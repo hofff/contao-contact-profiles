@@ -44,7 +44,7 @@
     }
   },
   "extra": {
-    "contao-manager-plugin": "Hofff\\Contao\\FormTools\\ContaoManager\\Plugin",
+    "contao-manager-plugin": "Hofff\\Contao\\ContactProfiles\\ContaoManager\\Plugin",
     "branch-alias": {
       "dev-master": "1.0.x-dev"
     }
