@@ -13,5 +13,9 @@
         <service id="Hofff\Contao\ContactProfiles\EventListener\Dca\ContactFieldsOptions" public="true">
             <argument type="service" id="contao.framework" />
         </service>
+
+        <service id="Hofff\Contao\ContactProfiles\EventListener\Dca\AccountTypeOptions" public="true">
+            <argument type="service" id="database_connection" />
+        </service>
     </services>
 </container>

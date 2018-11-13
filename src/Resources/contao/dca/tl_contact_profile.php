@@ -13,7 +13,6 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
         'sql'              => [
             'keys' => [
                 'id'        => 'primary',
-                'alias'     => 'index',
                 'published' => 'index',
             ],
         ],
@@ -23,7 +22,7 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
     'list'     => [
         'sorting'           => [
             'mode'                  => 4,
-            'fields'                => ['name'],
+            'fields'                => ['lastname', 'firstname'],
             'headerFields'          => ['title'],
             'panelLayout'           => 'filter;sort,search,limit',
             'child_record_callback' => ['tl_contact_profile', 'listContacts'],
@@ -58,23 +57,27 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
 
     // Palettes
     'palettes' => [
-        'default' => '{personal_legend},gender,name,job,image'
-            . ';{contact_legend},phone,mobile,fax,email,socialMedia'
-            . ';{image_legend},shortDescription,description,responsibilities,jumpTo'
-            . ';{published_legend},published'
+        'default' => '{personal_legend},gender,title,firstname,lastname,position,profession,image'
+            . ';{contact_legend},phone,mobile,fax,email,accounts'
+            . ';{details_legend},shortDescription,description,responsibilities'
+            . ';{redirect_legend},jumpTo'
+            . ';{published_legend},published',
     ],
 
     // Fields
     'fields'   => [
-        'id'         => [
+        'id'               => [
             'label'  => ['ID'],
             'search' => true,
             'sql'    => 'int(10) unsigned NOT NULL auto_increment',
         ],
-        'tstamp'     => [
+        'pid'              => [
             'sql' => "int(10) unsigned NOT NULL default '0'",
         ],
-        'gender'     => [
+        'tstamp'           => [
+            'sql' => "int(10) unsigned NOT NULL default '0'",
+        ],
+        'gender'           => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['gender'],
             'exclude'   => true,
             'inputType' => 'select',
@@ -83,56 +86,56 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             'eval'      => ['mandatory' => true, 'includeBlankOption' => true, 'tl_class' => 'w50'],
             'sql'       => 'varchar(6) NOT NULL default \'\'',
         ],
-        'title'      => [
+        'title'            => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['title'],
             'exclude'   => true,
             'inputType' => 'text',
             'eval'      => ['mandatory' => false, 'maxlength' => 255, 'tl_class' => 'w50', 'profileField' => true],
             'sql'       => 'varchar(255) NOT NULL default \'\'',
         ],
-        'firstname'  => [
+        'firstname'        => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['firstname'],
             'exclude'   => true,
             'inputType' => 'text',
             'eval'      => ['mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50', 'profileField' => true],
             'sql'       => 'varchar(255) NOT NULL default \'\'',
         ],
-        'lastname'   => [
+        'lastname'         => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['lastname'],
             'exclude'   => true,
             'inputType' => 'text',
             'eval'      => ['mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50', 'profileField' => true],
             'sql'       => 'varchar(255) NOT NULL default \'\'',
         ],
-        'position'   => [
+        'position'         => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['position'],
             'exclude'   => true,
             'inputType' => 'text',
             'eval'      => ['maxlength' => 255, 'tl_class' => 'w50', 'profileField' => true],
             'sql'       => 'varchar(255) NOT NULL default \'\'',
         ],
-        'profession' => [
+        'profession'       => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['profession'],
             'exclude'   => true,
             'inputType' => 'text',
             'eval'      => ['maxlength' => 255, 'tl_class' => 'w50', 'profileField' => true],
             'sql'       => 'varchar(255) NOT NULL default \'\'',
         ],
-        'image'      => [
+        'image'            => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['image'],
             'exclude'   => true,
             'inputType' => 'fileTree',
             'eval'      => [
                 'filesOnly'    => true,
                 'fieldType'    => 'radio',
-                'mandatory'    => true,
+                'mandatory'    => false,
                 'tl_class'     => 'clr',
                 'extensions'   => Config::get('validImageTypes'),
                 'profileField' => true,
             ],
             'sql'       => 'binary(16) NULL',
         ],
-        'phone'      => [
+        'phone'            => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['phone'],
             'exclude'   => true,
             'search'    => true,
@@ -146,7 +149,7 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             ],
             'sql'       => 'varchar(64) NOT NULL default \'\'',
         ],
-        'mobile'     => [
+        'mobile'           => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['mobile'],
             'exclude'   => true,
             'search'    => true,
@@ -160,7 +163,7 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             ],
             'sql'       => 'varchar(64) NOT NULL default \'\'',
         ],
-        'fax'        => [
+        'fax'              => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['fax'],
             'exclude'   => true,
             'search'    => true,
@@ -170,25 +173,95 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'rgxp'           => 'phone',
                 'decodeEntities' => true,
                 'tl_class'       => 'w50',
-                'profileField'   => true
+                'profileField'   => true,
             ],
             'sql'       => 'varchar(64) NOT NULL default \'\'',
         ],
-        'email'      => [
+        'email'            => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['email'],
             'exclude'   => true,
             'search'    => true,
             'inputType' => 'text',
             'eval'      => [
-                'maxlength' => 255,
-                'rgxp' => 'email',
+                'maxlength'      => 255,
+                'rgxp'           => 'email',
                 'decodeEntities' => true,
-                'tl_class' => 'w50',
-                'profileField'   => true
+                'tl_class'       => 'w50',
+                'profileField'   => true,
             ],
             'sql'       => 'varchar(255) NOT NULL default \'\'',
         ],
-        'published'  => [
+        'accounts'         => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['accounts'],
+            'exclude'   => true,
+            'inputType' => 'multiColumnWizard',
+            'eval'      => [
+                'tl_class'     => 'clr',
+                'profileField' => true,
+                'columnFields' => [
+                    'type' => [
+                        'label'            => &$GLOBALS['TL_LANG']['tl_contact_profile']['accountType'],
+                        'inputType'        => 'select',
+                        'options_callback' => [
+                            \Hofff\Contao\ContactProfiles\EventListener\Dca\AccountTypeOptions::class,
+                            '__invoke',
+                        ],
+                        'eval'             => [
+                            'mandatory'          => true,
+                            'includeBlankOption' => true,
+                            'tl_class'           => 'w50',
+                            'style'              => 'width: 100%',
+                        ],
+                    ],
+                    'url'  => [
+                        'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['url'],
+                        'inputType' => 'text',
+                        'eval'      => [
+                            'maxlength' => 128,
+                            'rgxp'      => 'url',
+                            'tl_class'  => 'w50',
+                        ],
+                    ],
+                ],
+            ],
+            'sql'       => 'varchar(255) NOT NULL default \'\'',
+        ],
+        'shortDescription' => [
+            'label'       => &$GLOBALS['TL_LANG']['tl_contact_profile']['shortDescription'],
+            'exclude'     => true,
+            'search'      => true,
+            'inputType'   => 'textarea',
+            'eval'        => ['mandatory' => false, 'rte' => 'tinyMCE', 'helpwizard' => true],
+            'explanation' => 'insertTags',
+            'sql'         => "mediumtext NULL",
+        ],
+        'description'      => [
+            'label'       => &$GLOBALS['TL_LANG']['tl_contact_profile']['shortDescription'],
+            'exclude'     => true,
+            'search'      => true,
+            'inputType'   => 'textarea',
+            'eval'        => ['mandatory' => false, 'rte' => 'tinyMCE', 'helpwizard' => true],
+            'explanation' => 'insertTags',
+            'sql'         => "mediumtext NULL",
+        ],
+        'responsibilities' => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['responsibilities'],
+            'exclude'   => true,
+            'inputType' => 'checkboxWizard',
+            'reference' => 'tl_contact_responsibility.name',
+            'eval'      => ['multiple' => true],
+            'sql'       => "mediumblob NULL",
+        ],
+        'jumpTo'           => [
+            'label'      => &$GLOBALS['TL_LANG']['tl_contact_profile']['jumpTo'],
+            'exclude'    => true,
+            'inputType'  => 'pageTree',
+            'foreignKey' => 'tl_page.title',
+            'eval'       => ['fieldType' => 'radio'],
+            'sql'        => "int(10) unsigned NOT NULL default '0'",
+            'relation'   => ['type' => 'hasOne', 'load' => 'lazy'],
+        ],
+        'published'        => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['published'],
             'exclude'   => true,
             'filter'    => true,

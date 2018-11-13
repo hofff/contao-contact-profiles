@@ -10,7 +10,7 @@ $GLOBALS['BE_MOD']['content']['hofff_contact_profiles'] = [
         'tl_contact_category',
         'tl_contact_profile',
         'tl_contact_responsibility',
-        'tl_contact_social_links',
+        'tl_contact_social_account',
     ],
 ];
 

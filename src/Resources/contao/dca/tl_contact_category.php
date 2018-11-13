@@ -41,20 +41,20 @@ $GLOBALS['TL_DCA']['tl_contact_category'] = [
             ],
             'social_accounts' => [
                 'label' => &$GLOBALS['TL_LANG']['tl_contact_category']['social_accounts'],
-                'href'  => 'table=tl_contact_social_accounts',
+                'href'  => 'table=tl_contact_social_account',
                 'class' => 'header hofff-contact-social-accounts',
             ],
         ],
         'operations'        => [
             'edit'       => [
                 'label' => &$GLOBALS['TL_LANG']['tl_contact_category']['edit'],
-                'href'  => 'table=tl_contact_person',
-                'icon'  => 'bundles/hofffcontaocontactprofiles/icon.png',
+                'href'  => 'table=tl_contact_profile',
+                'icon'  => 'edit.svg',
             ],
             'editheader' => [
                 'label' => &$GLOBALS['TL_LANG']['tl_contact_category']['editheader'],
                 'href'  => 'act=edit',
-                'icon'  => 'edit.gif',
+                'icon'  => 'header.svg',
             ],
             'delete'     => [
                 'label'      => &$GLOBALS['TL_LANG']['tl_contact_category']['delete'],
@@ -77,12 +77,21 @@ $GLOBALS['TL_DCA']['tl_contact_category'] = [
 
     // Fields
     'fields'   => [
+        'id'         => [
+            'label'  => ['ID'],
+            'search' => true,
+            'sql'    => 'int(10) unsigned NOT NULL auto_increment',
+        ],
+        'tstamp'     => [
+            'sql' => "int(10) unsigned NOT NULL default '0'",
+        ],
         'title' => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_category']['title'],
             'exclude'   => true,
             'search'    => true,
             'inputType' => 'text',
             'eval'      => ['mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50'],
+            'sql'       => 'varchar(255) NOT NULL default \'\'',
         ],
     ],
 ];

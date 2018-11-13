@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 /**
- * Table tl_contact_social_accounts
+ * Table tl_contact_social_account
  */
-$GLOBALS['TL_DCA']['tl_contact_social_accounts'] = [
+$GLOBALS['TL_DCA']['tl_contact_social_account'] = [
 
     // Config
     'config'   => [
@@ -31,18 +31,18 @@ $GLOBALS['TL_DCA']['tl_contact_social_accounts'] = [
         ],
         'operations' => [
             'edit'   => [
-                'label' => &$GLOBALS['TL_LANG']['tl_contact_social_accounts']['edit'],
+                'label' => &$GLOBALS['TL_LANG']['tl_contact_social_account']['edit'],
                 'href'  => 'act=edit',
                 'icon'  => 'edit.gif',
             ],
             'delete' => [
-                'label'      => &$GLOBALS['TL_LANG']['tl_contact_social_accounts']['delete'],
+                'label'      => &$GLOBALS['TL_LANG']['tl_contact_social_account']['delete'],
                 'href'       => 'act=delete',
                 'icon'       => 'delete.gif',
                 'attributes' => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"',
             ],
             'show'   => [
-                'label' => &$GLOBALS['TL_LANG']['tl_contact_social_accounts']['show'],
+                'label' => &$GLOBALS['TL_LANG']['tl_contact_social_account']['show'],
                 'href'  => 'act=show',
                 'icon'  => 'show.gif',
             ],
@@ -51,7 +51,7 @@ $GLOBALS['TL_DCA']['tl_contact_social_accounts'] = [
 
     // Palettes
     'palettes' => [
-        'default' => '{name_legend},name;',
+        'default' => '{name_legend},name,class',
     ],
 
     // Fields
@@ -65,7 +65,7 @@ $GLOBALS['TL_DCA']['tl_contact_social_accounts'] = [
             'sql' => "int(10) unsigned NOT NULL default '0'",
         ],
         'name'  => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_contact_social_accounts']['name'],
+            'label'     => &$GLOBALS['TL_LANG']['tl_contact_social_account']['name'],
             'exclude'   => true,
             'search'    => true,
             'inputType' => 'text',
@@ -73,12 +73,12 @@ $GLOBALS['TL_DCA']['tl_contact_social_accounts'] = [
             'sql'       => 'varchar(255) NOT NULL default \'\'',
         ],
         'class'  => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_contact_social_accounts']['class'],
+            'label'     => &$GLOBALS['TL_LANG']['tl_contact_social_account']['class'],
             'exclude'   => true,
             'search'    => true,
             'inputType' => 'text',
-            'eval'      => ['mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50'],
-            'sql'       => 'varchar(255) NOT NULL default \'\'',
+            'eval'      => ['mandatory' => true, 'maxlength' => 32, 'tl_class' => 'w50'],
+            'sql'       => 'varchar(32) NOT NULL default \'\'',
         ],
     ],
 ];
