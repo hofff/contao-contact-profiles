@@ -25,7 +25,10 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             'fields'                => ['lastname', 'firstname'],
             'headerFields'          => ['title'],
             'panelLayout'           => 'filter;sort,search,limit',
-            'child_record_callback' => ['tl_contact_profile', 'listContacts'],
+            'child_record_callback' => [
+                \Hofff\Contao\ContactProfiles\EventListener\Dca\ContactProfileDcaListener::class,
+                'generateRow',
+            ],
         ],
         'global_operations' => [
             'all' => [
@@ -57,9 +60,9 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
 
     // Palettes
     'palettes' => [
-        'default' => '{personal_legend},gender,title,firstname,lastname,position,profession,image'
+        'default' => '{personal_legend},salutation,title,firstname,lastname,position,profession,image'
             . ';{contact_legend},phone,mobile,fax,email,accounts'
-            . ';{details_legend},shortDescription,description,responsibilities'
+            . ';{details_legend},teaser,description,responsibilities'
             . ';{redirect_legend},jumpTo'
             . ';{published_legend},published',
     ],
@@ -77,14 +80,13 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
         'tstamp'           => [
             'sql' => "int(10) unsigned NOT NULL default '0'",
         ],
-        'gender'           => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['gender'],
+        'salutation'       => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['salutation'],
             'exclude'   => true,
-            'inputType' => 'select',
-            'options'   => ['male', 'female'],
-            'reference' => &$GLOBALS['TL_LANG']['MSC'],
-            'eval'      => ['mandatory' => true, 'includeBlankOption' => true, 'tl_class' => 'w50'],
-            'sql'       => 'varchar(6) NOT NULL default \'\'',
+            'inputType' => 'text',
+            'eval'      => ['mandatory' => false, 'maxlength' => 32, 'tl_class' => 'w50'],
+            'sql'       => 'varchar(32) NOT NULL default \'\'',
+
         ],
         'title'            => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['title'],
@@ -102,6 +104,7 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
         ],
         'lastname'         => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['lastname'],
+            'flag'      => 1,
             'exclude'   => true,
             'inputType' => 'text',
             'eval'      => ['mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50', 'profileField' => true],
@@ -226,8 +229,8 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             ],
             'sql'       => 'varchar(255) NOT NULL default \'\'',
         ],
-        'shortDescription' => [
-            'label'       => &$GLOBALS['TL_LANG']['tl_contact_profile']['shortDescription'],
+        'teaser'           => [
+            'label'       => &$GLOBALS['TL_LANG']['tl_contact_profile']['teaser'],
             'exclude'     => true,
             'search'      => true,
             'inputType'   => 'textarea',
@@ -236,7 +239,7 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             'sql'         => "mediumtext NULL",
         ],
         'description'      => [
-            'label'       => &$GLOBALS['TL_LANG']['tl_contact_profile']['shortDescription'],
+            'label'       => &$GLOBALS['TL_LANG']['tl_contact_profile']['description'],
             'exclude'     => true,
             'search'      => true,
             'inputType'   => 'textarea',
@@ -245,12 +248,12 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             'sql'         => "mediumtext NULL",
         ],
         'responsibilities' => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['responsibilities'],
-            'exclude'   => true,
-            'inputType' => 'checkboxWizard',
-            'reference' => 'tl_contact_responsibility.name',
-            'eval'      => ['multiple' => true],
-            'sql'       => "mediumblob NULL",
+            'label'      => &$GLOBALS['TL_LANG']['tl_contact_profile']['responsibilities'],
+            'exclude'    => true,
+            'inputType'  => 'checkboxWizard',
+            'foreignKey' => 'tl_contact_responsibility.name',
+            'eval'       => ['multiple' => true],
+            'sql'        => "mediumblob NULL",
         ],
         'jumpTo'           => [
             'label'      => &$GLOBALS['TL_LANG']['tl_contact_profile']['jumpTo'],
