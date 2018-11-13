@@ -1,0 +1,49 @@
+{
+  "name": "hofff/contao-contact-profiles",
+  "description": "Various form utilities for Contao CMS.",
+  "keywords": [
+    "form",
+    "contao",
+    "contacts",
+    "contact profiles"
+  ],
+  "type": "contao-bundle",
+  "homepage": "https://hofff.com/",
+  "license": "LGPL-3.0-or-later",
+  "authors": [
+    {
+      "name": "Nicky Hoff",
+      "email": "nick@hofff.com",
+      "homepage": "https://hofff.com/",
+      "role": "Maintainer"
+    },
+    {
+      "name": "David Molineus",
+      "homepage": "https://hofff.com",
+      "email": "david@hofff.com",
+      "role": "Developer"
+    }
+  ],
+  "support": {
+    "email": "info@hofff.com",
+    "issues": "https://github.com/hofff/contao-contact-profiles/issues",
+    "source": "https://github.com/hofff/contao-contact-profiles"
+  },
+  "require": {
+    "php": ">=7.1",
+    "ext-pdo": "*",
+    "contao/core-bundle": "~4.4",
+    "symfony/config": "^3.3 || ^4.0",
+    "symfony/dependency-injection": "^3.3 || ^4.0",
+    "symfony/http-kernel": "^3.3 || ^4.0",
+    "menatwork/contao-multicolumnwizard": "^3.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "Hofff\\Contao\\ContactProfiles\\": "src/"
+    }
+  },
+  "extra": {
+    "contao-manager-plugin": "Hofff\\Contao\\FormTools\\ContaoManager\\Plugin"
+  }
+}

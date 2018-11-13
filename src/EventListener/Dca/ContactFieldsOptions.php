@@ -1,0 +1,50 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Hofff\Contao\ContactProfiles\EventListener\Dca;
+
+use Contao\Controller;
+use Contao\CoreBundle\Framework\ContaoFrameworkInterface;
+use function array_filter;
+
+final class ContactFieldsOptions
+{
+    /**
+     * @var ContaoFrameworkInterface
+     */
+    private $framework;
+
+    /**
+     * ContactFieldsOptions constructor.
+     *
+     * @param ContaoFrameworkInterface $framework
+     */
+    public function __construct(ContaoFrameworkInterface $framework)
+    {
+        $this->framework = $framework;
+    }
+
+    public function __invoke(): array
+    {
+        /** @var Controller|Adapter $adpater */
+        $adpater = $this->framework->getAdapter(Controller::class);
+        $adpater->loadDataContainer('tl_contact_profile');
+        $adpater->loadLanguageFile('tl_contact_profile');
+
+        $fields = array_filter(
+            $GLOBALS['TL_DCA']['contact_profile']['fields'] ?? [],
+            function (array $config) {
+                return $config['eval']['profileField'] ?? false;
+            }
+        );
+
+        $options = [];
+
+        foreach ($fields as $name => $config) {
+            $options[$name] = $config['label'][0] ?? $name;
+        }
+
+        return $options;
+    }
+}
