@@ -54,5 +54,10 @@
             <argument type="service" id="Hofff\Contao\ContactProfiles\Query\ResponsibilitiesQuery" />
             <tag name="hofff_contao_contact_profiles.field_renderer" field="responsibilities" />
         </service>
+
+        <service id="Hofff\Contao\ContactProfiles\Renderer\Field\JumpToFieldRenderer">
+            <argument type="service" id="contao.framework" />
+            <tag name="hofff_contao_contact_profiles.field_renderer" field="jumpTo" />
+        </service>
     </services>
 </container>

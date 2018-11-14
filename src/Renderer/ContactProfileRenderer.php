@@ -23,14 +23,18 @@ final class ContactProfileRenderer
 
     private $fieldTemplates = [];
 
+    /** @var string */
+    private $moreLabel;
+
     /**
      * ContactProfileRenderer constructor.
      *
      * @param FieldRenderer $fieldRenderer
      */
-    public function __construct(FieldRenderer $fieldRenderer)
+    public function __construct(FieldRenderer $fieldRenderer, string $moreLabel)
     {
         $this->fieldRenderer = $fieldRenderer;
+        $this->moreLabel = $moreLabel;
     }
 
     public function withFields(array $fields): self
@@ -73,6 +77,11 @@ final class ContactProfileRenderer
     public function imageSize(): ?array
     {
         return $this->imageSize;
+    }
+
+    public function moreLabel(): string
+    {
+        return $this->moreLabel;
     }
 
     public function __invoke(array $profile): string

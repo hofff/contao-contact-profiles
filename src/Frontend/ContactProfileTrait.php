@@ -29,7 +29,8 @@ trait ContactProfileTrait
     private function createRenderer(): ContactProfileRenderer
     {
         $fieldRenderer = System::getContainer()->get(FieldRenderer::class);
-        $renderer      = (new ContactProfileRenderer($fieldRenderer))
+        $moreLabel     = (string) $this->hofff_contact_more ?: $GLOBALS['TL_LANG']['MSC']['more'];
+        $renderer      = (new ContactProfileRenderer($fieldRenderer, $moreLabel))
             ->withFields(StringUtil::deserialize($this->hofff_contact_fields, true));
 
         if (TL_MODE === 'FE' && $this->hofff_contact_template) {

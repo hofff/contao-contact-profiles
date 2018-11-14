@@ -1,0 +1,13 @@
+<?php
+
+declare(strict_types=1);
+
+$GLOBALS['TL_LANG']['tl_content']['profile_legend']            = 'Contact profile';
+$GLOBALS['TL_LANG']['tl_content']['hofff_contact_profiles'][0] = 'Contact profiles';
+$GLOBALS['TL_LANG']['tl_content']['hofff_contact_profiles'][1] = 'Please select the contact profiles which should be displayed.';
+$GLOBALS['TL_LANG']['tl_content']['hofff_contact_fields'][0]   = 'Contact fields';
+$GLOBALS['TL_LANG']['tl_content']['hofff_contact_fields'][1]   = 'Please select the fields which should be visible.';
+$GLOBALS['TL_LANG']['tl_content']['hofff_contact_template'][0] = 'Contact template';
+$GLOBALS['TL_LANG']['tl_content']['hofff_contact_template'][1] = 'You might select a custom template for the contact profile.';
+$GLOBALS['TL_LANG']['tl_content']['hofff_contact_more'][0]     = 'More label';
+$GLOBALS['TL_LANG']['tl_content']['hofff_contact_more'][1]     = 'You can customize the more label used for the redirect page link.';
