@@ -7,16 +7,15 @@ namespace Hofff\Contao\ContactProfiles\Query;
 use Doctrine\DBAL\Connection;
 use PDO;
 
-final class PublishedContactProfilesQuery
+final class ResponsibilitiesQuery
 {
     private const QUERY = <<<'SQL'
 SELECT 
   *
 FROM 
-  tl_contact_profile
+  tl_contact_responsibility
 WHERE 
   id IN (?)
-  AND published='1'
   ORDER BY FIELD(id, ?)
 SQL;
 
@@ -28,11 +27,11 @@ SQL;
         $this->connection = $connection;
     }
 
-    public function __invoke(array $profileIds): array
+    public function __invoke(array $responsibilityIds): array
     {
         $statement = $this->connection->executeQuery(
             self::QUERY,
-            [$profileIds, $profileIds],
+            [$responsibilityIds, $responsibilityIds],
             [Connection::PARAM_STR_ARRAY, Connection::PARAM_STR_ARRAY]
         );
 

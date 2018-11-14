@@ -11,7 +11,7 @@ use Hofff\Contao\ContactProfiles\EventListener\Dca\ContactTemplateOptions;
  */
 $GLOBALS['TL_DCA']['tl_content']['palettes']['hofff_contact_profile'] = '{type_legend},type,headline'
     . ';{profile_legend},hofff_contact_profiles,hofff_contact_fields'
-    . ';{template_legend:hide},customTpl,hofff_contact_template'
+    . ';{template_legend:hide},customTpl,hofff_contact_template,size'
     . ';{protected_legend:hide},protected'
     . ';{expert_legend:hide},guests,cssID'
     . ';{invisible_legend:hide},invisible,start,stop';
@@ -22,9 +22,9 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['hofff_contact_profile'] = '{type_l
 $GLOBALS['TL_DCA']['tl_content']['fields']['hofff_contact_profiles'] = [
     'label'            => &$GLOBALS['TL_LANG']['tl_content']['hofff_contact_profiles'],
     'exclude'          => true,
-    'inputType'        => 'select',
+    'inputType'        => 'checkboxWizard',
     'options_callback' => [ContactProfileOptions::class, '__invoke'],
-    'eval'             => ['tl_class' => 'clr', 'multiple' => true, 'chosen' => true],
+    'eval'             => ['tl_class' => 'clr', 'multiple' => true],
     'sql'              => 'blob NULL',
 ];
 
