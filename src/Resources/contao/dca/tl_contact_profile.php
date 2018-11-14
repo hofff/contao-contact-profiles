@@ -8,7 +8,6 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
     'config'   => [
         'dataContainer'    => 'Table',
         'ptable'           => 'tl_contact_category',
-        'switchToEdit'     => true,
         'enableVersioning' => true,
         'sql'              => [
             'keys' => [
@@ -210,7 +209,6 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                             '__invoke',
                         ],
                         'eval'             => [
-                            'mandatory'          => true,
                             'includeBlankOption' => true,
                             'tl_class'           => 'w50',
                             'style'              => 'width: 100%',

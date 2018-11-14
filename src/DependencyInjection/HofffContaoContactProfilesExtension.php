@@ -18,6 +18,7 @@ final class HofffContaoContactProfilesExtension extends Extension
             new FileLocator(__DIR__ . '/../Resources/config')
         );
 
+        $loader->load('services.xml');
         $loader->load('listener.xml');
     }
 }

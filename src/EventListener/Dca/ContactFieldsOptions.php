@@ -33,7 +33,7 @@ final class ContactFieldsOptions
         $adpater->loadLanguageFile('tl_contact_profile');
 
         $fields = array_filter(
-            $GLOBALS['TL_DCA']['contact_profile']['fields'] ?? [],
+            $GLOBALS['TL_DCA']['tl_contact_profile']['fields'] ?? [],
             function (array $config) {
                 return $config['eval']['profileField'] ?? false;
             }
