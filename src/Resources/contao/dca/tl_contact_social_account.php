@@ -29,6 +29,13 @@ $GLOBALS['TL_DCA']['tl_contact_social_account'] = [
             'fields' => ['name'],
             'format' => '%s',
         ],
+        'global_operations' => [
+            'categories' => [
+                'label' => &$GLOBALS['TL_LANG']['MSC']['backBT'],
+                'href'  => 'table=',
+                'class' => 'header_back',
+            ],
+        ],
         'operations' => [
             'edit'   => [
                 'label' => &$GLOBALS['TL_LANG']['tl_contact_social_account']['edit'],
@@ -77,7 +84,7 @@ $GLOBALS['TL_DCA']['tl_contact_social_account'] = [
             'exclude'   => true,
             'search'    => true,
             'inputType' => 'text',
-            'eval'      => ['mandatory' => true, 'maxlength' => 32, 'tl_class' => 'w50'],
+            'eval'      => ['mandatory' => false, 'maxlength' => 32, 'tl_class' => 'w50'],
             'sql'       => 'varchar(32) NOT NULL default \'\'',
         ],
     ],

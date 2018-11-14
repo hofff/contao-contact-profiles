@@ -12,6 +12,9 @@ $GLOBALS['BE_MOD']['content']['hofff_contact_profiles'] = [
         'tl_contact_responsibility',
         'tl_contact_social_account',
     ],
+    'stylesheet' => [
+        'bundles/hofffcontaocontactprofiles/css/background.css'
+    ]
 ];
 
 // Content element

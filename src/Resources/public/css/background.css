@@ -1,0 +1,16 @@
+
+.header_hofff_contact_responsibility,
+.header_hofff_contact_social_accounts {
+    padding: 3px 0 3px 21px;
+    background-position: left center;
+    background-repeat: no-repeat;
+    margin-left: 15px;
+}
+
+.header_hofff_contact_responsibility {
+    background-image: url(../img/responsibilities.svg);
+}
+
+.header_hofff_contact_social_accounts {
+    background-image: url(../img/social_accounts.svg);
+}

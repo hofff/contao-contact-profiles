@@ -29,6 +29,13 @@ $GLOBALS['TL_DCA']['tl_contact_responsibility'] = [
             'fields' => ['name'],
             'format' => '%s',
         ],
+        'global_operations' => [
+            'categories' => [
+                'label' => &$GLOBALS['TL_LANG']['MSC']['backBT'],
+                'href'  => 'table=',
+                'class' => 'header_back',
+            ],
+        ],
         'operations' => [
             'edit'   => [
                 'label' => &$GLOBALS['TL_LANG']['tl_contact_responsibility']['edit'],

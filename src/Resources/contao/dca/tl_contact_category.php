@@ -37,12 +37,12 @@ $GLOBALS['TL_DCA']['tl_contact_category'] = [
             'responsibilities' => [
                 'label' => &$GLOBALS['TL_LANG']['tl_contact_category']['responsibilities'],
                 'href'  => 'table=tl_contact_responsibility',
-                'class' => 'header hofff-contact-responsibility',
+                'class' => 'header_hofff_contact_responsibility',
             ],
             'social_accounts' => [
                 'label' => &$GLOBALS['TL_LANG']['tl_contact_category']['social_accounts'],
                 'href'  => 'table=tl_contact_social_account',
-                'class' => 'header hofff-contact-social-accounts',
+                'class' => 'header_hofff_contact_social_accounts',
             ],
         ],
         'operations'        => [
