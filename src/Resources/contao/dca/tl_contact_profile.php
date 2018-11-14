@@ -49,6 +49,13 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'icon'       => 'delete.gif',
                 'attributes' => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"',
             ],
+            'toggle' => [
+                'label'           => &$GLOBALS['TL_LANG']['tl_contact_profile']['toggle'],
+                'icon'            => 'visible.svg',
+                'attributes'      => 'onclick="Backend.getScrollOffset();return AjaxRequest.toggleVisibility(this,%s)"',
+                'button_callback' => [\Hofff\Contao\ContactProfiles\EventListener\Dca\ContactProfileDcaListener::class, 'toggleIcon'],
+                'showInHeader'    => true,
+            ],
             'show'   => [
                 'label' => &$GLOBALS['TL_LANG']['tl_contact_profile']['show'],
                 'href'  => 'act=show',
@@ -132,7 +139,7 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'fieldType'    => 'radio',
                 'mandatory'    => false,
                 'tl_class'     => 'clr',
-                'extensions'   => Config::get('validImageTypes'),
+                'extensions'   => Contao\Config::get('validImageTypes'),
                 'profileField' => true,
             ],
             'sql'       => 'binary(16) NULL',

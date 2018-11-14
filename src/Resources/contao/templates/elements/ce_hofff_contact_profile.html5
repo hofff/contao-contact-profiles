@@ -1,3 +1,4 @@
+<?php if ($this->profiles): ?>
 <?php $this->extend('block_searchable') ?>
 
 <?php $this->block('content') ?>
@@ -6,3 +7,4 @@
 <?php endforeach ?>
 
 <?php $this->endblock() ?>
+<?php endif ?>
