@@ -14,8 +14,13 @@ trait ContactProfileTrait
 {
     protected function compile(): void
     {
+        $renderer = $this->createRenderer();
+
         $this->Template->profiles      = $this->loadProfiles();
-        $this->Template->renderProfile = $this->createRenderer();
+        $this->Template->renderer      = $renderer;
+        $this->Template->renderProfile = function (array $profile) use ($renderer): string {
+            return $renderer->render($profile);
+        };
     }
 
     private function loadProfiles(): iterable

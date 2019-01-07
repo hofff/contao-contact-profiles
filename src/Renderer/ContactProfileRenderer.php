@@ -84,7 +84,7 @@ final class ContactProfileRenderer
         return $this->moreLabel;
     }
 
-    public function __invoke(array $profile): string
+    public function render(array $profile): string
     {
         $template = new FrontendTemplate($this->template);
         $template->setData(
