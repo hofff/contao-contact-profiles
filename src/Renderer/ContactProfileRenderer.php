@@ -106,7 +106,7 @@ final class ContactProfileRenderer
 
         foreach ($this->fields as $field) {
             $raw              = StringUtil::deserialize($profile[$field] ?? null);
-            $rendered[$field] = $this->fieldRenderer->__invoke($field, $raw, $this);
+            $rendered[$field] = $this->fieldRenderer->__invoke($field, $raw, $this, $profile);
         }
 
         return $rendered;

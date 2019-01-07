@@ -30,7 +30,7 @@ abstract class AbstractFieldRenderer implements FieldRenderer
         $this->framework = $framework;
     }
 
-    public function __invoke(string $field, $value, ContactProfileRenderer $renderer): ?string
+    public function __invoke(string $field, $value, ContactProfileRenderer $renderer, array $profile): ?string
     {
         if (!$this->hasValue($value)) {
             return null;
@@ -43,9 +43,10 @@ abstract class AbstractFieldRenderer implements FieldRenderer
 
         $template = new FrontendTemplate(static::TEMPLATE);
 
-        $template->field = $field;
-        $template->label = $GLOBALS['TL_DCA']['tl_contact_profile']['fields'][$field]['label'][0] ?? $field;
-        $template->value = $value;
+        $template->field   = $field;
+        $template->label   = $GLOBALS['TL_DCA']['tl_contact_profile']['fields'][$field]['label'][0] ?? $field;
+        $template->value   = $value;
+        $template->profile = $profile;
 
         $this->compile($template, $value, $renderer);
 

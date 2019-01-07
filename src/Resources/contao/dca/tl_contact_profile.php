@@ -66,7 +66,7 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
 
     // Palettes
     'palettes' => [
-        'default' => '{personal_legend},salutation,title,firstname,lastname,position,profession,image'
+        'default' => '{personal_legend},salutation,title,firstname,lastname,position,profession,image,caption'
             . ';{contact_legend},phone,mobile,fax,email,accounts'
             . ';{details_legend},teaser,description,responsibilities'
             . ';{redirect_legend},jumpTo'
@@ -143,6 +143,13 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'profileField' => true,
             ],
             'sql'       => 'binary(16) NULL',
+        ],
+        'caption'       => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['caption'],
+            'exclude'   => true,
+            'inputType' => 'text',
+            'eval'      => ['maxlength' => 255, 'tl_class' => 'w50', 'profileField' => false],
+            'sql'       => 'varchar(255) NOT NULL default \'\'',
         ],
         'phone'            => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['phone'],

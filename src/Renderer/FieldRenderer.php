@@ -6,5 +6,5 @@ namespace Hofff\Contao\ContactProfiles\Renderer;
 
 interface FieldRenderer
 {
-    public function __invoke(string $field, $value, ContactProfileRenderer $renderer): ?string;
+    public function __invoke(string $field, $value, ContactProfileRenderer $renderer, array $profile): ?string;
 }

@@ -29,13 +29,13 @@ final class CompositeFieldRenderer extends AbstractFieldRenderer
         $this->renderer = $renderer;
     }
 
-    public function __invoke(string $field, $value, ContactProfileRenderer $renderer): ?string
+    public function __invoke(string $field, $value, ContactProfileRenderer $renderer, array $profile): ?string
     {
         if (isset($this->renderer[$field])) {
-            return $this->renderer[$field]($field, $value, $renderer);
+            return $this->renderer[$field]($field, $value, $renderer, $profile);
         }
 
-        return parent::__invoke($field, $value, $renderer);
+        return parent::__invoke($field, $value, $renderer, $profile);
     }
 
     protected function compile(FrontendTemplate $template, $value, ContactProfileRenderer $renderer): void
