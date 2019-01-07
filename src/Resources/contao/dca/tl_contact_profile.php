@@ -68,7 +68,7 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
     'palettes' => [
         'default' => '{personal_legend},salutation,title,firstname,lastname,position,profession,image,caption'
             . ';{contact_legend},phone,mobile,fax,email,accounts'
-            . ';{details_legend},teaser,description,responsibilities'
+            . ';{details_legend},teaser,description,statement,responsibilities'
             . ';{redirect_legend},jumpTo'
             . ';{published_legend},published',
     ],
@@ -266,6 +266,15 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             'foreignKey' => 'tl_contact_responsibility.name',
             'eval'       => ['multiple' => true, 'profileField' => true],
             'sql'        => "mediumblob NULL",
+        ],
+        'statement'      => [
+            'label'       => &$GLOBALS['TL_LANG']['tl_contact_profile']['statement'],
+            'exclude'     => true,
+            'search'      => true,
+            'inputType'   => 'textarea',
+            'eval'        => ['mandatory' => false, 'rte' => 'tinyMCE', 'helpwizard' => true, 'profileField' => true],
+            'explanation' => 'insertTags',
+            'sql'         => "mediumtext NULL",
         ],
         'jumpTo'           => [
             'label'      => &$GLOBALS['TL_LANG']['tl_contact_profile']['jumpTo'],
