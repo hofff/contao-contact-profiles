@@ -41,7 +41,7 @@ abstract class AbstractFieldRenderer implements FieldRenderer
         $adpater->loadDataContainer('tl_contact_profile');
         $adpater->loadLanguageFile('tl_contact_profile');
 
-        $template = new FrontendTemplate(static::TEMPLATE);
+        $template = new FrontendTemplate($renderer->fieldTemplate($field, static::TEMPLATE));
 
         $template->field   = $field;
         $template->label   = $GLOBALS['TL_DCA']['tl_contact_profile']['fields'][$field]['label'][0] ?? $field;
