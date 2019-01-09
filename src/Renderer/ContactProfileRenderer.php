@@ -11,6 +11,8 @@ final class ContactProfileRenderer
 {
     private const DEFAULT_TEMPLATE = 'hofff_contact_profile_default';
 
+    private const DEFAULT_FIELD_TEMPLATE = 'hofff_contact_field';
+
     /** @var FieldRenderer */
     private $fieldRenderer;
 
@@ -24,17 +26,16 @@ final class ContactProfileRenderer
     private $fieldTemplates = [];
 
     /** @var string */
+    private $defaultFieldTemplate;
+
+    /** @var string */
     private $moreLabel;
 
-    /**
-     * ContactProfileRenderer constructor.
-     *
-     * @param FieldRenderer $fieldRenderer
-     */
     public function __construct(FieldRenderer $fieldRenderer, string $moreLabel)
     {
         $this->fieldRenderer = $fieldRenderer;
         $this->moreLabel = $moreLabel;
+        $this->defaultFieldTemplate = self::DEFAULT_FIELD_TEMPLATE;
     }
 
     public function withFields(array $fields): self
@@ -47,6 +48,13 @@ final class ContactProfileRenderer
     public function withTemplate(string $template): self
     {
         $this->template = $template;
+
+        return $this;
+    }
+
+    public function withDefaultFieldTemplate(string $template): self
+    {
+        $this->defaultFieldTemplate = $template;
 
         return $this;
     }
@@ -64,7 +72,7 @@ final class ContactProfileRenderer
             return $this->fieldTemplates[$field];
         }
 
-        return $default;
+        return $default ?: $this->defaultFieldTemplate;
     }
 
     public function withImageSize(array $imageSize): self
