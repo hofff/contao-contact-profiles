@@ -11,8 +11,6 @@ use Hofff\Contao\ContactProfiles\Renderer\FieldRenderer;
 
 final class CompositeFieldRenderer extends AbstractFieldRenderer
 {
-    protected const TEMPLATE = 'hofff_contact_field';
-
     /** @var FieldRenderer[] */
     private $renderer;
 
