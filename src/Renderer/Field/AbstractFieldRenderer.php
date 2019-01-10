@@ -13,6 +13,8 @@ use Hofff\Contao\ContactProfiles\Renderer\FieldRenderer;
 
 abstract class AbstractFieldRenderer implements FieldRenderer
 {
+    protected const TEMPLATE = null;
+
     /**
      * @var ContaoFrameworkInterface
      */
@@ -39,7 +41,7 @@ abstract class AbstractFieldRenderer implements FieldRenderer
         $adpater->loadDataContainer('tl_contact_profile');
         $adpater->loadLanguageFile('tl_contact_profile');
 
-        $template = new FrontendTemplate($renderer->fieldTemplate($field));
+        $template = new FrontendTemplate($renderer->fieldTemplate($field, static::TEMPLATE));
 
         $template->defaultTemplate = $renderer->defaultFieldTemplate();
         $template->field           = $field;
