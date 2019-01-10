@@ -59,6 +59,11 @@ final class ContactProfileRenderer
         return $this;
     }
 
+    public function defaultFieldTemplate(): string
+    {
+        return $this->defaultFieldTemplate;
+    }
+
     public function withFieldTemplate(string $field, string $template): self
     {
         $this->fieldTemplates[$field] = $template;

@@ -41,10 +41,11 @@ abstract class AbstractFieldRenderer implements FieldRenderer
 
         $template = new FrontendTemplate($renderer->fieldTemplate($field));
 
-        $template->field   = $field;
-        $template->label   = $GLOBALS['TL_DCA']['tl_contact_profile']['fields'][$field]['label'][0] ?? $field;
-        $template->value   = $value;
-        $template->profile = $profile;
+        $template->defaultTemplate = $renderer->defaultFieldTemplate();
+        $template->field           = $field;
+        $template->label           = $GLOBALS['TL_DCA']['tl_contact_profile']['fields'][$field]['label'][0] ?? $field;
+        $template->value           = $value;
+        $template->profile         = $profile;
 
         $this->compile($template, $value, $renderer);
 
