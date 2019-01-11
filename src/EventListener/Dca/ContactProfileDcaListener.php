@@ -33,14 +33,15 @@ final class ContactProfileDcaListener
 
         return $label;
     }
+
     /**
      * Return the "toggle visibility" button
      *
      * @param string[] $row
      */
-    public function toggleIcon(array $row, string $href, string $label, string $title, string $icon, string $attributes) : string
+    public function toggleIcon(array $row, ?string $href, string $label, string $title, string $icon, string $attributes) : string
     {
-        if (Input::get('tid') !== '') {
+        if (Input::get('tid') != '') {
             $this->toggleVisibility(Input::get('tid'), (Input::get('state') === '1'), (@func_get_arg(12) ?: null));
             Backend::redirect(Backend::getReferer());
         }
