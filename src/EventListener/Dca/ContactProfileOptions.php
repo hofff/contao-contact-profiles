@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Hofff\Contao\ContactProfiles\EventListener\Dca;
 
 use Hofff\Contao\ContactProfiles\Query\CategorizedContactProfilesQuery;
+use function sprintf;
 
 final class ContactProfileOptions
 {
@@ -16,9 +17,10 @@ final class ContactProfileOptions
         $this->query = $query;
     }
 
-    public function __invoke(): array
+    /** @return string[] */
+    public function __invoke() : array
     {
-        $result = ($this->query)();
+        $result  = ($this->query)();
         $options = [];
 
         foreach ($result as $row) {

@@ -15,24 +15,18 @@ abstract class AbstractFieldRenderer implements FieldRenderer
 {
     protected const TEMPLATE = null;
 
-    /**
-     * @var ContaoFrameworkInterface
-     */
+    /** @var ContaoFrameworkInterface */
     protected $framework;
 
-    /**
-     * ContactFieldsOptions constructor.
-     *
-     * @param ContaoFrameworkInterface $framework
-     */
     public function __construct(ContaoFrameworkInterface $framework)
     {
         $this->framework = $framework;
     }
 
-    public function __invoke(string $field, $value, ContactProfileRenderer $renderer, array $profile): ?string
+    /** {@inheritdoc} */
+    public function __invoke(string $field, $value, ContactProfileRenderer $renderer, array $profile) : ?string
     {
-        if (!$this->hasValue($value)) {
+        if (! $this->hasValue($value)) {
             return null;
         }
 
@@ -54,10 +48,12 @@ abstract class AbstractFieldRenderer implements FieldRenderer
         return $template->parse();
     }
 
-    protected function hasValue($value): bool
+    /** @param mixed $value */
+    protected function hasValue($value) : bool
     {
         return (bool) $value;
     }
 
-    abstract protected function compile(FrontendTemplate $template, $value, ContactProfileRenderer $renderer): void;
+    /** @param mixed $value */
+    abstract protected function compile(FrontendTemplate $template, $value, ContactProfileRenderer $renderer) : void;
 }

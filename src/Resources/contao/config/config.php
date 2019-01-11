@@ -12,13 +12,11 @@ $GLOBALS['BE_MOD']['content']['hofff_contact_profiles'] = [
         'tl_contact_responsibility',
         'tl_contact_social_account',
     ],
-    'stylesheet' => [
-        'bundles/hofffcontaocontactprofiles/css/background.css'
-    ]
+    'stylesheet' => ['bundles/hofffcontaocontactprofiles/css/background.css'],
 ];
 
 // Content element
-$GLOBALS['TL_CTE']['includes']['hofff_contact_profile']      = ContactProfileElement::class;
+$GLOBALS['TL_CTE']['includes']['hofff_contact_profile'] = ContactProfileElement::class;
 
 // Frontend module
 $GLOBALS['FE_MOD']['miscellaneous']['hofff_contact_profile'] = ContactProfileElement::class;

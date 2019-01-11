@@ -28,7 +28,12 @@ SQL;
         $this->connection = $connection;
     }
 
-    public function __invoke(array $profileIds): array
+    /**
+     * @param string[] $profileIds
+     *
+     * @return string[][]
+     */
+    public function __invoke(array $profileIds) : array
     {
         $statement = $this->connection->executeQuery(
             self::QUERY,

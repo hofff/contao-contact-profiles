@@ -23,7 +23,8 @@ final class ResponsibilitiesRenderer extends AbstractFieldRenderer
         $this->query = $query;
     }
 
-    protected function compile(FrontendTemplate $template, $value, ContactProfileRenderer $renderer): void
+    /** @param mixed $value */
+    protected function compile(FrontendTemplate $template, $value, ContactProfileRenderer $renderer) : void
     {
         $template->value = ($this->query)((array) $value);
     }

@@ -25,22 +25,22 @@ final class ImageFieldRenderer extends AbstractFieldRenderer
         $this->projectDir = $projectDir;
     }
 
-    protected function compile(FrontendTemplate $template, $value, ContactProfileRenderer $renderer): void
+    /** @param mixed $value */
+    protected function compile(FrontendTemplate $template, $value, ContactProfileRenderer $renderer) : void
     {
         /** @var FilesModel $model */
         $model = $this->framework->getAdapter(FilesModel::class)->findByUuid($value);
-        if (!$model || !is_file($this->projectDir . '/' . $model->path)) {
+        if (! $model || ! is_file($this->projectDir . '/' . $model->path)) {
             return;
         }
 
         $image = [
             'singleSRC' => $model->path,
-            'size'      => $renderer->imageSize()
+            'size'      => $renderer->imageSize(),
         ];
 
         $template->caption = $template->profile['caption'];
 
         $this->framework->getAdapter(Controller::class)->addImageToTemplate($template, $image);
     }
-
 }

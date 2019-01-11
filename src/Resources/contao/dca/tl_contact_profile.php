@@ -2,6 +2,9 @@
 
 declare(strict_types=1);
 
+use Hofff\Contao\ContactProfiles\EventListener\Dca\AccountTypeOptions;
+use Hofff\Contao\ContactProfiles\EventListener\Dca\ContactProfileDcaListener;
+
 $GLOBALS['TL_DCA']['tl_contact_profile'] = [
 
     // Config
@@ -25,7 +28,7 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             'headerFields'          => ['title'],
             'panelLayout'           => 'filter;sort,search,limit',
             'child_record_callback' => [
-                \Hofff\Contao\ContactProfiles\EventListener\Dca\ContactProfileDcaListener::class,
+                ContactProfileDcaListener::class,
                 'generateRow',
             ],
         ],
@@ -53,7 +56,7 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'label'           => &$GLOBALS['TL_LANG']['tl_contact_profile']['toggle'],
                 'icon'            => 'visible.svg',
                 'attributes'      => 'onclick="Backend.getScrollOffset();return AjaxRequest.toggleVisibility(this,%s)"',
-                'button_callback' => [\Hofff\Contao\ContactProfiles\EventListener\Dca\ContactProfileDcaListener::class, 'toggleIcon'],
+                'button_callback' => [ContactProfileDcaListener::class, 'toggleIcon'],
                 'showInHeader'    => true,
             ],
             'show'   => [
@@ -80,12 +83,8 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             'search' => true,
             'sql'    => 'int(10) unsigned NOT NULL auto_increment',
         ],
-        'pid'              => [
-            'sql' => "int(10) unsigned NOT NULL default '0'",
-        ],
-        'tstamp'           => [
-            'sql' => "int(10) unsigned NOT NULL default '0'",
-        ],
+        'pid'              => ['sql' => "int(10) unsigned NOT NULL default '0'"],
+        'tstamp'           => ['sql' => "int(10) unsigned NOT NULL default '0'"],
         'salutation'       => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['salutation'],
             'exclude'   => true,
@@ -219,7 +218,7 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                         'label'            => &$GLOBALS['TL_LANG']['tl_contact_profile']['accountType'],
                         'inputType'        => 'select',
                         'options_callback' => [
-                            \Hofff\Contao\ContactProfiles\EventListener\Dca\AccountTypeOptions::class,
+                            AccountTypeOptions::class,
                             '__invoke',
                         ],
                         'eval'             => [
@@ -248,7 +247,7 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             'inputType'   => 'textarea',
             'eval'        => ['mandatory' => false, 'rte' => 'tinyMCE', 'helpwizard' => true, 'profileField' => true],
             'explanation' => 'insertTags',
-            'sql'         => "mediumtext NULL",
+            'sql'         => 'mediumtext NULL',
         ],
         'description'      => [
             'label'       => &$GLOBALS['TL_LANG']['tl_contact_profile']['description'],
@@ -257,7 +256,7 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             'inputType'   => 'textarea',
             'eval'        => ['mandatory' => false, 'rte' => 'tinyMCE', 'helpwizard' => true, 'profileField' => true],
             'explanation' => 'insertTags',
-            'sql'         => "mediumtext NULL",
+            'sql'         => 'mediumtext NULL',
         ],
         'responsibilities' => [
             'label'      => &$GLOBALS['TL_LANG']['tl_contact_profile']['responsibilities'],
@@ -265,7 +264,7 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             'inputType'  => 'checkboxWizard',
             'foreignKey' => 'tl_contact_responsibility.name',
             'eval'       => ['multiple' => true, 'profileField' => true],
-            'sql'        => "mediumblob NULL",
+            'sql'        => 'mediumblob NULL',
         ],
         'statement'      => [
             'label'       => &$GLOBALS['TL_LANG']['tl_contact_profile']['statement'],
@@ -274,7 +273,7 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             'inputType'   => 'textarea',
             'eval'        => ['mandatory' => false, 'rte' => 'tinyMCE', 'helpwizard' => true, 'profileField' => true],
             'explanation' => 'insertTags',
-            'sql'         => "mediumtext NULL",
+            'sql'         => 'mediumtext NULL',
         ],
         'jumpTo'           => [
             'label'      => &$GLOBALS['TL_LANG']['tl_contact_profile']['jumpTo'],

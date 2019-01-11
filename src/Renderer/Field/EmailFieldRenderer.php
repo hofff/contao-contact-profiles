@@ -11,7 +11,8 @@ final class EmailFieldRenderer extends AbstractFieldRenderer
 {
     protected const TEMPLATE = 'hofff_contact_field_email';
 
-    protected function compile(FrontendTemplate $template, $value, ContactProfileRenderer $renderer): void
+    /** @param mixed $value */
+    protected function compile(FrontendTemplate $template, $value, ContactProfileRenderer $renderer) : void
     {
     }
 }

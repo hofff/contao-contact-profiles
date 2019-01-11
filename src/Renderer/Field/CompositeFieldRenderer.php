@@ -15,10 +15,7 @@ final class CompositeFieldRenderer extends AbstractFieldRenderer
     private $renderer;
 
     /**
-     * CompositeFieldRenderer constructor.
-     *
-     * @param ContaoFrameworkInterface $framework
-     * @param array| FieldRenderer[]   $renderer
+     * @param FieldRenderer[] $renderer
      */
     public function __construct(ContaoFrameworkInterface $framework, array $renderer)
     {
@@ -27,7 +24,11 @@ final class CompositeFieldRenderer extends AbstractFieldRenderer
         $this->renderer = $renderer;
     }
 
-    public function __invoke(string $field, $value, ContactProfileRenderer $renderer, array $profile): ?string
+    /**
+     * @param mixed    $value
+     * @param string[] $profile
+     */
+    public function __invoke(string $field, $value, ContactProfileRenderer $renderer, array $profile) : ?string
     {
         if (isset($this->renderer[$field])) {
             return $this->renderer[$field]($field, $value, $renderer, $profile);
@@ -36,7 +37,8 @@ final class CompositeFieldRenderer extends AbstractFieldRenderer
         return parent::__invoke($field, $value, $renderer, $profile);
     }
 
-    protected function compile(FrontendTemplate $template, $value, ContactProfileRenderer $renderer): void
+    /** @param mixed $value */
+    protected function compile(FrontendTemplate $template, $value, ContactProfileRenderer $renderer) : void
     {
     }
 }

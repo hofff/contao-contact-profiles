@@ -30,7 +30,8 @@ SQL;
         $this->connection = $connection;
     }
 
-    public function __invoke(): array
+    /** @return string[][] */
+    public function __invoke() : array
     {
         $statement = $this->connection->prepare(self::QUERY);
         $statement->execute();

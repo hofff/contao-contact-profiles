@@ -10,22 +10,16 @@ use function array_filter;
 
 final class ContactFieldsOptions
 {
-    /**
-     * @var ContaoFrameworkInterface
-     */
+    /** @var ContaoFrameworkInterface */
     private $framework;
 
-    /**
-     * ContactFieldsOptions constructor.
-     *
-     * @param ContaoFrameworkInterface $framework
-     */
     public function __construct(ContaoFrameworkInterface $framework)
     {
         $this->framework = $framework;
     }
 
-    public function __invoke(): array
+    /** @return string[] */
+    public function __invoke() : array
     {
         /** @var Controller|Adapter $adpater */
         $adpater = $this->framework->getAdapter(Controller::class);
@@ -34,7 +28,7 @@ final class ContactFieldsOptions
 
         $fields = array_filter(
             $GLOBALS['TL_DCA']['tl_contact_profile']['fields'] ?? [],
-            function (array $config) {
+            static function (array $config) {
                 return $config['eval']['profileField'] ?? false;
             }
         );

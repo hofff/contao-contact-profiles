@@ -10,14 +10,15 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Compiler\PriorityTaggedServiceTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
+use function sprintf;
 
 final class ImageFieldRendererPass implements CompilerPassInterface
 {
     use PriorityTaggedServiceTrait;
 
-    public function process(ContainerBuilder $container): void
+    public function process(ContainerBuilder $container) : void
     {
-        if (!$container->hasDefinition(FieldRenderer::class)) {
+        if (! $container->hasDefinition(FieldRenderer::class)) {
             return;
         }
 
@@ -27,7 +28,7 @@ final class ImageFieldRendererPass implements CompilerPassInterface
 
         foreach ($taggedServices as $id => $tags) {
             foreach ($tags as $attributes) {
-                if (!isset($attributes['field'])) {
+                if (! isset($attributes['field'])) {
                     throw new InvalidConfigurationException(
                         sprintf('Service "%s" tagged as field renderer but no field defined', $id)
                     );

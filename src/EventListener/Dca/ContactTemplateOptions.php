@@ -13,25 +13,17 @@ final class ContactTemplateOptions
     /** @var ContaoFrameworkInterface */
     private $framework;
 
-    /**
-     * ContactTemplateOptions constructor.
-     *
-     * @param ContaoFrameworkInterface $framework
-     */
     public function __construct(ContaoFrameworkInterface $framework)
     {
         $this->framework = $framework;
     }
 
-    /**
-     * @return array
-     */
-    public function __invoke(): array
+    /** @return string[] */
+    public function __invoke() : array
     {
         /** @var Controller|Adapter $adapter */
         $adapter = $this->framework->getAdapter(Controller::class);
 
         return $adapter->getTemplateGroup('hofff_contact_profile_');
     }
-
 }

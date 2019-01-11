@@ -10,5 +10,6 @@ final class ContactProfileElement extends ContentElement
 {
     use ContactProfileTrait;
 
+    /** @var string */
     protected $strTemplate = 'ce_hofff_contact_profile';
 }

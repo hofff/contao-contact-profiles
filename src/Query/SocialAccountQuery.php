@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Hofff\Contao\ContactProfiles\Query;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
 use PDO;
 
 final class SocialAccountQuery
@@ -24,7 +27,12 @@ SQL;
         $this->connection = $connection;
     }
 
-    public function __invoke(int $accountId): array
+    /**
+     * @return string[]
+     *
+     * @throws DBALException
+     */
+    public function __invoke(int $accountId) : array
     {
         $statement = $this->connection->prepare(self::QUERY);
         $statement->bindValue('id', $accountId);

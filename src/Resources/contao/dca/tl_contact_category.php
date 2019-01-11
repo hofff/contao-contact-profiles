@@ -15,9 +15,7 @@ $GLOBALS['TL_DCA']['tl_contact_category'] = [
         'enableVersioning' => true,
         'doNotCopyRecords' => true,
         'sql'              => [
-            'keys' => [
-                'id' => 'primary',
-            ],
+            'keys' => ['id' => 'primary'],
         ],
     ],
 
@@ -71,9 +69,7 @@ $GLOBALS['TL_DCA']['tl_contact_category'] = [
     ],
 
     // Palettes
-    'palettes' => [
-        'default' => '{title_legend},title',
-    ],
+    'palettes' => ['default' => '{title_legend},title'],
 
     // Fields
     'fields'   => [
@@ -82,9 +78,7 @@ $GLOBALS['TL_DCA']['tl_contact_category'] = [
             'search' => true,
             'sql'    => 'int(10) unsigned NOT NULL auto_increment',
         ],
-        'tstamp'     => [
-            'sql' => "int(10) unsigned NOT NULL default '0'",
-        ],
+        'tstamp'     => ['sql' => "int(10) unsigned NOT NULL default '0'"],
         'title' => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_category']['title'],
             'exclude'   => true,

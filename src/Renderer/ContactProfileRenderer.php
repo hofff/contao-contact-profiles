@@ -6,6 +6,7 @@ namespace Hofff\Contao\ContactProfiles\Renderer;
 
 use Contao\FrontendTemplate;
 use Contao\StringUtil;
+use function array_map;
 
 final class ContactProfileRenderer
 {
@@ -16,13 +17,16 @@ final class ContactProfileRenderer
     /** @var FieldRenderer */
     private $fieldRenderer;
 
+    /** @var string[] */
     private $fields = [];
 
-    /** @var array|null */
+    /** @var string[]|null */
     private $imageSize;
 
+    /** @var string */
     private $template = self::DEFAULT_TEMPLATE;
 
+    /** @var string[] */
     private $fieldTemplates = [];
 
     /** @var string */
@@ -33,45 +37,46 @@ final class ContactProfileRenderer
 
     public function __construct(FieldRenderer $fieldRenderer, string $moreLabel)
     {
-        $this->fieldRenderer = $fieldRenderer;
-        $this->moreLabel = $moreLabel;
+        $this->fieldRenderer        = $fieldRenderer;
+        $this->moreLabel            = $moreLabel;
         $this->defaultFieldTemplate = self::DEFAULT_FIELD_TEMPLATE;
     }
 
-    public function withFields(array $fields): self
+    /** @param string[] $fields */
+    public function withFields(array $fields) : self
     {
         $this->fields = $fields;
 
         return $this;
     }
 
-    public function withTemplate(string $template): self
+    public function withTemplate(string $template) : self
     {
         $this->template = $template;
 
         return $this;
     }
 
-    public function withDefaultFieldTemplate(string $template): self
+    public function withDefaultFieldTemplate(string $template) : self
     {
         $this->defaultFieldTemplate = $template;
 
         return $this;
     }
 
-    public function defaultFieldTemplate(): string
+    public function defaultFieldTemplate() : string
     {
         return $this->defaultFieldTemplate;
     }
 
-    public function withFieldTemplate(string $field, string $template): self
+    public function withFieldTemplate(string $field, string $template) : self
     {
         $this->fieldTemplates[$field] = $template;
 
         return $this;
     }
 
-    public function fieldTemplate(string $field, ?string $default = null): ?string
+    public function fieldTemplate(string $field, ?string $default = null) : ?string
     {
         if (isset($this->fieldTemplates[$field])) {
             return $this->fieldTemplates[$field];
@@ -80,32 +85,35 @@ final class ContactProfileRenderer
         return $default ?: $this->defaultFieldTemplate;
     }
 
-    public function withImageSize(array $imageSize): self
+    /** @param string[] $imageSize */
+    public function withImageSize(array $imageSize) : self
     {
         $this->imageSize = $imageSize;
 
         return $this;
     }
 
-    public function imageSize(): ?array
+    /** @return string[]|null */
+    public function imageSize() : ?array
     {
         return $this->imageSize;
     }
 
-    public function moreLabel(): string
+    public function moreLabel() : string
     {
         return $this->moreLabel;
     }
 
-    public function render(array $profile): string
+    /** @param string[] $profile */
+    public function render(array $profile) : string
     {
         $template = new FrontendTemplate($this->template);
         $template->setData(
             [
                 'fields'  => $this->parseFields($profile),
                 'profile' => array_map([StringUtil::class, 'deserialize'], $profile),
-                'has'     => function (string $field) use ($template): bool {
-                    return !empty($template->fields[$field]);
+                'has'     => static function (string $field) use ($template) : bool {
+                    return ! empty($template->fields[$field]);
                 },
             ]
         );
@@ -113,7 +121,12 @@ final class ContactProfileRenderer
         return $template->parse();
     }
 
-    private function parseFields(array $profile): array
+    /**
+     * @param string[] $profile
+     *
+     * @return string[]
+     */
+    private function parseFields(array $profile) : array
     {
         $rendered = [];
 

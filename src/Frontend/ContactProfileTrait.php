@@ -12,18 +12,19 @@ use Hofff\Contao\ContactProfiles\Renderer\FieldRenderer;
 
 trait ContactProfileTrait
 {
-    protected function compile(): void
+    protected function compile() : void
     {
         $renderer = $this->createRenderer();
 
         $this->Template->profiles      = $this->loadProfiles();
         $this->Template->renderer      = $renderer;
-        $this->Template->renderProfile = function (array $profile) use ($renderer): string {
+        $this->Template->renderProfile = static function (array $profile) use ($renderer) : string {
             return $renderer->render($profile);
         };
     }
 
-    private function loadProfiles(): iterable
+    /** @return string[][] */
+    private function loadProfiles() : iterable
     {
         $query      = System::getContainer()->get(PublishedContactProfilesQuery::class);
         $profileIds = StringUtil::deserialize($this->hofff_contact_profiles, true);
@@ -31,7 +32,7 @@ trait ContactProfileTrait
         return $query($profileIds);
     }
 
-    private function createRenderer(): ContactProfileRenderer
+    private function createRenderer() : ContactProfileRenderer
     {
         $fieldRenderer = System::getContainer()->get(FieldRenderer::class);
         $moreLabel     = (string) $this->hofff_contact_more ?: $GLOBALS['TL_LANG']['MSC']['more'];

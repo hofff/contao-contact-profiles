@@ -12,11 +12,11 @@ use Hofff\Contao\ContactProfiles\HofffContaoContactProfilesBundle;
 
 final class Plugin implements BundlePluginInterface
 {
-    public function getBundles(ParserInterface $parser): array
+    /** @return BundleConfig[] */
+    public function getBundles(ParserInterface $parser) : array
     {
-        return [
-            BundleConfig::create(HofffContaoContactProfilesBundle::class)
-                ->setLoadAfter([ContaoCoreBundle::class])
+        return [BundleConfig::create(HofffContaoContactProfilesBundle::class)
+                ->setLoadAfter([ContaoCoreBundle::class]),
         ];
     }
 }

@@ -11,9 +11,7 @@ $GLOBALS['TL_DCA']['tl_contact_social_account'] = [
     'config'   => [
         'dataContainer'    => 'Table',
         'sql'              => [
-            'keys' => [
-                'id' => 'primary',
-            ],
+            'keys' => ['id' => 'primary'],
         ],
     ],
 
@@ -57,9 +55,7 @@ $GLOBALS['TL_DCA']['tl_contact_social_account'] = [
     ],
 
     // Palettes
-    'palettes' => [
-        'default' => '{name_legend},name,class',
-    ],
+    'palettes' => ['default' => '{name_legend},name,class'],
 
     // Fields
     'fields'   => [
@@ -68,9 +64,7 @@ $GLOBALS['TL_DCA']['tl_contact_social_account'] = [
             'search' => true,
             'sql'    => 'int(10) unsigned NOT NULL auto_increment',
         ],
-        'tstamp' => [
-            'sql' => "int(10) unsigned NOT NULL default '0'",
-        ],
+        'tstamp' => ['sql' => "int(10) unsigned NOT NULL default '0'"],
         'name'  => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_social_account']['name'],
             'exclude'   => true,
@@ -89,4 +83,3 @@ $GLOBALS['TL_DCA']['tl_contact_social_account'] = [
         ],
     ],
 ];
-
