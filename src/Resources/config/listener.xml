@@ -22,6 +22,10 @@
             <argument type="service" id="Hofff\Contao\ContactProfiles\Query\CategorizedContactProfilesQuery" />
         </service>
 
+        <service id="Hofff\Contao\ContactProfiles\EventListener\News\AddContactProfileInformationListener" public="true">
+            <argument type="service" id="Hofff\Contao\ContactProfiles\Query\PublishedContactProfilesQuery" />
+        </service>
+
         <service id="Hofff\Contao\ContactProfiles\EventListener\News\NewsContactProfilesListener">
             <argument type="service" id="contao.framework" />
             <argument type="service" id="Hofff\Contao\ContactProfiles\Query\PublishedContactProfilesQuery" />

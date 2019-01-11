@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Hofff\Contao\ContactProfiles\EventListener\News\AddContactProfileInformationListener;
 use Hofff\Contao\ContactProfiles\Frontend\ContactProfileElement;
 
 // Backend module
@@ -20,3 +21,6 @@ $GLOBALS['TL_CTE']['includes']['hofff_contact_profile'] = ContactProfileElement:
 
 // Frontend module
 $GLOBALS['FE_MOD']['miscellaneous']['hofff_contact_profile'] = ContactProfileElement::class;
+
+// Hooks
+$GLOBALS['TL_HOOKS']['parseArticles'][] = [AddContactProfileInformationListener::class, 'onParseArticles'];

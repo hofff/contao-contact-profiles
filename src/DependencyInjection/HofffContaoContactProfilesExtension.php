@@ -23,9 +23,16 @@ final class HofffContaoContactProfilesExtension extends Extension
         $loader->load('services.xml');
         $loader->load('listener.xml');
 
+        $this->checkNewsListener($container);
+    }
+
+    private function checkNewsListener(ContainerBuilder $container) : void
+    {
         $bundles = $container->getParameter('kernel.bundles');
-        if (! isset($bundles['ContaoNewsBundle'])) {
-            $container->removeDefinition(NewsContactProfilesListener::class);
+        if (isset($bundles['ContaoNewsBundle'])) {
+            return;
         }
+
+        $container->removeDefinition(NewsContactProfilesListener::class);
     }
 }

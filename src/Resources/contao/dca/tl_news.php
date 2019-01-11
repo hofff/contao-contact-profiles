@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Contao\CoreBundle\DataContainer\PaletteManipulator;
 use Hofff\Contao\ContactProfiles\EventListener\Dca\ContactProfileOptions;
 
-\Contao\CoreBundle\DataContainer\PaletteManipulator::create()
+PaletteManipulator::create()
     ->addField('hofff_contact_profiles', 'title_legend', PaletteManipulator::POSITION_APPEND)
     ->applyToPalette('default', 'tl_news');
 
