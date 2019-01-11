@@ -110,10 +110,11 @@ final class ContactProfileRenderer
         $template = new FrontendTemplate($this->template);
         $template->setData(
             [
-                'fields'  => $this->parseFields($profile),
-                'profile' => array_map([StringUtil::class, 'deserialize'], $profile),
-                'has'     => static function (string $field) use ($template) : bool {
-                    return ! empty($template->fields[$field]);
+                'renderer' => $this,
+                'fields'   => $this->fields,
+                'profile'  => array_map([StringUtil::class, 'deserialize'], $profile),
+                'has'      => static function (string $field) use ($template) : bool {
+                    return ! empty($template->profile[$field]);
                 },
             ]
         );
@@ -121,20 +122,11 @@ final class ContactProfileRenderer
         return $template->parse();
     }
 
-    /**
-     * @param string[] $profile
-     *
-     * @return string[]
-     */
-    private function parseFields(array $profile) : array
+    /** @param string[] $profile */
+    public function parseField(string $field, array $profile) : string
     {
-        $rendered = [];
+        $raw = StringUtil::deserialize($profile[$field] ?? null);
 
-        foreach ($this->fields as $field) {
-            $raw              = StringUtil::deserialize($profile[$field] ?? null);
-            $rendered[$field] = $this->fieldRenderer->__invoke($field, $raw, $this, $profile);
-        }
-
-        return $rendered;
+        return ($this->fieldRenderer)($field, $raw, $this, $profile);
     }
 }

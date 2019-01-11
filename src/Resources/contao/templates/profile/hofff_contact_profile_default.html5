@@ -1,7 +1,7 @@
 <div class="contact-profile">
-    <?php foreach ($this->fields as $field => $html): ?>
+    <?php foreach ($this->fields as $field): ?>
     <?php if ($this->has($field)): ?>
-        <?= $html ?>
+        <?= $this->renderer->parseField($field, $this->profile) ?>
     <?php endif ?>
     <?php endforeach ?>
 </div>
