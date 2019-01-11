@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Hofff\Contao\ContactProfiles\EventListener\News;
+namespace Hofff\Contao\ContactProfiles\EventListener;
 
 use Contao\Config;
 use Contao\CoreBundle\Framework\ContaoFrameworkInterface;

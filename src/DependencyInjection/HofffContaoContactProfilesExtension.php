@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\DependencyInjection;
 
-use Hofff\Contao\ContactProfiles\EventListener\News\NewsContactProfilesListener;
+use Hofff\Contao\ContactProfiles\EventListener\NewsContactProfilesListener;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
