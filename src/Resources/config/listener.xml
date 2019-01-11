@@ -21,5 +21,11 @@
         <service id="Hofff\Contao\ContactProfiles\EventListener\Dca\ContactProfileOptions" public="true">
             <argument type="service" id="Hofff\Contao\ContactProfiles\Query\CategorizedContactProfilesQuery" />
         </service>
+
+        <service id="Hofff\Contao\ContactProfiles\EventListener\News\NewsContactProfilesListener">
+            <argument type="service" id="contao.framework" />
+            <argument type="service" id="Hofff\Contao\ContactProfiles\Query\PublishedContactProfilesQuery" />
+            <tag name="kernel.event_listener" event="hofff.contao_contact_profile.load_contact_profiles" method="onLoadContactProfiles"/>
+        </service>
     </services>
 </container>

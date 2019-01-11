@@ -10,7 +10,7 @@ use Hofff\Contao\ContactProfiles\EventListener\Dca\ContactTemplateOptions;
  * Palettes
  */
 $GLOBALS['TL_DCA']['tl_module']['palettes']['hofff_contact_profile'] = '{type_legend},name,headline,type'
-    . ';{profile_legend},hofff_contact_profiles,hofff_contact_fields'
+    . ';{profile_legend},hofff_contact_dynamic,hofff_contact_profiles,hofff_contact_fields'
     . ';{template_legend:hide},customTpl,hofff_contact_template,hofff_contact_more,size'
     . ';{protected_legend:hide},protected'
     . ';{expert_legend:hide},guests,cssID'
@@ -26,6 +26,14 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['hofff_contact_profiles'] = [
     'options_callback' => [ContactProfileOptions::class, '__invoke'],
     'eval'             => ['tl_class' => 'clr', 'multiple' => true],
     'sql'              => 'blob NULL',
+];
+
+$GLOBALS['TL_DCA']['tl_module']['fields']['hofff_contact_dynamic'] = [
+    'label'            => &$GLOBALS['TL_LANG']['tl_module']['hofff_contact_dynamic'],
+    'exclude'          => true,
+    'inputType'        => 'checkbox',
+    'eval'             => ['tl_class' => 'clr', 'multiple' => false],
+    'sql'              => 'char(1) NOT NULL default \'\'',
 ];
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['hofff_contact_fields'] = [

@@ -6,9 +6,11 @@ namespace Hofff\Contao\ContactProfiles\Frontend;
 
 use Contao\StringUtil;
 use Contao\System;
+use Hofff\Contao\ContactProfiles\Event\LoadContactProfilesEvent;
 use Hofff\Contao\ContactProfiles\Query\PublishedContactProfilesQuery;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
 use Hofff\Contao\ContactProfiles\Renderer\FieldRenderer;
+use const TL_MODE;
 
 trait ContactProfileTrait
 {
@@ -26,6 +28,17 @@ trait ContactProfileTrait
     /** @return string[][] */
     private function loadProfiles() : iterable
     {
+        if ($this->hofff_contact_dynamic) {
+            if (TL_MODE !== 'FE') {
+                return [];
+            }
+
+            $event = new LoadContactProfilesEvent($this, $GLOBALS['objPage']);
+            System::getContainer()->get('event_dispatcher')->dispatch($event::NAME, $event);
+
+            return $event->profiles();
+        }
+
         $query      = System::getContainer()->get(PublishedContactProfilesQuery::class);
         $profileIds = StringUtil::deserialize($this->hofff_contact_profiles, true);
 

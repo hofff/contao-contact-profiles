@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\DependencyInjection;
 
+use Hofff\Contao\ContactProfiles\EventListener\News\NewsContactProfilesListener;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -21,5 +22,10 @@ final class HofffContaoContactProfilesExtension extends Extension
 
         $loader->load('services.xml');
         $loader->load('listener.xml');
+
+        $bundles = $container->getParameter('kernel.bundles');
+        if (! isset($bundles['ContaoNewsBundle'])) {
+            $container->removeDefinition(NewsContactProfilesListener::class);
+        }
     }
 }
