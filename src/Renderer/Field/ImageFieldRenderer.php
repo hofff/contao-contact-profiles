@@ -39,8 +39,10 @@ final class ImageFieldRenderer extends AbstractFieldRenderer
             'size'      => $renderer->imageSize(),
         ];
 
-        $template->caption = $template->profile['caption'];
+        $this->framework->getAdapter(Controller::class)->addImageToTemplate($template, $image, null, null, $model);
 
-        $this->framework->getAdapter(Controller::class)->addImageToTemplate($template, $image);
+        if ($template->profile['caption']) {
+            $template->caption = $template->profile['caption'];
+        }
     }
 }
