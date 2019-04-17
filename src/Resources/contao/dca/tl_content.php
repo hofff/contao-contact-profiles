@@ -19,7 +19,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['hofff_contact_profile'] = '{type_l
 /*
  * Fields
  */
-$GLOBALS['TL_DCA']['tl_module']['fields']['hofff_contact_dynamic'] = [
+$GLOBALS['TL_DCA']['tl_content']['fields']['hofff_contact_dynamic'] = [
     'label'            => &$GLOBALS['TL_LANG']['tl_content']['hofff_contact_dynamic'],
     'exclude'          => true,
     'inputType'        => 'checkbox',
