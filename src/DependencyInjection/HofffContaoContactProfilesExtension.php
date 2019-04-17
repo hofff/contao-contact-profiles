@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\DependencyInjection;
 
+use Hofff\Contao\ContactProfiles\EventListener\EventsContactProfilesListener;
+use Hofff\Contao\ContactProfiles\EventListener\FAQContactProfilesListener;
 use Hofff\Contao\ContactProfiles\EventListener\NewsContactProfilesListener;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -23,7 +25,29 @@ final class HofffContaoContactProfilesExtension extends Extension
         $loader->load('services.xml');
         $loader->load('listener.xml');
 
+        $this->checkEventsListener($container);
+        $this->checkFaqListener($container);
         $this->checkNewsListener($container);
+    }
+
+    private function checkEventsListener(ContainerBuilder $container) : void
+    {
+        $bundles = $container->getParameter('kernel.bundles');
+        if (isset($bundles['ContaoCalendarBundle'])) {
+            return;
+        }
+
+        $container->removeDefinition(EventsContactProfilesListener::class);
+    }
+
+    private function checkFaqListener(ContainerBuilder $container) : void
+    {
+        $bundles = $container->getParameter('kernel.bundles');
+        if (isset($bundles['ContaoFaqBundle'])) {
+            return;
+        }
+
+        $container->removeDefinition(FAQContactProfilesListener::class);
     }
 
     private function checkNewsListener(ContainerBuilder $container) : void
