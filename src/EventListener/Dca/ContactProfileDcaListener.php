@@ -128,11 +128,8 @@ final class ContactProfileDcaListener
 
         // Update the database
         Database::getInstance()
-            ->prepare(
-                sprintf('UPDATE tl_contact_profile SET tstamp=%s, published=\'\'', $time)
-                . ($blnVisible ? '1' : '')
-                . "' WHERE id=?"
-            )
+            ->prepare('UPDATE tl_contact_profile %s WHERE id=?')
+            ->set(['tstamp' => $time, 'published' => ($blnVisible ? '1' : '')])
             ->execute($intId);
 
         if ($dc && $dc->activeRecord) {
