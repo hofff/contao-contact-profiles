@@ -64,5 +64,10 @@
             <argument type="service" id="contao.framework" />
             <tag name="hofff_contao_contact_profiles.field_renderer" field="website" />
         </service>
+
+        <service id="Hofff\Contao\ContactProfiles\Renderer\Field\VideosFieldRenderer">
+            <argument type="service" id="contao.framework" />
+            <tag name="hofff_contao_contact_profiles.field_renderer" field="videos" />
+        </service>
     </services>
 </container>

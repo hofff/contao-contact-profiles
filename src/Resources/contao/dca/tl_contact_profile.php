@@ -73,6 +73,7 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
         'default' => '{personal_legend},salutation,title,firstname,lastname,position,profession,image,caption'
             . ';{contact_legend},phone,mobile,fax,email,website,accounts'
             . ';{details_legend},teaser,description,statement,responsibilities'
+            . ';{videos_legend},videos'
             . ';{redirect_legend},jumpTo'
             . ';{published_legend},published',
     ],
@@ -308,6 +309,44 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             'inputType' => 'checkbox',
             'eval'      => ['doNotCopy' => true],
             'sql'       => "char(1) NOT NULL default ''",
+        ],
+        'videos'           => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['videos'],
+            'exclude'   => true,
+            'inputType' => 'multiColumnWizard',
+            'eval'      => [
+                'tl_class'     => 'clr',
+                'profileField' => true,
+                'columnFields' => [
+                    'source' => [
+                        'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['videoSource'],
+                        'inputType' => 'select',
+                        'options'   => ['local', 'youtube', 'vimeo'],
+                        'eval'      => [
+                            'includeBlankOption' => true,
+                            'tl_class'           => 'w50',
+                            'style'              => 'width: 100%',
+                        ],
+                    ],
+                    'video'  => [
+                        'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['videoVideo'],
+                        'inputType' => 'text',
+                        'eval'      => [
+                            'maxlength' => 128,
+                            'rgxp'      => 'url',
+                            'tl_class'  => 'w50 wizard',
+                            'dcaPicker' => [
+                                'do'        => 'files',
+                                'context'   => 'file',
+                                'icon'      => 'pickfile.svg',
+                                'fieldType' => 'radio',
+                                'filesOnly' => true,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'sql'       => 'blob NULL',
         ],
     ],
 ];

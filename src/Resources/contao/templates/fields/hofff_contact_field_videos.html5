@@ -1,0 +1,19 @@
+<?php $this->extend($this->defaultTemplate) ?>
+
+<?php $this->block('value') ?>
+<ul>
+<?php foreach ($this->value as $video): ?>
+  <li>
+  <?php if ($video['source'] === 'local'): ?>
+    <figure>
+      <video>
+        <source type="<?= $video['file']->mime ?>" src="<?= $video['file']->path.$video['file']->range ?>" title="<?= \Contao\StringUtil::specialchars($video['file']->title) ?>">
+      </video>
+    </figure>
+  <?php else: ?>
+    <iframe src="<?= $video['url'] ?>" allowfullscreen></iframe>
+  <?php endif ?>
+  </li>
+<?php endforeach ?>
+</ul>
+<?php $this->endblock() ?>

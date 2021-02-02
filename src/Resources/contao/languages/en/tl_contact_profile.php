@@ -8,6 +8,7 @@ $GLOBALS['TL_LANG']['tl_contact_profile']['contact_legend']   = 'Contact informa
 $GLOBALS['TL_LANG']['tl_contact_profile']['details_legend']   = 'Details';
 $GLOBALS['TL_LANG']['tl_contact_profile']['redirect_legend']  = 'Redirect';
 $GLOBALS['TL_LANG']['tl_contact_profile']['published_legend'] = 'Published';
+$GLOBALS['TL_LANG']['tl_contact_profile']['videos_legend']    = 'Videos';
 
 // Operations
 $GLOBALS['TL_LANG']['tl_contact_profile']['new'][0]    = 'New';
@@ -56,6 +57,12 @@ $GLOBALS['TL_LANG']['tl_contact_profile']['description'][0]      = 'Description'
 $GLOBALS['TL_LANG']['tl_contact_profile']['description'][1]      = 'Description of the contact.';
 $GLOBALS['TL_LANG']['tl_contact_profile']['statement'][0]        = 'Personal statement';
 $GLOBALS['TL_LANG']['tl_contact_profile']['statement'][1]        = 'Personal statement of the contact.';
+$GLOBALS['TL_LANG']['tl_contact_profile']['videos'][0]           = 'Videos';
+$GLOBALS['TL_LANG']['tl_contact_profile']['videoSource'][1]      = 'Source';
+$GLOBALS['TL_LANG']['tl_contact_profile']['videoSource'][0]      = 'Source of the video';
+$GLOBALS['TL_LANG']['tl_contact_profile']['videoVideo'][1]       = 'Video ID/Url/File';
+$GLOBALS['TL_LANG']['tl_contact_profile']['videoVideo'][0]       = 'The video file or id';
+$GLOBALS['TL_LANG']['tl_contact_profile']['videos'][1]           = 'Videos assigned with the contact.';
 $GLOBALS['TL_LANG']['tl_contact_profile']['jumpTo'][0]           = 'Redirect page';
 $GLOBALS['TL_LANG']['tl_contact_profile']['jumpTo'][1]           = 'You can provide a redirect page for each contact.';
 $GLOBALS['TL_LANG']['tl_contact_profile']['responsibilities'][0] = 'Responsibilities';

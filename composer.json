@@ -61,6 +61,6 @@
     }
   },
   "require-dev": {
-    "doctrine/coding-standard": "^5.0"
+    "doctrine/coding-standard": "^8.0"
   }
 }
