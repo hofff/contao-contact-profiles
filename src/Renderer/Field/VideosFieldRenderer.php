@@ -15,7 +15,6 @@ final class VideosFieldRenderer extends AbstractFieldRenderer
     /** @param mixed $videos */
     protected function compile(FrontendTemplate $template, $videos, ContactProfileRenderer $renderer): void
     {
-        \dump($videos);
         $template->value = array_filter(
             array_map(
                 static function (array $video) {
@@ -39,7 +38,6 @@ final class VideosFieldRenderer extends AbstractFieldRenderer
                 (array) $videos
             ),
             static function (array $video): bool {
-                \dump($video);
                 return !empty($video['url']);
             }
         );
