@@ -1,0 +1,20 @@
+<?php $this->extend($this->defaultTemplate) ?>
+
+<?php $this->block('value') ?>
+<ul>
+<?php foreach ($this->value as $image): ?>
+  <li>
+      <figure class="image_container"<?php if ($image->margin): ?> style="<?= $image->margin ?>"<?php endif; ?> itemscope itemtype="http://schema.org/ImageObject">
+          <?php if ($image->href): ?>
+              <a href="<?= $image->href ?>"<?= $image->attributes ?><?php if ($image->linkTitle) echo ' title="' . $image->linkTitle . '"'; ?> itemprop="contentUrl"><?php $this->insert('picture_default', $image->picture); ?></a>
+          <?php else: ?>
+              <?php $this->insert('picture_default', $image->picture); ?>
+          <?php endif; ?>
+          <?php if ($image->caption): ?>
+              <figcaption class="figure-caption" itemprop="caption"><?= $image->caption ?></figcaption>
+          <?php endif; ?>
+      </figure>
+  </li>
+<?php endforeach ?>
+</ul>
+<?php $this->endblock() ?>

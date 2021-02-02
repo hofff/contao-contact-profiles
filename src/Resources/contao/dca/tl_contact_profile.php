@@ -73,7 +73,8 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
         'default' => '{personal_legend},salutation,title,firstname,lastname,position,profession,image,caption'
             . ';{contact_legend},phone,mobile,fax,email,website,accounts'
             . ';{details_legend},teaser,description,statement,responsibilities'
-            . ';{videos_legend},videos'
+            . ';{gallery_legend:hide},gallery'
+            . ';{videos_legend:hide},videos'
             . ';{redirect_legend},jumpTo'
             . ';{published_legend},published',
     ],
@@ -347,6 +348,25 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 ],
             ],
             'sql'       => 'blob NULL',
+        ],
+        'gallery'          => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['gallery'],
+            'exclude'   => true,
+            'inputType' => 'fileTree',
+            'eval'      => [
+                'profileField' => true,
+                'multiple'     => true,
+                'fieldType'    => 'checkbox',
+                'orderField'   => 'galleryOrder',
+                'files'        => true,
+                'isGallery'    => true,
+                'extensions'   => Config::get('validImageTypes'),
+            ],
+            'sql'       => "blob NULL",
+        ],
+        'galleryOrder'     => [
+            'label' => &$GLOBALS['TL_LANG']['MSC']['sortOrder'],
+            'sql'   => "blob NULL",
         ],
     ],
 ];
