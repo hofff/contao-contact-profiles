@@ -255,7 +255,7 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                     ],
                 ],
             ],
-            'sql'       => 'varchar(255) NOT NULL default \'\'',
+            'sql'       => 'blob NULL',
         ],
         'teaser'           => [
             'label'       => &$GLOBALS['TL_LANG']['tl_contact_profile']['teaser'],
