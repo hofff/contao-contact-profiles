@@ -12,8 +12,8 @@ final class VideosFieldRenderer extends AbstractFieldRenderer
 {
     protected const TEMPLATE = 'hofff_contact_field_videos';
 
-    /** @param mixed $videos */
-    protected function compile(FrontendTemplate $template, $videos, ContactProfileRenderer $renderer): void
+    /** @param mixed $value */
+    protected function compile(FrontendTemplate $template, $value, ContactProfileRenderer $renderer): void
     {
         $template->value = array_filter(
             array_map(
@@ -35,7 +35,7 @@ final class VideosFieldRenderer extends AbstractFieldRenderer
 
                     return $video;
                 },
-                (array) $videos
+                (array) $value
             ),
             static function (array $video): bool {
                 return !empty($video['url']);
