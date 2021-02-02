@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Contao\Config;
 use Hofff\Contao\ContactProfiles\EventListener\Dca\AccountTypeOptions;
 use Hofff\Contao\ContactProfiles\EventListener\Dca\ContactProfileDcaListener;
 
@@ -70,7 +71,7 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
     // Palettes
     'palettes' => [
         'default' => '{personal_legend},salutation,title,firstname,lastname,position,profession,image,caption'
-            . ';{contact_legend},phone,mobile,fax,email,accounts'
+            . ';{contact_legend},phone,mobile,fax,email,website,accounts'
             . ';{details_legend},teaser,description,statement,responsibilities'
             . ';{redirect_legend},jumpTo'
             . ';{published_legend},published',
@@ -138,12 +139,12 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'fieldType'    => 'radio',
                 'mandatory'    => false,
                 'tl_class'     => 'clr',
-                'extensions'   => Contao\Config::get('validImageTypes'),
+                'extensions'   => Config::get('validImageTypes'),
                 'profileField' => true,
             ],
             'sql'       => 'binary(16) NULL',
         ],
-        'caption'       => [
+        'caption'          => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['caption'],
             'exclude'   => true,
             'inputType' => 'text',
@@ -203,6 +204,22 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'decodeEntities' => true,
                 'tl_class'       => 'w50',
                 'profileField'   => true,
+            ],
+            'sql'       => 'varchar(255) NOT NULL default \'\'',
+        ],
+        'website'          => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['website'],
+            'exclude'   => true,
+            'search'    => true,
+            'inputType' => 'text',
+            'eval'      => [
+                'maxlength'      => 255,
+                'rgxp'           => 'url',
+                'pagePicker'     => true,
+                'decodeEntities' => true,
+                'tl_class'       => 'w50',
+                'profileField'   => true,
+                'dcaPicker'      => true,
             ],
             'sql'       => 'varchar(255) NOT NULL default \'\'',
         ],
@@ -266,7 +283,7 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             'eval'       => ['multiple' => true, 'profileField' => true],
             'sql'        => 'mediumblob NULL',
         ],
-        'statement'      => [
+        'statement'        => [
             'label'       => &$GLOBALS['TL_LANG']['tl_contact_profile']['statement'],
             'exclude'     => true,
             'search'      => true,

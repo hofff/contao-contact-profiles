@@ -59,5 +59,10 @@
             <argument type="service" id="contao.framework" />
             <tag name="hofff_contao_contact_profiles.field_renderer" field="jumpTo" />
         </service>
+
+        <service id="Hofff\Contao\ContactProfiles\Renderer\Field\WebsiteFieldRenderer">
+            <argument type="service" id="contao.framework" />
+            <tag name="hofff_contao_contact_profiles.field_renderer" field="website" />
+        </service>
     </services>
 </container>
