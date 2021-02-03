@@ -318,7 +318,7 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             'eval'      => [
                 'tl_class'     => 'clr',
                 'profileField' => true,
-                'columnFields'    => [
+                'columnFields' => [
                     'videoTitle'  => [
                         'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['videoTitle'],
                         'exclude'   => true,
@@ -326,8 +326,9 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                         'eval'      => [
                             'mandatory'    => false,
                             'maxlength'    => 255,
-                            'tl_class'     => 'w50',
+                            'tl_class'     => '',
                             'profileField' => true,
+                            'style'        => 'width: 100%',
                         ],
                         'sql'       => 'varchar(255) NOT NULL default \'\'',
                     ],
@@ -337,17 +338,16 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                         'options'   => ['local', 'youtube', 'vimeo'],
                         'eval'      => [
                             'includeBlankOption' => true,
-                            'tl_class'           => 'w50',
                             'style'              => 'width: 100%',
                         ],
                     ],
-                    'video'  => [
+                    'video'       => [
                         'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['videoVideo'],
                         'inputType' => 'text',
                         'eval'      => [
                             'maxlength' => 128,
                             'rgxp'      => 'url',
-                            'tl_class'  => 'w50 wizard',
+                            'tl_class'  => 'wizard',
                             'dcaPicker' => [
                                 'do'        => 'files',
                                 'context'   => 'file',
@@ -355,9 +355,10 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                                 'fieldType' => 'radio',
                                 'filesOnly' => true,
                             ],
+                            'style'     => 'width: 100%',
                         ],
                     ],
-                    'image'  => [
+                    'image'       => [
                         'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['image'],
                         'exclude'   => true,
                         'inputType' => 'fileTree',
@@ -365,7 +366,6 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                             'filesOnly'    => true,
                             'fieldType'    => 'radio',
                             'mandatory'    => false,
-                            'tl_class'     => 'clr',
                             'extensions'   => Config::get('validImageTypes'),
                             'profileField' => true,
                         ],
