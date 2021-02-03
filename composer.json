@@ -30,15 +30,14 @@
     "source": "https://github.com/hofff/contao-contact-profiles"
   },
   "require": {
-    "php": ">=7.4",
+    "php": ">=7.1",
     "ext-pdo": "*",
     "contao/core-bundle": "~4.4",
     "doctrine/dbal": "^2.5",
     "symfony/config": "^3.3 || ^4.0",
     "symfony/dependency-injection": "^3.3 || ^4.0",
     "symfony/http-kernel": "^3.3 || ^4.0",
-    "menatwork/contao-multicolumnwizard": "^3.3",
-    "mvo/contao-group-widget": "^1.0"
+    "menatwork/contao-multicolumnwizard": "^3.3"
   },
   "suggest": {
     "contao/news-bundle": "Use contact profile for author information",
