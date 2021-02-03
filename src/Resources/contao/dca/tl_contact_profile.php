@@ -314,40 +314,71 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
         'videos'           => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['videos'],
             'exclude'   => true,
-            'inputType' => 'multiColumnWizard',
-            'eval'      => [
-                'tl_class'     => 'clr',
-                'profileField' => true,
-                'columnFields' => [
-                    'source' => [
-                        'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['videoSource'],
-                        'inputType' => 'select',
-                        'options'   => ['local', 'youtube', 'vimeo'],
-                        'eval'      => [
-                            'includeBlankOption' => true,
-                            'tl_class'           => 'w50',
-                            'style'              => 'width: 100%',
-                        ],
+            'inputType' => 'group',
+            'palettes'  => ['title', 'source', 'video', 'image'],
+            'min'       => 1,
+            'fields'    => [
+                'title'  => [
+                    'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['videoTitle'],
+                    'exclude'   => true,
+                    'inputType' => 'text',
+                    'eval'      => [
+                        'mandatory'    => false,
+                        'maxlength'    => 255,
+                        'tl_class'     => 'w50',
+                        'profileField' => true,
                     ],
-                    'video'  => [
-                        'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['videoVideo'],
-                        'inputType' => 'text',
-                        'eval'      => [
-                            'maxlength' => 128,
-                            'rgxp'      => 'url',
-                            'tl_class'  => 'w50 wizard',
-                            'dcaPicker' => [
-                                'do'        => 'files',
-                                'context'   => 'file',
-                                'icon'      => 'pickfile.svg',
-                                'fieldType' => 'radio',
-                                'filesOnly' => true,
-                            ],
+                    'sql'       => 'varchar(255) NOT NULL default \'\'',
+                ],
+                'source' => [
+                    'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['videoSource'],
+                    'inputType' => 'select',
+                    'options'   => ['local', 'youtube', 'vimeo'],
+                    'eval'      => [
+                        'includeBlankOption' => true,
+                        'tl_class'           => 'w50',
+                        'style'              => 'width: 100%',
+                    ],
+                ],
+                'video'  => [
+                    'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['videoVideo'],
+                    'inputType' => 'text',
+                    'eval'      => [
+                        'maxlength' => 128,
+                        'rgxp'      => 'url',
+                        'tl_class'  => 'w50 wizard',
+                        'dcaPicker' => [
+                            'do'        => 'files',
+                            'context'   => 'file',
+                            'icon'      => 'pickfile.svg',
+                            'fieldType' => 'radio',
+                            'filesOnly' => true,
                         ],
                     ],
                 ],
+                'image'  => [
+                    'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['image'],
+                    'exclude'   => true,
+                    'inputType' => 'fileTree',
+                    'eval'      => [
+                        'filesOnly'    => true,
+                        'fieldType'    => 'radio',
+                        'mandatory'    => false,
+                        'tl_class'     => 'clr',
+                        'extensions'   => Config::get('validImageTypes'),
+                        'profileField' => true,
+                    ],
+                ],
             ],
-            'sql'       => 'blob NULL',
+            'eval'      => [
+                'tl_class'     => 'clr',
+                'profileField' => true,
+            ],
+            'sql'       => [
+                'type'    => 'blob',
+                'length'  => \Doctrine\DBAL\Platforms\MySqlPlatform::LENGTH_LIMIT_BLOB,
+                'notnull' => false,
+            ],
         ],
         'gallery'          => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['gallery'],
