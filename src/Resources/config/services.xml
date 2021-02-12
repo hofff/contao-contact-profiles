@@ -6,8 +6,29 @@
     <services>
         <defaults public="false" autoconfigure="false" autowire="false"/>
 
+        <!-- Migration -->
+        <service id="Hofff\Contao\ContactProfiles\Migration\ContactProfileElementMigration">
+            <argument type="service" id="database_connection"/>
+            <argument>%hofff_contao_contact_profiles.sources%</argument>
+            <tag name="contao.migration"/>
+        </service>
+
+        <service id="Hofff\Contao\ContactProfiles\Migration\ContactProfileModuleMigration">
+            <argument type="service" id="database_connection"/>
+            <argument>%hofff_contao_contact_profiles.sources%</argument>
+            <tag name="contao.migration"/>
+        </service>
+
         <!-- Queries -->
+        <service id="Hofff\Contao\ContactProfiles\Query\PublishedContactProfileQuery" public="true">
+            <argument type="service" id="database_connection"/>
+        </service>
+
         <service id="Hofff\Contao\ContactProfiles\Query\PublishedContactProfilesQuery" public="true">
+            <argument type="service" id="database_connection"/>
+        </service>
+
+        <service id="Hofff\Contao\ContactProfiles\Query\PublishedContactProfilesByCategoriesQuery" public="true">
             <argument type="service" id="database_connection"/>
         </service>
 

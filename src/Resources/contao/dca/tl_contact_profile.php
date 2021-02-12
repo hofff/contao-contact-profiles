@@ -88,6 +88,13 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
         ],
         'pid'              => ['sql' => "int(10) unsigned NOT NULL default '0'"],
         'tstamp'           => ['sql' => "int(10) unsigned NOT NULL default '0'"],
+        'alias'            => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['alias'],
+            'exclude'   => true,
+            'inputType' => 'text',
+            'eval'      => ['mandatory' => false, 'maxlength' => 255, 'tl_class' => 'w50'],
+            'sql'       => 'varchar(255) BINARY NOT NULL default \'\'',
+        ],
         'salutation'       => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['salutation'],
             'exclude'   => true,

@@ -29,6 +29,10 @@ final class EventsContactProfilesListener
 
     public function onLoadContactProfiles(LoadContactProfilesEvent $event) : void
     {
+        if (!in_array('event', $event->sources(), true)) {
+            return;
+        }
+
         $calendarEvent = $this->getEvent();
         if (! $calendarEvent) {
             return;

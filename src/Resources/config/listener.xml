@@ -29,6 +29,10 @@
             <argument type="service" id="Hofff\Contao\ContactProfiles\Query\CategorizedContactProfilesQuery" />
         </service>
 
+        <service id="Hofff\Contao\ContactProfiles\EventListener\Dca\SourcesOptions" public="true">
+            <argument>%hofff_contao_contact_profiles.sources%</argument>
+        </service>
+
         <service id="Hofff\Contao\ContactProfiles\EventListener\Hook\AddContactProfileInformationListener" public="true">
             <argument type="service" id="Hofff\Contao\ContactProfiles\Query\PublishedContactProfilesQuery" />
             <argument>%hofff.contao_contact_profiles.template_prefixes%</argument>

@@ -29,6 +29,10 @@ final class FAQContactProfilesListener
 
     public function onLoadContactProfiles(LoadContactProfilesEvent $event) : void
     {
+        if (!in_array('faq', $event->sources(), true)) {
+            return;
+        }
+
         $news = $this->getFAQ();
         if (! $news) {
             return;

@@ -29,6 +29,10 @@ final class NewsContactProfilesListener
 
     public function onLoadContactProfiles(LoadContactProfilesEvent $event) : void
     {
+        if (!in_array('news', $event->sources(), true)) {
+            return;
+        }
+
         $news = $this->getNews();
         if (! $news) {
             return;

@@ -22,13 +22,18 @@ final class LoadContactProfilesEvent extends Event
     /** @var string[][] */
     private $profiles = [];
 
+    /** @var string[] */
+    private $sources;
+
     /**
      * @param ContentElement|Module $context
+     * @param string[]              $sources
      */
-    public function __construct($context, PageModel $page)
+    public function __construct($context, PageModel $page, array $sources = [])
     {
         $this->context = $context;
         $this->page    = $page;
+        $this->sources = $sources;
     }
 
     /** @param string[][] $profiles */
@@ -52,5 +57,10 @@ final class LoadContactProfilesEvent extends Event
     public function profiles() : array
     {
         return $this->profiles;
+    }
+
+    public function sources(): array
+    {
+        return $this->sources;
     }
 }

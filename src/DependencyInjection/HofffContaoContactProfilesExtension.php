@@ -25,35 +25,43 @@ final class HofffContaoContactProfilesExtension extends Extension
         $loader->load('services.xml');
         $loader->load('listener.xml');
 
-        $this->checkEventsListener($container);
-        $this->checkFaqListener($container);
-        $this->checkNewsListener($container);
+        $config  = $this->processConfiguration(new Configuration(), $configs);
+        $sources = $config['sources'];
+
+        $this->checkCalendarBundle($container, $sources);
+        $this->checkFaqBundle($container, $sources);
+        $this->checkNewsBundle($container, $sources);
+
+        $container->setParameter('hofff_contao_contact_profiles.sources', $sources);
     }
 
-    private function checkEventsListener(ContainerBuilder $container) : void
+    private function checkCalendarBundle(ContainerBuilder $container, array &$sources) : void
     {
         $bundles = $container->getParameter('kernel.bundles');
         if (isset($bundles['ContaoCalendarBundle'])) {
+            $sources[] = 'event';
             return;
         }
 
         $container->removeDefinition(EventsContactProfilesListener::class);
     }
 
-    private function checkFaqListener(ContainerBuilder $container) : void
+    private function checkFaqBundle(ContainerBuilder $container, array &$sources) : void
     {
         $bundles = $container->getParameter('kernel.bundles');
         if (isset($bundles['ContaoFaqBundle'])) {
+            $sources[] = 'faq';
             return;
         }
 
         $container->removeDefinition(FAQContactProfilesListener::class);
     }
 
-    private function checkNewsListener(ContainerBuilder $container) : void
+    private function checkNewsBundle(ContainerBuilder $container, array &$sources) : void
     {
         $bundles = $container->getParameter('kernel.bundles');
         if (isset($bundles['ContaoNewsBundle'])) {
+            $sources[] = 'news';
             return;
         }
 
