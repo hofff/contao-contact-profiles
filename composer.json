@@ -38,7 +38,7 @@
     "menatwork/contao-multicolumnwizard-bundle": "^3.4",
     "symfony/config": "^3.3 || ^4.0",
     "symfony/dependency-injection": "^3.3 || ^4.0",
-    "symfony/http-kernel": "^3.3 || ^4.0",
+    "symfony/http-kernel": "^3.3 || ^4.0"
   },
   "suggest": {
     "contao/news-bundle": "Use contact profile for author information",
