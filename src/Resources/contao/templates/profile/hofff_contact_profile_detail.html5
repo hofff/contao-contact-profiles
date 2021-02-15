@@ -1,0 +1,8 @@
+<div class="contact-profile">
+    <?php foreach ($this->fields as $field): ?>
+    <?php if ($this->has($field)): ?>
+        <?= $this->renderer->parseField($field, $this->profile) ?>
+    <?php endif ?>
+    <?php endforeach ?>
+    <a href="/kontakt/<?= $this->profile['id'] ?>.html">Mehr</a>
+</div>

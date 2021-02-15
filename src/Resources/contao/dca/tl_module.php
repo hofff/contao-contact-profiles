@@ -17,6 +17,12 @@ $GLOBALS['TL_DCA']['tl_module']['palettes']['hofff_contact_profile'] = '{type_le
     . ';{protected_legend:hide},protected'
     . ';{expert_legend:hide},guests,cssID'
     . ';{invisible_legend:hide},invisible,start,stop';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['hofff_contact_profile_detail'] = '{type_legend},type,headline'
+    . ';{profile_legend},hofff_contact_fields'
+    . ';{template_legend:hide},customTpl,hofff_contact_template,hofff_contact_more,size'
+    . ';{protected_legend:hide},protected'
+    . ';{expert_legend:hide},guests,cssID'
+    . ';{invisible_legend:hide},invisible,start,stop';
 
 $GLOBALS['TL_DCA']['tl_module']['metasubselectpalettes']['hofff_contact_source']['custom']     = ['hofff_contact_profiles'];
 $GLOBALS['TL_DCA']['tl_module']['metasubselectpalettes']['hofff_contact_source']['categories'] = ['hofff_contact_categories'];

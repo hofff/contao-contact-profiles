@@ -31,14 +31,17 @@ SQL;
     /**
      * @return string[][]
      */
-    public function __invoke(string $aliasOrId) : array
+    public function __invoke(string $aliasOrId) : ?array
     {
         if ($aliasOrId === '') {
             return [];
         }
 
         $statement = $this->connection->executeQuery(self::QUERY, ['alias' => $aliasOrId]);
+        if ($statement->rowCount() === 0) {
+            return null;
+        }
 
-        return $statement->fetchAll(PDO::FETCH_ASSOC);
+        return $statement->fetch(PDO::FETCH_ASSOC);
     }
 }

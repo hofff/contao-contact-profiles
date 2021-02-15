@@ -2,6 +2,11 @@
 
 declare(strict_types=1);
 
+$GLOBALS['TL_LANG']['CTE']['hofff_contact_profile'][0]        = 'Kontaktprofile';
+$GLOBALS['TL_LANG']['CTE']['hofff_contact_profile'][1]        = 'Kontaktprofile anzeigen';
+$GLOBALS['TL_LANG']['CTE']['hofff_contact_profile_detail'][0] = 'Kontaktprofil Details';
+$GLOBALS['TL_LANG']['CTE']['hofff_contact_profile_detail'][1] = 'Details eines Kontaktprofils anzeigen';
+
 $GLOBALS['TL_LANG']['tl_content']['profile_legend']            = 'Kontaktprofil';
 $GLOBALS['TL_LANG']['tl_content']['hofff_contact_profiles'][0] = 'Kontaktprofile';
 $GLOBALS['TL_LANG']['tl_content']['hofff_contact_profiles'][1] = 'Bitten wählen Sie ein oder mehrere Kontaktprofile aus, welche angezeigt werden sollen';
