@@ -10,8 +10,8 @@ use Hofff\Contao\ContactProfiles\EventListener\Dca\SourcesOptions;
 /*
  * Palettes
  */
-$GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][]        = 'hofff_contact_source';
-$GLOBALS['TL_DCA']['tl_content']['palettes']['hofff_contact_profile'] = '{type_legend},type,headline'
+$GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][]               = 'hofff_contact_source';
+$GLOBALS['TL_DCA']['tl_content']['palettes']['hofff_contact_profile']        = '{type_legend},type,headline'
     . ';{profile_legend},hofff_contact_source,hofff_contact_fields'
     . ';{template_legend:hide},customTpl,hofff_contact_template,hofff_contact_more,size'
     . ';{protected_legend:hide},protected'
@@ -36,8 +36,9 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['hofff_contact_source'] = [
     'exclude'   => true,
     'inputType' => 'select',
     'default'   => 'custom',
-    'options'   => ['custom', 'categories', 'dynamic', 'detail'],
-    'eval'      => ['tl_class' => 'clr w50', 'submitOnChange' => true],
+    'options'   => ['custom', 'categories', 'dynamic'],
+    'reference' => &$GLOBALS['TL_LANG']['tl_content']['hofff_contact_source_options'],
+    'eval'      => ['tl_class' => 'clr w50', 'submitOnChange' => true, 'helpwizard' => true],
     'sql'       => 'char(16) NOT NULL default \'custom\'',
 ];
 
@@ -46,6 +47,7 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['hofff_contact_sources'] = [
     'exclude'          => true,
     'inputType'        => 'checkbox',
     'options_callback' => [SourcesOptions::class, '__invoke'],
+    'reference'        => &$GLOBALS['TL_LANG']['tl_content']['hofff_contact_sources_options'],
     'eval'             => ['tl_class' => 'clr w50', 'multiple' => true],
     'sql'              => 'tinyblob NULL',
 ];

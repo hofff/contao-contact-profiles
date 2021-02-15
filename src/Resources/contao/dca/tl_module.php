@@ -36,8 +36,8 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['hofff_contact_source'] = [
     'exclude'   => true,
     'inputType' => 'select',
     'default'   => 'custom',
-    'options'   => ['custom', 'categories', 'dynamic', 'detail'],
-    'eval'      => ['tl_class' => 'clr w50', 'submitOnChange' => true],
+    'options'   => ['custom', 'categories', 'dynamic'],
+    'eval'      => ['tl_class' => 'clr w50', 'submitOnChange' => true, 'helpwizard' => true],
     'sql'       => 'char(16) NOT NULL default \'custom\'',
 ];
 
