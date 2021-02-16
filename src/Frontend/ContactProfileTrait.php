@@ -4,17 +4,21 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\Frontend;
 
+use Contao\PageModel;
 use Contao\StringUtil;
 use Contao\System;
 use Hofff\Contao\ContactProfiles\Event\LoadContactProfilesEvent;
 use Hofff\Contao\ContactProfiles\Query\PublishedContactProfilesByCategoriesQuery;
 use Hofff\Contao\ContactProfiles\Query\PublishedContactProfilesQuery;
 
+use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
 use const TL_MODE;
 
 trait ContactProfileTrait
 {
-    use CreateRendererTrait;
+    use CreateRendererTrait{
+        createRenderer as createRendererParent;
+    }
 
     protected function compile() : void
     {
@@ -56,4 +60,20 @@ trait ContactProfileTrait
                 return $query($profileIds);
         }
     }
+
+    protected function createRenderer(): ContactProfileRenderer
+    {
+        $renderer = $this->createRendererParent();
+
+        if ($this->hofff_contact_jump_to) {
+            $pageModel = PageModel::findByPk($this->hofff_contact_jump_to);
+            if ($pageModel) {
+                $renderer->withDetailPage($pageModel);
+            }
+        }
+
+        return $renderer;
+    }
+
+
 }

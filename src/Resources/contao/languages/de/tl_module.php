@@ -19,6 +19,8 @@ $GLOBALS['TL_LANG']['tl_module']['hofff_contact_sources'][0]    = 'Dynamische Ko
 $GLOBALS['TL_LANG']['tl_module']['hofff_contact_sources'][1]    = 'Wählen Sie dynamische Kontaktprofil-Bezugsquellen aus.';
 $GLOBALS['TL_LANG']['tl_module']['hofff_contact_categories'][0] = 'Kontaktprofil-Kategorien';
 $GLOBALS['TL_LANG']['tl_module']['hofff_contact_categories'][1] = 'Wählen Sie Kategorien aus, deren Kontaktprofile anzegeigt werden sollen.';
+$GLOBALS['TL_LANG']['tl_module']['hofff_contact_jump_to'][0]    = 'Kontakt-Detailseite';
+$GLOBALS['TL_LANG']['tl_module']['hofff_contact_jump_to'][1]    = 'Bitte wählen Sie eine Kontakt-Detailseite aus';
 
 $GLOBALS['TL_LANG']['tl_module']['hofff_contact_source_options']['custom'][0]     = 'Manuelle Auswahl';
 $GLOBALS['TL_LANG']['tl_module']['hofff_contact_source_options']['custom'][1]     = 'Wählen Sie manuell die Kontaktprofile aus';

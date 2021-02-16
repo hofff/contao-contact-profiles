@@ -25,6 +25,8 @@ $GLOBALS['TL_LANG']['tl_module']['hofff_contact_sources'][0]    = 'Dynamic conta
 $GLOBALS['TL_LANG']['tl_module']['hofff_contact_sources'][1]    = 'Select which sources may provide the contact profiles.';
 $GLOBALS['TL_LANG']['tl_module']['hofff_contact_categories'][0] = 'Contact profile categories';
 $GLOBALS['TL_LANG']['tl_module']['hofff_contact_categories'][1] = 'Select the categories to choose which categories should be listed.';
+$GLOBALS['TL_LANG']['tl_module']['hofff_contact_jump_to'][0]    = 'Contact detail page';
+$GLOBALS['TL_LANG']['tl_module']['hofff_contact_jump_to'][1]    = 'Please choose a contact detail page';
 
 $GLOBALS['TL_LANG']['tl_module']['hofff_contact_source_options']['custom'][0]     = 'Custom';
 $GLOBALS['TL_LANG']['tl_module']['hofff_contact_source_options']['custom'][1]     = 'Choose custom contact profiles.';

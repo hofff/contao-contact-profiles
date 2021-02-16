@@ -4,4 +4,10 @@
         <?= $this->renderer->parseField($field, $this->profile) ?>
     <?php endif ?>
     <?php endforeach ?>
+
+    <?php if ($detailPage = $this->renderer->detailPage()): ?>
+        <a href="<?= $detailPage->getFrontendUrl('/' . ($this->profile['alias'] ?: $this->profile['id'])) ?>" class="more">
+            <?= $this->renderer->moreLabel() ?>
+        </a>
+    <?php endif ?>
 </div>

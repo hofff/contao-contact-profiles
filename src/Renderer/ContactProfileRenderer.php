@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Hofff\Contao\ContactProfiles\Renderer;
 
 use Contao\FrontendTemplate;
+use Contao\PageModel;
 use Contao\StringUtil;
 use function array_map;
 
@@ -34,6 +35,9 @@ final class ContactProfileRenderer
 
     /** @var string */
     private $moreLabel;
+
+    /** @var PageModel|null */
+    private $detailPage;
 
     public function __construct(FieldRenderer $fieldRenderer, string $moreLabel)
     {
@@ -76,6 +80,13 @@ final class ContactProfileRenderer
         return $this;
     }
 
+    public function withDetailPage(PageModel $pageModel) :self
+    {
+        $this->detailPage = $pageModel;
+
+        return $this;
+    }
+
     public function fieldTemplate(string $field, ?string $default = null) : ?string
     {
         if (isset($this->fieldTemplates[$field])) {
@@ -102,6 +113,11 @@ final class ContactProfileRenderer
     public function moreLabel() : string
     {
         return $this->moreLabel;
+    }
+
+    public function detailPage(): ?PageModel
+    {
+        return $this->detailPage;
     }
 
     /** @param string[] $profile */

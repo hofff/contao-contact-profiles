@@ -8,6 +8,7 @@ $GLOBALS['TL_LANG']['CTE']['hofff_contact_profile_detail'][0] = 'Contact profile
 $GLOBALS['TL_LANG']['CTE']['hofff_contact_profile_detail'][1] = 'Show contact profile details';
 
 $GLOBALS['TL_LANG']['tl_content']['profile_legend']              = 'Contact profile';
+$GLOBALS['TL_LANG']['tl_content']['redirect_legend']             = 'Redirect';
 $GLOBALS['TL_LANG']['tl_content']['hofff_contact_profiles'][0]   = 'Contact profiles';
 $GLOBALS['TL_LANG']['tl_content']['hofff_contact_profiles'][1]   = 'Please select the contact profiles which should be displayed.';
 $GLOBALS['TL_LANG']['tl_content']['hofff_contact_fields'][0]     = 'Contact fields';
@@ -24,6 +25,8 @@ $GLOBALS['TL_LANG']['tl_content']['hofff_contact_sources'][0]    = 'Dynamic cont
 $GLOBALS['TL_LANG']['tl_content']['hofff_contact_sources'][1]    = 'Select which sources may provide the contact profiles.';
 $GLOBALS['TL_LANG']['tl_content']['hofff_contact_categories'][0] = 'Contact profile categories';
 $GLOBALS['TL_LANG']['tl_content']['hofff_contact_categories'][1] = 'Select the categories to choose which categories should be listed.';
+$GLOBALS['TL_LANG']['tl_content']['hofff_contact_jump_to'][0]    = 'Contact detail page';
+$GLOBALS['TL_LANG']['tl_content']['hofff_contact_jump_to'][1]    = 'Please choose a contact detail page';
 
 $GLOBALS['TL_LANG']['tl_content']['hofff_contact_source_options']['custom'][0]     = 'Custom';
 $GLOBALS['TL_LANG']['tl_content']['hofff_contact_source_options']['custom'][1]     = 'Choose custom contact profiles.';
