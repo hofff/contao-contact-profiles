@@ -7,7 +7,7 @@ namespace Hofff\Contao\ContactProfiles\Frontend;
 use Contao\CoreBundle\Exception\PageNotFoundException;
 use Contao\Input;
 use Contao\System;
-use Hofff\Contao\ContactProfiles\Query\PublishedContactProfileQuery;
+use Hofff\Contao\ContactProfiles\Model\ContactProfileRepository;
 
 trait ContactProfileDetailTrait
 {
@@ -48,9 +48,9 @@ trait ContactProfileDetailTrait
     /** @return string[][] */
     private function loadProfile(): ?array
     {
-        $query = System::getContainer()->get(PublishedContactProfileQuery::class);
+        $repository = System::getContainer()->get(ContactProfileRepository::class);
 
-        return $query((string) Input::get('auto_item'));
+        return $repository->fetchPublishedByIdOrAlias((string) Input::get('auto_item'));
     }
 
     abstract protected function renderBackendWildcard(): string;

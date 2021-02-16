@@ -7,6 +7,9 @@ namespace Hofff\Contao\ContactProfiles\Query;
 use Doctrine\DBAL\Connection;
 use PDO;
 
+/**
+ * @deprecated
+ */
 final class PublishedContactProfilesQuery
 {
     private const QUERY = <<<'SQL'

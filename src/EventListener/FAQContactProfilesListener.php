@@ -11,48 +11,48 @@ use Contao\FaqModel;
 use Contao\Input;
 use Contao\StringUtil;
 use Hofff\Contao\ContactProfiles\Event\LoadContactProfilesEvent;
-use Hofff\Contao\ContactProfiles\Query\PublishedContactProfilesQuery;
+use Hofff\Contao\ContactProfiles\Model\ContactProfileRepository;
 
 final class FAQContactProfilesListener
 {
     /** @var ContaoFrameworkInterface */
     private $framework;
 
-    /** @var PublishedContactProfilesQuery */
-    private $query;
+    /** @var ContactProfileRepository */
+    private $repository;
 
-    public function __construct(ContaoFrameworkInterface $framework, PublishedContactProfilesQuery $query)
+    public function __construct(ContaoFrameworkInterface $framework, ContactProfileRepository $repository)
     {
-        $this->framework = $framework;
-        $this->query     = $query;
+        $this->framework  = $framework;
+        $this->repository = $repository;
     }
 
-    public function onLoadContactProfiles(LoadContactProfilesEvent $event) : void
+    public function onLoadContactProfiles(LoadContactProfilesEvent $event): void
     {
         if (!in_array('faq', $event->sources(), true)) {
             return;
         }
 
         $news = $this->getFAQ();
-        if (! $news) {
+        if (!$news) {
             return;
         }
 
         $profileIds = StringUtil::deserialize($news->hofff_contact_profiles, true);
-        $profiles   = ($this->query)($profileIds);
+        $profiles   = $this->repository->fetchPublishedByProfileIds($profileIds);
 
         $event->setProfiles($profiles);
     }
 
-    private function getFAQ() : ?FaqModel
+    private function getFAQ(): ?FaqModel
     {
         $faqAlias = $this->getFAQAlias();
-        if (! $faqAlias) {
+        if (!$faqAlias) {
             return null;
         }
 
         $faqCategory = $this->getFAQCategory();
-        if (! $faqCategory) {
+        if (!$faqCategory) {
             return null;
         }
 
@@ -61,9 +61,9 @@ final class FAQContactProfilesListener
         return $repository->__call('findPublishedByParentAndIdOrAlias', [$faqAlias, [$faqCategory->id]]);
     }
 
-    private function getFAQAlias() : ?string
+    private function getFAQAlias(): ?string
     {
-        if (! isset($GLOBALS['objPage'])) {
+        if (!isset($GLOBALS['objPage'])) {
             return null;
         }
 
@@ -77,7 +77,7 @@ final class FAQContactProfilesListener
         return $inputAdapter->__call('get', ['items']);
     }
 
-    private function getFAQCategory() : ?FaqCategoryModel
+    private function getFAQCategory(): ?FaqCategoryModel
     {
         $repository = $this->framework->getAdapter(FaqCategoryModel::class);
 

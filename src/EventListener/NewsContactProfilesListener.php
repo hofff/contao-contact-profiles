@@ -11,48 +11,48 @@ use Contao\NewsArchiveModel;
 use Contao\NewsModel;
 use Contao\StringUtil;
 use Hofff\Contao\ContactProfiles\Event\LoadContactProfilesEvent;
-use Hofff\Contao\ContactProfiles\Query\PublishedContactProfilesQuery;
+use Hofff\Contao\ContactProfiles\Model\ContactProfileRepository;
 
 final class NewsContactProfilesListener
 {
     /** @var ContaoFrameworkInterface */
     private $framework;
 
-    /** @var PublishedContactProfilesQuery */
-    private $query;
+    /** @var ContactProfileRepository */
+    private $repository;
 
-    public function __construct(ContaoFrameworkInterface $framework, PublishedContactProfilesQuery $query)
+    public function __construct(ContaoFrameworkInterface $framework, ContactProfileRepository $repository)
     {
-        $this->framework = $framework;
-        $this->query     = $query;
+        $this->framework  = $framework;
+        $this->repository = $repository;
     }
 
-    public function onLoadContactProfiles(LoadContactProfilesEvent $event) : void
+    public function onLoadContactProfiles(LoadContactProfilesEvent $event): void
     {
         if (!in_array('news', $event->sources(), true)) {
             return;
         }
 
         $news = $this->getNews();
-        if (! $news) {
+        if (!$news) {
             return;
         }
 
         $profileIds = StringUtil::deserialize($news->hofff_contact_profiles, true);
-        $profiles   = ($this->query)($profileIds);
+        $profiles   = $this->repository->fetchPublishedByProfileIds($profileIds);
 
         $event->setProfiles($profiles);
     }
 
-    private function getNews() : ?NewsModel
+    private function getNews(): ?NewsModel
     {
         $newsAlias = $this->getNewsAlias();
-        if (! $newsAlias) {
+        if (!$newsAlias) {
             return null;
         }
 
         $newsArchive = $this->getNewsArchive();
-        if (! $newsArchive) {
+        if (!$newsArchive) {
             return null;
         }
 
@@ -61,9 +61,9 @@ final class NewsContactProfilesListener
         return $repository->__call('findPublishedByParentAndIdOrAlias', [$newsAlias, [$newsArchive->id]]);
     }
 
-    private function getNewsAlias() : ?string
+    private function getNewsAlias(): ?string
     {
-        if (! isset($GLOBALS['objPage'])) {
+        if (!isset($GLOBALS['objPage'])) {
             return null;
         }
 
@@ -77,7 +77,7 @@ final class NewsContactProfilesListener
         return $inputAdapter->__call('get', ['items']);
     }
 
-    private function getNewsArchive() : ?NewsArchiveModel
+    private function getNewsArchive(): ?NewsArchiveModel
     {
         $repository = $this->framework->getAdapter(NewsArchiveModel::class);
 

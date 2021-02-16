@@ -11,48 +11,48 @@ use Contao\CoreBundle\Framework\ContaoFrameworkInterface;
 use Contao\Input;
 use Contao\StringUtil;
 use Hofff\Contao\ContactProfiles\Event\LoadContactProfilesEvent;
-use Hofff\Contao\ContactProfiles\Query\PublishedContactProfilesQuery;
+use Hofff\Contao\ContactProfiles\Model\ContactProfileRepository;
 
 final class EventsContactProfilesListener
 {
     /** @var ContaoFrameworkInterface */
     private $framework;
 
-    /** @var PublishedContactProfilesQuery */
-    private $query;
+    /** @var ContactProfileRepository */
+    private $repository;
 
-    public function __construct(ContaoFrameworkInterface $framework, PublishedContactProfilesQuery $query)
+    public function __construct(ContaoFrameworkInterface $framework, ContactProfileRepository $repository)
     {
-        $this->framework = $framework;
-        $this->query     = $query;
+        $this->framework  = $framework;
+        $this->repository = $repository;
     }
 
-    public function onLoadContactProfiles(LoadContactProfilesEvent $event) : void
+    public function onLoadContactProfiles(LoadContactProfilesEvent $event): void
     {
         if (!in_array('event', $event->sources(), true)) {
             return;
         }
 
         $calendarEvent = $this->getEvent();
-        if (! $calendarEvent) {
+        if (!$calendarEvent) {
             return;
         }
 
         $profileIds = StringUtil::deserialize($calendarEvent->hofff_contact_profiles, true);
-        $profiles   = ($this->query)($profileIds);
+        $profiles   = $this->repository->fetchPublishedByProfileIds($profileIds);
 
         $event->setProfiles($profiles);
     }
 
-    private function getEvent() : ?CalendarEventsModel
+    private function getEvent(): ?CalendarEventsModel
     {
         $eventAlias = $this->getEventAlias();
-        if (! $eventAlias) {
+        if (!$eventAlias) {
             return null;
         }
 
         $newsArchive = $this->getCalendar();
-        if (! $newsArchive) {
+        if (!$newsArchive) {
             return null;
         }
 
@@ -61,9 +61,9 @@ final class EventsContactProfilesListener
         return $repository->__call('findPublishedByParentAndIdOrAlias', [$eventAlias, [$newsArchive->id]]);
     }
 
-    private function getEventAlias() : ?string
+    private function getEventAlias(): ?string
     {
-        if (! isset($GLOBALS['objPage'])) {
+        if (!isset($GLOBALS['objPage'])) {
             return null;
         }
 
@@ -77,7 +77,7 @@ final class EventsContactProfilesListener
         return $inputAdapter->__call('get', ['items']);
     }
 
-    private function getCalendar() : ?CalendarModel
+    private function getCalendar(): ?CalendarModel
     {
         $repository = $this->framework->getAdapter(CalendarModel::class);
 

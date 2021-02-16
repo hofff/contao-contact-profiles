@@ -25,9 +25,19 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['hofff_contact_profile_detail'] = '
     . ';{expert_legend:hide},guests,cssID'
     . ';{invisible_legend:hide},invisible,start,stop';
 
-$GLOBALS['TL_DCA']['tl_content']['metasubselectpalettes']['hofff_contact_source']['custom']     = ['hofff_contact_profiles'];
-$GLOBALS['TL_DCA']['tl_content']['metasubselectpalettes']['hofff_contact_source']['categories'] = ['hofff_contact_categories'];
-$GLOBALS['TL_DCA']['tl_content']['metasubselectpalettes']['hofff_contact_source']['dynamic']    = ['hofff_contact_sources'];
+$GLOBALS['TL_DCA']['tl_content']['metasubselectpalettes']['hofff_contact_source']['custom']     = [
+    'hofff_contact_profiles',
+    'perPage',
+    'numberOfItems',
+];
+$GLOBALS['TL_DCA']['tl_content']['metasubselectpalettes']['hofff_contact_source']['categories'] = [
+    'hofff_contact_categories',
+    'perPage',
+    'numberOfItems',
+];
+$GLOBALS['TL_DCA']['tl_content']['metasubselectpalettes']['hofff_contact_source']['dynamic']    = [
+    'hofff_contact_sources',
+];
 
 /*
  * Fields
@@ -49,7 +59,7 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['hofff_contact_sources'] = [
     'inputType'        => 'checkbox',
     'options_callback' => [SourcesOptions::class, '__invoke'],
     'reference'        => &$GLOBALS['TL_LANG']['tl_content']['hofff_contact_sources_options'],
-    'eval'             => ['tl_class' => 'clr w50', 'multiple' => true],
+    'eval'             => ['tl_class' => 'clr', 'multiple' => true],
     'sql'              => 'tinyblob NULL',
 ];
 
@@ -57,7 +67,7 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['hofff_contact_categories'] = [
     'label'      => &$GLOBALS['TL_LANG']['tl_content']['hofff_contact_categories'],
     'exclude'    => true,
     'inputType'  => 'checkbox',
-    'eval'       => ['tl_class' => 'clr w50', 'multiple' => true, 'mandatory' => true],
+    'eval'       => ['tl_class' => 'clr', 'multiple' => true, 'mandatory' => true],
     'foreignKey' => 'tl_contact_category.title',
     'sql'        => 'tinyblob NULL',
 ];

@@ -24,6 +24,11 @@
             <tag name="contao.migration"/>
         </service>
 
+        <!-- Repository -->
+        <service id="Hofff\Contao\ContactProfiles\Model\ContactProfileRepository" public="true">
+            <argument type="service" id="database_connection"/>
+        </service>
+
         <!-- Queries -->
         <service id="Hofff\Contao\ContactProfiles\Query\PublishedContactProfileQuery" public="true">
             <argument type="service" id="database_connection"/>

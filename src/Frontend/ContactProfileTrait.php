@@ -4,14 +4,18 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\Frontend;
 
+use Contao\Config;
+use Contao\CoreBundle\Exception\PageNotFoundException;
+use Contao\Environment;
+use Contao\Input;
 use Contao\PageModel;
+use Contao\Pagination;
 use Contao\StringUtil;
 use Contao\System;
 use Hofff\Contao\ContactProfiles\Event\LoadContactProfilesEvent;
-use Hofff\Contao\ContactProfiles\Query\PublishedContactProfilesByCategoriesQuery;
-use Hofff\Contao\ContactProfiles\Query\PublishedContactProfilesQuery;
-
+use Hofff\Contao\ContactProfiles\Model\ContactProfileRepository;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
+
 use const TL_MODE;
 
 trait ContactProfileTrait
@@ -24,7 +28,16 @@ trait ContactProfileTrait
     {
         $renderer = $this->createRenderer();
 
-        $this->Template->profiles      = $this->loadProfiles();
+        $pageParameter = $this->pageParameter();
+        $offset        = $this->determineOffset($pageParameter);
+        $profiles      = $this->loadProfiles($offset);
+        $total         = $this->numberOfItems > 0
+            ? min((int) $this->numberOfItems, $this->countTotal($profiles))
+            : $this->countTotal($profiles);
+
+        $this->Template->total         = $total;
+        $this->Template->profiles      = $profiles;
+        $this->Template->pagination    = $this->generatePagination($total, $pageParameter);
         $this->Template->renderer      = $renderer;
         $this->Template->renderProfile = static function (array $profile) use ($renderer) : string {
             return $renderer->render($profile);
@@ -32,33 +45,90 @@ trait ContactProfileTrait
     }
 
     /** @return string[][] */
-    private function loadProfiles() : iterable
+    private function loadProfiles(int $offset) : iterable
     {
+        if ($this->hofff_contact_source === 'dynamic') {
+            if (TL_MODE !== 'FE') {
+                return [];
+            }
+
+            $sources = StringUtil::deserialize($this->hofff_contact_sources, true);
+            $event = new LoadContactProfilesEvent($this, $GLOBALS['objPage'], $sources);
+            System::getContainer()->get('event_dispatcher')->dispatch($event::NAME, $event);
+
+            return $event->profiles();
+        }
+
+        $repository = System::getContainer()->get(ContactProfileRepository::class);
+        $order      = $this->hofff_contact_profiles_order_sql ?: null;
+        $limit      = (int) $this->numberOfItems;
+        $perPage    = (int) $this->perPage;
+        if ($perPage > 0) {
+            $limit = $perPage;
+        }
+
         switch ($this->hofff_contact_source) {
-            case 'dynamic':
-                if (TL_MODE !== 'FE') {
-                    return [];
-                }
-
-                $sources = StringUtil::deserialize($this->hofff_contact_sources, true);
-                $event = new LoadContactProfilesEvent($this, $GLOBALS['objPage'], $sources);
-                System::getContainer()->get('event_dispatcher')->dispatch($event::NAME, $event);
-
-                return $event->profiles();
-
             case 'categories':
-                $query       = System::getContainer()->get(PublishedContactProfilesByCategoriesQuery::class);
                 $categoryIds = StringUtil::deserialize($this->hofff_contact_categories, true);
 
-                return $query($categoryIds);
+                return $repository->fetchPublishedByCategories($categoryIds, $limit, $offset, $order);
 
             case 'custom':
             default:
-                $query      = System::getContainer()->get(PublishedContactProfilesQuery::class);
+                $repository = System::getContainer()->get(ContactProfileRepository::class);
                 $profileIds = StringUtil::deserialize($this->hofff_contact_profiles, true);
 
-                return $query($profileIds);
+                return $repository->fetchPublishedByProfileIds($profileIds, $limit, $offset, $order);
         }
+    }
+
+    private function determineOffset(string $pageParameter): int
+    {
+        if ($this->perPage < 1 || $this->hofff_contact_source === 'dynamic') {
+            return 0;
+        }
+
+        $page = Input::get($pageParameter);
+        if ($page === null) {
+            $page = 1;
+        }
+
+        if ($page < 1) {
+            throw new PageNotFoundException('Page not found: ' . Environment::get('uri'));
+        }
+
+        return ($page - 1) * $this->perPage * $this->perPage;
+    }
+
+    private function countTotal(array $profiles): int
+    {
+        switch ($this->hofff_contact_source) {
+            case 'dynamic':
+                return count($profiles);
+
+            case 'categories':
+                $categoryIds = StringUtil::deserialize($this->hofff_contact_categories, true);
+
+                return System::getContainer()->get(ContactProfileRepository::class)
+                    ->countPublishedByCategories($categoryIds);
+
+            case 'custom':
+            default:
+                $profileIds = StringUtil::deserialize($this->hofff_contact_profiles, true);
+
+                return System::getContainer()->get(ContactProfileRepository::class)
+                    ->countPublishedByProfileIds($profileIds);
+        }
+    }
+
+    private function generatePagination(int $total, string $pageParameter): string
+    {
+        if ($this->hofff_contact_source === 'dynamic') {
+            return '';
+        }
+
+        return (new Pagination($total, $this->perPage, Config::get('maxPaginationLinks'), $pageParameter))
+            ->generate("\n ");
     }
 
     protected function createRenderer(): ContactProfileRenderer
@@ -75,5 +145,5 @@ trait ContactProfileTrait
         return $renderer;
     }
 
-
+    abstract protected function pageParameter(): string;
 }

@@ -12,4 +12,9 @@ final class ContactProfileElement extends ContentElement
 
     /** @var string */
     protected $strTemplate = 'ce_hofff_contact_profile';
+
+    protected function pageParameter(): string
+    {
+        return 'c' . $this->id;
+    }
 }

@@ -21,6 +21,19 @@ ORDER BY
   p.lastname, p.firstname
 SQL;
 
+    private const COUNT_QUERY = <<<'SQL'
+SELECT 
+  count(p.id)
+FROM 
+  tl_contact_profile p
+WHERE 
+  p.pid IN (?)
+  AND p.published='1'
+ORDER BY 
+  p.lastname, p.firstname
+SQL;
+
+
     /** @var Connection */
     private $connection;
 
@@ -43,5 +56,16 @@ SQL;
         );
 
         return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function count(array $categoryIds): int
+    {
+        $statement = $this->connection->executeQuery(
+            self::COUNT_QUERY,
+            [$categoryIds],
+            [Connection::PARAM_STR_ARRAY]
+        );
+
+        return (int) $statement->fetch(PDO::FETCH_COLUMN);
     }
 }

@@ -12,4 +12,9 @@ final class ContactProfileModule extends Module
 
     /** @var string */
     protected $strTemplate = 'mod_hofff_contact_profile';
+
+    protected function pageParameter(): string
+    {
+        return 'm' . $this->id;
+    }
 }

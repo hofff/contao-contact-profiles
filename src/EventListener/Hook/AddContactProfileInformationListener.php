@@ -6,21 +6,21 @@ namespace Hofff\Contao\ContactProfiles\EventListener\Hook;
 
 use Contao\StringUtil;
 use Contao\Template;
-use Hofff\Contao\ContactProfiles\Query\PublishedContactProfilesQuery;
+use Hofff\Contao\ContactProfiles\Model\ContactProfileRepository;
 use function strpos;
 
 final class AddContactProfileInformationListener
 {
-    /** @var PublishedContactProfilesQuery */
-    private $query;
+    /** @var ContactProfileRepository */
+    private $repository;
 
     /** @var string[] */
     private $templatePrefixes;
 
     /** @param string[] $templatePrefixes */
-    public function __construct(PublishedContactProfilesQuery $query, array $templatePrefixes)
+    public function __construct(ContactProfileRepository $repository, array $templatePrefixes)
     {
-        $this->query            = $query;
+        $this->repository       = $repository;
         $this->templatePrefixes = $templatePrefixes;
     }
 
@@ -33,7 +33,7 @@ final class AddContactProfileInformationListener
 
         $profileIds = StringUtil::deserialize($template->hofff_contact_profiles, true);
 
-        $template->contactProfiles = ($this->query)($profileIds);
+        $template->contactProfiles = $this->repository->fetchPublishedByProfileIds($profileIds);
     }
 
     private function match(string $templateName) : bool

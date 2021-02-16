@@ -40,25 +40,25 @@
         </service>
 
         <service id="Hofff\Contao\ContactProfiles\EventListener\Hook\AddContactProfileInformationListener" public="true">
-            <argument type="service" id="Hofff\Contao\ContactProfiles\Query\PublishedContactProfilesQuery" />
+            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\ContactProfileRepository" />
             <argument>%hofff.contao_contact_profiles.template_prefixes%</argument>
         </service>
 
         <service id="Hofff\Contao\ContactProfiles\EventListener\NewsContactProfilesListener">
             <argument type="service" id="contao.framework" />
-            <argument type="service" id="Hofff\Contao\ContactProfiles\Query\PublishedContactProfilesQuery" />
+            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\ContactProfileRepository" />
             <tag name="kernel.event_listener" event="hofff.contao_contact_profile.load_contact_profiles" method="onLoadContactProfiles"/>
         </service>
 
         <service id="Hofff\Contao\ContactProfiles\EventListener\EventsContactProfilesListener">
             <argument type="service" id="contao.framework" />
-            <argument type="service" id="Hofff\Contao\ContactProfiles\Query\PublishedContactProfilesQuery" />
+            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\ContactProfileRepository" />
             <tag name="kernel.event_listener" event="hofff.contao_contact_profile.load_contact_profiles" method="onLoadContactProfiles"/>
         </service>
 
         <service id="Hofff\Contao\ContactProfiles\EventListener\FAQContactProfilesListener">
             <argument type="service" id="contao.framework" />
-            <argument type="service" id="Hofff\Contao\ContactProfiles\Query\PublishedContactProfilesQuery" />
+            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\ContactProfileRepository" />
             <tag name="kernel.event_listener" event="hofff.contao_contact_profile.load_contact_profiles" method="onLoadContactProfiles"/>
         </service>
     </services>
