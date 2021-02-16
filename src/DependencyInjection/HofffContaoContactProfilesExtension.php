@@ -33,6 +33,10 @@ final class HofffContaoContactProfilesExtension extends Extension
         $this->checkNewsBundle($container, $sources);
 
         $container->setParameter('hofff_contao_contact_profiles.sources', $sources);
+
+        $container->setParameter('hofff_contao_contact_profiles.alias_pattern', $config['alias']['pattern']);
+        unset($config['alias']['pattern']);
+        $container->setParameter('hofff_contao_contact_profiles.alias_options', $config['alias']);
     }
 
     private function checkCalendarBundle(ContainerBuilder $container, array &$sources) : void

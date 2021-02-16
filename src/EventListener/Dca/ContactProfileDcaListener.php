@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\EventListener\Dca;
 
+use Ausi\SlugGenerator\SlugGeneratorInterface;
 use Contao\Backend;
 use Contao\BackendUser;
 use Contao\CoreBundle\Exception\AccessDeniedException;
+use Contao\CoreBundle\ServiceAnnotation\Callback;
+use Contao\CoreBundle\ServiceAnnotation\Hook;
 use Contao\Database;
 use Contao\DataContainer;
 use Contao\Image;
@@ -14,6 +17,8 @@ use Contao\Input;
 use Contao\StringUtil;
 use Contao\System;
 use Contao\Versions;
+use Doctrine\DBAL\Connection;
+use Exception;
 use function func_get_arg;
 use function is_array;
 use function is_callable;
@@ -22,8 +27,61 @@ use function time;
 
 final class ContactProfileDcaListener
 {
+    /** @var SlugGeneratorInterface */
+    private $slugGenerator;
+
+    /** @var Connection */
+    private $connection;
+
+    /** @var string */
+    private $pattern;
+
+    public function __construct(SlugGeneratorInterface $slugGenerator, Connection $connection, string $aliasPattern)
+    {
+        $this->slugGenerator = $slugGenerator;
+        $this->connection    = $connection;
+        $this->pattern       = $aliasPattern;
+    }
+
+    /**
+     * @Callback(table="tl_contact_profile", target="fields.alias.save")
+     */
+    public function generateAlias($value, DataContainer $dataContainer): string
+    {
+        $aliasExists = function (string $alias) use ($dataContainer): bool {
+            return $this->connection
+                    ->executeQuery(
+                        'SELECT id FROM tl_contact_profile WHERE alias=? AND id!=?',
+                        [$alias, $dataContainer->id]
+                    )
+                    ->rowCount() > 0;
+        };
+
+        // Generate alias if there is none
+        if (!$value) {
+            $alias = preg_replace_callback(
+                '/{([^}]+)}/',
+                function (array $matches) use ($dataContainer) {
+                    return $dataContainer->activeRecord->{$matches[1]};
+                },
+                $this->pattern
+            );
+            $value = $this->slugGenerator->generate($alias);
+        }
+
+        if (preg_match('/^[1-9]\d*$/', $value)) {
+            throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['aliasNumeric'], $value));
+        }
+
+        if ($aliasExists($value)) {
+            throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['aliasExists'], $value));
+        }
+
+        return $value;
+    }
+
     /** @param string[] $row */
-    public function generateRow(array $row) : string
+    public function generateRow(array $row): string
     {
         $label = $row['lastname'];
 
@@ -39,7 +97,7 @@ final class ContactProfileDcaListener
      *
      * @param string[] $row
      */
-    public function toggleIcon(array $row, ?string $href, string $label, string $title, string $icon, string $attributes) : string
+    public function toggleIcon(array $row, ?string $href, string $label, string $title, string $icon, string $attributes): string
     {
         if (Input::get('tid') !== null && Input::get('tid') !== '') {
             $this->toggleVisibility((int) Input::get('tid'), (Input::get('state') === '1'), (@func_get_arg(12) ?: null));
@@ -47,13 +105,13 @@ final class ContactProfileDcaListener
         }
 
         // Check permissions AFTER checking the tid, so hacking attempts are logged
-        if (! BackendUser::getInstance()->hasAccess('tl_contact_profile::published', 'alexf')) {
+        if (!BackendUser::getInstance()->hasAccess('tl_contact_profile::published', 'alexf')) {
             return '';
         }
 
         $href .= '&amp;tid=' . $row['id'] . '&amp;state=' . ($row['published'] ? '' : 1);
 
-        if (! $row['published']) {
+        if (!$row['published']) {
             $icon = 'invisible.svg';
         }
 
@@ -71,7 +129,7 @@ final class ContactProfileDcaListener
      *
      * @throws AccessDeniedException
      */
-    public function toggleVisibility(int $intId, bool $blnVisible, ?DataContainer $dc = null) : void
+    public function toggleVisibility(int $intId, bool $blnVisible, ?DataContainer $dc = null): void
     {
         // Set the ID and action
         Input::setGet('id', $intId);
@@ -94,7 +152,7 @@ final class ContactProfileDcaListener
         }
 
         // Check the field access
-        if (! BackendUser::getInstance()->hasAccess('tl_contact_profile::published', 'alexf')) {
+        if (!BackendUser::getInstance()->hasAccess('tl_contact_profile::published', 'alexf')) {
             throw new AccessDeniedException('Not enough permissions to publish/unpublish article ID "' . $intId . '".');
         }
 
