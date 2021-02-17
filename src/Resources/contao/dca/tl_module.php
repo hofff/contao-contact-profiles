@@ -34,6 +34,7 @@ $GLOBALS['TL_DCA']['tl_module']['metasubselectpalettes']['hofff_contact_source']
     'hofff_contact_categories',
     'perPage',
     'numberOfItems',
+    'hofff_contact_profiles_order_sql'
 ];
 $GLOBALS['TL_DCA']['tl_module']['metasubselectpalettes']['hofff_contact_source']['dynamic']    = [
     'hofff_contact_sources',
@@ -112,4 +113,11 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['hofff_contact_jump_to'] = [
     'eval'       => ['fieldType' => 'radio'],
     'sql'        => 'int(10) unsigned NOT NULL default 0',
     'relation'   => ['type' => 'hasOne', 'load' => 'lazy'],
+];
+
+$GLOBALS['TL_DCA']['tl_content']['fields']['hofff_contact_profiles_order_sql'] = [
+    'exclude'   => true,
+    'inputType' => 'text',
+    'eval'      => ['tl_class' => 'w50', 'maxlength' => 64],
+    'sql'       => "varchar(64) NOT NULL default ''",
 ];

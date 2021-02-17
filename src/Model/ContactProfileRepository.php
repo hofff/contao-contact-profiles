@@ -99,7 +99,7 @@ final class ContactProfileRepository
         }
 
         if ($order !== null) {
-            $builder->orderBy($order);
+            $builder->orderBy($order, ' ');
         }
 
         return $builder;

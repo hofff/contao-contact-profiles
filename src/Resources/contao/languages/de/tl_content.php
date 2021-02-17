@@ -27,6 +27,8 @@ $GLOBALS['TL_LANG']['tl_content']['hofff_contact_categories'][0] = 'Kontaktprofi
 $GLOBALS['TL_LANG']['tl_content']['hofff_contact_categories'][1] = 'Wählen Sie Kategorien aus, deren Kontaktprofile anzegeigt werden sollen.';
 $GLOBALS['TL_LANG']['tl_content']['hofff_contact_jump_to'][0]    = 'Kontakt-Detailseite';
 $GLOBALS['TL_LANG']['tl_content']['hofff_contact_jump_to'][1]    = 'Bitte wählen Sie eine Kontakt-Detailseite aus';
+$GLOBALS['TL_LANG']['tl_content']['hofff_contact_profiles_order_sql'][0] = 'SQL Sortieranweisung';
+$GLOBALS['TL_LANG']['tl_content']['hofff_contact_profiles_order_sql'][1] = 'SQL Sortieranweisung. Nutzen Sie <em>p.*</em> als Tabellenalias!';
 
 $GLOBALS['TL_LANG']['tl_content']['hofff_contact_source_options']['custom'][0]     = 'Manuelle Auswahl';
 $GLOBALS['TL_LANG']['tl_content']['hofff_contact_source_options']['custom'][1]     = 'Wählen Sie manuell die Kontaktprofile aus';
