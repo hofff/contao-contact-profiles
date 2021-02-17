@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Hofff\Contao\ContactProfiles\Frontend;
 
 use Contao\BackendTemplate;
-use Contao\ContentElement;
+use Contao\Module;
 use Patchwork\Utf8;
 
-final class ContactProfileInitialsFilterModule extends ContentElement
+final class ContactProfileInitialsFilterModule extends Module
 {
     use ContactProfileInitialsFilterTrait;
 
