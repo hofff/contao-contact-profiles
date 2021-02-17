@@ -59,6 +59,8 @@ trait ContactProfileTrait
             return $event->profiles();
         }
 
+        $criteria = $this->buildCriteria();
+
         $repository = System::getContainer()->get(ContactProfileRepository::class);
         $order      = $this->hofff_contact_profiles_order_sql ?: null;
         $limit      = (int) $this->numberOfItems;
@@ -71,14 +73,14 @@ trait ContactProfileTrait
             case 'categories':
                 $categoryIds = StringUtil::deserialize($this->hofff_contact_categories, true);
 
-                return $repository->fetchPublishedByCategories($categoryIds, $limit, $offset, $order);
+                return $repository->fetchPublishedByCategories($categoryIds, $limit, $offset, $order, $criteria);
 
             case 'custom':
             default:
                 $repository = System::getContainer()->get(ContactProfileRepository::class);
                 $profileIds = StringUtil::deserialize($this->hofff_contact_profiles, true);
 
-                return $repository->fetchPublishedByProfileIds($profileIds, $limit, $offset, $order);
+                return $repository->fetchPublishedByProfileIds($profileIds, $limit, $offset, $order, $criteria);
         }
     }
 
@@ -129,6 +131,17 @@ trait ContactProfileTrait
 
         return (new Pagination($total, $this->perPage, Config::get('maxPaginationLinks'), $pageParameter))
             ->generate("\n ");
+    }
+
+    private function buildCriteria(): array
+    {
+        $criteria = [];
+
+        if (Input::get('letter')) {
+            $criteria['p.lastname LIKE :letter'] = ['letter' => Input::get('letter') . '%'];
+        }
+
+        return $criteria;
     }
 
     protected function createRenderer(): ContactProfileRenderer

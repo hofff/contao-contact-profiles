@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\Model;
 
+use Contao\StringUtil;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use PDO;
+
+use function preg_match;
 
 final class ContactProfileRepository
 {
@@ -22,9 +25,10 @@ final class ContactProfileRepository
         array $categoryIds,
         int $limit = 0,
         int $offset = 0,
-        string $order = null
+        string $order = null,
+        array $criteria = []
     ): array {
-        return $this->createFetchPublishedQuery($limit, $offset, $order)
+        return $this->createFetchPublishedQuery($limit, $offset, $order, $criteria)
             ->andWhere('p.pid IN(:categoryIds)')
             ->setParameter('categoryIds', $categoryIds, Connection::PARAM_STR_ARRAY)
             ->execute()
@@ -35,9 +39,10 @@ final class ContactProfileRepository
         array $profileIds,
         int $limit = 0,
         int $offset = 0,
-        ?string $order = null
+        ?string $order = null,
+        array $criteria = []
     ): array {
-        $builder = $this->createFetchPublishedQuery($limit, $offset, $order)
+        $builder = $this->createFetchPublishedQuery($limit, $offset, $order, $criteria)
             ->andWhere('p.id IN(:profileIds)')
             ->setParameter('profileIds', $profileIds, Connection::PARAM_STR_ARRAY);
 
@@ -78,10 +83,29 @@ final class ContactProfileRepository
             ->fetch(PDO::FETCH_COLUMN);
     }
 
+    public function fetchInitialsOfPublishedByCategories(array $categoryIds): array
+    {
+        return $this->createFetchPublishedInitialsQuery()
+            ->andWhere('p.pid IN (:categoryIds)')
+            ->setParameter('categoryIds', $categoryIds, Connection::PARAM_STR_ARRAY)
+            ->execute()
+            ->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function fetchInitialsOfPublishedByProfileIds(array $profileIds): array
+    {
+        return $this->createFetchPublishedInitialsQuery()
+            ->andWhere('p.id IN (:profileIds)')
+            ->setParameter('profileIds', $profileIds, Connection::PARAM_STR_ARRAY)
+            ->execute()
+            ->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     private function createFetchPublishedQuery(
         int $limit = 0,
         int $offset = 0,
-        string $order = null
+        string $order = null,
+        array $criteria = []
     ): QueryBuilder
     {
         $builder = $this->connection->createQueryBuilder()
@@ -89,6 +113,13 @@ final class ContactProfileRepository
             ->from('tl_contact_profile', 'p')
             ->where('p.published = :published')
             ->setParameter('published', '1');
+
+        foreach ($criteria as $criterion => $parameters) {
+            $builder->andWhere($criterion);
+            foreach ($parameters as $parameter => $value) {
+                $builder->setParameter($parameter, $value);
+            }
+        }
 
         if ($limit > 0) {
             $builder->setMaxResults($limit);
@@ -99,7 +130,13 @@ final class ContactProfileRepository
         }
 
         if ($order !== null) {
-            $builder->orderBy($order, ' ');
+            foreach(StringUtil::trimsplit(',', $order) as $orderClause) {
+                if (preg_match('/(.+)\s*(DESC|ASC)/i', $orderClause, $matches)) {
+                    $builder->addOrderBy($matches[1], $matches[2]);
+                } else {
+                    $builder->addOrderBy($orderClause);
+                }
+            }
         }
 
         return $builder;
@@ -111,6 +148,16 @@ final class ContactProfileRepository
             ->select('count(p.id)')
             ->from('tl_contact_profile', 'p')
             ->where('p.published = :published')
+            ->setParameter('published', '1');
+    }
+
+    private function createFetchPublishedInitialsQuery(): QueryBuilder
+    {
+        return $this->connection->createQueryBuilder()
+            ->select('LOWER(SUBSTR(p.lastname, 1, 1)) as letter, count(p.id) AS count')
+            ->from('tl_contact_profile', 'p')
+            ->where('p.published = :published')
+            ->groupBy('letter')
             ->setParameter('published', '1');
     }
 }

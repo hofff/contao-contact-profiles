@@ -6,6 +6,8 @@ $GLOBALS['TL_LANG']['CTE']['hofff_contact_profile'][0]        = 'Contact profile
 $GLOBALS['TL_LANG']['CTE']['hofff_contact_profile'][1]        = 'Show contact profiles';
 $GLOBALS['TL_LANG']['CTE']['hofff_contact_profile_detail'][0] = 'Contact profile details';
 $GLOBALS['TL_LANG']['CTE']['hofff_contact_profile_detail'][1] = 'Show contact profile details';
+$GLOBALS['TL_LANG']['CTE']['hofff_contact_profile_initials_filter'][0] = 'Contact profile initials filter';
+$GLOBALS['TL_LANG']['CTE']['hofff_contact_profile_initials_filter'][1] = 'Initials filter for the contact profiles';
 
 $GLOBALS['TL_LANG']['tl_content']['profile_legend']                      = 'Contact profile';
 $GLOBALS['TL_LANG']['tl_content']['redirect_legend']                     = 'Redirect';

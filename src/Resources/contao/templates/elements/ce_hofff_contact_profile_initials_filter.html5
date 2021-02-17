@@ -1,0 +1,26 @@
+<?php $this->extend('block_unsearchable') ?>
+
+<?php $this->block('content') ?>
+
+<ul class="contact-profile-initials-filter">
+    <?php foreach ($this->letters as $letter => $count): ?>
+        <li class="contact-profile-initials-filter-item">
+            <?php if ($letter === $this->activeLetter): ?>
+                <span class="active"><?= \Patchwork\Utf8::strtoupper($letter) ?></span>
+            <?php elseif ($count > 0): ?>
+                <a href="<?= $this->filterUrl($letter) ?>"><?= \Patchwork\Utf8::strtoupper($letter) ?></a>
+            <?php else: ?>
+                <?= \Patchwork\Utf8::strtoupper($letter) ?>
+            <?php endif ?>
+        </li>
+    <?php endforeach ?>
+    <li>
+        <?php if ($this->activeLetter): ?>
+            <a href="<?= $this->resetUrl ?>">#</a>
+        <?php else: ?>
+            <span class="active">#</span>
+        <?php endif ?>
+    </li>
+</ul>
+
+<?php $this->endblock() ?>

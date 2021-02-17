@@ -11,6 +11,7 @@ use Hofff\Contao\ContactProfiles\EventListener\Dca\SourcesOptions;
  * Palettes
  */
 $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][]               = 'hofff_contact_source';
+
 $GLOBALS['TL_DCA']['tl_content']['palettes']['hofff_contact_profile']        = '{type_legend},type,headline'
     . ';{profile_legend},hofff_contact_source,hofff_contact_fields'
     . ';{redirect_legend:hide},hofff_contact_jump_to'
@@ -18,6 +19,31 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['hofff_contact_profile']        = '
     . ';{protected_legend:hide},protected'
     . ';{expert_legend:hide},guests,cssID'
     . ';{invisible_legend:hide},invisible,start,stop';
+
+$GLOBALS['TL_DCA']['tl_content']['palettes']['hofff_contact_profilecustom']        = '{type_legend},type,headline'
+    . ';{profile_legend},hofff_contact_source,hofff_contact_profiles,perPage,numberOfItems,hofff_contact_fields'
+    . ';{redirect_legend:hide},hofff_contact_jump_to'
+    . ';{template_legend:hide},customTpl,hofff_contact_template,hofff_contact_more,size'
+    . ';{protected_legend:hide},protected'
+    . ';{expert_legend:hide},guests,cssID'
+    . ';{invisible_legend:hide},invisible,start,stop';
+
+$GLOBALS['TL_DCA']['tl_content']['palettes']['hofff_contact_profilecategories']        = '{type_legend},type,headline'
+    . ';{profile_legend},hofff_contact_source,hofff_contact_categories,perPage,numberOfItems,hofff_contact_profiles_order_sql,hofff_contact_fields'
+    . ';{redirect_legend:hide},hofff_contact_jump_to'
+    . ';{template_legend:hide},customTpl,hofff_contact_template,hofff_contact_more,size'
+    . ';{protected_legend:hide},protected'
+    . ';{expert_legend:hide},guests,cssID'
+    . ';{invisible_legend:hide},invisible,start,stop';
+
+$GLOBALS['TL_DCA']['tl_content']['palettes']['hofff_contact_profiledynamic']        = '{type_legend},type,headline'
+    . ';{profile_legend},hofff_contact_source,hofff_contact_sources,hofff_contact_fields'
+    . ';{redirect_legend:hide},hofff_contact_jump_to'
+    . ';{template_legend:hide},customTpl,hofff_contact_template,hofff_contact_more,size'
+    . ';{protected_legend:hide},protected'
+    . ';{expert_legend:hide},guests,cssID'
+    . ';{invisible_legend:hide},invisible,start,stop';
+
 $GLOBALS['TL_DCA']['tl_content']['palettes']['hofff_contact_profile_detail'] = '{type_legend},type,headline'
     . ';{profile_legend},hofff_contact_fields'
     . ';{template_legend:hide},customTpl,hofff_contact_template,hofff_contact_more,size'
@@ -25,20 +51,37 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['hofff_contact_profile_detail'] = '
     . ';{expert_legend:hide},guests,cssID'
     . ';{invisible_legend:hide},invisible,start,stop';
 
-$GLOBALS['TL_DCA']['tl_content']['metasubselectpalettes']['hofff_contact_source']['custom']     = [
-    'hofff_contact_profiles',
-    'perPage',
-    'numberOfItems',
-];
-$GLOBALS['TL_DCA']['tl_content']['metasubselectpalettes']['hofff_contact_source']['categories'] = [
-    'hofff_contact_categories',
-    'perPage',
-    'numberOfItems',
-    'hofff_contact_profiles_order_sql'
-];
-$GLOBALS['TL_DCA']['tl_content']['metasubselectpalettes']['hofff_contact_source']['dynamic']    = [
-    'hofff_contact_sources',
-];
+$GLOBALS['TL_DCA']['tl_content']['palettes']['hofff_contact_profile_initials_filter'] = '{type_legend},type,headline'
+    . ';{profile_legend},hofff_contact_source'
+    . ';{redirect_legend:hide},hofff_contact_jump_to'
+    . ';{template_legend:hide},customTpl'
+    . ';{protected_legend:hide},protected'
+    . ';{expert_legend:hide},guests,cssID'
+    . ';{invisible_legend:hide},invisible,start,stop';
+
+$GLOBALS['TL_DCA']['tl_content']['palettes']['hofff_contact_profile_initials_filtercustom'] = '{type_legend},type,headline'
+    . ';{profile_legend},hofff_contact_source,hofff_contact_profiles'
+    . ';{redirect_legend:hide},hofff_contact_jump_to'
+    . ';{template_legend:hide},customTpl'
+    . ';{protected_legend:hide},protected'
+    . ';{expert_legend:hide},guests,cssID'
+    . ';{invisible_legend:hide},invisible,start,stop';
+
+$GLOBALS['TL_DCA']['tl_content']['palettes']['hofff_contact_profile_initials_filtercategories'] = '{type_legend},type,headline'
+    . ';{profile_legend},hofff_contact_source,hofff_contact_categories'
+    . ';{redirect_legend:hide},hofff_contact_jump_to'
+    . ';{template_legend:hide},customTpl'
+    . ';{protected_legend:hide},protected'
+    . ';{expert_legend:hide},guests,cssID'
+    . ';{invisible_legend:hide},invisible,start,stop';
+
+$GLOBALS['TL_DCA']['tl_content']['palettes']['hofff_contact_profile_initials_filterdynamic'] = '{type_legend},type,headline'
+    . ';{profile_legend},hofff_contact_source,hofff_contact_sources'
+    . ';{redirect_legend:hide},hofff_contact_jump_to'
+    . ';{template_legend:hide},customTpl'
+    . ';{protected_legend:hide},protected'
+    . ';{expert_legend:hide},guests,cssID'
+    . ';{invisible_legend:hide},invisible,start,stop';
 
 /*
  * Fields

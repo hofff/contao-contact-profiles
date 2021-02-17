@@ -18,9 +18,18 @@ $GLOBALS['TL_DCA']['tl_module']['palettes']['hofff_contact_profile']        = '{
     . ';{protected_legend:hide},protected'
     . ';{expert_legend:hide},guests,cssID'
     . ';{invisible_legend:hide},invisible,start,stop';
+
 $GLOBALS['TL_DCA']['tl_module']['palettes']['hofff_contact_profile_detail'] = '{type_legend},type,headline'
     . ';{profile_legend},hofff_contact_fields'
     . ';{template_legend:hide},customTpl,hofff_contact_template,hofff_contact_more,size'
+    . ';{protected_legend:hide},protected'
+    . ';{expert_legend:hide},guests,cssID'
+    . ';{invisible_legend:hide},invisible,start,stop';
+
+$GLOBALS['TL_DCA']['tl_module']['palettes']['hofff_contact_profile_initials_filter'] = '{type_legend},type,headline'
+    . ';{profile_legend},hofff_contact_source'
+    . ';{redirect_legend:hide},hofff_contact_jump_to'
+    . ';{template_legend:hide},customTpl'
     . ';{protected_legend:hide},protected'
     . ';{expert_legend:hide},guests,cssID'
     . ';{invisible_legend:hide},invisible,start,stop';
