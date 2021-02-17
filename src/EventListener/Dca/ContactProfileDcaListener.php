@@ -89,6 +89,10 @@ final class ContactProfileDcaListener
             $label .= ', ' . $row['firstname'];
         }
 
+        if ($row['alias']) {
+            $label .= sprintf(' <span class="tl_gray">[%s]</span>', $row['alias']);
+        }
+
         return $label;
     }
 
