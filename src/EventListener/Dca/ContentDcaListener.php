@@ -30,6 +30,11 @@ final class ContentDcaListener
                 'hofff_consent_bridge_legend',
                 PaletteManipulator::POSITION_APPEND
             )
-            ->applyToPalette('hofff_contact_profile', 'tl_content');
+            ->applyToPalette('hofff_contact_profile', 'tl_content')
+            ->applyToPalette('hofff_contact_profilecustom', 'tl_content')
+            ->applyToPalette('hofff_contact_profilecategories', 'tl_content')
+            ->applyToPalette('hofff_contact_profiledynamic', 'tl_content')
+            ->applyToPalette('hofff_contact_profile_detail', 'tl_content')
+        ;
     }
 }

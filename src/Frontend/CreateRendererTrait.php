@@ -6,6 +6,8 @@ namespace Hofff\Contao\ContactProfiles\Frontend;
 
 use Contao\StringUtil;
 use Contao\System;
+use Hofff\Contao\Consent\Bridge\ConsentId\ConsentIdParser;
+use Hofff\Contao\Consent\Bridge\Exception\InvalidArgumentException;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
 use Hofff\Contao\ContactProfiles\Renderer\FieldRenderer;
 
@@ -27,6 +29,25 @@ trait CreateRendererTrait
             $renderer->withImageSize($size);
         }
 
+        $this->addConsentId($renderer, 'youtube');
+        $this->addConsentId($renderer, 'vimeo');
+
         return $renderer;
+    }
+
+    protected function addConsentId(ContactProfileRenderer $renderer, string $type): void
+    {
+        $consentIdParser = System::getContainer()->get(ConsentIdParser::class);
+        $key             = 'hofff_contact_consent_tag_' . $type;
+
+        if (!$this->{$key}) {
+            return;
+        }
+
+        try {
+            $renderer->withConsentId($type, $consentIdParser->parse($this->{$key}));
+        } catch (InvalidArgumentException $exception) {
+            // Do nothing. Probably a not anymore supported consent id
+        }
     }
 }

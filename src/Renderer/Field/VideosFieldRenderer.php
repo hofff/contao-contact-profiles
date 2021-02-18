@@ -9,6 +9,7 @@ use Contao\FilesModel;
 use Contao\FrontendTemplate;
 use Hofff\Contao\Consent\Bridge\ConsentToolManager;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
+use function stat;
 
 final class VideosFieldRenderer extends AbstractFieldRenderer
 {
@@ -27,13 +28,11 @@ final class VideosFieldRenderer extends AbstractFieldRenderer
     /** @param mixed $value */
     protected function compile(FrontendTemplate $template, $value, ContactProfileRenderer $renderer): void
     {
-        $template->consentTool      = $this->consentToolManager->activeConsentTool();
-        $template->youtubeConsentId = $renderer->consentId('youtube');
-        $template->vimeoConsentId   = $renderer->consentId('vimeo');
-        $template->value            = array_filter(
+        $template->renderer = $renderer;
+        $template->value  = array_filter(
             array_map(
                 static function (array $video) {
-                    switch ($video['source']) {
+                    switch ($video['videoSource']) {
                         case 'youtube':
                             $video['url'] = 'https://www.youtube-nocookie.com/embed/' . $video['video'];
                             break;
@@ -56,5 +55,12 @@ final class VideosFieldRenderer extends AbstractFieldRenderer
                 return !empty($video['url']);
             }
         );
+
+        $template->renderVideo = static function (array $video): string {
+            $template = new FrontendTemplate('hofff_contact_video_' . $video['videoSource']);
+            $template->setData($video);
+
+            return $template->parse();
+        };
     }
 }

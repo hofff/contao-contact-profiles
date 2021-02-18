@@ -1,0 +1,5 @@
+<figure>
+    <video>
+        <source type="<?= $this->file->mime ?>" src="<?= $this->file->path.$this->file->range ?>" title="<?= \Contao\StringUtil::specialchars($this->file->title) ?>">
+    </video>
+</figure>

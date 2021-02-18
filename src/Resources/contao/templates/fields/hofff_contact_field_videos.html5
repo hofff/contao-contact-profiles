@@ -4,15 +4,17 @@
 <ul>
 <?php foreach ($this->value as $video): ?>
   <li>
-  <?php if ($video['source'] === 'local'): ?>
-    <figure>
-      <video>
-        <source type="<?= $video['file']->mime ?>" src="<?= $video['file']->path.$video['file']->range ?>" title="<?= \Contao\StringUtil::specialchars($video['file']->title) ?>">
-      </video>
-    </figure>
-  <?php else: ?>
-    <iframe src="<?= $video['url'] ?>" allowfullscreen></iframe>
-  <?php endif ?>
+    <?php if ($this->activeConsentTool && $consentId = $this->renderer->consentId($video['videoSource'])): ?>
+      <?php
+        $videoModel = new class extends \Contao\Model {
+            protected static $strTable = 'tl_hofff_contact_profile_video';
+        };
+        $videoModel->setRow($video);
+    ?>
+      <?= $this->activeConsentTool->renderContent($this->renderVideo($video), $consentId, $videoModel, 'hofff_contact_consent_placeholder_video') ?>
+    <?php else: ?>
+      <?= $this->renderVideo($video) ?>
+    <?php endif ?>
   </li>
 <?php endforeach ?>
 </ul>

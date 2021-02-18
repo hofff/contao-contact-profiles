@@ -30,6 +30,10 @@ final class ModuleDcaListener
                 'hofff_consent_bridge_legend',
                 PaletteManipulator::POSITION_APPEND
             )
-            ->applyToPalette('hofff_contact_profile', 'tl_module');
+            ->applyToPalette('hofff_contact_profile', 'tl_module')
+            ->applyToPalette('hofff_contact_profilecustom', 'tl_module')
+            ->applyToPalette('hofff_contact_profilecategories', 'tl_module')
+            ->applyToPalette('hofff_contact_profiledynamic', 'tl_module')
+            ->applyToPalette('hofff_contact_profile_detail', 'tl_module');
     }
 }

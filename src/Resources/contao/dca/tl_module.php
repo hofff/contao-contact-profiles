@@ -5,13 +5,14 @@ declare(strict_types=1);
 use Hofff\Contao\ContactProfiles\EventListener\Dca\ContactFieldsOptions;
 use Hofff\Contao\ContactProfiles\EventListener\Dca\ContactProfileOptions;
 use Hofff\Contao\ContactProfiles\EventListener\Dca\ContactTemplateOptions;
+use Hofff\Contao\ContactProfiles\EventListener\Dca\ModuleDcaListener;
 use Hofff\Contao\ContactProfiles\EventListener\Dca\SourcesOptions;
 
 /*
  * Config
  */
 $GLOBALS['TL_DCA']['tl_module']['config']['onload_callback'][] = [
-    ContentDcalistener::class,
+    ModuleDcaListener::class,
     'initializePalettes'
 ];
 

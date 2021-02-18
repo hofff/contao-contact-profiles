@@ -1,0 +1,3 @@
+<?php if ($this->model->image): ?>
+  {{picture::<?= \Contao\StringUtil::binToUuid($this->model->image) ?>}}
+<?php endif ?>
