@@ -15,6 +15,9 @@ final class ContactProfileInitialsFilterElement extends ContentElement
     /** @var string */
     protected $strTemplate = 'ce_hofff_contact_profile_initials_filter';
 
+    /**
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
     protected function renderBackendWildcard(): string
     {
         $objTemplate           = new BackendTemplate('be_wildcard');

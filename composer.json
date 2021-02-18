@@ -1,5 +1,6 @@
 {
   "name": "hofff/contao-contact-profiles",
+  "type": "contao-bundle",
   "description": "Various form utilities for Contao CMS.",
   "keywords": [
     "form",
@@ -7,7 +8,6 @@
     "contacts",
     "contact profiles"
   ],
-  "type": "contao-bundle",
   "homepage": "https://hofff.com/",
   "license": "LGPL-3.0-or-later",
   "authors": [
@@ -19,50 +19,54 @@
     },
     {
       "name": "David Molineus",
-      "homepage": "https://hofff.com",
       "email": "david@hofff.com",
+      "homepage": "https://hofff.com",
       "role": "Developer"
     }
   ],
-  "support": {
-    "email": "info@hofff.com",
-    "issues": "https://github.com/hofff/contao-contact-profiles/issues",
-    "source": "https://github.com/hofff/contao-contact-profiles"
-  },
   "require": {
     "php": ">=7.1",
     "ext-pdo": "*",
+    "ausi/slug-generator": "^1.1",
     "contao/core-bundle": "~4.9",
     "doctrine/dbal": "^2.5",
-    "menatwork/contao-multicolumnwizard-bundle": "^3.4",
     "hofff/contao-consent-bridge": "^1.3",
-    "symfony/config": "^3.3 || ^4.0",
+    "menatwork/contao-multicolumnwizard-bundle": "^3.4",
+    "patchwork/utf8": "^1.3",
+    "symfony/config": "^3.4 || ^4.0",
     "symfony/dependency-injection": "^3.3 || ^4.0",
-    "symfony/http-kernel": "^3.3 || ^4.0"
-  },
-  "suggest": {
-    "contao/news-bundle": "Use contact profile for author information",
-    "contao/calendar-bundle": "Use contact profile for author information",
-    "contao/faq-bundle": "Use contact profile for author information"
+    "symfony/event-dispatcher": "^3.4 || ^4.0",
+    "symfony/http-kernel": "^3.4 || ^4.0"
   },
   "conflict": {
-    "contao/news-bundle": "<4.4 || >=5.0",
     "contao/calendar-bundle": "<4.4 || >=5.0",
-    "contao/faq-bundle": "<4.4 || >=5.0"
+    "contao/faq-bundle": "<4.4 || >=5.0",
+    "contao/news-bundle": "<4.4 || >=5.0"
+  },
+  "require-dev": {
+    "doctrine/coding-standard": "^8.0",
+    "phpcq/runner-bootstrap": "^1.0@dev"
+  },
+  "suggest": {
+    "contao/calendar-bundle": "Use contact profile for author information",
+    "contao/faq-bundle": "Use contact profile for author information",
+    "contao/news-bundle": "Use contact profile for author information"
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-develop": "1.1.x-dev",
+      "dev-master": "1.0.x-dev"
+    },
+    "contao-manager-plugin": "Hofff\\Contao\\ContactProfiles\\ContaoManager\\Plugin"
   },
   "autoload": {
     "psr-4": {
       "Hofff\\Contao\\ContactProfiles\\": "src/"
     }
   },
-  "extra": {
-    "contao-manager-plugin": "Hofff\\Contao\\ContactProfiles\\ContaoManager\\Plugin",
-    "branch-alias": {
-      "dev-master": "1.0.x-dev",
-      "dev-develop": "1.1.x-dev"
-    }
-  },
-  "require-dev": {
-    "doctrine/coding-standard": "^8.0"
+  "support": {
+    "email": "info@hofff.com",
+    "issues": "https://github.com/hofff/contao-contact-profiles/issues",
+    "source": "https://github.com/hofff/contao-contact-profiles"
   }
 }

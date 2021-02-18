@@ -44,7 +44,11 @@ trait ContactProfileTrait
         };
     }
 
-    /** @return string[][] */
+    /**
+     * @return string[][]
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
     private function loadProfiles(int $offset) : iterable
     {
         if ($this->hofff_contact_source === 'dynamic') {

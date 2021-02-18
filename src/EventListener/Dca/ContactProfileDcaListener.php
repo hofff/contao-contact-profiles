@@ -45,6 +45,8 @@ final class ContactProfileDcaListener
 
     /**
      * @Callback(table="tl_contact_profile", target="fields.alias.save")
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function generateAlias($value, DataContainer $dataContainer): string
     {
@@ -132,15 +134,19 @@ final class ContactProfileDcaListener
      * Disable/enable a user group
      *
      * @throws AccessDeniedException
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function toggleVisibility(int $intId, bool $blnVisible, ?DataContainer $dc = null): void
+    public function toggleVisibility(int $intId, bool $blnVisible, ?DataContainer $dataContainer = null): void
     {
         // Set the ID and action
         Input::setGet('id', $intId);
         Input::setGet('act', 'toggle');
 
-        if ($dc) {
-            $dc->id = $intId; // see #8043
+        if ($dataContainer) {
+            $dataContainer->id = $intId; // see #8043
         }
 
         // Trigger the onload_callback
@@ -148,9 +154,9 @@ final class ContactProfileDcaListener
             foreach ($GLOBALS['TL_DCA']['tl_contact_profile']['config']['onload_callback'] as $callback) {
                 if (is_array($callback)) {
                     $callback[0] = System::importStatic($callback[0]);
-                    $callback[0]->{$callback[1]}($dc);
+                    $callback[0]->{$callback[1]}($dataContainer);
                 } elseif (is_callable($callback)) {
-                    $callback($dc);
+                    $callback($dataContainer);
                 }
             }
         }
@@ -161,13 +167,13 @@ final class ContactProfileDcaListener
         }
 
         // Set the current record
-        if ($dc) {
+        if ($dataContainer) {
             $objRow = Database::getInstance()->prepare('SELECT * FROM tl_contact_profile WHERE id=?')
                 ->limit(1)
                 ->execute($intId);
 
             if ($objRow->numRows) {
-                $dc->activeRecord = $objRow;
+                $dataContainer->activeRecord = $objRow;
             }
         }
 
@@ -179,9 +185,9 @@ final class ContactProfileDcaListener
             foreach ($GLOBALS['TL_DCA']['tl_contact_profile']['fields']['published']['save_callback'] as $callback) {
                 if (is_array($callback)) {
                     $callback[0] = System::importStatic($callback[0]);
-                    $blnVisible  = $callback[0]->{$callback[1]}($dc);
+                    $blnVisible  = $callback[0]->{$callback[1]}($dataContainer);
                 } elseif (is_callable($callback)) {
-                    $blnVisible = $callback($dc);
+                    $blnVisible = $callback($dataContainer);
                 }
             }
         }
@@ -194,9 +200,9 @@ final class ContactProfileDcaListener
             ->set(['tstamp' => $time, 'published' => ($blnVisible ? '1' : '')])
             ->execute($intId);
 
-        if ($dc && $dc->activeRecord) {
-            $dc->activeRecord->tstamp    = $time;
-            $dc->activeRecord->published = ($blnVisible ? '1' : '');
+        if ($dataContainer && $dataContainer->activeRecord) {
+            $dataContainer->activeRecord->tstamp    = $time;
+            $dataContainer->activeRecord->published = ($blnVisible ? '1' : '');
         }
 
         // Trigger the onsubmit_callback
@@ -204,9 +210,9 @@ final class ContactProfileDcaListener
             foreach ($GLOBALS['TL_DCA']['tl_contact_profile']['config']['onsubmit_callback'] as $callback) {
                 if (is_array($callback)) {
                     $callback[0] = System::importStatic($callback[0]);
-                    $callback[0]->{$callback[1]}($dc);
+                    $callback[0]->{$callback[1]}($dataContainer);
                 } elseif (is_callable($callback)) {
-                    $callback($dc);
+                    $callback($dataContainer);
                 }
             }
         }

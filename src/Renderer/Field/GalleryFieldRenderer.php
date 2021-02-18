@@ -139,10 +139,10 @@ final class GalleryFieldRenderer extends AbstractFieldRenderer
 
             Controller::addImageToTemplate(
                 $cell,
-                $images[$index],
+                $image,
                 null,
                 $lightBoxId,
-                $images[$index]['filesModel']
+                $image['filesModel']
             );
 
             if ($cell->picture['class']) {

@@ -15,6 +15,9 @@ final class ContactProfileDetailModule extends Module
     /** @var string */
     protected $strTemplate = 'mod_hofff_contact_profile_detail';
 
+    /**
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
     protected function renderBackendWildcard(): string
     {
         $objTemplate           = new BackendTemplate('be_wildcard');

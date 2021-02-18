@@ -7,6 +7,9 @@ namespace Hofff\Contao\ContactProfiles\Query;
 use Doctrine\DBAL\Connection;
 use PDO;
 
+/**
+ * @SuppressWarnings(PHPMD.LongClassName)
+ */
 final class PublishedContactProfilesByCategoriesQuery
 {
     private const QUERY = <<<'SQL'

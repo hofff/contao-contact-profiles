@@ -15,6 +15,9 @@ class ContactProfileDetailElement extends ContentElement
     /** @var string */
     protected $strTemplate = 'ce_hofff_contact_profile_detail';
 
+    /**
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
     protected function renderBackendWildcard(): string
     {
         $objTemplate           = new BackendTemplate('be_wildcard');

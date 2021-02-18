@@ -13,6 +13,9 @@ use Hofff\Contao\ContactProfiles\Renderer\FieldRenderer;
 
 trait CreateRendererTrait
 {
+    /**
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
     protected function createRenderer(): ContactProfileRenderer
     {
         $fieldRenderer = System::getContainer()->get(FieldRenderer::class);

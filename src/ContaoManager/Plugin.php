@@ -16,7 +16,11 @@ use Hofff\Contao\ContactProfiles\HofffContaoContactProfilesBundle;
 
 final class Plugin implements BundlePluginInterface
 {
-    /** @return BundleConfig[] */
+    /**
+     * @return BundleConfig[]
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function getBundles(ParserInterface $parser) : array
     {
         return [BundleConfig::create(HofffContaoContactProfilesBundle::class)

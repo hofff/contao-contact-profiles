@@ -29,6 +29,9 @@ trait ContactProfileInitialsFilterTrait
         return parent::generate();
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
     protected function compile(): void
     {
         $resetUrl = isset($GLOBALS['objPage'])
@@ -43,6 +46,9 @@ trait ContactProfileInitialsFilterTrait
         };
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
     private function calculateLettersUsage(): array
     {
         // TODO: Do we need setlocale(LC_CTYPE,"de_DE.UTF-8"); here?

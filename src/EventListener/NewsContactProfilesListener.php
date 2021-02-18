@@ -61,6 +61,9 @@ final class NewsContactProfilesListener
         return $repository->__call('findPublishedByParentAndIdOrAlias', [$newsAlias, [$newsArchive->id]]);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
     private function getNewsAlias(): ?string
     {
         if (!isset($GLOBALS['objPage'])) {
@@ -77,6 +80,9 @@ final class NewsContactProfilesListener
         return $inputAdapter->__call('get', ['items']);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
     private function getNewsArchive(): ?NewsArchiveModel
     {
         $repository = $this->framework->getAdapter(NewsArchiveModel::class);

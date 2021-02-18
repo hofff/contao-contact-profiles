@@ -18,7 +18,11 @@ final class ContactFieldsOptions
         $this->framework = $framework;
     }
 
-    /** @return string[] */
+    /**
+     * @return string[]
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
     public function __invoke() : array
     {
         /** @var Controller|Adapter $adpater */

@@ -16,6 +16,9 @@ trait ContactProfileDetailTrait
     /** @var array|null */
     private $profile;
 
+    /**
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
     public function generate(): string
     {
         $request = System::getContainer()->get('request_stack')->getCurrentRequest();

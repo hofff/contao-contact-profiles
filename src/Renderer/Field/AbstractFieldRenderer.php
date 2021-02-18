@@ -23,7 +23,11 @@ abstract class AbstractFieldRenderer implements FieldRenderer
         $this->framework = $framework;
     }
 
-    /** {@inheritdoc} */
+    /**
+     * {@inheritdoc}
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
     public function __invoke(string $field, $value, ContactProfileRenderer $renderer, array $profile) : ?string
     {
         if (! $this->hasValue($value)) {

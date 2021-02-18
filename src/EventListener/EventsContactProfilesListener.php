@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\EventListener;
 
-use CalendarEventsModel;
+use Contao\CalendarEventsModel;
 use Contao\CalendarModel;
 use Contao\Config;
 use Contao\CoreBundle\Framework\ContaoFrameworkInterface;
@@ -61,6 +61,9 @@ final class EventsContactProfilesListener
         return $repository->__call('findPublishedByParentAndIdOrAlias', [$eventAlias, [$newsArchive->id]]);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
     private function getEventAlias(): ?string
     {
         if (!isset($GLOBALS['objPage'])) {
@@ -77,6 +80,9 @@ final class EventsContactProfilesListener
         return $inputAdapter->__call('get', ['items']);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
     private function getCalendar(): ?CalendarModel
     {
         $repository = $this->framework->getAdapter(CalendarModel::class);

@@ -61,6 +61,9 @@ final class FAQContactProfilesListener
         return $repository->__call('findPublishedByParentAndIdOrAlias', [$faqAlias, [$faqCategory->id]]);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
     private function getFAQAlias(): ?string
     {
         if (!isset($GLOBALS['objPage'])) {
@@ -77,6 +80,9 @@ final class FAQContactProfilesListener
         return $inputAdapter->__call('get', ['items']);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
     private function getFAQCategory(): ?FaqCategoryModel
     {
         $repository = $this->framework->getAdapter(FaqCategoryModel::class);
