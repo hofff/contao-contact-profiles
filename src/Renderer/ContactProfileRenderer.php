@@ -7,6 +7,7 @@ namespace Hofff\Contao\ContactProfiles\Renderer;
 use Contao\FrontendTemplate;
 use Contao\PageModel;
 use Contao\StringUtil;
+use Hofff\Contao\Consent\Bridge\ConsentId;
 use function array_map;
 
 final class ContactProfileRenderer
@@ -38,6 +39,9 @@ final class ContactProfileRenderer
 
     /** @var PageModel|null */
     private $detailPage;
+
+    /** @var array<string,ConsentId> */
+    private $consentIds = [];
 
     public function __construct(FieldRenderer $fieldRenderer, string $moreLabel)
     {
@@ -104,6 +108,13 @@ final class ContactProfileRenderer
         return $this;
     }
 
+    public function withConsentId(string $type, ConsentId $consentId) : self
+    {
+        $this->consentIds[$type] = $consentId;
+
+        return $this;
+    }
+
     /** @return string[]|null */
     public function imageSize() : ?array
     {
@@ -118,6 +129,11 @@ final class ContactProfileRenderer
     public function detailPage(): ?PageModel
     {
         return $this->detailPage;
+    }
+
+    public function consentId(string $type): ?ConsentId
+    {
+        return $this->consentIds[$type] ?? null;
     }
 
     /** @param string[] $profile */

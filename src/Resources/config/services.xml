@@ -98,6 +98,7 @@
 
         <service id="Hofff\Contao\ContactProfiles\Renderer\Field\VideosFieldRenderer">
             <argument type="service" id="contao.framework" />
+            <argument type="service" id="Hofff\Contao\Consent\Bridge\ConsentToolManager" />
             <tag name="hofff_contao_contact_profiles.field_renderer" field="videos" />
         </service>
 

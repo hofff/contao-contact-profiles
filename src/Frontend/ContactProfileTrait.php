@@ -12,6 +12,8 @@ use Contao\PageModel;
 use Contao\Pagination;
 use Contao\StringUtil;
 use Contao\System;
+use Hofff\Contao\Consent\Bridge\ConsentId\ConsentIdParser;
+use Hofff\Contao\Consent\Bridge\Exception\InvalidArgumentException;
 use Hofff\Contao\ContactProfiles\Event\LoadContactProfilesEvent;
 use Hofff\Contao\ContactProfiles\Model\ContactProfileRepository;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
@@ -155,8 +157,27 @@ trait ContactProfileTrait
             }
         }
 
+        $this->addConsentId($renderer, 'youtube');
+        $this->addConsentId($renderer, 'vimeo');
+
         return $renderer;
     }
 
     abstract protected function pageParameter(): string;
+
+    protected function addConsentId(ContactProfileRenderer $renderer, string $type): void
+    {
+        $consentIdParser = System::getContainer()->get(ConsentIdParser::class);
+        $key             = 'hofff_contact_consent_tag_' . $type;
+
+        if (!$this->{$key}) {
+            return;
+        }
+
+        try {
+            $renderer->withConsentId($type, $consentIdParser->parse($this->{$key}));
+        } catch (InvalidArgumentException $exception) {
+            // Do nothing. Probably a not anymore supported consent id
+        }
+    }
 }

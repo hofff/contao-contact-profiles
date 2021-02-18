@@ -8,6 +8,14 @@ use Hofff\Contao\ContactProfiles\EventListener\Dca\ContactTemplateOptions;
 use Hofff\Contao\ContactProfiles\EventListener\Dca\SourcesOptions;
 
 /*
+ * Config
+ */
+$GLOBALS['TL_DCA']['tl_module']['config']['onload_callback'][] = [
+    ContentDcalistener::class,
+    'initializePalettes'
+];
+
+/*
  * Palettes
  */
 $GLOBALS['TL_DCA']['tl_module']['palettes']['__selector__'][]               = 'hofff_contact_source';

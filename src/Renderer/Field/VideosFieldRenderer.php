@@ -4,18 +4,33 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\Renderer\Field;
 
+use Contao\CoreBundle\Framework\ContaoFrameworkInterface;
 use Contao\FilesModel;
 use Contao\FrontendTemplate;
+use Hofff\Contao\Consent\Bridge\ConsentToolManager;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
 
 final class VideosFieldRenderer extends AbstractFieldRenderer
 {
     protected const TEMPLATE = 'hofff_contact_field_videos';
 
+    /** @var ConsentToolManager */
+    private $consentToolManager;
+
+    public function __construct(ContaoFrameworkInterface $framework, ConsentToolManager $consentToolManager)
+    {
+        parent::__construct($framework);
+
+        $this->consentToolManager = $consentToolManager;
+    }
+
     /** @param mixed $value */
     protected function compile(FrontendTemplate $template, $value, ContactProfileRenderer $renderer): void
     {
-        $template->value = array_filter(
+        $template->consentTool      = $this->consentToolManager->activeConsentTool();
+        $template->youtubeConsentId = $renderer->consentId('youtube');
+        $template->vimeoConsentId   = $renderer->consentId('vimeo');
+        $template->value            = array_filter(
             array_map(
                 static function (array $video) {
                     switch ($video['source']) {

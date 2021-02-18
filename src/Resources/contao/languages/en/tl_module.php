@@ -25,6 +25,10 @@ $GLOBALS['TL_LANG']['tl_module']['hofff_contact_jump_to'][0]            = 'Conta
 $GLOBALS['TL_LANG']['tl_module']['hofff_contact_jump_to'][1]            = 'Please choose a contact detail page';
 $GLOBALS['TL_LANG']['tl_module']['hofff_contact_profiles_order_sql'][0] = 'Order SQL clause';
 $GLOBALS['TL_LANG']['tl_module']['hofff_contact_profiles_order_sql'][1] = 'SQL order clause. Use <em>p.*</em> as the table alias!';
+$GLOBALS['TL_LANG']['tl_module']['hofff_contact_consent_tag_youtube'][0] = 'Youtube consent tag';
+$GLOBALS['TL_LANG']['tl_module']['hofff_contact_consent_tag_youtube'][1] = 'Assign a consent ID for youtube videos.';
+$GLOBALS['TL_LANG']['tl_module']['hofff_contact_consent_tag_vimeo'][0]   = 'Vimeo consent tag';
+$GLOBALS['TL_LANG']['tl_module']['hofff_contact_consent_tag_vimeo'][1]   = 'Assign a consent ID for vimeo videos.';
 
 $GLOBALS['TL_LANG']['tl_module']['hofff_contact_source_options']['custom'][0]     = 'Custom';
 $GLOBALS['TL_LANG']['tl_module']['hofff_contact_source_options']['custom'][1]     = 'Choose custom contact profiles.';
