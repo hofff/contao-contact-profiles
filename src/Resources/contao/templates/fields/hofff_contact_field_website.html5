@@ -1,5 +1,5 @@
 <?php $this->extend($this->defaultTemplate) ?>
 
-<?php $this->block('content') ?>
-<a href="<?= $this->value ?>" target="_blank" rel="noreferrer nofollow"><?= $this->label ?></a>
+<?php $this->block('value') ?>
+<a href="<?= $this->value ?>" target="_blank" rel="noreferrer nofollow"><?= $this->linkTitle ?></a>
 <?php $this->endblock() ?>

@@ -14,5 +14,6 @@ final class WebsiteFieldRenderer extends AbstractFieldRenderer
     /** @param mixed $value */
     protected function compile(FrontendTemplate $template, $value, ContactProfileRenderer $renderer) : void
     {
+        $template->linkTitle = $template->profile['websiteTitle'] ?: $value;
     }
 }

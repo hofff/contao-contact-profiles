@@ -71,7 +71,7 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
     // Palettes
     'palettes' => [
         'default' => '{personal_legend},salutation,title,firstname,lastname,alias,position,profession,image,caption'
-            . ';{contact_legend},phone,mobile,fax,email,website,accounts'
+            . ';{contact_legend},phone,mobile,fax,email,website,websiteTitle,accounts'
             . ';{details_legend},teaser,description,statement,responsibilities'
             . ';{gallery_legend:hide},gallery'
             . ';{videos_legend:hide},videos'
@@ -231,6 +231,12 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'profileField'   => true,
                 'dcaPicker'      => true,
             ],
+            'sql'       => 'varchar(255) NOT NULL default \'\'',
+        ],
+        'websiteTitle'          => [
+            'exclude'   => true,
+            'inputType' => 'text',
+            'eval'      => ['maxlength' => 255, 'tl_class' => 'w50', 'profileField' => false],
             'sql'       => 'varchar(255) NOT NULL default \'\'',
         ],
         'accounts'         => [
