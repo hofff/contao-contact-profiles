@@ -233,7 +233,7 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             ],
             'sql'       => 'varchar(255) NOT NULL default \'\'',
         ],
-        'websiteTitle'          => [
+        'websiteTitle'     => [
             'exclude'   => true,
             'inputType' => 'text',
             'eval'      => ['maxlength' => 255, 'tl_class' => 'w50', 'profileField' => false],
@@ -326,10 +326,13 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             'sql'       => "char(1) NOT NULL default ''",
         ],
         'videos'           => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['videos'],
-            'exclude'   => true,
-            'inputType' => 'multiColumnWizard',
-            'eval'      => [
+            'label'         => &$GLOBALS['TL_LANG']['tl_contact_profile']['videos'],
+            'exclude'       => true,
+            'inputType'     => 'multiColumnWizard',
+            'save_callback' => [
+                [ContactProfileDcaListener::class, 'saveVideos'],
+            ],
+            'eval'          => [
                 'tl_class'     => 'clr',
                 'profileField' => true,
                 'columnFields' => [
@@ -358,17 +361,18 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                         'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['videoVideo'],
                         'inputType' => 'text',
                         'eval'      => [
-                            'maxlength' => 128,
-                            'rgxp'      => 'url',
-                            'tl_class'  => 'wizard',
-                            'dcaPicker' => [
+                            'maxlength'      => 128,
+                            'rgxp'           => 'url',
+                            'tl_class'       => 'wizard',
+                            'decodeEntities' => true,
+                            'dcaPicker'      => [
                                 'do'        => 'files',
                                 'context'   => 'file',
                                 'icon'      => 'pickfile.svg',
                                 'fieldType' => 'radio',
                                 'filesOnly' => true,
                             ],
-                            'style'     => 'width: 100%',
+                            'style'          => 'width: 100%',
                         ],
                     ],
                     'image'       => [
@@ -384,7 +388,7 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                     ],
                 ],
             ],
-            'sql'       => [
+            'sql'           => [
                 'type'    => 'blob',
                 'length'  => \Doctrine\DBAL\Platforms\MySqlPlatform::LENGTH_LIMIT_BLOB,
                 'notnull' => false,

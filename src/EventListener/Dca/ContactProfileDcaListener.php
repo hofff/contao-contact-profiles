@@ -98,6 +98,24 @@ final class ContactProfileDcaListener
         return $label;
     }
 
+    public function saveVideos($values, DataContainer $dataContainer): array
+    {
+        $values = StringUtil::deserialize($values, true);
+
+        foreach ($values as $index => $value) {
+            switch ($value['videoSource']) {
+                case 'youtube':
+                    $values[$index]['video'] = $this->extractYouTubeId($value['video']);
+                    break;
+                case 'vimeo':
+                    $values[$index]['video'] = $this->extractVimeoId($value['video']);
+                    break;
+            }
+        }
+
+        return $values;
+    }
+
     /**
      * Return the "toggle visibility" button
      *
@@ -218,5 +236,41 @@ final class ContactProfileDcaListener
         }
 
         $objVersions->create();
+    }
+
+    /**
+     * Extract the YouTube ID from an URL
+     *
+     * @param mixed         $varValue
+     *
+     * @return mixed
+     */
+    public function extractYouTubeId($varValue)
+    {
+        $matches = [];
+
+        if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $varValue, $matches)) {
+            $varValue = $matches[1];
+        }
+
+        return $varValue;
+    }
+
+    /**
+     * Extract the Vimeo ID from an URL
+     *
+     * @param mixed         $varValue
+     *
+     * @return mixed
+     */
+    public function extractVimeoId($varValue)
+    {
+        $matches = [];
+
+        if (preg_match('%vimeo\.com/(?:channels/(?:\w+/)?|groups/(?:[^/]+)/videos/|album/(?:\d+)/video/)?(\d+)(?:$|/|\?)%i', $varValue, $matches)) {
+            $varValue = $matches[1];
+        }
+
+        return $varValue;
     }
 }
