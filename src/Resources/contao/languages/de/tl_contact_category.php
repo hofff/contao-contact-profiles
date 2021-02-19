@@ -22,5 +22,7 @@ $GLOBALS['TL_LANG']['tl_contact_category']['social_accounts'][0]  = 'Social Medi
 $GLOBALS['TL_LANG']['tl_contact_category']['social_accounts'][1]  = 'Social Media Profile verwalten';
 
 // Fields
-$GLOBALS['TL_LANG']['tl_contact_category']['title'][0] = 'Titel';
-$GLOBALS['TL_LANG']['tl_contact_category']['title'][1] = 'Titel der Kategorie';
+$GLOBALS['TL_LANG']['tl_contact_category']['title'][0]  = 'Titel';
+$GLOBALS['TL_LANG']['tl_contact_category']['title'][1]  = 'Titel der Kategorie';
+$GLOBALS['TL_LANG']['tl_contact_category']['jumpTo'][0] = 'Weiterleitungsseite';
+$GLOBALS['TL_LANG']['tl_contact_category']['jumpTo'][1] = 'Weiterleitungsseite zu der Detailseite';

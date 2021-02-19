@@ -22,5 +22,7 @@ $GLOBALS['TL_LANG']['tl_contact_category']['social_accounts'][0]  = 'Social acco
 $GLOBALS['TL_LANG']['tl_contact_category']['social_accounts'][1]  = 'Manage social accounts';
 
 // Fields
-$GLOBALS['TL_LANG']['tl_contact_category']['title'][0] = 'Title';
-$GLOBALS['TL_LANG']['tl_contact_category']['title'][1] = 'Title of the category.';
+$GLOBALS['TL_LANG']['tl_contact_category']['title'][0]  = 'Title';
+$GLOBALS['TL_LANG']['tl_contact_category']['title'][1]  = 'Title of the category.';
+$GLOBALS['TL_LANG']['tl_contact_category']['jumpTo'][0] = 'Redirect page';
+$GLOBALS['TL_LANG']['tl_contact_category']['jumpTo'][1] = 'Redirect page of a detail page.';

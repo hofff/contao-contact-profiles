@@ -21,6 +21,20 @@ final class ContactProfileRepository
         $this->connection = $connection;
     }
 
+    public function fetchById($profileId)
+    {
+        $statement = $this->connection->executeQuery(
+            'SELECT * FROM tl_contact_profile WHERE id=:id LIMIT 0,1',
+            ['id' => $profileId]
+        );
+
+        if ($statement->rowCount() === 0) {
+            return null;
+        }
+
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
+
     public function fetchPublishedByCategories(
         array $categoryIds,
         int $limit = 0,

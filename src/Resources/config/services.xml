@@ -106,5 +106,14 @@
             <argument type="service" id="contao.framework" />
             <tag name="hofff_contao_contact_profiles.field_renderer" field="gallery" />
         </service>
+
+        <service id="Hofff\Contao\ContactProfiles\Picker\ContactProfilePickerProvider">
+            <argument type="service" id="knp_menu.factory"/>
+            <argument type="service" id="router"/>
+            <argument type="service" id="translator" on-invalid="null"/>
+            <argument type="service" id="security.helper"/>
+            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\ContactProfileRepository"/>
+            <tag name="contao.picker_provider"/>
+        </service>
     </services>
 </container>
