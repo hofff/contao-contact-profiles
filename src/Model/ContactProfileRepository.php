@@ -76,7 +76,7 @@ final class ContactProfileRepository
             ->setParameter('alias', $aliasOrId)
             ->setMaxResults(1)
             ->execute()
-            ->fetch(PDO::FETCH_ASSOC);
+            ->fetch(PDO::FETCH_ASSOC) ?: null;
     }
 
     public function countPublishedByCategories(array $categoryIds): int
