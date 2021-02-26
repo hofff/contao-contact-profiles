@@ -16,6 +16,7 @@ use Hofff\Contao\ContactProfiles\Event\LoadContactProfilesEvent;
 use Hofff\Contao\ContactProfiles\Model\ContactProfileRepository;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
 
+use function strlen;
 use const TL_MODE;
 
 trait ContactProfileTrait
@@ -140,8 +141,9 @@ trait ContactProfileTrait
     private function buildCriteria(): array
     {
         $criteria = [];
+        $letter   = (string) Input::get('letter');
 
-        if (Input::get('letter')) {
+        if (strlen($letter) > 0) {
             $criteria['p.lastname LIKE :letter'] = ['letter' => Input::get('letter') . '%'];
         }
 

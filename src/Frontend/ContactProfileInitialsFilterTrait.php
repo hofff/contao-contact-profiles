@@ -39,7 +39,7 @@ trait ContactProfileInitialsFilterTrait
             : explode('?', Environment::get('request'))[0];
 
         $this->Template->letters      = $this->calculateLettersUsage();
-        $this->Template->activeLetter = Input::get('letter');
+        $this->Template->activeLetter = (string) Input::get('letter');
         $this->Template->resetUrl     = $resetUrl;
         $this->Template->filterUrl    = static function (string $letter) use ($resetUrl) {
             return $resetUrl . '?letter=' . $letter;
