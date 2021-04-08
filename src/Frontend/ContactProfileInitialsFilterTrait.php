@@ -34,15 +34,10 @@ trait ContactProfileInitialsFilterTrait
      */
     protected function compile(): void
     {
-        $resetUrl = isset($GLOBALS['objPage'])
-            ? $GLOBALS['objPage']->getFrontendUrl()
-            : explode('?', Environment::get('request'))[0];
-
         $this->Template->letters      = $this->calculateLettersUsage();
-        $this->Template->activeLetter = (string) Input::get('letter');
-        $this->Template->resetUrl     = $resetUrl;
-        $this->Template->filterUrl    = static function (string $letter) use ($resetUrl) {
-            return $resetUrl . '?letter=' . $letter;
+        $this->Template->activeLetter = (string) Input::get('auto_item');
+        $this->Template->filterUrl    = static function (string $letter) {
+            return $GLOBALS['objPage']->getFrontendUrl('/' . $letter);
         };
     }
 
@@ -51,9 +46,8 @@ trait ContactProfileInitialsFilterTrait
      */
     private function calculateLettersUsage(): array
     {
-        // TODO: Do we need setlocale(LC_CTYPE,"de_DE.UTF-8"); here?
-
-        $letters = array_fill_keys(range('a', 'z'), 0);
+        $letters    = array_fill_keys(range('a', 'z'), 0);
+        $special    = 0;
         $repository = System::getContainer()->get(ContactProfileRepository::class);
 
         switch ($this->hofff_contact_source) {
@@ -64,7 +58,11 @@ trait ContactProfileInitialsFilterTrait
 
                 foreach ($event->profiles() as $profile) {
                     $letter = iconv('UTF-8', 'ASCII//TRANSLIT', substr($profile['lastname'], 0, 1));
-                    $letters[$letter] ++;
+                    if (isset($letters[$letter])) {
+                        $letters[$letter] ++;
+                    } else {
+                        $special++;
+                    }
                 }
 
                 break;
@@ -74,7 +72,11 @@ trait ContactProfileInitialsFilterTrait
 
                 foreach ($repository->fetchInitialsOfPublishedByCategories($categoryIds) as $letter) {
                     $normalized = iconv('UTF-8', 'ASCII//TRANSLIT', $letter['letter']);
-                    $letters[$normalized] = $letter['count'];
+                    if (isset($letters[$normalized])) {
+                        $letters[$normalized] = $letter['count'];
+                    } else {
+                        $special += $letter['count'];
+                    }
                 }
 
                 break;
@@ -85,8 +87,16 @@ trait ContactProfileInitialsFilterTrait
 
                 foreach ($repository->fetchInitialsOfPublishedByProfileIds($profileIds) as $letter) {
                     $normalized = iconv('UTF-8', 'ASCII//TRANSLIT', $letter['letter']);
-                    $letters[$normalized] = $letter['count'];
+                    if (isset($letters[$normalized])) {
+                        $letters[$normalized] = $letter['count'];
+                    } else {
+                        $special += $letter['count'];
+                    }
                 }
+        }
+
+        if ($special > 0) {
+            $letters['numeric'] = $special;
         }
 
         return $letters;

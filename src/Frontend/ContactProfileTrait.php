@@ -16,6 +16,8 @@ use Hofff\Contao\ContactProfiles\Event\LoadContactProfilesEvent;
 use Hofff\Contao\ContactProfiles\Model\ContactProfileRepository;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
 
+use function array_fill_keys;
+use function range;
 use function strlen;
 use const TL_MODE;
 
@@ -141,10 +143,15 @@ trait ContactProfileTrait
     private function buildCriteria(): array
     {
         $criteria = [];
-        $letter   = (string) Input::get('letter');
+        $letter   = (string) Input::get('auto_item');
 
-        if (strlen($letter) > 0) {
-            $criteria['p.lastname LIKE :letter'] = ['letter' => Input::get('letter') . '%'];
+        if ($letter === 'numeric') {
+            $letters    = range('a', 'z');
+            foreach ($letters as $letter) {
+                $criteria['p.lastname NOT LIKE :letter_' . $letter] = ['letter_' . $letter => $letter . '%'];
+            }
+        } elseif (strlen($letter) > 0) {
+            $criteria['p.lastname LIKE :letter'] = ['letter' => $letter . '%'];
         }
 
         return $criteria;
