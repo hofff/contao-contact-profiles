@@ -9,6 +9,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use PDO;
 
+use function is_numeric;
 use function preg_match;
 
 final class ContactProfileRepository
@@ -71,9 +72,11 @@ final class ContactProfileRepository
 
     public function fetchPublishedByIdOrAlias(string $aliasOrId): ?array
     {
+        $field = is_numeric($aliasOrId) ? 'id' : 'alias';
+
         return $this->createFetchPublishedQuery()
-            ->andWhere('p.id = :alias OR p.alias = :alias')
-            ->setParameter('alias', $aliasOrId)
+            ->andWhere('p.' . $field . ' = :alias')
+            ->setParameter('alias', $aliasOrId, PDO::PARAM_STR)
             ->setMaxResults(1)
             ->execute()
             ->fetch(PDO::FETCH_ASSOC) ?: null;
