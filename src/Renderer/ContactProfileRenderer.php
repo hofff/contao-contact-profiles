@@ -159,6 +159,6 @@ final class ContactProfileRenderer
     {
         $raw = StringUtil::deserialize($profile[$field] ?? null);
 
-        return ($this->fieldRenderer)($field, $raw, $this, $profile);
+        return ($this->fieldRenderer)($field, $raw, $this, $profile) ?? '';
     }
 }
