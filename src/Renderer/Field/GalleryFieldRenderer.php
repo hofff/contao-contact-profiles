@@ -129,13 +129,8 @@ final class GalleryFieldRenderer extends AbstractFieldRenderer
             $cell        = new FrontendTemplate();
             $cell->class = 'image_' . $index;
 
-            // Build legacy size format.
-            if (is_array($imageSize)) {
-                $imageSize = [$imageSize['width'], $imageSize['height'], $imageSize['size']];
-            }
-
             // Add size and margin
-            $images[$index]['size'] = $imageSize;
+            $image['size'] = $imageSize;
 
             Controller::addImageToTemplate(
                 $cell,
@@ -153,6 +148,5 @@ final class GalleryFieldRenderer extends AbstractFieldRenderer
         }
 
         return $compiled;
-
     }
 }
