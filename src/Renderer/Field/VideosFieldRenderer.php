@@ -29,9 +29,11 @@ final class VideosFieldRenderer extends AbstractFieldRenderer
     protected function compile(FrontendTemplate $template, $value, ContactProfileRenderer $renderer): void
     {
         $template->renderer = $renderer;
-        $template->value  = array_filter(
+        $template->value    = array_filter(
             array_map(
                 static function (array $video) {
+                    $video['aspect'] = str_replace(':', '', $video['aspect']);
+
                     switch ($video['videoSource']) {
                         case 'youtube':
                             $video['url'] = 'https://www.youtube-nocookie.com/embed/' . $video['video'];

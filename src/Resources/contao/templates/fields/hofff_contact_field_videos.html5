@@ -3,7 +3,7 @@
 <?php $this->block('value') ?>
 <ul>
 <?php foreach ($this->value as $video): ?>
-  <li>
+  <li class="contact-profile-video contact-profile-video-<?= $video['videoSource'] ?>">
     <?php if ($this->activeConsentTool && $consentId = $this->renderer->consentId($video['videoSource'])): ?>
       <?php
         $videoModel = new class extends \Contao\Model {

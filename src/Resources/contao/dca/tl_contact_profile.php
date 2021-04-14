@@ -386,6 +386,14 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                             'extensions' => Config::get('validImageTypes'),
                         ],
                     ],
+                    'aspect' => [
+                        'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['videoAspect'],
+                        'exclude'   => true,
+                        'inputType' => 'select',
+                        'options'   => ['16:9', '16:10', '21:9', '4:3', '3:2'],
+                        'reference' => &$GLOBALS['TL_LANG']['tl_contact_profile']['videoAspect'],
+                        'eval'      => ['includeBlankOption' => true, 'nospace' => true, 'tl_class' => 'w50'],
+                    ],
                 ],
             ],
             'sql'           => [

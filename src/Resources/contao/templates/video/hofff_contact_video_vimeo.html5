@@ -1,1 +1,9 @@
-<iframe src="<?= $this->url ?>" allowfullscreen></iframe>
+<figure class="video_container">
+    <?php if ($this->aspect): ?>
+    <div class="responsive ratio-<?= $this->aspect ?>">
+    <?php endif; ?>
+    <iframe src="<?= $this->url ?>" allowfullscreen></iframe>
+    <?php if ($this->aspect): ?>
+    </div>
+    <?php endif; ?>
+</figure>
