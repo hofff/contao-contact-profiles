@@ -185,8 +185,8 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['hofff_contact_jump_to'] = [
 $GLOBALS['TL_DCA']['tl_content']['fields']['hofff_contact_profiles_order_sql'] = [
     'exclude'   => true,
     'inputType' => 'text',
-    'eval'      => ['tl_class' => 'w50', 'maxlength' => 64],
-    'sql'       => "varchar(64) NOT NULL default ''",
+    'eval'      => ['tl_class' => 'w50', 'maxlength' => 128, 'decodeEntities' => true],
+    'sql'       => "varchar(128) NOT NULL default ''",
 ];
 
 $GLOBALS['TL_DCA']['tl_content']['fields']['hofff_contact_consent_tag_youtube'] = [

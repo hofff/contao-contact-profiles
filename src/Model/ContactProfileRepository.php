@@ -147,13 +147,7 @@ final class ContactProfileRepository
         }
 
         if ($order !== null) {
-            foreach(StringUtil::trimsplit(',', $order) as $orderClause) {
-                if (preg_match('/(.+)\s*(DESC|ASC)/i', $orderClause, $matches)) {
-                    $builder->addOrderBy($matches[1], $matches[2]);
-                } else {
-                    $builder->addOrderBy($orderClause);
-                }
-            }
+            $builder->addOrderBy($order, ' ');
         }
 
         return $builder;
