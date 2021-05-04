@@ -8,6 +8,7 @@ use Contao\CoreBundle\Framework\ContaoFrameworkInterface;
 use Contao\FrontendTemplate;
 use Hofff\Contao\ContactProfiles\Query\SocialAccountQuery;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
+use function array_filter;
 use function array_key_exists;
 use function array_merge;
 
@@ -26,6 +27,22 @@ final class SocialAccountsRenderer extends AbstractFieldRenderer
         parent::__construct($framework);
 
         $this->query = $query;
+    }
+
+    protected function hasValue($value): bool
+    {
+        if (! parent::hasValue($value)) {
+            return false;
+        }
+
+        $profiles = array_filter(
+            (array) $value,
+            static function (array $config) {
+                return $config['type'] !== '' && $config['url'] !== '';
+            }
+        );
+
+        return $profiles !== [];
     }
 
     /**
