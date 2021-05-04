@@ -7,6 +7,7 @@ namespace Hofff\Contao\ContactProfiles\EventListener\Hook;
 use Contao\StringUtil;
 use Contao\Template;
 use Hofff\Contao\ContactProfiles\Model\ContactProfileRepository;
+use Hofff\Contao\ContactProfiles\Util\ContactProfileUtil;
 use function strpos;
 
 final class AddContactProfileInformationListener
@@ -32,8 +33,11 @@ final class AddContactProfileInformationListener
         }
 
         $profileIds = StringUtil::deserialize($template->hofff_contact_profiles, true);
+        $order      = StringUtil::deserialize($template->hofff_contact_profiles_order, true);
+        $profiles   = $this->repository->fetchPublishedByProfileIds($profileIds);
+        $profiles   = ContactProfileUtil::orderListByIds($profiles, $order);
 
-        $template->contactProfiles = $this->repository->fetchPublishedByProfileIds($profileIds);
+        $template->contactProfiles = $profiles;
     }
 
     private function match(string $templateName) : bool

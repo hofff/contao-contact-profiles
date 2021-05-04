@@ -12,6 +12,8 @@ use Contao\NewsModel;
 use Contao\StringUtil;
 use Hofff\Contao\ContactProfiles\Event\LoadContactProfilesEvent;
 use Hofff\Contao\ContactProfiles\Model\ContactProfileRepository;
+use Hofff\Contao\ContactProfiles\Util\ContactProfileUtil;
+use function dump;
 
 final class NewsContactProfilesListener
 {
@@ -39,7 +41,9 @@ final class NewsContactProfilesListener
         }
 
         $profileIds = StringUtil::deserialize($news->hofff_contact_profiles, true);
+        $order      = StringUtil::deserialize($news->hofff_contact_profiles_order, true);
         $profiles   = $this->repository->fetchPublishedByProfileIds($profileIds);
+        $profiles   = ContactProfileUtil::orderListByIds($profiles, $order);
 
         $event->setProfiles($profiles);
     }

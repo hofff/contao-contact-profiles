@@ -12,6 +12,7 @@ use Contao\Input;
 use Contao\StringUtil;
 use Hofff\Contao\ContactProfiles\Event\LoadContactProfilesEvent;
 use Hofff\Contao\ContactProfiles\Model\ContactProfileRepository;
+use Hofff\Contao\ContactProfiles\Util\ContactProfileUtil;
 
 final class EventsContactProfilesListener
 {
@@ -39,7 +40,9 @@ final class EventsContactProfilesListener
         }
 
         $profileIds = StringUtil::deserialize($calendarEvent->hofff_contact_profiles, true);
+        $order      = StringUtil::deserialize($calendarEvent->hofff_contact_profiles_order, true);
         $profiles   = $this->repository->fetchPublishedByProfileIds($profileIds);
+        $profiles   = ContactProfileUtil::orderListByIds($profiles, $order);
 
         $event->setProfiles($profiles);
     }

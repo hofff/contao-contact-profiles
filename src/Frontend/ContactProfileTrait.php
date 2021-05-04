@@ -16,6 +16,7 @@ use Hofff\Contao\ContactProfiles\Event\LoadContactProfilesEvent;
 use Hofff\Contao\ContactProfiles\Model\ContactProfileRepository;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
 
+use Hofff\Contao\ContactProfiles\Util\ContactProfileUtil;
 use function array_fill_keys;
 use function range;
 use function strlen;
@@ -86,8 +87,11 @@ trait ContactProfileTrait
             default:
                 $repository = System::getContainer()->get(ContactProfileRepository::class);
                 $profileIds = StringUtil::deserialize($this->hofff_contact_profiles, true);
+                $profiles   =  $repository->fetchPublishedByProfileIds($profileIds, $limit, $offset, $order, $criteria);
+                $order      = StringUtil::deserialize($this->hofff_contact_profiles_order, true);
+                $profiles   = ContactProfileUtil::orderListByIds($profiles, $order);
 
-                return $repository->fetchPublishedByProfileIds($profileIds, $limit, $offset, $order, $criteria);
+                return $profiles;
         }
     }
 

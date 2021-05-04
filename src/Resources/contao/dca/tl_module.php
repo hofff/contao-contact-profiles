@@ -127,11 +127,23 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['hofff_contact_categories'] = [
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['hofff_contact_profiles'] = [
     'label'            => &$GLOBALS['TL_LANG']['tl_module']['hofff_contact_profiles'],
-    'exclude'          => true,
-    'inputType'        => 'checkboxWizard',
+    'inputType'        => 'picker',
     'options_callback' => [ContactProfileOptions::class, '__invoke'],
-    'eval'             => ['tl_class' => 'clr', 'multiple' => true],
+    'eval'             => [
+        'orderField' => 'hofff_contact_profiles_order',
+        'tl_class'   => 'clr long',
+        'multiple'   => true,
+        'chosen'     => true,
+    ],
+    'relation'         => [
+        'type'  => 'hasMany',
+        'table' => 'tl_contact_profile',
+    ],
     'sql'              => 'blob NULL',
+];
+
+$GLOBALS['TL_DCA']['tl_content']['fields']['hofff_contact_profiles_order'] = [
+    'sql' => 'blob NULL',
 ];
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['hofff_contact_fields'] = [
