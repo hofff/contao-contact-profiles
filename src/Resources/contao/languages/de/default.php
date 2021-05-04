@@ -9,4 +9,5 @@ $GLOBALS['TL_LANG']['BTN']['tl_contact_responsibility'][1]  = 'Zuständigkeiten 
 $GLOBALS['TL_LANG']['BTN']['tl_contact_social_accounts'][0] = 'Social Media Profile';
 $GLOBALS['TL_LANG']['BTN']['tl_contact_social_accounts'][1] = 'Social Media Profile verwalten';
 
-$GLOBALS['TL_LANG']['MSC']['contactProfilePicker'] = 'Kontaktprofile';
+$GLOBALS['TL_LANG']['MSC']['contactProfilePicker']     = 'Kontaktprofile';
+$GLOBALS['TL_LANG']['MSC']['contactProfileResetLabel'] = 'Alle';

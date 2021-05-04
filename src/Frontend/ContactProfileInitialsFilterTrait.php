@@ -36,6 +36,7 @@ trait ContactProfileInitialsFilterTrait
     {
         $this->Template->letters      = $this->calculateLettersUsage();
         $this->Template->activeLetter = (string) Input::get('auto_item');
+        $this->Template->resetUrl     = $GLOBALS['objPage']->getFrontendUrl();
         $this->Template->filterUrl    = static function (string $letter) {
             return $GLOBALS['objPage']->getFrontendUrl('/' . $letter);
         };

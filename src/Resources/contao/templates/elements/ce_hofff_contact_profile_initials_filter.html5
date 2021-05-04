@@ -15,7 +15,12 @@
         endif
         ?></li><?php
     endforeach
-    ?>
+    ?><li><?php if ($this->activeLetter):
+        ?><a href="<?= $this->resetUrl ?>"><span itemprop="name"><?= $this->trans('MSC.contactProfileResetLabel', [], 'contao_default') ?></span></a><?php
+        else:
+            ?><strong class="active"><span itemprop="name"><?= $this->trans('MSC.contactProfileResetLabel', [], 'contao_default') ?></span></strong><?php
+        endif
+        ?></li>
 </ul>
 
 <?php $this->endblock() ?>
