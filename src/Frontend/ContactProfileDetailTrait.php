@@ -9,6 +9,8 @@ use Contao\Input;
 use Contao\System;
 use Hofff\Contao\ContactProfiles\Model\ContactProfileRepository;
 
+use function trim;
+
 trait ContactProfileDetailTrait
 {
     use CreateRendererTrait;
@@ -32,7 +34,8 @@ trait ContactProfileDetailTrait
             throw new PageNotFoundException('Contact profile not found');
         }
 
-        $GLOBALS['objPage']->pageTitle = trim($this->profile['firstname'] . ' ' . $this->profile['lastname']);
+        $GLOBALS['objPage']->pageTitle   = trim($this->profile['firstname'] . ' ' . $this->profile['lastname']);
+        $GLOBALS['objPage']->description = $this->prepareMetaDescription((string) $this->profile['teaser']);
 
         return parent::generate();
     }
