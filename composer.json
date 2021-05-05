@@ -46,8 +46,8 @@
   },
   "require-dev": {
     "doctrine/coding-standard": "^8.0",
-    "phpcq/runner-bootstrap": "^1.0@dev",
-    "hofff/contao-social-tags": "^1.1"
+    "hofff/contao-social-tags": "^1.1",
+    "phpcq/runner-bootstrap": "^1.0@dev"
   },
   "suggest": {
     "contao/calendar-bundle": "Use contact profile for author information",
