@@ -41,16 +41,19 @@
   "conflict": {
     "contao/calendar-bundle": "<4.4 || >=5.0",
     "contao/faq-bundle": "<4.4 || >=5.0",
-    "contao/news-bundle": "<4.4 || >=5.0"
+    "contao/news-bundle": "<4.4 || >=5.0",
+    "hofff/contao-social-tags": "<1.1 || >=2.0"
   },
   "require-dev": {
     "doctrine/coding-standard": "^8.0",
-    "phpcq/runner-bootstrap": "^1.0@dev"
+    "phpcq/runner-bootstrap": "^1.0@dev",
+    "hofff/contao-social-tags": "^1.1"
   },
   "suggest": {
     "contao/calendar-bundle": "Use contact profile for author information",
     "contao/faq-bundle": "Use contact profile for author information",
-    "contao/news-bundle": "Use contact profile for author information"
+    "contao/news-bundle": "Use contact profile for author information",
+    "hofff/contao-social-tags": "Generate open graph and twitter cards social tags"
   },
   "extra": {
     "branch-alias": {

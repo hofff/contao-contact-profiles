@@ -9,6 +9,7 @@ use Hofff\Contao\ContactProfiles\Frontend\ContactProfileElement;
 use Hofff\Contao\ContactProfiles\Frontend\ContactProfileInitialsFilterElement;
 use Hofff\Contao\ContactProfiles\Frontend\ContactProfileInitialsFilterModule;
 use Hofff\Contao\ContactProfiles\Frontend\ContactProfileModule;
+use Hofff\Contao\ContactProfiles\Model\ContactProfile;
 
 // Backend module
 $GLOBALS['BE_MOD']['content']['hofff_contact_profiles'] = [
@@ -33,3 +34,6 @@ $GLOBALS['FE_MOD']['hofff_contact_profiles']['hofff_contact_profile_initials_fil
 
 // Hooks
 $GLOBALS['TL_HOOKS']['parseTemplate'][] = [AddContactProfileInformationListener::class, 'onParseTemplate'];
+
+// Models
+$GLOBALS['TL_MODELS'][ContactProfile::getTable()] = ContactProfile::class;

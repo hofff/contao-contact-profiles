@@ -115,5 +115,18 @@
             <argument type="service" id="Hofff\Contao\ContactProfiles\Model\ContactProfileRepository"/>
             <tag name="contao.picker_provider"/>
         </service>
+
+        <!-- Social tags -->
+        <service id="Hofff\Contao\ContactProfiles\SocialTags\ContactProfileExtractor">
+            <argument type="service" id="contao.framework"/>
+            <argument type="service" id="request_stack"/>
+            <argument>%kernel.project_dir%</argument>
+            <tag name="Hofff\Contao\SocialTags\Data\Extractor"/>
+        </service>
+
+        <service id="Hofff\Contao\ContactProfiles\SocialTags\SocialTagsGenerator" public="true">
+            <argument type="service" id="request_stack"/>
+            <argument type="service" id="Hofff\Contao\SocialTags\Data\SocialTagsFactory" on-invalid="ignore"/>
+        </service>
     </services>
 </container>

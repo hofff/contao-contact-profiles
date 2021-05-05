@@ -8,6 +8,7 @@ use Contao\CoreBundle\Exception\PageNotFoundException;
 use Contao\Input;
 use Contao\System;
 use Hofff\Contao\ContactProfiles\Model\ContactProfileRepository;
+use Hofff\Contao\ContactProfiles\SocialTags\SocialTagsGenerator;
 
 use function trim;
 
@@ -36,6 +37,8 @@ trait ContactProfileDetailTrait
 
         $GLOBALS['objPage']->pageTitle   = trim($this->profile['firstname'] . ' ' . $this->profile['lastname']);
         $GLOBALS['objPage']->description = $this->prepareMetaDescription((string) $this->profile['teaser']);
+
+        System::getContainer()->get(SocialTagsGenerator::class)->generate($this->profile);
 
         return parent::generate();
     }
