@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\Frontend;
 
-use Contao\Environment;
 use Contao\Input;
 use Contao\StringUtil;
 use Contao\System;
 use Hofff\Contao\ContactProfiles\Event\LoadContactProfilesEvent;
 use Hofff\Contao\ContactProfiles\Model\ContactProfileRepository;
+
 use function array_fill_keys;
-use function explode;
 use function iconv;
 use function range;
 use function substr;
@@ -43,7 +42,10 @@ trait ContactProfileInitialsFilterTrait
     }
 
     /**
+     * @return array<string,int>
+     *
      * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function calculateLettersUsage(): array
     {
@@ -54,7 +56,7 @@ trait ContactProfileInitialsFilterTrait
         switch ($this->hofff_contact_source) {
             case 'dynamic':
                 $sources = StringUtil::deserialize($this->hofff_contact_sources, true);
-                $event = new LoadContactProfilesEvent($this, $GLOBALS['objPage'], $sources);
+                $event   = new LoadContactProfilesEvent($this, $GLOBALS['objPage'], $sources);
                 System::getContainer()->get('event_dispatcher')->dispatch($event::NAME, $event);
 
                 foreach ($event->profiles() as $profile) {

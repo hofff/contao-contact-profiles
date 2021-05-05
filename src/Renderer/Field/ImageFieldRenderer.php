@@ -9,6 +9,7 @@ use Contao\CoreBundle\Framework\ContaoFrameworkInterface;
 use Contao\FilesModel;
 use Contao\FrontendTemplate;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
+
 use function is_file;
 
 final class ImageFieldRenderer extends AbstractFieldRenderer
@@ -26,11 +27,10 @@ final class ImageFieldRenderer extends AbstractFieldRenderer
     }
 
     /** @param mixed $value */
-    protected function compile(FrontendTemplate $template, $value, ContactProfileRenderer $renderer) : void
+    protected function compile(FrontendTemplate $template, $value, ContactProfileRenderer $renderer): void
     {
-        /** @var FilesModel $model */
         $model = $this->framework->getAdapter(FilesModel::class)->findByUuid($value);
-        if (! $model || ! is_file($this->projectDir . '/' . $model->path)) {
+        if (! $model instanceof FilesModel || ! is_file($this->projectDir . '/' . $model->path)) {
             return;
         }
 
@@ -41,8 +41,10 @@ final class ImageFieldRenderer extends AbstractFieldRenderer
 
         $this->framework->getAdapter(Controller::class)->addImageToTemplate($template, $image, null, null, $model);
 
-        if ($template->profile['caption']) {
-            $template->caption = $template->profile['caption'];
+        if (! $template->profile['caption']) {
+            return;
         }
+
+        $template->caption = $template->profile['caption'];
     }
 }

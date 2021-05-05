@@ -9,7 +9,6 @@ use Contao\Backend;
 use Contao\BackendUser;
 use Contao\CoreBundle\Exception\AccessDeniedException;
 use Contao\CoreBundle\ServiceAnnotation\Callback;
-use Contao\CoreBundle\ServiceAnnotation\Hook;
 use Contao\Database;
 use Contao\DataContainer;
 use Contao\Image;
@@ -19,9 +18,12 @@ use Contao\System;
 use Contao\Versions;
 use Doctrine\DBAL\Connection;
 use Exception;
+
 use function func_get_arg;
 use function is_array;
 use function is_callable;
+use function preg_match;
+use function preg_replace_callback;
 use function sprintf;
 use function time;
 
@@ -44,6 +46,8 @@ final class ContactProfileDcaListener
     }
 
     /**
+     * @param mixed $value
+     *
      * @Callback(table="tl_contact_profile", target="fields.alias.save")
      *
      * @SuppressWarnings(PHPMD.Superglobals)
@@ -60,10 +64,11 @@ final class ContactProfileDcaListener
         };
 
         // Generate alias if there is none
-        if (!$value) {
+        if (! $value) {
             $alias = preg_replace_callback(
                 '/{([^}]+)}/',
-                function (array $matches) use ($dataContainer) {
+                /** @return mixed */
+                static function (array $matches) use ($dataContainer) {
                     return $dataContainer->activeRecord->{$matches[1]};
                 },
                 $this->pattern
@@ -98,6 +103,13 @@ final class ContactProfileDcaListener
         return $label;
     }
 
+    /**
+     * @param string|list<array<string,mixed>> $values
+     *
+     * @return list<array<string,mixed>>
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function saveVideos($values, DataContainer $dataContainer): array
     {
         $values = StringUtil::deserialize($values, true);
@@ -121,21 +133,31 @@ final class ContactProfileDcaListener
      *
      * @param string[] $row
      */
-    public function toggleIcon(array $row, ?string $href, string $label, string $title, string $icon, string $attributes): string
-    {
+    public function toggleIcon(
+        array $row,
+        ?string $href,
+        string $label,
+        string $title,
+        string $icon,
+        string $attributes
+    ): string {
         if (Input::get('tid') !== null && Input::get('tid') !== '') {
-            $this->toggleVisibility((int) Input::get('tid'), (Input::get('state') === '1'), (@func_get_arg(12) ?: null));
+            $this->toggleVisibility(
+                (int) Input::get('tid'),
+                (Input::get('state') === '1'),
+                (@func_get_arg(12) ?: null)
+            );
             Backend::redirect(Backend::getReferer());
         }
 
         // Check permissions AFTER checking the tid, so hacking attempts are logged
-        if (!BackendUser::getInstance()->hasAccess('tl_contact_profile::published', 'alexf')) {
+        if (! BackendUser::getInstance()->hasAccess('tl_contact_profile::published', 'alexf')) {
             return '';
         }
 
         $href .= '&amp;tid=' . $row['id'] . '&amp;state=' . ($row['published'] ? '' : 1);
 
-        if (!$row['published']) {
+        if (! $row['published']) {
             $icon = 'invisible.svg';
         }
 
@@ -180,7 +202,7 @@ final class ContactProfileDcaListener
         }
 
         // Check the field access
-        if (!BackendUser::getInstance()->hasAccess('tl_contact_profile::published', 'alexf')) {
+        if (! BackendUser::getInstance()->hasAccess('tl_contact_profile::published', 'alexf')) {
             throw new AccessDeniedException('Not enough permissions to publish/unpublish article ID "' . $intId . '".');
         }
 
@@ -241,7 +263,7 @@ final class ContactProfileDcaListener
     /**
      * Extract the YouTube ID from an URL
      *
-     * @param mixed         $varValue
+     * @param mixed $varValue
      *
      * @return mixed
      */
@@ -249,7 +271,13 @@ final class ContactProfileDcaListener
     {
         $matches = [];
 
-        if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $varValue, $matches)) {
+        if (
+            preg_match(
+                '%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i',
+                $varValue,
+                $matches
+            )
+        ) {
             $varValue = $matches[1];
         }
 
@@ -259,7 +287,7 @@ final class ContactProfileDcaListener
     /**
      * Extract the Vimeo ID from an URL
      *
-     * @param mixed         $varValue
+     * @param mixed $varValue
      *
      * @return mixed
      */
@@ -267,7 +295,13 @@ final class ContactProfileDcaListener
     {
         $matches = [];
 
-        if (preg_match('%vimeo\.com/(?:channels/(?:\w+/)?|groups/(?:[^/]+)/videos/|album/(?:\d+)/video/)?(\d+)(?:$|/|\?)%i', $varValue, $matches)) {
+        if (
+            preg_match(
+                '%vimeo\.com/(?:channels/(?:\w+/)?|groups/(?:[^/]+)/videos/|album/(?:\d+)/video/)?(\d+)(?:$|/|\?)%i',
+                $varValue,
+                $matches
+            )
+        ) {
             $varValue = $matches[1];
         }
 

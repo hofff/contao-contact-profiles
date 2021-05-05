@@ -50,7 +50,7 @@ SQL;
      *
      * @return string[][]
      */
-    public function __invoke(array $categoryIds) : array
+    public function __invoke(array $categoryIds): array
     {
         $statement = $this->connection->executeQuery(
             self::QUERY,
@@ -61,6 +61,7 @@ SQL;
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    /** @param list<string> $categoryIds */
     public function count(array $categoryIds): int
     {
         $statement = $this->connection->executeQuery(

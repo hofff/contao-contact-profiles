@@ -19,9 +19,9 @@ final class ContactTemplateOptions
     }
 
     /** @return string[] */
-    public function __invoke() : array
+    public function __invoke(): array
     {
-        /** @var Controller|Adapter $adapter */
+        /** @var Controller<Adapter> $adapter */
         $adapter = $this->framework->getAdapter(Controller::class);
 
         return $adapter->getTemplateGroup('hofff_contact_profile_');

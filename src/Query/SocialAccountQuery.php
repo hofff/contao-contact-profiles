@@ -32,7 +32,7 @@ SQL;
      *
      * @throws DBALException
      */
-    public function __invoke(int $accountId) : array
+    public function __invoke(int $accountId): array
     {
         $statement = $this->connection->prepare(self::QUERY);
         $statement->bindValue('id', $accountId);

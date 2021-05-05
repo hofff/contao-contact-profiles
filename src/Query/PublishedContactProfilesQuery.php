@@ -36,7 +36,7 @@ SQL;
      *
      * @return string[][]
      */
-    public function __invoke(array $profileIds) : array
+    public function __invoke(array $profileIds): array
     {
         $statement = $this->connection->executeQuery(
             self::QUERY,

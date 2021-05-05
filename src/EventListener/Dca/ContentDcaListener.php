@@ -7,6 +7,8 @@ namespace Hofff\Contao\ContactProfiles\EventListener\Dca;
 use Contao\CoreBundle\DataContainer\PaletteManipulator;
 use Hofff\Contao\Consent\Bridge\ConsentToolManager;
 
+use function count;
+
 final class ContentDcaListener
 {
     /** @var ConsentToolManager */
@@ -34,7 +36,6 @@ final class ContentDcaListener
             ->applyToPalette('hofff_contact_profilecustom', 'tl_content')
             ->applyToPalette('hofff_contact_profilecategories', 'tl_content')
             ->applyToPalette('hofff_contact_profiledynamic', 'tl_content')
-            ->applyToPalette('hofff_contact_profile_detail', 'tl_content')
-        ;
+            ->applyToPalette('hofff_contact_profile_detail', 'tl_content');
     }
 }

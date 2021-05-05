@@ -14,6 +14,8 @@ use Hofff\Contao\ContactProfiles\Event\LoadContactProfilesEvent;
 use Hofff\Contao\ContactProfiles\Model\ContactProfileRepository;
 use Hofff\Contao\ContactProfiles\Util\ContactProfileUtil;
 
+use function in_array;
+
 final class EventsContactProfilesListener
 {
     /** @var ContaoFrameworkInterface */
@@ -30,12 +32,12 @@ final class EventsContactProfilesListener
 
     public function onLoadContactProfiles(LoadContactProfilesEvent $event): void
     {
-        if (!in_array('event', $event->sources(), true)) {
+        if (! in_array('event', $event->sources(), true)) {
             return;
         }
 
         $calendarEvent = $this->getEvent();
-        if (!$calendarEvent) {
+        if (! $calendarEvent) {
             return;
         }
 
@@ -50,12 +52,12 @@ final class EventsContactProfilesListener
     private function getEvent(): ?CalendarEventsModel
     {
         $eventAlias = $this->getEventAlias();
-        if (!$eventAlias) {
+        if (! $eventAlias) {
             return null;
         }
 
         $newsArchive = $this->getCalendar();
-        if (!$newsArchive) {
+        if (! $newsArchive) {
             return null;
         }
 
@@ -69,7 +71,7 @@ final class EventsContactProfilesListener
      */
     private function getEventAlias(): ?string
     {
-        if (!isset($GLOBALS['objPage'])) {
+        if (! isset($GLOBALS['objPage'])) {
             return null;
         }
 

@@ -7,6 +7,9 @@ namespace Hofff\Contao\ContactProfiles\Migration;
 use Contao\CoreBundle\Migration\AbstractMigration;
 use Contao\CoreBundle\Migration\MigrationResult;
 use Doctrine\DBAL\Connection;
+use PDO;
+
+use function serialize;
 
 abstract class AbstractContactProfileMigration extends AbstractMigration
 {
@@ -34,12 +37,12 @@ abstract class AbstractContactProfileMigration extends AbstractMigration
             return false;
         }
 
-        if (!$schemaManager->tablesExist($this->table)) {
+        if (! $schemaManager->tablesExist($this->table)) {
             return false;
         }
 
         $columns = $schemaManager->listTableColumns($this->table);
-        if (!isset($columns['hofff_contact_dynamic'])) {
+        if (! isset($columns['hofff_contact_dynamic'])) {
             return false;
         }
 
@@ -51,7 +54,7 @@ abstract class AbstractContactProfileMigration extends AbstractMigration
             ]
         );
 
-        return $statement->fetch(\PDO::FETCH_COLUMN) > 0;
+        return $statement->fetch(PDO::FETCH_COLUMN) > 0;
     }
 
     public function run(): MigrationResult
@@ -60,11 +63,16 @@ abstract class AbstractContactProfileMigration extends AbstractMigration
         if ($schemaManager !== null) {
             $columns = $schemaManager->listTableColumns($this->table);
 
-            if (!isset($columns['hofff_contact_source'])) {
-                $this->connection->executeStatement('ALTER TABLE ' . $this->table . ' ADD hofff_contact_source char(16) NOT NULL DEFAULT \'custom\'');
+            if (! isset($columns['hofff_contact_source'])) {
+                $this->connection->executeStatement(
+                    'ALTER TABLE ' . $this->table . ' ADD hofff_contact_source char(16) NOT NULL DEFAULT \'custom\''
+                );
             }
-            if (!isset($columns['hofff_contact_sources'])) {
-                $this->connection->executeStatement('ALTER TABLE ' . $this->table . ' ADD hofff_contact_sources TINYBLOB null');
+
+            if (! isset($columns['hofff_contact_sources'])) {
+                $this->connection->executeStatement(
+                    'ALTER TABLE ' . $this->table . ' ADD hofff_contact_sources TINYBLOB null'
+                );
             }
         }
 

@@ -43,7 +43,7 @@ trait CreateRendererTrait
         $consentIdParser = System::getContainer()->get(ConsentIdParser::class);
         $key             = 'hofff_contact_consent_tag_' . $type;
 
-        if (!$this->{$key}) {
+        if (! $this->{$key}) {
             return;
         }
 

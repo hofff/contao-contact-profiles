@@ -13,16 +13,14 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+use function sprintf;
+
 final class ContactProfilePickerProvider extends AbstractInsertTagPickerProvider implements DcaPickerProviderInterface
 {
-    /**
-     * @var Security
-     */
+    /** @var Security */
     private $security;
 
-    /**
-     * @var ContactProfileRepository
-     */
+    /** @var ContactProfileRepository */
     private $repository;
 
     public function __construct(
@@ -43,9 +41,10 @@ final class ContactProfilePickerProvider extends AbstractInsertTagPickerProvider
         return 'contactProfilePicker';
     }
 
+    /** @param mixed $context */
     public function supportsContext($context): bool
     {
-        return 'link' === $context && $this->security->isGranted('contao_user.modules', 'hofff_contact_profiles');
+        return $context === 'link' && $this->security->isGranted('contao_user.modules', 'hofff_contact_profiles');
     }
 
     public function supportsValue(PickerConfig $config): bool
@@ -58,11 +57,13 @@ final class ContactProfilePickerProvider extends AbstractInsertTagPickerProvider
         return 'tl_contact_profile';
     }
 
+    /** @return array<string,mixed> */
     public function getDcaAttributes(PickerConfig $config): array
     {
         $attributes = ['fieldType' => 'radio'];
+        $source     = $config->getExtra('source');
 
-        if ($source = $config->getExtra('source')) {
+        if ($source) {
             $attributes['preserveRecord'] = $source;
         }
 
@@ -73,20 +74,23 @@ final class ContactProfilePickerProvider extends AbstractInsertTagPickerProvider
         return $attributes;
     }
 
+    /** @param mixed $value */
     public function convertDcaValue(PickerConfig $config, $value): string
     {
         return sprintf($this->getInsertTag($config), $value);
     }
 
-    protected function getRouteParameters(PickerConfig $config = null): array
+    /** @return array<string,mixed> */
+    protected function getRouteParameters(?PickerConfig $config = null): array
     {
         $params = ['do' => 'hofff_contact_profiles'];
 
-        if (null === $config || !$config->getValue() || !$this->supportsValue($config)) {
+        if ($config === null || ! $config->getValue() || ! $this->supportsValue($config)) {
             return $params;
         }
 
-        if (null !== ($categoryId = $this->getCategoryId($this->getInsertTagValue($config)))) {
+        $categoryId = $this->getCategoryId($this->getInsertTagValue($config));
+        if ($categoryId !== null) {
             $params['table'] = 'tl_contact_profile';
             $params['id']    = $categoryId;
         }
@@ -100,11 +104,11 @@ final class ContactProfilePickerProvider extends AbstractInsertTagPickerProvider
     }
 
     /**
-     * @param int|string $id
+     * @param int|string $categoryId
      */
-    private function getCategoryId($id): ?int
+    private function getCategoryId($categoryId): ?int
     {
-        $profile = $this->repository->fetchById((int) $id);
+        $profile = $this->repository->fetchById((int) $categoryId);
         if ($profile) {
             return (int) $profile['pid'];
         }

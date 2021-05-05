@@ -15,11 +15,13 @@ use Contao\System;
 use Hofff\Contao\ContactProfiles\Event\LoadContactProfilesEvent;
 use Hofff\Contao\ContactProfiles\Model\ContactProfileRepository;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
-
 use Hofff\Contao\ContactProfiles\Util\ContactProfileUtil;
-use function array_fill_keys;
+
+use function count;
+use function min;
 use function range;
 use function strlen;
+
 use const TL_MODE;
 
 trait ContactProfileTrait
@@ -28,7 +30,7 @@ trait ContactProfileTrait
         createRenderer as createRendererParent;
     }
 
-    protected function compile() : void
+    protected function compile(): void
     {
         $renderer = $this->createRenderer();
 
@@ -43,7 +45,7 @@ trait ContactProfileTrait
         $this->Template->profiles      = $profiles;
         $this->Template->pagination    = $this->generatePagination($total, $pageParameter);
         $this->Template->renderer      = $renderer;
-        $this->Template->renderProfile = static function (array $profile) use ($renderer) : string {
+        $this->Template->renderProfile = static function (array $profile) use ($renderer): string {
             return $renderer->render($profile);
         };
     }
@@ -53,7 +55,7 @@ trait ContactProfileTrait
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    private function loadProfiles(int $offset) : iterable
+    private function loadProfiles(int $offset): iterable
     {
         if ($this->hofff_contact_source === 'dynamic') {
             if (TL_MODE !== 'FE') {
@@ -61,7 +63,7 @@ trait ContactProfileTrait
             }
 
             $sources = StringUtil::deserialize($this->hofff_contact_sources, true);
-            $event = new LoadContactProfilesEvent($this, $GLOBALS['objPage'], $sources);
+            $event   = new LoadContactProfilesEvent($this, $GLOBALS['objPage'], $sources);
             System::getContainer()->get('event_dispatcher')->dispatch($event::NAME, $event);
 
             return $event->profiles();
@@ -113,6 +115,7 @@ trait ContactProfileTrait
         return ($page - 1) * $this->perPage * $this->perPage;
     }
 
+    /** @param list<array<string,mixed>> $profiles */
     private function countTotal(array $profiles): int
     {
         switch ($this->hofff_contact_source) {
@@ -144,13 +147,14 @@ trait ContactProfileTrait
             ->generate("\n ");
     }
 
+    /** @return array<string,array<string,mixed>> */
     private function buildCriteria(): array
     {
         $criteria = [];
         $letter   = (string) Input::get('auto_item');
 
         if ($letter === 'numeric') {
-            $letters    = range('a', 'z');
+            $letters = range('a', 'z');
             foreach ($letters as $letter) {
                 $criteria['p.lastname NOT LIKE :letter_' . $letter] = ['letter_' . $letter => $letter . '%'];
             }

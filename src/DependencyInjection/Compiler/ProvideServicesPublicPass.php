@@ -12,7 +12,7 @@ final class ProvideServicesPublicPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {
-        if (!$container->hasDefinition(ConsentIdParser::class)) {
+        if (! $container->hasDefinition(ConsentIdParser::class)) {
             return;
         }
 

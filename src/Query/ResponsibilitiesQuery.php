@@ -35,7 +35,7 @@ SQL;
      *
      * @throws DBALException
      */
-    public function __invoke(array $responsibilityIds) : array
+    public function __invoke(array $responsibilityIds): array
     {
         $statement = $this->connection->executeQuery(
             self::QUERY,

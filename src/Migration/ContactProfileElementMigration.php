@@ -8,6 +8,7 @@ use Doctrine\DBAL\Connection;
 
 final class ContactProfileElementMigration extends AbstractContactProfileMigration
 {
+    /** @param string[] $sources */
     public function __construct(Connection $connection, array $sources)
     {
         parent::__construct($connection, $sources, 'tl_content');

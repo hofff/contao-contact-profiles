@@ -28,7 +28,7 @@ final class CompositeFieldRenderer extends AbstractFieldRenderer
      * @param mixed    $value
      * @param string[] $profile
      */
-    public function __invoke(string $field, $value, ContactProfileRenderer $renderer, array $profile) : ?string
+    public function __invoke(string $field, $value, ContactProfileRenderer $renderer, array $profile): ?string
     {
         if (isset($this->renderer[$field])) {
             return $this->renderer[$field]($field, $value, $renderer, $profile);
@@ -38,7 +38,7 @@ final class CompositeFieldRenderer extends AbstractFieldRenderer
     }
 
     /** @param mixed $value */
-    protected function compile(FrontendTemplate $template, $value, ContactProfileRenderer $renderer) : void
+    protected function compile(FrontendTemplate $template, $value, ContactProfileRenderer $renderer): void
     {
     }
 }

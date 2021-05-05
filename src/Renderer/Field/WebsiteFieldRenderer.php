@@ -12,7 +12,7 @@ final class WebsiteFieldRenderer extends AbstractFieldRenderer
     protected const TEMPLATE = 'hofff_contact_field_website';
 
     /** @param mixed $value */
-    protected function compile(FrontendTemplate $template, $value, ContactProfileRenderer $renderer) : void
+    protected function compile(FrontendTemplate $template, $value, ContactProfileRenderer $renderer): void
     {
         $template->linkTitle = $template->profile['websiteTitle'] ?: $value;
     }

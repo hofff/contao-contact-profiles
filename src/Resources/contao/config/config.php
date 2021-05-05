@@ -23,14 +23,20 @@ $GLOBALS['BE_MOD']['content']['hofff_contact_profiles'] = [
 ];
 
 // Content element
-$GLOBALS['TL_CTE']['hofff_contact_profiles']['hofff_contact_profile']                 = ContactProfileElement::class;
-$GLOBALS['TL_CTE']['hofff_contact_profiles']['hofff_contact_profile_detail']          = ContactProfileDetailElement::class;
-$GLOBALS['TL_CTE']['hofff_contact_profiles']['hofff_contact_profile_initials_filter'] = ContactProfileInitialsFilterElement::class;
+$GLOBALS['TL_CTE']['hofff_contact_profiles']['hofff_contact_profile']                 =
+    ContactProfileElement::class;
+$GLOBALS['TL_CTE']['hofff_contact_profiles']['hofff_contact_profile_detail']          =
+    ContactProfileDetailElement::class;
+$GLOBALS['TL_CTE']['hofff_contact_profiles']['hofff_contact_profile_initials_filter'] =
+    ContactProfileInitialsFilterElement::class;
 
 // Frontend module
-$GLOBALS['FE_MOD']['hofff_contact_profiles']['hofff_contact_profile']                 = ContactProfileModule::class;
-$GLOBALS['FE_MOD']['hofff_contact_profiles']['hofff_contact_profile_detail']          = ContactProfileDetailModule::class;
-$GLOBALS['FE_MOD']['hofff_contact_profiles']['hofff_contact_profile_initials_filter'] = ContactProfileInitialsFilterModule::class;
+$GLOBALS['FE_MOD']['hofff_contact_profiles']['hofff_contact_profile']                 =
+    ContactProfileModule::class;
+$GLOBALS['FE_MOD']['hofff_contact_profiles']['hofff_contact_profile_detail']          =
+    ContactProfileDetailModule::class;
+$GLOBALS['FE_MOD']['hofff_contact_profiles']['hofff_contact_profile_initials_filter'] =
+    ContactProfileInitialsFilterModule::class;
 
 // Hooks
 $GLOBALS['TL_HOOKS']['parseTemplate'][] = [AddContactProfileInformationListener::class, 'onParseTemplate'];

@@ -28,6 +28,4 @@ $GLOBALS['TL_DCA']['tl_faq']['fields']['hofff_contact_profiles'] = [
     'sql'              => 'blob NULL',
 ];
 
-$GLOBALS['TL_DCA']['tl_faq']['fields']['hofff_contact_profiles_order'] = [
-    'sql' => 'blob NULL',
-];
+$GLOBALS['TL_DCA']['tl_faq']['fields']['hofff_contact_profiles_order'] = ['sql' => 'blob NULL'];

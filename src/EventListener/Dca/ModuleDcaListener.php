@@ -7,6 +7,8 @@ namespace Hofff\Contao\ContactProfiles\EventListener\Dca;
 use Contao\CoreBundle\DataContainer\PaletteManipulator;
 use Hofff\Contao\Consent\Bridge\ConsentToolManager;
 
+use function count;
+
 final class ModuleDcaListener
 {
     /** @var ConsentToolManager */

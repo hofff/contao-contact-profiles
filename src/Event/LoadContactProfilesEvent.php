@@ -37,7 +37,7 @@ final class LoadContactProfilesEvent extends Event
     }
 
     /** @param string[][] $profiles */
-    public function setProfiles(array $profiles) : void
+    public function setProfiles(array $profiles): void
     {
         $this->profiles = $profiles;
     }
@@ -48,17 +48,18 @@ final class LoadContactProfilesEvent extends Event
         return $this->context;
     }
 
-    public function page() : PageModel
+    public function page(): PageModel
     {
         return $this->page;
     }
 
     /** @return string[][] */
-    public function profiles() : array
+    public function profiles(): array
     {
         return $this->profiles;
     }
 
+    /** @return list<string> */
     public function sources(): array
     {
         return $this->sources;

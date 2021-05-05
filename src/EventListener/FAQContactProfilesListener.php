@@ -14,6 +14,8 @@ use Hofff\Contao\ContactProfiles\Event\LoadContactProfilesEvent;
 use Hofff\Contao\ContactProfiles\Model\ContactProfileRepository;
 use Hofff\Contao\ContactProfiles\Util\ContactProfileUtil;
 
+use function in_array;
+
 final class FAQContactProfilesListener
 {
     /** @var ContaoFrameworkInterface */
@@ -30,12 +32,12 @@ final class FAQContactProfilesListener
 
     public function onLoadContactProfiles(LoadContactProfilesEvent $event): void
     {
-        if (!in_array('faq', $event->sources(), true)) {
+        if (! in_array('faq', $event->sources(), true)) {
             return;
         }
 
         $news = $this->getFAQ();
-        if (!$news) {
+        if (! $news) {
             return;
         }
 
@@ -50,12 +52,12 @@ final class FAQContactProfilesListener
     private function getFAQ(): ?FaqModel
     {
         $faqAlias = $this->getFAQAlias();
-        if (!$faqAlias) {
+        if (! $faqAlias) {
             return null;
         }
 
         $faqCategory = $this->getFAQCategory();
-        if (!$faqCategory) {
+        if (! $faqCategory) {
             return null;
         }
 
@@ -69,7 +71,7 @@ final class FAQContactProfilesListener
      */
     private function getFAQAlias(): ?string
     {
-        if (!isset($GLOBALS['objPage'])) {
+        if (! isset($GLOBALS['objPage'])) {
             return null;
         }
 

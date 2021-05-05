@@ -10,7 +10,19 @@ use Contao\FilesModel;
 use Contao\FrontendTemplate;
 use Contao\Model\Collection;
 use Contao\StringUtil;
+use Exception;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
+
+use function array_filter;
+use function array_flip;
+use function array_key_exists;
+use function array_map;
+use function array_merge;
+use function array_values;
+use function file_exists;
+use function is_array;
+use function trim;
+use function uniqid;
 
 final class GalleryFieldRenderer extends AbstractFieldRenderer
 {
@@ -26,6 +38,9 @@ final class GalleryFieldRenderer extends AbstractFieldRenderer
     /**
      * Apply custom sorting.
      *
+     * @param list<string>        $uuids
+     * @param array<string,mixed> $profile
+     *
      * @return list<resource>
      */
     protected function fetchImagesOrderedByCustomOrder(array $uuids, array $profile): array
@@ -38,27 +53,29 @@ final class GalleryFieldRenderer extends AbstractFieldRenderer
         $images = $this->prepareFiles($collection);
         $tmp    = StringUtil::deserialize($profile['galleryOrder']);
 
-        if (empty($tmp) || !is_array($tmp)) {
+        if (empty($tmp) || ! is_array($tmp)) {
             return $images;
         }
 
         // Remove all values
         $ordered = array_map(
-            static function () {
+            static function (): void {
             },
             array_flip($tmp)
         );
 
         // Move the matching elements to their position in $order
         foreach ($images as $k => $v) {
-            if (array_key_exists($v['uuid'], $ordered)) {
-                $ordered[$v['uuid']] = $v;
-                unset($images[$k]);
+            if (! array_key_exists($v['uuid'], $ordered)) {
+                continue;
             }
+
+            $ordered[$v['uuid']] = $v;
+            unset($images[$k]);
         }
 
         // Append the left-over images at the end
-        if (!empty($images)) {
+        if (! empty($images)) {
             $ordered = array_merge($ordered, array_values($images));
         }
 
@@ -72,28 +89,28 @@ final class GalleryFieldRenderer extends AbstractFieldRenderer
     /**
      * Prepare all file data and return the aux dates.
      *
-     * @param Collection $collection File model collection.
-     * @param array      $images     The collected images.
-     * @param bool       $deep       If true sub files are added as well.
+     * @param Collection                        $collection File model collection.
+     * @param array<string,array<string,mixed>> $images     The collected images.
+     * @param bool                              $deep       If true sub files are added as well.
      *
-     * @return array
+     * @return array<string,array<string,mixed>>
      *
-     * @throws \Exception If file could not be opened.
+     * @throws Exception If file could not be opened.
      */
-    protected function prepareFiles(Collection $collection, array $images = [], $deep = true): array
+    protected function prepareFiles(Collection $collection, array $images = [], bool $deep = true): array
     {
         // Get all images
         foreach ($collection as $fileModel) {
             // Continue if the files has been processed or does not exist
-            if (isset($images[$fileModel->path]) || !file_exists(TL_ROOT . '/' . $fileModel->path)) {
+            if (isset($images[$fileModel->path]) || ! file_exists(TL_ROOT . '/' . $fileModel->path)) {
                 continue;
             }
 
-            if ($fileModel->type == 'file') {
+            if ($fileModel->type === 'file') {
                 // Single files
                 $file = new File($fileModel->path);
 
-                if (!$file->isImage) {
+                if (! $file->isImage) {
                     continue;
                 }
 
@@ -106,7 +123,6 @@ final class GalleryFieldRenderer extends AbstractFieldRenderer
                     'title'      => StringUtil::specialchars($file->basename),
                     'filesModel' => $fileModel->current(),
                 ];
-
             } elseif ($deep) {
                 // Folders
                 $subfiles = FilesModel::findByPid($fileModel->uuid);
@@ -120,6 +136,12 @@ final class GalleryFieldRenderer extends AbstractFieldRenderer
         return array_values($images);
     }
 
+    /**
+     * @param array<string,array<string,mixed>> $images
+     * @param list<string>|null                 $imageSize
+     *
+     * @return list<array<string,mixed>>
+     */
     private function compileImages(array $images, ?array $imageSize): array
     {
         $compiled   = [];

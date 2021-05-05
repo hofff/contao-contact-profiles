@@ -16,7 +16,7 @@ trait ContactProfileDetailTrait
 {
     use CreateRendererTrait;
 
-    /** @var array|null */
+    /** @var array<string,mixed>|null */
     private $profile;
 
     /**

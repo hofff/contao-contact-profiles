@@ -9,7 +9,10 @@ use Contao\FilesModel;
 use Contao\FrontendTemplate;
 use Hofff\Contao\Consent\Bridge\ConsentToolManager;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
+
 use function array_filter;
+use function array_map;
+use function str_replace;
 
 final class VideosFieldRenderer extends AbstractFieldRenderer
 {
@@ -25,6 +28,7 @@ final class VideosFieldRenderer extends AbstractFieldRenderer
         $this->consentToolManager = $consentToolManager;
     }
 
+    /** @param mixed $value */
     protected function hasValue($value): bool
     {
         if (! parent::hasValue($value)) {
@@ -70,7 +74,7 @@ final class VideosFieldRenderer extends AbstractFieldRenderer
                 (array) $value
             ),
             static function (array $video): bool {
-                return !empty($video['url']);
+                return ! empty($video['url']);
             }
         );
 

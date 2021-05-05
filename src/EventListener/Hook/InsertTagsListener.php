@@ -8,6 +8,9 @@ use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\PageModel;
 use Doctrine\DBAL\Connection;
 use Hofff\Contao\ContactProfiles\Model\ContactProfileRepository;
+use PDO;
+
+use function explode;
 
 final class InsertTagsListener
 {
@@ -20,13 +23,24 @@ final class InsertTagsListener
     /** @var Connection */
     private $connection;
 
-    public function __construct(ContactProfileRepository $repository, Connection $connection, ContaoFramework $framework)
-    {
+    public function __construct(
+        ContactProfileRepository $repository,
+        Connection $connection,
+        ContaoFramework $framework
+    ) {
         $this->repository = $repository;
         $this->framework  = $framework;
         $this->connection = $connection;
     }
 
+    /**
+     * @param mixed        $cacheValue
+     * @param list<string> $flags
+     *
+     * @return string|bool
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function __invoke(string $tag, bool $useCache, $cacheValue, array $flags)
     {
         $elements = explode('::', $tag, 2);
@@ -36,7 +50,7 @@ final class InsertTagsListener
         }
 
         $profile = $this->repository->fetchById($elements[1]);
-        if (!$profile) {
+        if (! $profile) {
             return '';
         }
 
@@ -58,7 +72,7 @@ final class InsertTagsListener
             return '';
         }
 
-        $pageId = $statement->fetch(\PDO::FETCH_COLUMN);
+        $pageId    = $statement->fetch(PDO::FETCH_COLUMN);
         $pageModel = $pageModelAdapter->findByPk($pageId);
         if ($pageModel) {
             return $pageModel->getFrontendUrl('/' . $profile['alias'] ?: $profile['id']);

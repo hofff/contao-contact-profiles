@@ -8,6 +8,7 @@ use Contao\StringUtil;
 use Contao\Template;
 use Hofff\Contao\ContactProfiles\Model\ContactProfileRepository;
 use Hofff\Contao\ContactProfiles\Util\ContactProfileUtil;
+
 use function strpos;
 
 final class AddContactProfileInformationListener
@@ -25,8 +26,7 @@ final class AddContactProfileInformationListener
         $this->templatePrefixes = $templatePrefixes;
     }
 
-    /** @param mixed[] $row */
-    public function onParseTemplate(Template $template) : void
+    public function onParseTemplate(Template $template): void
     {
         if (! $this->match($template->getName())) {
             return;
@@ -40,7 +40,7 @@ final class AddContactProfileInformationListener
         $template->contactProfiles = $profiles;
     }
 
-    private function match(string $templateName) : bool
+    private function match(string $templateName): bool
     {
         foreach ($this->templatePrefixes as $prefix) {
             if (strpos($templateName, $prefix) === 0) {

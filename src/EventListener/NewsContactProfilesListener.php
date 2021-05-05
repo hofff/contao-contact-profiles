@@ -13,7 +13,8 @@ use Contao\StringUtil;
 use Hofff\Contao\ContactProfiles\Event\LoadContactProfilesEvent;
 use Hofff\Contao\ContactProfiles\Model\ContactProfileRepository;
 use Hofff\Contao\ContactProfiles\Util\ContactProfileUtil;
-use function dump;
+
+use function in_array;
 
 final class NewsContactProfilesListener
 {
@@ -31,12 +32,12 @@ final class NewsContactProfilesListener
 
     public function onLoadContactProfiles(LoadContactProfilesEvent $event): void
     {
-        if (!in_array('news', $event->sources(), true)) {
+        if (! in_array('news', $event->sources(), true)) {
             return;
         }
 
         $news = $this->getNews();
-        if (!$news) {
+        if (! $news) {
             return;
         }
 
@@ -51,12 +52,12 @@ final class NewsContactProfilesListener
     private function getNews(): ?NewsModel
     {
         $newsAlias = $this->getNewsAlias();
-        if (!$newsAlias) {
+        if (! $newsAlias) {
             return null;
         }
 
         $newsArchive = $this->getNewsArchive();
-        if (!$newsArchive) {
+        if (! $newsArchive) {
             return null;
         }
 
@@ -70,7 +71,7 @@ final class NewsContactProfilesListener
      */
     private function getNewsAlias(): ?string
     {
-        if (!isset($GLOBALS['objPage'])) {
+        if (! isset($GLOBALS['objPage'])) {
             return null;
         }
 

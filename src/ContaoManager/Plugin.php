@@ -21,10 +21,10 @@ final class Plugin implements BundlePluginInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getBundles(ParserInterface $parser) : array
+    public function getBundles(ParserInterface $parser): array
     {
-        return [BundleConfig::create(HofffContaoContactProfilesBundle::class)
-            ->setLoadAfter(
+        return [
+            BundleConfig::create(HofffContaoContactProfilesBundle::class)->setLoadAfter(
                 [
                     ContaoCoreBundle::class,
                     ContaoNewsBundle::class,

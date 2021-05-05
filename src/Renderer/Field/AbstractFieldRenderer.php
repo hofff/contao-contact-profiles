@@ -28,17 +28,18 @@ abstract class AbstractFieldRenderer implements FieldRenderer
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public function __invoke(string $field, $value, ContactProfileRenderer $renderer, array $profile) : ?string
+    public function __invoke(string $field, $value, ContactProfileRenderer $renderer, array $profile): ?string
     {
         if (! $this->hasValue($value)) {
             return null;
         }
 
-        /** @var Controller|Adapter $adpater */
+        /** @var Adapter<Controller> $adpater */
         $adpater = $this->framework->getAdapter(Controller::class);
         $adpater->loadDataContainer('tl_contact_profile');
         $adpater->loadLanguageFile('tl_contact_profile');
 
+        // phpcs:ignore
         $template = new FrontendTemplate($renderer->fieldTemplate($field, static::TEMPLATE));
 
         $template->renderer        = $renderer;
@@ -54,11 +55,11 @@ abstract class AbstractFieldRenderer implements FieldRenderer
     }
 
     /** @param mixed $value */
-    protected function hasValue($value) : bool
+    protected function hasValue($value): bool
     {
         return (bool) $value;
     }
 
     /** @param mixed $value */
-    abstract protected function compile(FrontendTemplate $template, $value, ContactProfileRenderer $renderer) : void;
+    abstract protected function compile(FrontendTemplate $template, $value, ContactProfileRenderer $renderer): void;
 }

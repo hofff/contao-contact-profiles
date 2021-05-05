@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Contao\Config;
+use Doctrine\DBAL\Platforms\MySqlPlatform;
 use Hofff\Contao\ContactProfiles\EventListener\Dca\AccountTypeOptions;
 use Hofff\Contao\ContactProfiles\EventListener\Dca\ContactProfileDcaListener;
 
@@ -51,7 +52,8 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'label'      => &$GLOBALS['TL_LANG']['tl_contact_profile']['delete'],
                 'href'       => 'act=delete',
                 'icon'       => 'delete.gif',
-                'attributes' => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"',
+                'attributes' => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm']
+                    . '\')) return false; Backend.getScrollOffset();"',
             ],
             'toggle' => [
                 'label'           => &$GLOBALS['TL_LANG']['tl_contact_profile']['toggle'],
@@ -386,7 +388,7 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                             'extensions' => Config::get('validImageTypes'),
                         ],
                     ],
-                    'aspect' => [
+                    'aspect'      => [
                         'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['videoAspect'],
                         'exclude'   => true,
                         'inputType' => 'select',
@@ -398,7 +400,7 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             ],
             'sql'           => [
                 'type'    => 'blob',
-                'length'  => \Doctrine\DBAL\Platforms\MySqlPlatform::LENGTH_LIMIT_BLOB,
+                'length'  => MySqlPlatform::LENGTH_LIMIT_BLOB,
                 'notnull' => false,
             ],
         ],
@@ -415,11 +417,19 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'isGallery'    => true,
                 'extensions'   => Config::get('validImageTypes'),
             ],
-            'sql'       => "blob NULL",
+            'sql'       => [
+                'type'    => 'blob',
+                'length'  => MySqlPlatform::LENGTH_LIMIT_BLOB,
+                'notnull' => false,
+            ],
         ],
         'galleryOrder'     => [
             'label' => &$GLOBALS['TL_LANG']['MSC']['sortOrder'],
-            'sql'   => "blob NULL",
+            'sql'   => [
+                'type'    => 'blob',
+                'length'  => MySqlPlatform::LENGTH_LIMIT_BLOB,
+                'notnull' => false,
+            ],
         ],
     ],
 ];

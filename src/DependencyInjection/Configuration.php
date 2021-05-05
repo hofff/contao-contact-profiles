@@ -11,7 +11,7 @@ final class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        $builder = new TreeBuilder('hofff_contao_contact_profiles');
+        $builder  = new TreeBuilder('hofff_contao_contact_profiles');
         $rootNode = $builder->getRootNode();
 
         $rootNode

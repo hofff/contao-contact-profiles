@@ -15,7 +15,7 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 final class HofffContaoContactProfilesExtension extends Extension
 {
     /** @param mixed[][] $configs */
-    public function load(array $configs, ContainerBuilder $container) : void
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $loader = new XmlFileLoader(
             $container,
@@ -39,33 +39,39 @@ final class HofffContaoContactProfilesExtension extends Extension
         $container->setParameter('hofff_contao_contact_profiles.alias_options', $config['alias']);
     }
 
-    private function checkCalendarBundle(ContainerBuilder $container, array &$sources) : void
+    /** @param list<string> $sources */
+    private function checkCalendarBundle(ContainerBuilder $container, array &$sources): void
     {
         $bundles = $container->getParameter('kernel.bundles');
         if (isset($bundles['ContaoCalendarBundle'])) {
             $sources[] = 'event';
+
             return;
         }
 
         $container->removeDefinition(EventsContactProfilesListener::class);
     }
 
-    private function checkFaqBundle(ContainerBuilder $container, array &$sources) : void
+    /** @param list<string> $sources */
+    private function checkFaqBundle(ContainerBuilder $container, array &$sources): void
     {
         $bundles = $container->getParameter('kernel.bundles');
         if (isset($bundles['ContaoFaqBundle'])) {
             $sources[] = 'faq';
+
             return;
         }
 
         $container->removeDefinition(FAQContactProfilesListener::class);
     }
 
-    private function checkNewsBundle(ContainerBuilder $container, array &$sources) : void
+    /** @param list<string> $sources */
+    private function checkNewsBundle(ContainerBuilder $container, array &$sources): void
     {
         $bundles = $container->getParameter('kernel.bundles');
         if (isset($bundles['ContaoNewsBundle'])) {
             $sources[] = 'news';
+
             return;
         }
 

@@ -8,6 +8,7 @@ use Contao\FrontendTemplate;
 use Contao\PageModel;
 use Contao\StringUtil;
 use Hofff\Contao\Consent\Bridge\ConsentId;
+
 use function array_map;
 
 final class ContactProfileRenderer
@@ -51,47 +52,47 @@ final class ContactProfileRenderer
     }
 
     /** @param string[] $fields */
-    public function withFields(array $fields) : self
+    public function withFields(array $fields): self
     {
         $this->fields = $fields;
 
         return $this;
     }
 
-    public function withTemplate(string $template) : self
+    public function withTemplate(string $template): self
     {
         $this->template = $template;
 
         return $this;
     }
 
-    public function withDefaultFieldTemplate(string $template) : self
+    public function withDefaultFieldTemplate(string $template): self
     {
         $this->defaultFieldTemplate = $template;
 
         return $this;
     }
 
-    public function defaultFieldTemplate() : string
+    public function defaultFieldTemplate(): string
     {
         return $this->defaultFieldTemplate;
     }
 
-    public function withFieldTemplate(string $field, string $template) : self
+    public function withFieldTemplate(string $field, string $template): self
     {
         $this->fieldTemplates[$field] = $template;
 
         return $this;
     }
 
-    public function withDetailPage(PageModel $pageModel) :self
+    public function withDetailPage(PageModel $pageModel): self
     {
         $this->detailPage = $pageModel;
 
         return $this;
     }
 
-    public function fieldTemplate(string $field, ?string $default = null) : ?string
+    public function fieldTemplate(string $field, ?string $default = null): ?string
     {
         if (isset($this->fieldTemplates[$field])) {
             return $this->fieldTemplates[$field];
@@ -101,14 +102,14 @@ final class ContactProfileRenderer
     }
 
     /** @param string[] $imageSize */
-    public function withImageSize(array $imageSize) : self
+    public function withImageSize(array $imageSize): self
     {
         $this->imageSize = $imageSize;
 
         return $this;
     }
 
-    public function withConsentId(string $type, ConsentId $consentId) : self
+    public function withConsentId(string $type, ConsentId $consentId): self
     {
         $this->consentIds[$type] = $consentId;
 
@@ -116,12 +117,12 @@ final class ContactProfileRenderer
     }
 
     /** @return string[]|null */
-    public function imageSize() : ?array
+    public function imageSize(): ?array
     {
         return $this->imageSize;
     }
 
-    public function moreLabel() : string
+    public function moreLabel(): string
     {
         return $this->moreLabel;
     }
@@ -137,7 +138,7 @@ final class ContactProfileRenderer
     }
 
     /** @param string[] $profile */
-    public function render(array $profile) : string
+    public function render(array $profile): string
     {
         $template = new FrontendTemplate($this->template);
         $template->setData(
@@ -145,7 +146,7 @@ final class ContactProfileRenderer
                 'renderer' => $this,
                 'fields'   => $this->fields,
                 'profile'  => array_map([StringUtil::class, 'deserialize'], $profile),
-                'has'      => static function (string $field) use ($template) : bool {
+                'has'      => static function (string $field) use ($template): bool {
                     return ! empty($template->profile[$field]);
                 },
             ]
@@ -155,7 +156,7 @@ final class ContactProfileRenderer
     }
 
     /** @param string[] $profile */
-    public function parseField(string $field, array $profile) : string
+    public function parseField(string $field, array $profile): string
     {
         $raw = StringUtil::deserialize($profile[$field] ?? null);
 
