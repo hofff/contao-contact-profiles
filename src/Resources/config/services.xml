@@ -27,13 +27,10 @@
         <!-- Repository -->
         <service id="Hofff\Contao\ContactProfiles\Model\ContactProfileRepository" public="true">
             <argument type="service" id="database_connection"/>
+            <argument type="service" id="contao.security.token_checker"/>
         </service>
 
         <!-- Queries -->
-        <service id="Hofff\Contao\ContactProfiles\Query\PublishedContactProfileQuery" public="true">
-            <argument type="service" id="database_connection"/>
-        </service>
-
         <service id="Hofff\Contao\ContactProfiles\Query\PublishedContactProfilesQuery" public="true">
             <argument type="service" id="database_connection"/>
         </service>

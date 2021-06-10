@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\Model;
 
+use Contao\CoreBundle\Security\Authentication\Token\TokenChecker;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use PDO;
@@ -15,9 +16,13 @@ final class ContactProfileRepository
     /** @var Connection */
     private $connection;
 
-    public function __construct(Connection $connection)
+    /** @var TokenChecker */
+    private $tokenChecker;
+
+    public function __construct(Connection $connection, TokenChecker $tokenChecker)
     {
-        $this->connection = $connection;
+        $this->connection   = $connection;
+        $this->tokenChecker = $tokenChecker;
     }
 
     /**
@@ -163,9 +168,13 @@ final class ContactProfileRepository
     ): QueryBuilder {
         $builder = $this->connection->createQueryBuilder()
             ->select('p.*')
-            ->from('tl_contact_profile', 'p')
-            ->where('p.published = :published')
-            ->setParameter('published', '1');
+            ->from('tl_contact_profile', 'p');
+
+        if (! $this->tokenChecker->isPreviewMode()) {
+            $builder
+                ->where('p.published = :published')
+                ->setParameter('published', '1');
+        }
 
         foreach ($criteria as $criterion => $parameters) {
             $builder->andWhere($criterion);
@@ -191,20 +200,37 @@ final class ContactProfileRepository
 
     private function createCountPublishedQuery(): QueryBuilder
     {
-        return $this->connection->createQueryBuilder()
+        $builder = $this->connection->createQueryBuilder()
             ->select('count(p.id)')
-            ->from('tl_contact_profile', 'p')
-            ->where('p.published = :published')
-            ->setParameter('published', '1');
+            ->from('tl_contact_profile', 'p');
+
+        if (! $this->tokenChecker->isPreviewMode()) {
+            $builder
+                ->where('p.published = :published')
+                ->setParameter('published', '1');
+        }
+
+        return $builder;
     }
 
     private function createFetchPublishedInitialsQuery(): QueryBuilder
     {
-        return $this->connection->createQueryBuilder()
+        $builder = $this->connection->createQueryBuilder()
             ->select('LOWER(SUBSTR(p.lastname, 1, 1)) as letter, count(p.id) AS count')
             ->from('tl_contact_profile', 'p')
-            ->where('p.published = :published')
-            ->groupBy('letter')
-            ->setParameter('published', '1');
+            ->groupBy('letter');
+
+        if (! $this->tokenChecker->isPreviewMode()) {
+            $builder
+                ->where('p.published = :published')
+                ->setParameter('published', '1');
+        }
+
+        return $builder;
+    }
+
+    private function isFrontendPreview(): bool
+    {
+        return $this->tokenChecker->isPreviewMode();
     }
 }
