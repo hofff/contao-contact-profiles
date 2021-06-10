@@ -9,6 +9,7 @@ use PDO;
 
 /**
  * @SuppressWarnings(PHPMD.LongClassName)
+ * @deprecated
  */
 final class PublishedContactProfilesByCategoriesQuery
 {
