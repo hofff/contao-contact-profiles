@@ -76,5 +76,19 @@
             <argument type="service" id="Hofff\Contao\ContactProfiles\Model\ContactProfileRepository" />
             <tag name="kernel.event_listener" event="hofff.contao_contact_profile.load_contact_profiles" method="onLoadContactProfiles"/>
         </service>
+
+        <service id="Hofff\Contao\ContactProfiles\EventListener\PreviewUrlConvertListener">
+            <argument type="service" id="contao.framework" />
+            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\ContactProfileRepository" />
+            <argument type="service" id="database_connection" />
+            <tag name="kernel.event_listener" event="contao.preview_url_convert" />
+        </service>
+
+        <service id="Hofff\Contao\ContactProfiles\EventListener\PreviewUrlCreateListener">
+            <argument type="service" id="request_stack" />
+            <argument type="service" id="contao.framework" />
+            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\ContactProfileRepository" />
+            <tag name="kernel.event_listener" event="contao.preview_url_create" />
+        </service>
     </services>
 </container>
