@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Hofff\Contao\Consent\Bridge\EventListener\Dca\ConsentIdOptions;
 use Hofff\Contao\ContactProfiles\EventListener\Dca\ContactFieldsOptions;
 use Hofff\Contao\ContactProfiles\EventListener\Dca\ContactProfileOptions;
 use Hofff\Contao\ContactProfiles\EventListener\Dca\ContactTemplateOptions;
@@ -171,4 +172,32 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['hofff_contact_profiles_order_sql'] = 
     'inputType' => 'text',
     'eval'      => ['tl_class' => 'w50', 'maxlength' => 128, 'decodeEntities' => true],
     'sql'       => "varchar(128) NOT NULL default ''",
+];
+
+$GLOBALS['TL_DCA']['tl_module']['fields']['hofff_contact_consent_tag_youtube'] = [
+    'label'            => &$GLOBALS['TL_LANG']['tl_module']['hofff_contact_consent_tag_youtube'],
+    'exclude'          => true,
+    'inputType'        => 'select',
+    'options_callback' => [ConsentIdOptions::class, '__invoke'],
+    'eval'             => [
+        'tl_class'           => 'w50',
+        'includeBlankOption' => true,
+        'chosen'             => true,
+        'multiple'           => false,
+    ],
+    'sql'              => ['type' => 'string', 'default' => null, 'notnull' => false],
+];
+
+$GLOBALS['TL_DCA']['tl_module']['fields']['hofff_contact_consent_tag_vimeo'] = [
+    'label'            => &$GLOBALS['TL_LANG']['tl_module']['hofff_contact_consent_tag_vimeo'],
+    'exclude'          => true,
+    'inputType'        => 'select',
+    'options_callback' => [ConsentIdOptions::class, '__invoke'],
+    'eval'             => [
+        'tl_class'           => 'w50',
+        'includeBlankOption' => true,
+        'chosen'             => true,
+        'multiple'           => false,
+    ],
+    'sql'              => ['type' => 'string', 'default' => null, 'notnull' => false],
 ];
