@@ -19,8 +19,10 @@ trait CreateRendererTrait
     protected function createRenderer(): ContactProfileRenderer
     {
         $fieldRenderer = System::getContainer()->get(FieldRenderer::class);
+        $connection    = System::getContainer()->get('database_connection');
+        $framework     = System::getContainer()->get('contao.framework');
         $moreLabel     = (string) $this->hofff_contact_more ?: $GLOBALS['TL_LANG']['MSC']['more'];
-        $renderer      = (new ContactProfileRenderer($fieldRenderer, $moreLabel))
+        $renderer      = (new ContactProfileRenderer($fieldRenderer, $moreLabel, $connection, $framework))
             ->withFields(StringUtil::deserialize($this->hofff_contact_fields, true));
 
         if (TL_MODE === 'FE' && $this->hofff_contact_template) {

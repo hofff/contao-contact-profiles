@@ -1,13 +1,15 @@
 <div class="contact-profile">
-    <?php foreach ($this->fields as $field): ?>
-    <?php if ($this->has($field)): ?>
-        <?= $this->renderer->parseField($field, $this->profile) ?>
-    <?php endif ?>
-    <?php endforeach ?>
+    <?php $this->block('before') ?>
+    <?php $this->endblock() ?>
 
-    <?php if ($detailPage = $this->renderer->detailPage()): ?>
-        <a href="<?= $detailPage->getFrontendUrl('/' . ($this->profile['alias'] ?: $this->profile['id'])) ?>" class="more">
-            <?= $this->renderer->moreLabel() ?>
-        </a>
-    <?php endif ?>
+    <?php $this->block('fields') ?>
+    <?php foreach ($this->fields as $field): ?>
+        <?php if ($this->has($field)): ?>
+            <?= $this->renderer->parseField($field, $this->profile) ?>
+        <?php endif ?>
+    <?php endforeach ?>
+    <?php $this->endblock() ?>
+
+    <?php $this->block('after') ?>
+    <?php $this->endblock() ?>
 </div>

@@ -24,7 +24,6 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'hofff_contact_
 
 $GLOBALS['TL_DCA']['tl_content']['palettes']['hofff_contact_profile'] = '{type_legend},type,headline'
     . ';{profile_legend},hofff_contact_source,hofff_contact_fields'
-    . ';{redirect_legend:hide},hofff_contact_jump_to'
     . ';{template_legend:hide},customTpl,hofff_contact_template,hofff_contact_more,size'
     . ';{protected_legend:hide},protected'
     . ';{expert_legend:hide},guests,cssID'
@@ -32,7 +31,6 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['hofff_contact_profile'] = '{type_l
 
 $GLOBALS['TL_DCA']['tl_content']['palettes']['hofff_contact_profilecustom'] = '{type_legend},type,headline'
     . ';{profile_legend},hofff_contact_source,hofff_contact_profiles,perPage,numberOfItems,hofff_contact_fields'
-    . ';{redirect_legend:hide},hofff_contact_jump_to'
     . ';{template_legend:hide},customTpl,hofff_contact_template,hofff_contact_more,size'
     . ';{protected_legend:hide},protected'
     . ';{expert_legend:hide},guests,cssID'
@@ -41,7 +39,6 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['hofff_contact_profilecustom'] = '{
 $GLOBALS['TL_DCA']['tl_content']['palettes']['hofff_contact_profilecategories'] = '{type_legend},type,headline'
     . ';{profile_legend},hofff_contact_source,hofff_contact_categories,perPage,numberOfItems'
     . ',hofff_contact_profiles_order_sql,hofff_contact_fields'
-    . ';{redirect_legend:hide},hofff_contact_jump_to'
     . ';{template_legend:hide},customTpl,hofff_contact_template,hofff_contact_more,size'
     . ';{protected_legend:hide},protected'
     . ';{expert_legend:hide},guests,cssID'
@@ -49,7 +46,6 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['hofff_contact_profilecategories'] 
 
 $GLOBALS['TL_DCA']['tl_content']['palettes']['hofff_contact_profiledynamic'] = '{type_legend},type,headline'
     . ';{profile_legend},hofff_contact_source,hofff_contact_sources,hofff_contact_fields'
-    . ';{redirect_legend:hide},hofff_contact_jump_to'
     . ';{template_legend:hide},customTpl,hofff_contact_template,hofff_contact_more,size'
     . ';{protected_legend:hide},protected'
     . ';{expert_legend:hide},guests,cssID'
@@ -64,7 +60,6 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['hofff_contact_profile_detail'] = '
 
 $GLOBALS['TL_DCA']['tl_content']['palettes']['hofff_contact_profile_initials_filter'] = '{type_legend},type,headline'
     . ';{profile_legend},hofff_contact_source'
-    . ';{redirect_legend:hide},hofff_contact_jump_to'
     . ';{template_legend:hide},customTpl'
     . ';{protected_legend:hide},protected'
     . ';{expert_legend:hide},guests,cssID'
@@ -73,7 +68,6 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['hofff_contact_profile_initials_fil
 $GLOBALS['TL_DCA']['tl_content']['palettes']['hofff_contact_profile_initials_filtercustom'] =
     '{type_legend},type,headline'
     . ';{profile_legend},hofff_contact_source,hofff_contact_profiles'
-    . ';{redirect_legend:hide},hofff_contact_jump_to'
     . ';{template_legend:hide},customTpl'
     . ';{protected_legend:hide},protected'
     . ';{expert_legend:hide},guests,cssID'
@@ -82,7 +76,6 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['hofff_contact_profile_initials_fil
 $GLOBALS['TL_DCA']['tl_content']['palettes']['hofff_contact_profile_initials_filtercategories'] =
     '{type_legend},type,headline'
     . ';{profile_legend},hofff_contact_source,hofff_contact_categories'
-    . ';{redirect_legend:hide},hofff_contact_jump_to'
     . ';{template_legend:hide},customTpl'
     . ';{protected_legend:hide},protected'
     . ';{expert_legend:hide},guests,cssID'
@@ -91,7 +84,6 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['hofff_contact_profile_initials_fil
 $GLOBALS['TL_DCA']['tl_content']['palettes']['hofff_contact_profile_initials_filterdynamic'] =
     '{type_legend},type,headline'
     . ';{profile_legend},hofff_contact_source,hofff_contact_sources'
-    . ';{redirect_legend:hide},hofff_contact_jump_to'
     . ';{template_legend:hide},customTpl'
     . ';{protected_legend:hide},protected'
     . ';{expert_legend:hide},guests,cssID'
@@ -173,15 +165,6 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['hofff_contact_more'] = [
     'inputType' => 'text',
     'eval'      => ['tl_class' => 'w50'],
     'sql'       => "varchar(64) NOT NULL default ''",
-];
-
-$GLOBALS['TL_DCA']['tl_content']['fields']['hofff_contact_jump_to'] = [
-    'exclude'    => true,
-    'inputType'  => 'pageTree',
-    'foreignKey' => 'tl_page.title',
-    'eval'       => ['fieldType' => 'radio'],
-    'sql'        => 'int(10) unsigned NOT NULL default 0',
-    'relation'   => ['type' => 'hasOne', 'load' => 'lazy'],
 ];
 
 $GLOBALS['TL_DCA']['tl_content']['fields']['hofff_contact_profiles_order_sql'] = [

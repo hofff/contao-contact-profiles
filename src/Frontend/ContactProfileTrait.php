@@ -8,13 +8,11 @@ use Contao\Config;
 use Contao\CoreBundle\Exception\PageNotFoundException;
 use Contao\Environment;
 use Contao\Input;
-use Contao\PageModel;
 use Contao\Pagination;
 use Contao\StringUtil;
 use Contao\System;
 use Hofff\Contao\ContactProfiles\Event\LoadContactProfilesEvent;
 use Hofff\Contao\ContactProfiles\Model\ContactProfileRepository;
-use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
 use Hofff\Contao\ContactProfiles\Util\ContactProfileUtil;
 
 use function count;
@@ -26,9 +24,7 @@ use const TL_MODE;
 
 trait ContactProfileTrait
 {
-    use CreateRendererTrait{
-        createRenderer as createRendererParent;
-    }
+    use CreateRendererTrait;
 
     protected function compile(): void
     {
@@ -163,20 +159,6 @@ trait ContactProfileTrait
         }
 
         return $criteria;
-    }
-
-    protected function createRenderer(): ContactProfileRenderer
-    {
-        $renderer = $this->createRendererParent();
-
-        if ($this->hofff_contact_jump_to) {
-            $pageModel = PageModel::findByPk($this->hofff_contact_jump_to);
-            if ($pageModel) {
-                $renderer->withDetailPage($pageModel);
-            }
-        }
-
-        return $renderer;
     }
 
     abstract protected function pageParameter(): string;
