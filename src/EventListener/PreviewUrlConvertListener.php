@@ -39,7 +39,7 @@ final class PreviewUrlConvertListener
      */
     public function __invoke(PreviewUrlConvertEvent $event): void
     {
-        if (!$this->framework->isInitialized()) {
+        if (! $this->framework->isInitialized()) {
             return;
         }
 
@@ -61,15 +61,17 @@ final class PreviewUrlConvertListener
         $event->setUrl($detailPage->getPreviewUrl('/' . $contactProfile['alias'] ?: $contactProfile['id']));
     }
 
+    /** @return string[]|null */
     private function getContactProfile(Request $request): ?array
     {
-        if (!$request->query->has('hofff_contact_profile')) {
+        if (! $request->query->has('hofff_contact_profile')) {
             return null;
         }
 
         return $this->contactProfiles->fetchById($request->query->get('hofff_contact_profile'));
     }
 
+    /** @param string[] $contactProfile */
     private function getDetailPage(array $contactProfile): ?PageModel
     {
         /** @var Adapter<PageModel> $adapter */

@@ -8,8 +8,9 @@ use Doctrine\DBAL\Connection;
 use PDO;
 
 /**
- * @SuppressWarnings(PHPMD.LongClassName)
  * @deprecated
+ *
+ * @SuppressWarnings(PHPMD.LongClassName)
  */
 final class PublishedContactProfilesByCategoriesQuery
 {

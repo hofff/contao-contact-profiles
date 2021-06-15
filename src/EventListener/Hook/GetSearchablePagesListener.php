@@ -26,7 +26,6 @@ final class GetSearchablePagesListener
     /** @var ContactProfileUrlGenerator */
     private $urlGenerator;
 
-
     public function __construct(
         ContaoFramework $framework,
         Connection $connection,
@@ -39,7 +38,12 @@ final class GetSearchablePagesListener
         $this->urlGenerator    = $urlGenerator;
     }
 
-    public function __invoke(array $pages, int $rootId = null, bool $isSitemap = false, string $language = null): array
+    /**
+     * @param string[] $pages
+     *
+     * @return string[]
+     */
+    public function __invoke(array $pages, ?int $rootId = null, bool $isSitemap = false): array
     {
         $categoryIds = $this->fetchCategoriesWithDetailPage($rootId);
 
@@ -64,6 +68,7 @@ final class GetSearchablePagesListener
         return $pages;
     }
 
+    /** @return string|int[] */
     private function fetchCategoriesWithDetailPage(?int $rootId): array
     {
         $pageIds      = $this->getPageIds($rootId);
@@ -82,6 +87,7 @@ final class GetSearchablePagesListener
         return $queryBuilder->execute()->fetchFirstColumn();
     }
 
+    /** @return string|int[] */
     private function getPageIds(?int $rootId): array
     {
         if ($rootId === null || $rootId === 0) {
@@ -96,14 +102,15 @@ final class GetSearchablePagesListener
         $time = Date::floorToMinute();
 
         // The target page has not been published (see #5520)
-        if (!$detailPage->published
-            || ($detailPage->start != '' && $detailPage->start > $time)
-            || ($detailPage->stop != '' && $detailPage->stop <= ($time + 60))
+        if (
+            ! $detailPage->published
+            || ((string) $detailPage->start !== '' && $detailPage->start > $time)
+            || ((string) $detailPage->stop !== '' && $detailPage->stop <= $time + 60)
         ) {
             return true;
         }
 
-        if (!$isSitemap) {
+        if (! $isSitemap) {
             return false;
         }
 
@@ -113,10 +120,6 @@ final class GetSearchablePagesListener
         }
 
         // The target page is exempt from the sitemap (see #6418)
-        if ($detailPage->sitemap == 'map_never') {
-            return true;
-        }
-
-        return false;
+        return $detailPage->sitemap === 'map_never';
     }
 }

@@ -39,7 +39,7 @@ final class PreviewUrlCreateListener
      */
     public function __invoke(PreviewUrlCreateEvent $event): void
     {
-        if (!$this->framework->isInitialized() || 'hofff_contact_profiles' !== $event->getKey()) {
+        if (! $this->framework->isInitialized() || $event->getKey() !== 'hofff_contact_profiles') {
             return;
         }
 
@@ -49,7 +49,7 @@ final class PreviewUrlCreateListener
         }
 
         // Return on the contact profile list page
-        if ($request->query->get('table') === 'tl_contact_profile' && !$request->query->has('act')) {
+        if ($request->query->get('table') === 'tl_contact_profile' && ! $request->query->has('act')) {
             return;
         }
 
@@ -67,7 +67,7 @@ final class PreviewUrlCreateListener
     private function getId(PreviewUrlCreateEvent $event, Request $request)
     {
         // Overwrite the ID if the contact profile settings are edited
-        if ('tl_contact_profile' === $request->query->get('table') && 'edit' === $request->query->get('act')) {
+        if ($request->query->get('table') === 'tl_contact_profile' && $request->query->get('act') === 'edit') {
             return $request->query->get('id');
         }
 

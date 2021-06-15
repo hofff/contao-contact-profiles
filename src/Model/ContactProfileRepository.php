@@ -228,9 +228,4 @@ final class ContactProfileRepository
 
         return $builder;
     }
-
-    private function isFrontendPreview(): bool
-    {
-        return $this->tokenChecker->isPreviewMode();
-    }
 }

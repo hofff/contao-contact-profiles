@@ -11,6 +11,9 @@ use Doctrine\DBAL\Connection;
 use InvalidArgumentException;
 use PDO;
 
+use function array_key_exists;
+use function sprintf;
+
 final class ContactProfileUrlGenerator
 {
     public const ABSOLUTE_PATH = 1;
@@ -34,6 +37,7 @@ final class ContactProfileUrlGenerator
         $this->connection = $connection;
     }
 
+    /** @param array<string,mixed> $profile */
     public function getDetailPage(array $profile): ?PageModel
     {
         if ($profile['jumpTo']) {
@@ -47,6 +51,7 @@ final class ContactProfileUrlGenerator
         return $this->categoryDetailPages[$profile['pid']];
     }
 
+    /** @param array<string,mixed> $profile */
     public function generateUrlWithPage(
         array $profile,
         PageModel $pageModel,
@@ -71,7 +76,8 @@ final class ContactProfileUrlGenerator
         }
     }
 
-    public function generateDetailUrl(array $profile, $referenceType = self::ABSOLUTE_PATH): ?string
+    /** @param array<string,mixed> $profile */
+    public function generateDetailUrl(array $profile, int $referenceType = self::ABSOLUTE_PATH): ?string
     {
         $page = $this->getDetailPage($profile);
         if ($page === null) {

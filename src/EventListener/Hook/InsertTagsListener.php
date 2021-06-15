@@ -8,6 +8,7 @@ use Hofff\Contao\ContactProfiles\Model\ContactProfileRepository;
 use Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator;
 
 use function explode;
+use function in_array;
 
 final class InsertTagsListener
 {
@@ -42,7 +43,7 @@ final class InsertTagsListener
         }
 
         $profile = $this->repository->fetchById($elements[1]);
-        if (!$profile) {
+        if (! $profile) {
             return '';
         }
 

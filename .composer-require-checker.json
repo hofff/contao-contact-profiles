@@ -15,6 +15,11 @@
     "Contao\\CalendarEventsModel",
     "Contao\\FaqModel",
     "Contao\\FaqCategoryModel",
-    "TL_MODE"
+    "TL_MODE",
+    "Hofff\\Contao\\SocialTags\\Data\\Data",
+    "Hofff\\Contao\\SocialTags\\Data\\Extractor\\AbstractExtractor",
+    "Hofff\\Contao\\SocialTags\\Data\\OpenGraph\\OpenGraphImageData",
+    "Hofff\\Contao\\SocialTags\\Data\\OpenGraph\\OpenGraphType",
+    "Hofff\\Contao\\SocialTags\\Util\\TypeUtil"
   ]
 }

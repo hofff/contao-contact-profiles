@@ -4,17 +4,11 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\Renderer;
 
-use Contao\CoreBundle\Framework\Adapter;
-use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\FrontendTemplate;
-use Contao\PageModel;
 use Contao\StringUtil;
-use Doctrine\DBAL\Connection;
 use Hofff\Contao\Consent\Bridge\ConsentId;
 use Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator;
-use PDO;
 
-use function array_key_exists;
 use function array_map;
 
 final class ContactProfileRenderer
@@ -153,6 +147,7 @@ final class ContactProfileRenderer
         return $template->parse();
     }
 
+    /** @param string[] $profile */
     public function generateDetailUrl(array $profile): ?string
     {
         return $this->urlGenerator->generateDetailUrl($profile);
