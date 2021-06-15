@@ -54,8 +54,7 @@
 
         <service id="Hofff\Contao\ContactProfiles\EventListener\Hook\InsertTagsListener" public="true">
             <argument type="service" id="Hofff\Contao\ContactProfiles\Model\ContactProfileRepository"/>
-            <argument type="service" id="database_connection"/>
-            <argument type="service" id="contao.framework"/>
+            <argument type="service" id="Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator" />
             <tag name="contao.hook" hook="replaceInsertTags"/>
         </service>
 

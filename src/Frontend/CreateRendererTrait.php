@@ -10,6 +10,7 @@ use Hofff\Contao\Consent\Bridge\ConsentId\ConsentIdParser;
 use Hofff\Contao\Consent\Bridge\Exception\InvalidArgumentException;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
 use Hofff\Contao\ContactProfiles\Renderer\FieldRenderer;
+use Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator;
 
 trait CreateRendererTrait
 {
@@ -19,10 +20,9 @@ trait CreateRendererTrait
     protected function createRenderer(): ContactProfileRenderer
     {
         $fieldRenderer = System::getContainer()->get(FieldRenderer::class);
-        $connection    = System::getContainer()->get('database_connection');
-        $framework     = System::getContainer()->get('contao.framework');
+        $urlGenerator  = System::getContainer()->get(ContactProfileUrlGenerator::class);
         $moreLabel     = (string) $this->hofff_contact_more ?: $GLOBALS['TL_LANG']['MSC']['more'];
-        $renderer      = (new ContactProfileRenderer($fieldRenderer, $moreLabel, $connection, $framework))
+        $renderer      = (new ContactProfileRenderer($fieldRenderer, $moreLabel, $urlGenerator))
             ->withFields(StringUtil::deserialize($this->hofff_contact_fields, true));
 
         if (TL_MODE === 'FE' && $this->hofff_contact_template) {

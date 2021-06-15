@@ -30,6 +30,12 @@
             <argument type="service" id="contao.security.token_checker"/>
         </service>
 
+        <!-- Url Generator -->
+        <service id="Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator" public="true">
+            <argument type="service" id="contao.framework" />
+            <argument type="service" id="database_connection" />
+        </service>
+
         <!-- Queries -->
         <service id="Hofff\Contao\ContactProfiles\Query\PublishedContactProfilesQuery" public="true">
             <argument type="service" id="database_connection"/>
