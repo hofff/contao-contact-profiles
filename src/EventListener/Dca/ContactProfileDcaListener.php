@@ -151,10 +151,12 @@ final class ContactProfileDcaListener
         }
 
         // Check permissions AFTER checking the tid, so hacking attempts are logged
-        if (! BackendUser::getInstance()->hasAccess('tl_contact_profile::published', 'alexf')) {
+        $user = BackendUser::getInstance();
+        if (! $user instanceof BackendUser || ! $user->hasAccess('tl_contact_profile::published', 'alexf')) {
             return '';
         }
 
+        $href  = (string) $href;
         $href .= '&amp;tid=' . $row['id'] . '&amp;state=' . ($row['published'] ? '' : 1);
 
         if (! $row['published']) {
@@ -202,7 +204,8 @@ final class ContactProfileDcaListener
         }
 
         // Check the field access
-        if (! BackendUser::getInstance()->hasAccess('tl_contact_profile::published', 'alexf')) {
+        $user = BackendUser::getInstance();
+        if (! $user instanceof BackendUser || ! $user->hasAccess('tl_contact_profile::published', 'alexf')) {
             throw new AccessDeniedException('Not enough permissions to publish/unpublish article ID "' . $intId . '".');
         }
 

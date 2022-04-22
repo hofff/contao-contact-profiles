@@ -43,11 +43,7 @@ final class PreviewUrlConvertListener
             return;
         }
 
-        $request = $event->getRequest();
-        if ($request === null) {
-            return;
-        }
-
+        $request        = $event->getRequest();
         $contactProfile = $this->getContactProfile($request);
         if ($contactProfile === null) {
             return;
@@ -68,10 +64,15 @@ final class PreviewUrlConvertListener
             return null;
         }
 
-        return $this->contactProfiles->fetchById($request->query->get('hofff_contact_profile'));
+        return $this->contactProfiles->fetchById($request->query->getInt('hofff_contact_profile'));
     }
 
-    /** @param string[] $contactProfile */
+    /**
+     * @param string[] $contactProfile
+     *
+     * @psalm-suppress InvalidReturnType
+     * @psalm-suppress InvalidReturnStatement
+     */
     private function getDetailPage(array $contactProfile): ?PageModel
     {
         /** @var Adapter<PageModel> $adapter */

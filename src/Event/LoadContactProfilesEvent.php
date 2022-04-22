@@ -7,7 +7,7 @@ namespace Hofff\Contao\ContactProfiles\Event;
 use Contao\ContentElement;
 use Contao\Module;
 use Contao\PageModel;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 final class LoadContactProfilesEvent extends Event
 {

@@ -12,6 +12,8 @@ use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
 use Hofff\Contao\ContactProfiles\Renderer\FieldRenderer;
 use Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator;
 
+use function defined;
+
 trait CreateRendererTrait
 {
     /**
@@ -19,13 +21,16 @@ trait CreateRendererTrait
      */
     protected function createRenderer(): ContactProfileRenderer
     {
+        /** @psalm-var FieldRenderer $fieldRenderer */
         $fieldRenderer = System::getContainer()->get(FieldRenderer::class);
-        $urlGenerator  = System::getContainer()->get(ContactProfileUrlGenerator::class);
-        $moreLabel     = (string) $this->hofff_contact_more ?: $GLOBALS['TL_LANG']['MSC']['more'];
-        $renderer      = (new ContactProfileRenderer($fieldRenderer, $moreLabel, $urlGenerator))
+        /** @psalm-var ContactProfileUrlGenerator $urlGenerator */
+        $urlGenerator = System::getContainer()->get(ContactProfileUrlGenerator::class);
+
+        $moreLabel = (string) $this->hofff_contact_more ?: $GLOBALS['TL_LANG']['MSC']['more'];
+        $renderer  = (new ContactProfileRenderer($fieldRenderer, $moreLabel, $urlGenerator))
             ->withFields(StringUtil::deserialize($this->hofff_contact_fields, true));
 
-        if (TL_MODE === 'FE' && $this->hofff_contact_template) {
+        if (defined('TL_MODE') && TL_MODE === 'FE' && $this->hofff_contact_template) {
             $renderer->withTemplate($this->hofff_contact_template);
         }
 
@@ -42,6 +47,7 @@ trait CreateRendererTrait
 
     protected function addConsentId(ContactProfileRenderer $renderer, string $type): void
     {
+        /** @psalm-var ConsentIdParser $consentIdParser */
         $consentIdParser = System::getContainer()->get(ConsentIdParser::class);
         $key             = 'hofff_contact_consent_tag_' . $type;
 

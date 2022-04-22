@@ -10,7 +10,8 @@ use Contao\Model;
  * @property string      $firstname
  * @property string      $lastname
  * @property string      $alias
- * @property string|null image
+ * @property string|null $image
+ * @property string|null $teaser
  */
 final class ContactProfile extends Model
 {

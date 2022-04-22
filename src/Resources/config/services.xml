@@ -107,6 +107,7 @@
 
         <service id="Hofff\Contao\ContactProfiles\Renderer\Field\GalleryFieldRenderer">
             <argument type="service" id="contao.framework" />
+            <argument>%kernel.project_dir%</argument>
             <tag name="hofff_contao_contact_profiles.field_renderer" field="gallery" />
         </service>
 

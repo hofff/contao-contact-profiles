@@ -14,8 +14,10 @@ use Contao\System;
 use Hofff\Contao\ContactProfiles\Event\LoadContactProfilesEvent;
 use Hofff\Contao\ContactProfiles\Model\ContactProfileRepository;
 use Hofff\Contao\ContactProfiles\Util\ContactProfileUtil;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 use function count;
+use function defined;
 use function min;
 use function range;
 use function strlen;
@@ -33,7 +35,9 @@ trait ContactProfileTrait
         $pageParameter = $this->pageParameter();
         $offset        = $this->determineOffset($pageParameter);
         $profiles      = $this->loadProfiles($offset);
-        $total         = $this->numberOfItems > 0
+
+        /** @psalm-suppress RedundantCast - Value might be a string */
+        $total = $this->numberOfItems > 0
             ? min((int) $this->numberOfItems, $this->countTotal($profiles))
             : $this->countTotal($profiles);
 
@@ -54,23 +58,28 @@ trait ContactProfileTrait
     private function loadProfiles(int $offset): iterable
     {
         if ($this->hofff_contact_source === 'dynamic') {
-            if (TL_MODE !== 'FE') {
+            if (defined('TL_MODE') && TL_MODE !== 'FE') {
                 return [];
             }
 
-            $sources = StringUtil::deserialize($this->hofff_contact_sources, true);
-            $event   = new LoadContactProfilesEvent($this, $GLOBALS['objPage'], $sources);
-            System::getContainer()->get('event_dispatcher')->dispatch($event::NAME, $event);
+            /** @psalm-var EventDispatcherInterface $dispatcher */
+            $dispatcher = System::getContainer()->get('event_dispatcher');
+            $sources    = StringUtil::deserialize($this->hofff_contact_sources, true);
+            $event      = new LoadContactProfilesEvent($this, $GLOBALS['objPage'], $sources);
+            $dispatcher->dispatch($event, $event::NAME);
 
             return $event->profiles();
         }
 
         $criteria = $this->buildCriteria();
 
+        /** @psalm-var ContactProfileRepository $repository */
         $repository = System::getContainer()->get(ContactProfileRepository::class);
         $order      = $this->hofff_contact_profiles_order_sql ?: null;
-        $limit      = (int) $this->numberOfItems;
-        $perPage    = (int) $this->perPage;
+        /** @psalm-suppress RedundantCastGivenDocblockType */
+        $limit = (int) $this->numberOfItems;
+        /** @psalm-suppress RedundantCastGivenDocblockType */
+        $perPage = (int) $this->perPage;
         if ($perPage > 0) {
             $limit = $perPage;
         }
@@ -83,9 +92,10 @@ trait ContactProfileTrait
 
             case 'custom':
             default:
+                /** @psalm-var ContactProfileRepository $repository */
                 $repository = System::getContainer()->get(ContactProfileRepository::class);
                 $profileIds = StringUtil::deserialize($this->hofff_contact_profiles, true);
-                $profiles   =  $repository->fetchPublishedByProfileIds($profileIds, $limit, $offset, $order, $criteria);
+                $profiles   = $repository->fetchPublishedByProfileIds($profileIds, $limit, $offset, $order, $criteria);
                 $order      = StringUtil::deserialize($this->hofff_contact_profiles_order, true);
                 $profiles   = ContactProfileUtil::orderListByIds($profiles, $order);
 
@@ -114,6 +124,9 @@ trait ContactProfileTrait
     /** @param list<array<string,mixed>> $profiles */
     private function countTotal(array $profiles): int
     {
+        /** @psalm-var ContactProfileRepository $repository */
+        $repository = System::getContainer()->get(ContactProfileRepository::class);
+
         switch ($this->hofff_contact_source) {
             case 'dynamic':
                 return count($profiles);
@@ -121,15 +134,13 @@ trait ContactProfileTrait
             case 'categories':
                 $categoryIds = StringUtil::deserialize($this->hofff_contact_categories, true);
 
-                return System::getContainer()->get(ContactProfileRepository::class)
-                    ->countPublishedByCategories($categoryIds);
+                return $repository->countPublishedByCategories($categoryIds);
 
             case 'custom':
             default:
                 $profileIds = StringUtil::deserialize($this->hofff_contact_profiles, true);
 
-                return System::getContainer()->get(ContactProfileRepository::class)
-                    ->countPublishedByProfileIds($profileIds);
+                return $repository->countPublishedByProfileIds($profileIds);
         }
     }
 

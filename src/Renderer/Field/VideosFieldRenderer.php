@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\Renderer\Field;
 
-use Contao\CoreBundle\Framework\ContaoFrameworkInterface;
+use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\FilesModel;
 use Contao\FrontendTemplate;
 use Hofff\Contao\Consent\Bridge\ConsentToolManager;
@@ -16,12 +16,13 @@ use function str_replace;
 
 final class VideosFieldRenderer extends AbstractFieldRenderer
 {
-    protected const TEMPLATE = 'hofff_contact_field_videos';
+    /** @var string|null */
+    protected $template = 'hofff_contact_field_videos';
 
     /** @var ConsentToolManager */
     private $consentToolManager;
 
-    public function __construct(ContaoFrameworkInterface $framework, ConsentToolManager $consentToolManager)
+    public function __construct(ContaoFramework $framework, ConsentToolManager $consentToolManager)
     {
         parent::__construct($framework);
 

@@ -51,6 +51,10 @@ final class ContactProfileExtractor extends AbstractExtractor
     private function extractOpenGraphImageData(ContactProfile $contactProfile): OpenGraphImageData
     {
         $imageData = new OpenGraphImageData();
+        if ($contactProfile->image === null) {
+            return $imageData;
+        }
+
         $fileModel = FilesModel::findByUuid($contactProfile->image);
 
         if ($fileModel instanceof FilesModel && is_file($this->projectDir . '/' . $fileModel->path)) {
@@ -88,6 +92,7 @@ final class ContactProfileExtractor extends AbstractExtractor
             return null;
         }
 
+        /** @psalm-var string $description */
         $description = $contactProfile->teaser;
         $description = trim(str_replace(["\n", "\r"], [' ', ''], $description));
         $description = $this->replaceInsertTags($description);

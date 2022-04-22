@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Hofff\Contao\ContactProfiles\EventListener;
 
 use Contao\Config;
-use Contao\CoreBundle\Framework\ContaoFrameworkInterface;
+use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\FaqCategoryModel;
 use Contao\FaqModel;
 use Contao\Input;
@@ -18,13 +18,13 @@ use function in_array;
 
 final class FAQContactProfilesListener
 {
-    /** @var ContaoFrameworkInterface */
+    /** @var ContaoFramework */
     private $framework;
 
     /** @var ContactProfileRepository */
     private $repository;
 
-    public function __construct(ContaoFrameworkInterface $framework, ContactProfileRepository $repository)
+    public function __construct(ContaoFramework $framework, ContactProfileRepository $repository)
     {
         $this->framework  = $framework;
         $this->repository = $repository;

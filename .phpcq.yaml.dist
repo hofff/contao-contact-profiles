@@ -27,6 +27,9 @@ phpcq:
     composer-normalize:
       version: ^1.0
       signed: false
+    psalm:
+      version: ^1.0
+      signed: false
   trusted-keys:
     # sb@sebastian-bergmann.de
     - 4AA394086372C20A
@@ -57,6 +60,7 @@ tasks:
     - phpcpd
     - phpmd
     - phpcs
+    - psalm
 
   default:
     - verify

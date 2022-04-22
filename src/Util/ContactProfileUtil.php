@@ -14,16 +14,19 @@ use function array_values;
 final class ContactProfileUtil
 {
     /**
-     * @param list<array<string,mixed>> $profiles
-     * @param list<string>              $orderIds
+     * @param array<int, array<string,mixed>> $profiles
+     * @param list<string>                    $orderIds
      *
-     * @return list<array<string,mixed>>
+     * @return array<int, array<string,mixed>>
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public static function orderListByIds(array $profiles, array $orderIds): array
     {
         // Remove all values
         $order = array_map(
-            static function (): void {
+            /** @param mixed $value */
+            static function ($value): void {
             },
             array_flip($orderIds)
         );

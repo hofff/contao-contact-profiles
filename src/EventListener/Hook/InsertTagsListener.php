@@ -51,6 +51,6 @@ final class InsertTagsListener
             ? ContactProfileUrlGenerator::ABSOLUTE_URL
             : ContactProfileUrlGenerator::ABSOLUTE_PATH;
 
-        return $this->urlGenerator->generateDetailUrl($profile, $referenceType);
+        return $this->urlGenerator->generateDetailUrl($profile, $referenceType) ?: false;
     }
 }

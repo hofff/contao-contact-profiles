@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\Renderer\Field;
 
-use Contao\CoreBundle\Framework\ContaoFrameworkInterface;
+use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\FrontendTemplate;
 use Hofff\Contao\ContactProfiles\Query\SocialAccountQuery;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
@@ -15,7 +15,8 @@ use function array_merge;
 
 final class SocialAccountsRenderer extends AbstractFieldRenderer
 {
-    protected const TEMPLATE = 'hofff_contact_field_accounts';
+    /** @var string|null */
+    protected $template = 'hofff_contact_field_accounts';
 
     /** @var SocialAccountQuery */
     private $query;
@@ -23,7 +24,7 @@ final class SocialAccountsRenderer extends AbstractFieldRenderer
     /** @var string[][] */
     private $accounts = [];
 
-    public function __construct(ContaoFrameworkInterface $framework, SocialAccountQuery $query)
+    public function __construct(ContaoFramework $framework, SocialAccountQuery $query)
     {
         parent::__construct($framework);
 
@@ -48,13 +49,13 @@ final class SocialAccountsRenderer extends AbstractFieldRenderer
     }
 
     /**
-     * @param mixed $accounts
+     * @param mixed $value
      */
-    protected function compile(FrontendTemplate $template, $accounts, ContactProfileRenderer $renderer): void
+    protected function compile(FrontendTemplate $template, $value, ContactProfileRenderer $renderer): void
     {
-        $value = [];
+        $compiled = [];
 
-        foreach ((array) $accounts as $config) {
+        foreach ((array) $value as $config) {
             if ($config['type'] === '' || $config['url'] === '') {
                 continue;
             }
@@ -64,14 +65,14 @@ final class SocialAccountsRenderer extends AbstractFieldRenderer
                 continue;
             }
 
-            $value[] = array_merge($config, $account);
+            $compiled[] = array_merge($config, $account);
         }
 
-        $template->value = $value;
+        $template->value = $compiled;
     }
 
-    /** @return string[][] */
-    private function accountById(int $type): ?array
+    /** @return string[] */
+    private function accountById(int $type): array
     {
         if (! array_key_exists($type, $this->accounts)) {
             $this->accounts[$type] = ($this->query)($type);

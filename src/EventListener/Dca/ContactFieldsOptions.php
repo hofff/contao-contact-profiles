@@ -6,16 +6,16 @@ namespace Hofff\Contao\ContactProfiles\EventListener\Dca;
 
 use Contao\Controller;
 use Contao\CoreBundle\Framework\Adapter;
-use Contao\CoreBundle\Framework\ContaoFrameworkInterface;
+use Contao\CoreBundle\Framework\ContaoFramework;
 
 use function array_filter;
 
 final class ContactFieldsOptions
 {
-    /** @var ContaoFrameworkInterface */
+    /** @var ContaoFramework */
     private $framework;
 
-    public function __construct(ContaoFrameworkInterface $framework)
+    public function __construct(ContaoFramework $framework)
     {
         $this->framework = $framework;
     }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\Renderer\Field;
 
-use Contao\CoreBundle\Framework\ContaoFrameworkInterface;
+use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\FrontendTemplate;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
 use Hofff\Contao\ContactProfiles\Renderer\FieldRenderer;
@@ -17,17 +17,14 @@ final class CompositeFieldRenderer extends AbstractFieldRenderer
     /**
      * @param FieldRenderer[] $renderer
      */
-    public function __construct(ContaoFrameworkInterface $framework, array $renderer)
+    public function __construct(ContaoFramework $framework, array $renderer)
     {
         parent::__construct($framework);
 
         $this->renderer = $renderer;
     }
 
-    /**
-     * @param mixed    $value
-     * @param string[] $profile
-     */
+    /** {@inheritDoc} */
     public function __invoke(string $field, $value, ContactProfileRenderer $renderer, array $profile): ?string
     {
         if (isset($this->renderer[$field])) {

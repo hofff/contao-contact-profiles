@@ -9,3 +9,4 @@
 !phpcs.xml.dist
 !.phpcq.yaml.dist
 !/.github
+!/psalm.xml

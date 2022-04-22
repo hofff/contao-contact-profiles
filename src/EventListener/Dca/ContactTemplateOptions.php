@@ -5,15 +5,14 @@ declare(strict_types=1);
 namespace Hofff\Contao\ContactProfiles\EventListener\Dca;
 
 use Contao\Controller;
-use Contao\CoreBundle\Framework\Adapter;
-use Contao\CoreBundle\Framework\ContaoFrameworkInterface;
+use Contao\CoreBundle\Framework\ContaoFramework;
 
 final class ContactTemplateOptions
 {
-    /** @var ContaoFrameworkInterface */
+    /** @var ContaoFramework */
     private $framework;
 
-    public function __construct(ContaoFrameworkInterface $framework)
+    public function __construct(ContaoFramework $framework)
     {
         $this->framework = $framework;
     }
@@ -21,7 +20,6 @@ final class ContactTemplateOptions
     /** @return string[] */
     public function __invoke(): array
     {
-        /** @var Controller<Adapter> $adapter */
         $adapter = $this->framework->getAdapter(Controller::class);
 
         return $adapter->getTemplateGroup('hofff_contact_profile_');

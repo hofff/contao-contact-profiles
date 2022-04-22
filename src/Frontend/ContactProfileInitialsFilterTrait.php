@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\Frontend;
 
+use Contao\CoreBundle\Routing\ScopeMatcher;
 use Contao\Input;
 use Contao\StringUtil;
 use Contao\System;
 use Hofff\Contao\ContactProfiles\Event\LoadContactProfilesEvent;
 use Hofff\Contao\ContactProfiles\Model\ContactProfileRepository;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 use function array_fill_keys;
 use function iconv;
@@ -19,9 +22,13 @@ trait ContactProfileInitialsFilterTrait
 {
     public function generate(): string
     {
-        $request = System::getContainer()->get('request_stack')->getCurrentRequest();
+        /** @psalm-var RequestStack $requestStack */
+        $requestStack = System::getContainer()->get('request_stack');
+        /** @psalm-var ScopeMatcher $scopeMatcher */
+        $scopeMatcher = System::getContainer()->get('contao.routing.scope_matcher');
+        $request      = $requestStack->getCurrentRequest();
 
-        if ($request && System::getContainer()->get('contao.routing.scope_matcher')->isBackendRequest($request)) {
+        if ($request && $scopeMatcher->isBackendRequest($request)) {
             return $this->renderBackendWildcard();
         }
 
@@ -36,7 +43,7 @@ trait ContactProfileInitialsFilterTrait
         $this->Template->letters      = $this->calculateLettersUsage();
         $this->Template->activeLetter = (string) Input::get('auto_item');
         $this->Template->resetUrl     = $GLOBALS['objPage']->getFrontendUrl();
-        $this->Template->filterUrl    = static function (string $letter) {
+        $this->Template->filterUrl    = static function (string $letter): string {
             return $GLOBALS['objPage']->getFrontendUrl('/' . $letter);
         };
     }
@@ -49,15 +56,18 @@ trait ContactProfileInitialsFilterTrait
      */
     private function calculateLettersUsage(): array
     {
-        $letters    = array_fill_keys(range('a', 'z'), 0);
-        $special    = 0;
+        $letters = array_fill_keys(range('a', 'z'), 0);
+        $special = 0;
+        /** @psalm-var ContactProfileRepository $repository */
         $repository = System::getContainer()->get(ContactProfileRepository::class);
 
         switch ($this->hofff_contact_source) {
             case 'dynamic':
-                $sources = StringUtil::deserialize($this->hofff_contact_sources, true);
-                $event   = new LoadContactProfilesEvent($this, $GLOBALS['objPage'], $sources);
-                System::getContainer()->get('event_dispatcher')->dispatch($event::NAME, $event);
+                /** @psalm-var EventDispatcherInterface $eventDispatcher */
+                $eventDispatcher = System::getContainer()->get('event_dispatcher');
+                $sources         = StringUtil::deserialize($this->hofff_contact_sources, true);
+                $event           = new LoadContactProfilesEvent($this, $GLOBALS['objPage'], $sources);
+                $eventDispatcher->dispatch($event, $event::NAME);
 
                 foreach ($event->profiles() as $profile) {
                     $letter = iconv('UTF-8', 'ASCII//TRANSLIT', substr($profile['lastname'], 0, 1));

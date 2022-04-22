@@ -6,21 +6,34 @@ namespace Hofff\Contao\ContactProfiles\Renderer\Field;
 
 use Contao\Controller;
 use Contao\CoreBundle\Framework\Adapter;
-use Contao\CoreBundle\Framework\ContaoFrameworkInterface;
+use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\FrontendTemplate;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
 use Hofff\Contao\ContactProfiles\Renderer\FieldRenderer;
 
 abstract class AbstractFieldRenderer implements FieldRenderer
 {
+    /** @deprecated use $template property */
     protected const TEMPLATE = null;
 
-    /** @var ContaoFrameworkInterface */
+    /** @var ContaoFramework */
     protected $framework;
 
-    public function __construct(ContaoFrameworkInterface $framework)
+    /** @var string|null */
+    protected $template = null;
+
+    // phpcs:disable SlevomatCodingStandard.Classes.DisallowLateStaticBindingForConstants.DisallowedLateStaticBindingForConstant
+    public function __construct(ContaoFramework $framework)
     {
         $this->framework = $framework;
+
+        /** @psalm-suppress DeprecatedConstant */
+        if (static::TEMPLATE === null) {
+            return;
+        }
+
+        /** @psalm-suppress DeprecatedConstant */
+        $this->template = static::TEMPLATE;
     }
 
     /**
@@ -40,7 +53,7 @@ abstract class AbstractFieldRenderer implements FieldRenderer
         $adpater->loadLanguageFile('tl_contact_profile');
 
         // phpcs:ignore
-        $template = new FrontendTemplate($renderer->fieldTemplate($field, static::TEMPLATE));
+        $template = new FrontendTemplate((string) $renderer->fieldTemplate($field, $this->template));
 
         $template->renderer        = $renderer;
         $template->defaultTemplate = $renderer->defaultFieldTemplate();

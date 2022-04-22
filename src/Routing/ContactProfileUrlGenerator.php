@@ -37,7 +37,12 @@ final class ContactProfileUrlGenerator
         $this->connection = $connection;
     }
 
-    /** @param array<string,mixed> $profile */
+    /**
+     * @param array<string,mixed> $profile
+     *
+     * @psalm-suppress InvalidReturnType
+     * @psalm-suppress InvalidReturnStatement
+     */
     public function getDetailPage(array $profile): ?PageModel
     {
         if ($profile['jumpTo']) {
@@ -87,6 +92,10 @@ final class ContactProfileUrlGenerator
         return $this->generateUrlWithPage($profile, $page, $referenceType);
     }
 
+    /**
+     * @psalm-suppress InvalidReturnType
+     * @psalm-suppress InvalidReturnStatement
+     */
     private function fetchCategoryDetailPage(int $categoryId): ?PageModel
     {
         $statement = $this->connection->executeQuery(

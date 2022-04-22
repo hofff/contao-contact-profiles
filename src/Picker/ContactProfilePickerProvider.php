@@ -80,7 +80,7 @@ final class ContactProfilePickerProvider extends AbstractInsertTagPickerProvider
         return sprintf($this->getInsertTag($config), $value);
     }
 
-    /** @return array<string,mixed> */
+    /** {@inheritDoc} */
     protected function getRouteParameters(?PickerConfig $config = null): array
     {
         $params = ['do' => 'hofff_contact_profiles'];

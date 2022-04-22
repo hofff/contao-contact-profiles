@@ -12,6 +12,9 @@ use Doctrine\DBAL\Connection;
 use Hofff\Contao\ContactProfiles\Model\ContactProfileRepository;
 use Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator;
 
+use function is_int;
+use function is_string;
+
 final class GetSearchablePagesListener
 {
     /** @var ContaoFramework */
@@ -68,7 +71,7 @@ final class GetSearchablePagesListener
         return $pages;
     }
 
-    /** @return string|int[] */
+    /** @return array<array-key,mixed> */
     private function fetchCategoriesWithDetailPage(?int $rootId): array
     {
         $pageIds      = $this->getPageIds($rootId);
@@ -84,10 +87,15 @@ final class GetSearchablePagesListener
                 ->setParameter('pageIds', $pageIds, Connection::PARAM_STR_ARRAY);
         }
 
-        return $queryBuilder->execute()->fetchFirstColumn();
+        $result = $queryBuilder->execute();
+        if (is_string($result) || is_int($result)) {
+            return [];
+        }
+
+        return $result->fetchFirstColumn();
     }
 
-    /** @return string|int[] */
+    /** @return array<array-key,mixed> */
     private function getPageIds(?int $rootId): array
     {
         if ($rootId === null || $rootId === 0) {

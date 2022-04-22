@@ -7,7 +7,7 @@ namespace Hofff\Contao\ContactProfiles\EventListener;
 use Contao\CalendarEventsModel;
 use Contao\CalendarModel;
 use Contao\Config;
-use Contao\CoreBundle\Framework\ContaoFrameworkInterface;
+use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\Input;
 use Contao\StringUtil;
 use Hofff\Contao\ContactProfiles\Event\LoadContactProfilesEvent;
@@ -18,13 +18,13 @@ use function in_array;
 
 final class EventsContactProfilesListener
 {
-    /** @var ContaoFrameworkInterface */
+    /** @var ContaoFramework */
     private $framework;
 
     /** @var ContactProfileRepository */
     private $repository;
 
-    public function __construct(ContaoFrameworkInterface $framework, ContactProfileRepository $repository)
+    public function __construct(ContaoFramework $framework, ContactProfileRepository $repository)
     {
         $this->framework  = $framework;
         $this->repository = $repository;

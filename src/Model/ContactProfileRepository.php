@@ -9,7 +9,9 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use PDO;
 
+use function is_int;
 use function is_numeric;
+use function is_string;
 
 final class ContactProfileRepository
 {
@@ -32,23 +34,23 @@ final class ContactProfileRepository
      */
     public function fetchById($profileId): ?array
     {
-        $statement = $this->connection->executeQuery(
+        $result = $this->connection->executeQuery(
             'SELECT * FROM tl_contact_profile WHERE id=:id LIMIT 0,1',
             ['id' => $profileId]
         );
 
-        if ($statement->rowCount() === 0) {
+        if ($result->rowCount() === 0) {
             return null;
         }
 
-        return $statement->fetch(PDO::FETCH_ASSOC);
+        return $result->fetchAssociative() ?: null;
     }
 
     /**
-     * @param list<string|int>          $categoryIds
-     * @param array<string,list<mixed>> $criteria
+     * @param list<string|int>                  $categoryIds
+     * @param array<string,array<string,mixed>> $criteria
      *
-     * @return list<array<string,mixed>>
+     * @return array<int, array<string, mixed>>
      */
     public function fetchPublishedByCategories(
         array $categoryIds,
@@ -57,18 +59,23 @@ final class ContactProfileRepository
         ?string $order = null,
         array $criteria = []
     ): array {
-        return $this->createFetchPublishedQuery($limit, $offset, $order, $criteria)
+        $result = $this->createFetchPublishedQuery($limit, $offset, $order, $criteria)
             ->andWhere('p.pid IN(:categoryIds)')
             ->setParameter('categoryIds', $categoryIds, Connection::PARAM_STR_ARRAY)
-            ->execute()
-            ->fetchAll(PDO::FETCH_ASSOC);
+            ->execute();
+
+        if (is_int($result) || is_string($result)) {
+            return [];
+        }
+
+        return $result->fetchAllAssociative();
     }
 
     /**
-     * @param list<string|int>          $profileIds
-     * @param array<string,list<mixed>> $criteria
+     * @param list<string|int>                  $profileIds
+     * @param array<string,array<string,mixed>> $criteria
      *
-     * @return list<array<string,mixed>>
+     * @return array<int, array<string, mixed>>
      */
     public function fetchPublishedByProfileIds(
         array $profileIds,
@@ -85,9 +92,13 @@ final class ContactProfileRepository
             $builder->orderBy('FIELD(id, :profileIds)');
         }
 
-        return $builder
-            ->execute()
-            ->fetchAll(PDO::FETCH_ASSOC);
+        $result = $builder->execute();
+
+        if (is_int($result) || is_string($result)) {
+            return [];
+        }
+
+        return $result->fetchAllAssociative();
     }
 
     /**
@@ -95,14 +106,18 @@ final class ContactProfileRepository
      */
     public function fetchPublishedByIdOrAlias(string $aliasOrId): ?array
     {
-        $field = is_numeric($aliasOrId) ? 'id' : 'alias';
-
-        return $this->createFetchPublishedQuery()
+        $field  = is_numeric($aliasOrId) ? 'id' : 'alias';
+        $result =  $this->createFetchPublishedQuery()
             ->andWhere('p.' . $field . ' = :alias')
             ->setParameter('alias', $aliasOrId, PDO::PARAM_STR)
             ->setMaxResults(1)
-            ->execute()
-            ->fetch(PDO::FETCH_ASSOC) ?: null;
+            ->execute();
+
+        if (is_int($result) || is_string($result)) {
+            return null;
+        }
+
+        return $result->fetchAssociative() ?: null;
     }
 
     /**
@@ -110,11 +125,16 @@ final class ContactProfileRepository
      */
     public function countPublishedByCategories(array $categoryIds): int
     {
-        return (int) $this->createCountPublishedQuery()
+        $result = $this->createCountPublishedQuery()
             ->andWhere('p.pid IN (:categoryIds)')
             ->setParameter('categoryIds', $categoryIds, Connection::PARAM_STR_ARRAY)
-            ->execute()
-            ->fetch(PDO::FETCH_COLUMN);
+            ->execute();
+
+        if (is_int($result) || is_string($result)) {
+            return 0;
+        }
+
+        return (int) $result->fetchOne();
     }
 
     /**
@@ -122,43 +142,58 @@ final class ContactProfileRepository
      */
     public function countPublishedByProfileIds(array $profileIds): int
     {
-        return (int) $this->createCountPublishedQuery()
+        $result = $this->createCountPublishedQuery()
             ->andWhere('p.id IN (:profileIds)')
             ->setParameter('profileIds', $profileIds, Connection::PARAM_STR_ARRAY)
-            ->execute()
-            ->fetch(PDO::FETCH_COLUMN);
+            ->execute();
+
+        if (is_int($result) || is_string($result)) {
+            return 0;
+        }
+
+        return (int) $result->fetchOne();
     }
 
     /**
      * @param list<string|int> $categoryIds
      *
-     * @return list<array<string,mixed>>
+     * @return array<int,array<string,mixed>>
      */
     public function fetchInitialsOfPublishedByCategories(array $categoryIds): array
     {
-        return $this->createFetchPublishedInitialsQuery()
+        $result = $this->createFetchPublishedInitialsQuery()
             ->andWhere('p.pid IN (:categoryIds)')
             ->setParameter('categoryIds', $categoryIds, Connection::PARAM_STR_ARRAY)
-            ->execute()
-            ->fetchAll(PDO::FETCH_ASSOC);
+            ->execute();
+
+        if (is_int($result) || is_string($result)) {
+            return [];
+        }
+
+        return $result->fetchAllAssociative();
     }
 
     /**
      * @param list<string|int> $profileIds
      *
-     * @return list<array<string,mixed>>
+     * @return array<int,array<string,mixed>>
      */
     public function fetchInitialsOfPublishedByProfileIds(array $profileIds): array
     {
-        return $this->createFetchPublishedInitialsQuery()
+        $result = $this->createFetchPublishedInitialsQuery()
             ->andWhere('p.id IN (:profileIds)')
             ->setParameter('profileIds', $profileIds, Connection::PARAM_STR_ARRAY)
-            ->execute()
-            ->fetchAll(PDO::FETCH_ASSOC);
+            ->execute();
+
+        if (is_int($result) || is_string($result)) {
+            return [];
+        }
+
+        return $result->fetchAllAssociative();
     }
 
     /**
-     * @param array<string,list<mixed>> $criteria
+     * @param array<string,array<string,mixed>> $criteria
      */
     private function createFetchPublishedQuery(
         int $limit = 0,

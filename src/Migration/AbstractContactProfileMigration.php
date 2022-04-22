@@ -33,10 +33,6 @@ abstract class AbstractContactProfileMigration extends AbstractMigration
     public function shouldRun(): bool
     {
         $schemaManager = $this->connection->getSchemaManager();
-        if ($schemaManager === null) {
-            return false;
-        }
-
         if (! $schemaManager->tablesExist($this->table)) {
             return false;
         }
@@ -60,20 +56,18 @@ abstract class AbstractContactProfileMigration extends AbstractMigration
     public function run(): MigrationResult
     {
         $schemaManager = $this->connection->getSchemaManager();
-        if ($schemaManager !== null) {
-            $columns = $schemaManager->listTableColumns($this->table);
+        $columns       = $schemaManager->listTableColumns($this->table);
 
-            if (! isset($columns['hofff_contact_source'])) {
-                $this->connection->executeStatement(
-                    'ALTER TABLE ' . $this->table . ' ADD hofff_contact_source char(16) NOT NULL DEFAULT \'custom\''
-                );
-            }
+        if (! isset($columns['hofff_contact_source'])) {
+            $this->connection->executeStatement(
+                'ALTER TABLE ' . $this->table . ' ADD hofff_contact_source char(16) NOT NULL DEFAULT \'custom\''
+            );
+        }
 
-            if (! isset($columns['hofff_contact_sources'])) {
-                $this->connection->executeStatement(
-                    'ALTER TABLE ' . $this->table . ' ADD hofff_contact_sources TINYBLOB null'
-                );
-            }
+        if (! isset($columns['hofff_contact_sources'])) {
+            $this->connection->executeStatement(
+                'ALTER TABLE ' . $this->table . ' ADD hofff_contact_sources TINYBLOB null'
+            );
         }
 
         $this->connection->update(

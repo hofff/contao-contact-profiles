@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Hofff\Contao\ContactProfiles\Renderer\Field;
 
 use Contao\Controller;
+use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\File;
 use Contao\FilesModel;
 use Contao\FrontendTemplate;
@@ -12,6 +13,7 @@ use Contao\Model\Collection;
 use Contao\StringUtil;
 use Exception;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
+use stdClass;
 
 use function array_filter;
 use function array_flip;
@@ -26,7 +28,18 @@ use function uniqid;
 
 final class GalleryFieldRenderer extends AbstractFieldRenderer
 {
-    protected const TEMPLATE = 'hofff_contact_field_gallery';
+    /** @var string|null */
+    protected $template = 'hofff_contact_field_gallery';
+
+    /** @var string */
+    private $projectDir;
+
+    public function __construct(ContaoFramework $framework, string $projectDir)
+    {
+        parent::__construct($framework);
+
+        $this->projectDir = $projectDir;
+    }
 
     /** @param mixed $value */
     protected function compile(FrontendTemplate $template, $value, ContactProfileRenderer $renderer): void
@@ -41,12 +54,14 @@ final class GalleryFieldRenderer extends AbstractFieldRenderer
      * @param list<string>        $uuids
      * @param array<string,mixed> $profile
      *
-     * @return list<resource>
+     * @return list<array<string,mixed>>
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function fetchImagesOrderedByCustomOrder(array $uuids, array $profile): array
     {
         $collection = FilesModel::findMultipleByUuids($uuids);
-        if ($collection === null) {
+        if (! $collection instanceof Collection) {
             return [];
         }
 
@@ -59,7 +74,8 @@ final class GalleryFieldRenderer extends AbstractFieldRenderer
 
         // Remove all values
         $ordered = array_map(
-            static function (): void {
+            /** @param mixed $value */
+            static function ($value): void {
             },
             array_flip($tmp)
         );
@@ -93,7 +109,7 @@ final class GalleryFieldRenderer extends AbstractFieldRenderer
      * @param array<string,array<string,mixed>> $images     The collected images.
      * @param bool                              $deep       If true sub files are added as well.
      *
-     * @return array<string,array<string,mixed>>
+     * @return list<array<string,mixed>>
      *
      * @throws Exception If file could not be opened.
      */
@@ -102,7 +118,7 @@ final class GalleryFieldRenderer extends AbstractFieldRenderer
         // Get all images
         foreach ($collection as $fileModel) {
             // Continue if the files has been processed or does not exist
-            if (isset($images[$fileModel->path]) || ! file_exists(TL_ROOT . '/' . $fileModel->path)) {
+            if (isset($images[$fileModel->path]) || ! file_exists($this->projectDir . '/' . $fileModel->path)) {
                 continue;
             }
 
@@ -127,7 +143,7 @@ final class GalleryFieldRenderer extends AbstractFieldRenderer
                 // Folders
                 $subfiles = FilesModel::findByPid($fileModel->uuid);
 
-                if ($subfiles !== null) {
+                if ($subfiles instanceof Collection) {
                     $images = $this->prepareFiles($subfiles, $images, false);
                 }
             }
@@ -137,10 +153,10 @@ final class GalleryFieldRenderer extends AbstractFieldRenderer
     }
 
     /**
-     * @param array<string,array<string,mixed>> $images
-     * @param list<string>|null                 $imageSize
+     * @param list<array<string,mixed>> $images
+     * @param list<string>|null         $imageSize
      *
-     * @return list<array<string,mixed>>
+     * @return list<stdClass>
      */
     private function compileImages(array $images, ?array $imageSize): array
     {

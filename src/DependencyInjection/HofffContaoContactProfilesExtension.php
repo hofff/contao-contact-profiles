@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
 final class HofffContaoContactProfilesExtension extends Extension
 {
-    /** @param mixed[][] $configs */
+    /** {@inheritDoc} */
     public function load(array $configs, ContainerBuilder $container): void
     {
         $loader = new XmlFileLoader(

@@ -68,7 +68,7 @@ final class PreviewUrlCreateListener
     {
         // Overwrite the ID if the contact profile settings are edited
         if ($request->query->get('table') === 'tl_contact_profile' && $request->query->get('act') === 'edit') {
-            return $request->query->get('id');
+            return $request->query->getInt('id');
         }
 
         return $event->getId();
