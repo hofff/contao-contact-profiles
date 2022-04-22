@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Hofff\Contao\ContactProfiles\Query;
 
 use Doctrine\DBAL\Connection;
-use PDO;
 
 /**
  * @deprecated
@@ -38,12 +37,12 @@ SQL;
      */
     public function __invoke(array $profileIds): array
     {
-        $statement = $this->connection->executeQuery(
+        $result = $this->connection->executeQuery(
             self::QUERY,
             [$profileIds, $profileIds],
             [Connection::PARAM_STR_ARRAY, Connection::PARAM_STR_ARRAY]
         );
 
-        return $statement->fetchAll(PDO::FETCH_ASSOC);
+        return $result->fetchAllAssociative();
     }
 }

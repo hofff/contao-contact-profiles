@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\Query;
 
-use Doctrine\DBAL\Driver\Connection;
-use PDO;
+use Doctrine\DBAL\Connection;
 
 final class CategorizedContactProfilesQuery
 {
@@ -33,9 +32,8 @@ SQL;
     /** @return string[][] */
     public function __invoke(): array
     {
-        $statement = $this->connection->prepare(self::QUERY);
-        $statement->execute();
+        $result = $this->connection->executeQuery(self::QUERY);
 
-        return $statement->fetchAll(PDO::FETCH_ASSOC);
+        return $result->fetchAllAssociative();
     }
 }

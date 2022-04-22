@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Doctrine\DBAL\Platforms\MySqlPlatform;
+use Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
 use Hofff\Contao\ContactProfiles\EventListener\Dca\CalendarEventsDcaListener;
 use Hofff\Contao\ContactProfiles\EventListener\Dca\ContactProfileOptions;
 
@@ -32,7 +32,7 @@ $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['hofff_contact_profiles'] = [
 $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['hofff_contact_profiles_order'] = [
     'sql' => [
         'type'    => 'blob',
-        'length'  => MySqlPlatform::LENGTH_LIMIT_BLOB,
+        'length'  => AbstractMySQLPlatform::LENGTH_LIMIT_BLOB,
         'notnull' => false,
     ],
 ];

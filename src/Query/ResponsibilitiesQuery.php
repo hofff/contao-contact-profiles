@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Hofff\Contao\ContactProfiles\Query;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\DBALException;
-use PDO;
 
 final class ResponsibilitiesQuery
 {
@@ -32,17 +30,15 @@ SQL;
      * @param string[] $responsibilityIds
      *
      * @return string[][]
-     *
-     * @throws DBALException
      */
     public function __invoke(array $responsibilityIds): array
     {
-        $statement = $this->connection->executeQuery(
+        $result = $this->connection->executeQuery(
             self::QUERY,
             [$responsibilityIds, $responsibilityIds],
             [Connection::PARAM_STR_ARRAY, Connection::PARAM_STR_ARRAY]
         );
 
-        return $statement->fetchAll(PDO::FETCH_ASSOC);
+        return $result->fetchAllAssociative();
     }
 }

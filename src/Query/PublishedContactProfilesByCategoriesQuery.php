@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Hofff\Contao\ContactProfiles\Query;
 
 use Doctrine\DBAL\Connection;
-use PDO;
 
 /**
  * @deprecated
@@ -54,24 +53,24 @@ SQL;
      */
     public function __invoke(array $categoryIds): array
     {
-        $statement = $this->connection->executeQuery(
+        $result = $this->connection->executeQuery(
             self::QUERY,
             [$categoryIds],
             [Connection::PARAM_STR_ARRAY]
         );
 
-        return $statement->fetchAll(PDO::FETCH_ASSOC);
+        return $result->fetchAllAssociative();
     }
 
     /** @param list<string> $categoryIds */
     public function count(array $categoryIds): int
     {
-        $statement = $this->connection->executeQuery(
+        $result = $this->connection->executeQuery(
             self::COUNT_QUERY,
             [$categoryIds],
             [Connection::PARAM_STR_ARRAY]
         );
 
-        return (int) $statement->fetch(PDO::FETCH_COLUMN);
+        return (int) $result->fetchOne();
     }
 }

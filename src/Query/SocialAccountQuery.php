@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Hofff\Contao\ContactProfiles\Query;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\DBALException;
 
 final class SocialAccountQuery
 {
@@ -28,8 +27,6 @@ SQL;
 
     /**
      * @return string[]
-     *
-     * @throws DBALException
      */
     public function __invoke(int $accountId): array
     {
