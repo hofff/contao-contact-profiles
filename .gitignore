@@ -8,3 +8,4 @@
 !/composer.json
 !phpcs.xml.dist
 !.phpcq.yaml.dist
+!/.github

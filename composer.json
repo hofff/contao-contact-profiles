@@ -1,15 +1,14 @@
 {
   "name": "hofff/contao-contact-profiles",
-  "type": "contao-bundle",
   "description": "Various form utilities for Contao CMS.",
+  "license": "LGPL-3.0-or-later",
+  "type": "contao-bundle",
   "keywords": [
     "form",
     "contao",
     "contacts",
     "contact profiles"
   ],
-  "homepage": "https://hofff.com/",
-  "license": "LGPL-3.0-or-later",
   "authors": [
     {
       "name": "Nicky Hoff",
@@ -24,6 +23,12 @@
       "role": "Developer"
     }
   ],
+  "homepage": "https://hofff.com/",
+  "support": {
+    "email": "info@hofff.com",
+    "issues": "https://github.com/hofff/contao-contact-profiles/issues",
+    "source": "https://github.com/hofff/contao-contact-profiles"
+  },
   "require": {
     "php": ">=7.1",
     "ext-pdo": "*",
@@ -42,16 +47,16 @@
     "symfony/routing": "^4.4 || ^5.0",
     "symfony/security-core": "^4.4 || ^5.0"
   },
+  "require-dev": {
+    "doctrine/coding-standard": "^8.0",
+    "hofff/contao-social-tags": "^1.1",
+    "phpcq/runner-bootstrap": "^1.0@dev"
+  },
   "conflict": {
     "contao/calendar-bundle": "<4.4 || >=5.0",
     "contao/faq-bundle": "<4.4 || >=5.0",
     "contao/news-bundle": "<4.4 || >=5.0",
     "hofff/contao-social-tags": "<1.1 || >=2.0"
-  },
-  "require-dev": {
-    "doctrine/coding-standard": "^8.0",
-    "hofff/contao-social-tags": "^1.1",
-    "phpcq/runner-bootstrap": "^1.0@dev"
   },
   "suggest": {
     "contao/calendar-bundle": "Use contact profile for author information",
@@ -59,21 +64,22 @@
     "contao/news-bundle": "Use contact profile for author information",
     "hofff/contao-social-tags": "Generate open graph and twitter cards social tags"
   },
+  "autoload": {
+    "psr-4": {
+      "Hofff\\Contao\\ContactProfiles\\": "src/"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true,
+      "contao-components/installer": false
+    }
+  },
   "extra": {
     "branch-alias": {
       "dev-develop": "1.1.x-dev",
       "dev-master": "1.0.x-dev"
     },
     "contao-manager-plugin": "Hofff\\Contao\\ContactProfiles\\ContaoManager\\Plugin"
-  },
-  "autoload": {
-    "psr-4": {
-      "Hofff\\Contao\\ContactProfiles\\": "src/"
-    }
-  },
-  "support": {
-    "email": "info@hofff.com",
-    "issues": "https://github.com/hofff/contao-contact-profiles/issues",
-    "source": "https://github.com/hofff/contao-contact-profiles"
   }
 }
