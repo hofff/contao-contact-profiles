@@ -6,37 +6,56 @@ namespace Hofff\Contao\ContactProfiles\Renderer\Field;
 
 use Contao\Controller;
 use Contao\CoreBundle\Framework\Adapter;
-use Contao\CoreBundle\Framework\ContaoFrameworkInterface;
+use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\FrontendTemplate;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
 use Hofff\Contao\ContactProfiles\Renderer\FieldRenderer;
 
 abstract class AbstractFieldRenderer implements FieldRenderer
 {
+    /** @deprecated use $template property */
     protected const TEMPLATE = null;
 
-    /** @var ContaoFrameworkInterface */
+    /** @var ContaoFramework */
     protected $framework;
 
-    public function __construct(ContaoFrameworkInterface $framework)
+    /** @var string|null */
+    protected $template = null;
+
+    // phpcs:disable SlevomatCodingStandard.Classes.DisallowLateStaticBindingForConstants.DisallowedLateStaticBindingForConstant
+    public function __construct(ContaoFramework $framework)
     {
         $this->framework = $framework;
+
+        /** @psalm-suppress DeprecatedConstant */
+        if (static::TEMPLATE === null) {
+            return;
+        }
+
+        /** @psalm-suppress DeprecatedConstant */
+        $this->template = static::TEMPLATE;
     }
 
-    /** {@inheritdoc} */
-    public function __invoke(string $field, $value, ContactProfileRenderer $renderer, array $profile) : ?string
+    /**
+     * {@inheritdoc}
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    public function __invoke(string $field, $value, ContactProfileRenderer $renderer, array $profile): ?string
     {
         if (! $this->hasValue($value)) {
             return null;
         }
 
-        /** @var Controller|Adapter $adpater */
+        /** @var Adapter<Controller> $adpater */
         $adpater = $this->framework->getAdapter(Controller::class);
         $adpater->loadDataContainer('tl_contact_profile');
         $adpater->loadLanguageFile('tl_contact_profile');
 
-        $template = new FrontendTemplate($renderer->fieldTemplate($field, static::TEMPLATE));
+        // phpcs:ignore
+        $template = new FrontendTemplate((string) $renderer->fieldTemplate($field, $this->template));
 
+        $template->renderer        = $renderer;
         $template->defaultTemplate = $renderer->defaultFieldTemplate();
         $template->field           = $field;
         $template->label           = $GLOBALS['TL_DCA']['tl_contact_profile']['fields'][$field]['label'][0] ?? $field;
@@ -49,11 +68,11 @@ abstract class AbstractFieldRenderer implements FieldRenderer
     }
 
     /** @param mixed $value */
-    protected function hasValue($value) : bool
+    protected function hasValue($value): bool
     {
         return (bool) $value;
     }
 
     /** @param mixed $value */
-    abstract protected function compile(FrontendTemplate $template, $value, ContactProfileRenderer $renderer) : void;
+    abstract protected function compile(FrontendTemplate $template, $value, ContactProfileRenderer $renderer): void;
 }

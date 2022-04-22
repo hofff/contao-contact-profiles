@@ -26,7 +26,7 @@ SQL;
     }
 
     /** @return string[] */
-    public function __invoke() : iterable
+    public function __invoke(): array
     {
         $statement = $this->connection->executeQuery(self::QUERY);
         $options   = [];

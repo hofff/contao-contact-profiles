@@ -6,5 +6,7 @@
     <?= $this->renderProfile($profile) ?>
 <?php endforeach ?>
 
+<?= $this->pagination ?>
+
 <?php $this->endblock() ?>
 <?php endif ?>

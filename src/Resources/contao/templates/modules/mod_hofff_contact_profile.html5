@@ -2,9 +2,12 @@
 <?php $this->extend('block_searchable') ?>
 
 <?php $this->block('content') ?>
+
 <?php foreach ($this->profiles as $profile): ?>
     <?= $this->renderProfile($profile) ?>
 <?php endforeach ?>
+
+<?= $this->pagination ?>
 
 <?php $this->endblock() ?>
 <?php endif ?>

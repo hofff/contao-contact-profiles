@@ -1,0 +1,26 @@
+<?php $this->extend('block_unsearchable') ?>
+
+<?php $this->block('content') ?>
+
+<ul>
+    <?php foreach ($this->letters as $letter => $count):
+        $label = $letter === 'numeric' ? '#' : \Patchwork\Utf8::strtoupper($letter);
+        ?><li<?php if ((string) $letter === $this->activeLetter): ?> class="active"<?php endif; ?>><?php
+            if ((string) $letter === $this->activeLetter):
+                ?><strong class="active"><span itemprop="name"><?= $label ?></span></strong><?php
+            elseif ($count > 0):
+                ?><a href="<?= $this->filterUrl($letter) ?>"><span itemprop="name"><?= $label ?></span></a><?php
+            else:
+                ?><span itemprop="name"><?= $label ?></span><?php
+            endif
+        ?></li><?php
+    endforeach
+    ?><li<?php if (!$this->activeLetter): ?> class="active" <?php endif ?>><?php if ($this->activeLetter):
+        ?><a href="<?= $this->resetUrl ?>"><span itemprop="name"><?= $this->trans('MSC.contactProfileResetLabel', [], 'contao_default') ?></span></a><?php
+        else:
+            ?><strong class="active"><span itemprop="name"><?= $this->trans('MSC.contactProfileResetLabel', [], 'contao_default') ?></span></strong><?php
+        endif
+        ?></li>
+</ul>
+
+<?php $this->endblock() ?>

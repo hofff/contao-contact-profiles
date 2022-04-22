@@ -1,9 +1,9 @@
 <?php $this->extend($this->defaultTemplate) ?>
 
 <?php $this->block('value') ?>
-<ul>
-<?php foreach ($this->value as $account): ?>
-  <li><a href="<?= $account['url'] ?>" class="social-account <?= $account['class'] ?>" rel="noopener nofollow" target="_blank"><?= $account['name'] ?></a></li>
-<?php endforeach ?>
-</ul>
+  <ul><?php
+    foreach ($this->value as $account):
+      ?><li><a href="<?= $account['url'] ?>" class="social-account <?= $account['class'] ?>" rel="noopener nofollow" target="_blank"><span itemprop="name"><?= $account['name'] ?></span></a></li><?php
+    endforeach
+  ?></ul>
 <?php $this->endblock() ?>

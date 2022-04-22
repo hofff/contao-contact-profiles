@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<psalm
+        errorLevel="3"
+        hideExternalErrors="true"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="https://getpsalm.org/schema/config"
+        xsi:schemaLocation="https://getpsalm.org/schema/config ./.phpcq/plugins/psalm/tools/config.xsd"
+>
+    <projectFiles>
+        <directory name="src"/>
+        <ignoreFiles>
+            <file name="src/DependencyInjection/Configuration.php"/>
+        </ignoreFiles>
+    </projectFiles>
+
+    <issueHandlers>
+        <DeprecatedMethod errorLevel="suppress">
+            <errorLevel type="suppress">
+                <referencedMethod name="Symfony\Component\HttpFoundation\RequestStack::getMasterRequest"/>
+            </errorLevel>
+        </DeprecatedMethod>
+        <InternalMethod errorLevel="suppress">
+            <errorLevel type="suppress">
+                <referencedMethod name="Contao\CoreBundle\Framework\ContaoFramework::getAdapter"/>
+            </errorLevel>
+        </InternalMethod>
+        <TooManyArguments>
+            <errorLevel type="suppress">
+                <referencedFunction name="Symfony\Contracts\EventDispatcher\EventDispatcherInterface::dispatch"/>
+            </errorLevel>
+        </TooManyArguments>
+        <UndefinedInterfaceMethod>
+            <errorLevel type="suppress">
+                <referencedMethod name="UnitEnum::offsetGet"/>
+            </errorLevel>
+        </UndefinedInterfaceMethod>
+        <UndefinedDocblockClass>
+            <errorLevel type="suppress">
+                <referencedClass name="UnitEnum"/>
+            </errorLevel>
+        </UndefinedDocblockClass>
+    </issueHandlers>
+
+    <universalObjectCrates>
+        <class name="Contao\BackendTemplate"/>
+        <class name="Contao\FrontendTemplate"/>
+        <class name="Contao\Template"/>
+        <class name="Contao\CalendarEventsModel"/>
+        <class name="Contao\FaqModel"/>
+        <class name="Contao\NewsModel"/>
+    </universalObjectCrates>
+</psalm>

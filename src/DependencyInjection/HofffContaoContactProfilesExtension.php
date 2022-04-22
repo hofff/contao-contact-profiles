@@ -14,8 +14,8 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
 final class HofffContaoContactProfilesExtension extends Extension
 {
-    /** @param mixed[][] $configs */
-    public function load(array $configs, ContainerBuilder $container) : void
+    /** {@inheritDoc} */
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $loader = new XmlFileLoader(
             $container,
@@ -25,35 +25,53 @@ final class HofffContaoContactProfilesExtension extends Extension
         $loader->load('services.xml');
         $loader->load('listener.xml');
 
-        $this->checkEventsListener($container);
-        $this->checkFaqListener($container);
-        $this->checkNewsListener($container);
+        $config  = $this->processConfiguration(new Configuration(), $configs);
+        $sources = $config['sources'];
+
+        $this->checkCalendarBundle($container, $sources);
+        $this->checkFaqBundle($container, $sources);
+        $this->checkNewsBundle($container, $sources);
+
+        $container->setParameter('hofff_contao_contact_profiles.sources', $sources);
+
+        $container->setParameter('hofff_contao_contact_profiles.alias_pattern', $config['alias']['pattern']);
+        unset($config['alias']['pattern']);
+        $container->setParameter('hofff_contao_contact_profiles.alias_options', $config['alias']);
     }
 
-    private function checkEventsListener(ContainerBuilder $container) : void
+    /** @param list<string> $sources */
+    private function checkCalendarBundle(ContainerBuilder $container, array &$sources): void
     {
         $bundles = $container->getParameter('kernel.bundles');
         if (isset($bundles['ContaoCalendarBundle'])) {
+            $sources[] = 'event';
+
             return;
         }
 
         $container->removeDefinition(EventsContactProfilesListener::class);
     }
 
-    private function checkFaqListener(ContainerBuilder $container) : void
+    /** @param list<string> $sources */
+    private function checkFaqBundle(ContainerBuilder $container, array &$sources): void
     {
         $bundles = $container->getParameter('kernel.bundles');
         if (isset($bundles['ContaoFaqBundle'])) {
+            $sources[] = 'faq';
+
             return;
         }
 
         $container->removeDefinition(FAQContactProfilesListener::class);
     }
 
-    private function checkNewsListener(ContainerBuilder $container) : void
+    /** @param list<string> $sources */
+    private function checkNewsBundle(ContainerBuilder $container, array &$sources): void
     {
         $bundles = $container->getParameter('kernel.bundles');
         if (isset($bundles['ContaoNewsBundle'])) {
+            $sources[] = 'news';
+
             return;
         }
 

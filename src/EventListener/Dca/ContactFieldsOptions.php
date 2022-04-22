@@ -5,23 +5,29 @@ declare(strict_types=1);
 namespace Hofff\Contao\ContactProfiles\EventListener\Dca;
 
 use Contao\Controller;
-use Contao\CoreBundle\Framework\ContaoFrameworkInterface;
+use Contao\CoreBundle\Framework\Adapter;
+use Contao\CoreBundle\Framework\ContaoFramework;
+
 use function array_filter;
 
 final class ContactFieldsOptions
 {
-    /** @var ContaoFrameworkInterface */
+    /** @var ContaoFramework */
     private $framework;
 
-    public function __construct(ContaoFrameworkInterface $framework)
+    public function __construct(ContaoFramework $framework)
     {
         $this->framework = $framework;
     }
 
-    /** @return string[] */
-    public function __invoke() : array
+    /**
+     * @return string[]
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    public function __invoke(): array
     {
-        /** @var Controller|Adapter $adpater */
+        /** @var Adapter<Controller> $adpater */
         $adpater = $this->framework->getAdapter(Controller::class);
         $adpater->loadDataContainer('tl_contact_profile');
         $adpater->loadLanguageFile('tl_contact_profile');

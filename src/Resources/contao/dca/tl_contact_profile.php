@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Contao\Config;
+use Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
 use Hofff\Contao\ContactProfiles\EventListener\Dca\AccountTypeOptions;
 use Hofff\Contao\ContactProfiles\EventListener\Dca\ContactProfileDcaListener;
 
@@ -50,7 +52,8 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'label'      => &$GLOBALS['TL_LANG']['tl_contact_profile']['delete'],
                 'href'       => 'act=delete',
                 'icon'       => 'delete.gif',
-                'attributes' => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"',
+                'attributes' => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm']
+                    . '\')) return false; Backend.getScrollOffset();"',
             ],
             'toggle' => [
                 'label'           => &$GLOBALS['TL_LANG']['tl_contact_profile']['toggle'],
@@ -69,9 +72,11 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
 
     // Palettes
     'palettes' => [
-        'default' => '{personal_legend},salutation,title,firstname,lastname,position,profession,image,caption'
-            . ';{contact_legend},phone,mobile,fax,email,accounts'
+        'default' => '{personal_legend},salutation,title,firstname,lastname,alias,position,profession,image,caption'
+            . ';{contact_legend},phone,mobile,fax,email,website,websiteTitle,accounts'
             . ';{details_legend},teaser,description,statement,responsibilities'
+            . ';{gallery_legend:hide},gallery'
+            . ';{videos_legend:hide},videos'
             . ';{redirect_legend},jumpTo'
             . ';{published_legend},published',
     ],
@@ -85,6 +90,14 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
         ],
         'pid'              => ['sql' => "int(10) unsigned NOT NULL default '0'"],
         'tstamp'           => ['sql' => "int(10) unsigned NOT NULL default '0'"],
+        'alias'            => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['alias'],
+            'exclude'   => true,
+            'search'    => true,
+            'inputType' => 'text',
+            'eval'      => ['mandatory' => false, 'maxlength' => 255, 'tl_class' => 'w50'],
+            'sql'       => 'varchar(255) BINARY NOT NULL default \'\'',
+        ],
         'salutation'       => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['salutation'],
             'exclude'   => true,
@@ -119,7 +132,7 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['position'],
             'exclude'   => true,
             'inputType' => 'text',
-            'eval'      => ['maxlength' => 255, 'tl_class' => 'w50', 'profileField' => true],
+            'eval'      => ['maxlength' => 255, 'tl_class' => 'clr w50', 'profileField' => true],
             'sql'       => 'varchar(255) NOT NULL default \'\'',
         ],
         'profession'       => [
@@ -138,12 +151,12 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'fieldType'    => 'radio',
                 'mandatory'    => false,
                 'tl_class'     => 'clr',
-                'extensions'   => Contao\Config::get('validImageTypes'),
+                'extensions'   => Config::get('validImageTypes'),
                 'profileField' => true,
             ],
             'sql'       => 'binary(16) NULL',
         ],
-        'caption'       => [
+        'caption'          => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['caption'],
             'exclude'   => true,
             'inputType' => 'text',
@@ -206,6 +219,28 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             ],
             'sql'       => 'varchar(255) NOT NULL default \'\'',
         ],
+        'website'          => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['website'],
+            'exclude'   => true,
+            'search'    => true,
+            'inputType' => 'text',
+            'eval'      => [
+                'maxlength'      => 255,
+                'rgxp'           => 'url',
+                'pagePicker'     => true,
+                'decodeEntities' => true,
+                'tl_class'       => 'w50',
+                'profileField'   => true,
+                'dcaPicker'      => true,
+            ],
+            'sql'       => 'varchar(255) NOT NULL default \'\'',
+        ],
+        'websiteTitle'     => [
+            'exclude'   => true,
+            'inputType' => 'text',
+            'eval'      => ['maxlength' => 255, 'tl_class' => 'w50', 'profileField' => false],
+            'sql'       => 'varchar(255) NOT NULL default \'\'',
+        ],
         'accounts'         => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['accounts'],
             'exclude'   => true,
@@ -238,7 +273,7 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                     ],
                 ],
             ],
-            'sql'       => 'varchar(255) NOT NULL default \'\'',
+            'sql'       => 'blob NULL',
         ],
         'teaser'           => [
             'label'       => &$GLOBALS['TL_LANG']['tl_contact_profile']['teaser'],
@@ -266,7 +301,7 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             'eval'       => ['multiple' => true, 'profileField' => true],
             'sql'        => 'mediumblob NULL',
         ],
-        'statement'      => [
+        'statement'        => [
             'label'       => &$GLOBALS['TL_LANG']['tl_contact_profile']['statement'],
             'exclude'     => true,
             'search'      => true,
@@ -291,6 +326,110 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             'inputType' => 'checkbox',
             'eval'      => ['doNotCopy' => true],
             'sql'       => "char(1) NOT NULL default ''",
+        ],
+        'videos'           => [
+            'label'         => &$GLOBALS['TL_LANG']['tl_contact_profile']['videos'],
+            'exclude'       => true,
+            'inputType'     => 'multiColumnWizard',
+            'save_callback' => [
+                [ContactProfileDcaListener::class, 'saveVideos'],
+            ],
+            'eval'          => [
+                'tl_class'     => 'clr',
+                'profileField' => true,
+                'columnFields' => [
+                    'videoTitle'  => [
+                        'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['videoTitle'],
+                        'exclude'   => true,
+                        'inputType' => 'text',
+                        'eval'      => [
+                            'mandatory' => false,
+                            'maxlength' => 255,
+                            'tl_class'  => '',
+                            'style'     => 'width: 100%',
+                        ],
+                        'sql'       => 'varchar(255) NOT NULL default \'\'',
+                    ],
+                    'videoSource' => [
+                        'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['videoSource'],
+                        'inputType' => 'select',
+                        'options'   => ['local', 'youtube', 'vimeo'],
+                        'eval'      => [
+                            'includeBlankOption' => true,
+                            'style'              => 'width: 100%',
+                        ],
+                    ],
+                    'video'       => [
+                        'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['videoVideo'],
+                        'inputType' => 'text',
+                        'eval'      => [
+                            'maxlength'      => 128,
+                            'rgxp'           => 'url',
+                            'tl_class'       => 'wizard',
+                            'decodeEntities' => true,
+                            'dcaPicker'      => [
+                                'do'        => 'files',
+                                'context'   => 'file',
+                                'icon'      => 'pickfile.svg',
+                                'fieldType' => 'radio',
+                                'filesOnly' => true,
+                            ],
+                            'style'          => 'width: 100%',
+                        ],
+                    ],
+                    'image'       => [
+                        'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['image'],
+                        'exclude'   => true,
+                        'inputType' => 'fileTree',
+                        'eval'      => [
+                            'filesOnly'  => true,
+                            'fieldType'  => 'radio',
+                            'mandatory'  => false,
+                            'extensions' => Config::get('validImageTypes'),
+                        ],
+                    ],
+                    'aspect'      => [
+                        'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['videoAspect'],
+                        'exclude'   => true,
+                        'inputType' => 'select',
+                        'options'   => ['16:9', '16:10', '21:9', '4:3', '3:2'],
+                        'reference' => &$GLOBALS['TL_LANG']['tl_contact_profile']['videoAspect'],
+                        'eval'      => ['includeBlankOption' => true, 'nospace' => true, 'tl_class' => 'w50'],
+                    ],
+                ],
+            ],
+            'sql'           => [
+                'type'    => 'blob',
+                'length'  => AbstractMySQLPlatform::LENGTH_LIMIT_BLOB,
+                'notnull' => false,
+            ],
+        ],
+        'gallery'          => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['gallery'],
+            'exclude'   => true,
+            'inputType' => 'fileTree',
+            'eval'      => [
+                'profileField' => true,
+                'multiple'     => true,
+                'fieldType'    => 'checkbox',
+                'orderField'   => 'galleryOrder',
+                'files'        => true,
+                'isGallery'    => true,
+                'extensions'   => Config::get('validImageTypes'),
+            ],
+            'sql'       => [
+                'type'    => 'blob',
+                'length'  => AbstractMySQLPlatform::LENGTH_LIMIT_BLOB,
+                'notnull' => false,
+            ],
+        ],
+        'galleryOrder'     => [
+            'label' => &$GLOBALS['TL_LANG']['MSC']['sortOrder'],
+            'sql'   => [
+                'type'    => 'blob',
+                'length'  => AbstractMySQLPlatform::LENGTH_LIMIT_BLOB,
+                'notnull' => false,
+            ],
         ],
     ],
 ];

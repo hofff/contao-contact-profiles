@@ -6,37 +6,41 @@ namespace Hofff\Contao\ContactProfiles\EventListener\Hook;
 
 use Contao\StringUtil;
 use Contao\Template;
-use Hofff\Contao\ContactProfiles\Query\PublishedContactProfilesQuery;
+use Hofff\Contao\ContactProfiles\Model\ContactProfileRepository;
+use Hofff\Contao\ContactProfiles\Util\ContactProfileUtil;
+
 use function strpos;
 
 final class AddContactProfileInformationListener
 {
-    /** @var PublishedContactProfilesQuery */
-    private $query;
+    /** @var ContactProfileRepository */
+    private $repository;
 
     /** @var string[] */
     private $templatePrefixes;
 
     /** @param string[] $templatePrefixes */
-    public function __construct(PublishedContactProfilesQuery $query, array $templatePrefixes)
+    public function __construct(ContactProfileRepository $repository, array $templatePrefixes)
     {
-        $this->query            = $query;
+        $this->repository       = $repository;
         $this->templatePrefixes = $templatePrefixes;
     }
 
-    /** @param mixed[] $row */
-    public function onParseTemplate(Template $template) : void
+    public function onParseTemplate(Template $template): void
     {
         if (! $this->match($template->getName())) {
             return;
         }
 
         $profileIds = StringUtil::deserialize($template->hofff_contact_profiles, true);
+        $order      = StringUtil::deserialize($template->hofff_contact_profiles_order, true);
+        $profiles   = $this->repository->fetchPublishedByProfileIds($profileIds);
+        $profiles   = ContactProfileUtil::orderListByIds($profiles, $order);
 
-        $template->contactProfiles = ($this->query)($profileIds);
+        $template->contactProfiles = $profiles;
     }
 
-    private function match(string $templateName) : bool
+    private function match(string $templateName): bool
     {
         foreach ($this->templatePrefixes as $prefix) {
             if (strpos($templateName, $prefix) === 0) {

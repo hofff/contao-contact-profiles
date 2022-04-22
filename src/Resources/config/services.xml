@@ -5,9 +5,43 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <defaults public="false" autoconfigure="false" autowire="false"/>
+        
+        <!-- Alias generator -->
+        <service id="hofff_contao_contact_profiles.alias_generator" class="Ausi\SlugGenerator\SlugGenerator">
+            <argument>%hofff_contao_contact_profiles.alias_options%</argument>
+        </service>
+
+        <!-- Migration -->
+        <service id="Hofff\Contao\ContactProfiles\Migration\ContactProfileElementMigration">
+            <argument type="service" id="database_connection"/>
+            <argument>%hofff_contao_contact_profiles.sources%</argument>
+            <tag name="contao.migration"/>
+        </service>
+
+        <service id="Hofff\Contao\ContactProfiles\Migration\ContactProfileModuleMigration">
+            <argument type="service" id="database_connection"/>
+            <argument>%hofff_contao_contact_profiles.sources%</argument>
+            <tag name="contao.migration"/>
+        </service>
+
+        <!-- Repository -->
+        <service id="Hofff\Contao\ContactProfiles\Model\ContactProfileRepository" public="true">
+            <argument type="service" id="database_connection"/>
+            <argument type="service" id="contao.security.token_checker"/>
+        </service>
+
+        <!-- Url Generator -->
+        <service id="Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator" public="true">
+            <argument type="service" id="contao.framework" />
+            <argument type="service" id="database_connection" />
+        </service>
 
         <!-- Queries -->
         <service id="Hofff\Contao\ContactProfiles\Query\PublishedContactProfilesQuery" public="true">
+            <argument type="service" id="database_connection"/>
+        </service>
+
+        <service id="Hofff\Contao\ContactProfiles\Query\PublishedContactProfilesByCategoriesQuery" public="true">
             <argument type="service" id="database_connection"/>
         </service>
 
@@ -58,6 +92,45 @@
         <service id="Hofff\Contao\ContactProfiles\Renderer\Field\JumpToFieldRenderer">
             <argument type="service" id="contao.framework" />
             <tag name="hofff_contao_contact_profiles.field_renderer" field="jumpTo" />
+        </service>
+
+        <service id="Hofff\Contao\ContactProfiles\Renderer\Field\WebsiteFieldRenderer">
+            <argument type="service" id="contao.framework" />
+            <tag name="hofff_contao_contact_profiles.field_renderer" field="website" />
+        </service>
+
+        <service id="Hofff\Contao\ContactProfiles\Renderer\Field\VideosFieldRenderer">
+            <argument type="service" id="contao.framework" />
+            <argument type="service" id="Hofff\Contao\Consent\Bridge\ConsentToolManager" />
+            <tag name="hofff_contao_contact_profiles.field_renderer" field="videos" />
+        </service>
+
+        <service id="Hofff\Contao\ContactProfiles\Renderer\Field\GalleryFieldRenderer">
+            <argument type="service" id="contao.framework" />
+            <argument>%kernel.project_dir%</argument>
+            <tag name="hofff_contao_contact_profiles.field_renderer" field="gallery" />
+        </service>
+
+        <service id="Hofff\Contao\ContactProfiles\Picker\ContactProfilePickerProvider">
+            <argument type="service" id="knp_menu.factory"/>
+            <argument type="service" id="router"/>
+            <argument type="service" id="translator" on-invalid="null"/>
+            <argument type="service" id="security.helper"/>
+            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\ContactProfileRepository"/>
+            <tag name="contao.picker_provider"/>
+        </service>
+
+        <!-- Social tags -->
+        <service id="Hofff\Contao\ContactProfiles\SocialTags\ContactProfileExtractor">
+            <argument type="service" id="contao.framework"/>
+            <argument type="service" id="request_stack"/>
+            <argument>%kernel.project_dir%</argument>
+            <tag name="Hofff\Contao\SocialTags\Data\Extractor"/>
+        </service>
+
+        <service id="Hofff\Contao\ContactProfiles\SocialTags\SocialTagsGenerator" public="true">
+            <argument type="service" id="request_stack"/>
+            <argument type="service" id="Hofff\Contao\SocialTags\Data\SocialTagsFactory" on-invalid="ignore"/>
         </service>
     </services>
 </container>

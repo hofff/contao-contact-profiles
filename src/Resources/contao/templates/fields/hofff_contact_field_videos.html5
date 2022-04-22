@@ -1,0 +1,21 @@
+<?php $this->extend($this->defaultTemplate) ?>
+
+<?php $this->block('value') ?>
+<ul>
+<?php foreach ($this->value as $video): ?>
+  <li class="contact-profile-video contact-profile-video-<?= $video['videoSource'] ?>">
+    <?php if ($this->activeConsentTool && $consentId = $this->renderer->consentId($video['videoSource'])): ?>
+      <?php
+        $videoModel = new class extends \Contao\Model {
+            protected static $strTable = 'tl_hofff_contact_profile_video';
+        };
+        $videoModel->setRow($video);
+    ?>
+      <?= $this->activeConsentTool->renderContent($this->renderVideo($video), $consentId, $videoModel, 'hofff_contact_consent_placeholder_video') ?>
+    <?php else: ?>
+      <?= $this->renderVideo($video) ?>
+    <?php endif ?>
+  </li>
+<?php endforeach ?>
+</ul>
+<?php $this->endblock() ?>

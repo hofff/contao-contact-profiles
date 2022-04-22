@@ -1,0 +1,9 @@
+<?php $this->extend('hofff_contact_profile_default') ?>
+
+<?php $this->block('after') ?>
+<?php if ($detailUrl = $this->renderer->generateDetailUrl($this->profile)): ?>
+    <a href="<?= $detailUrl ?>" class="more">
+        <?= $this->renderer->moreLabel() ?>
+    </a>
+<?php endif ?>
+<?php $this->endblock() ?>

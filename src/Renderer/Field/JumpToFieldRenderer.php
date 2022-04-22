@@ -10,14 +10,16 @@ use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
 
 final class JumpToFieldRenderer extends AbstractFieldRenderer
 {
-    protected const TEMPLATE = 'hofff_contact_field_jump_to';
+    /** @var string|null */
+    protected $template = 'hofff_contact_field_jump_to';
 
     /** @param mixed $value */
-    protected function compile(FrontendTemplate $template, $value, ContactProfileRenderer $renderer) : void
+    protected function compile(FrontendTemplate $template, $value, ContactProfileRenderer $renderer): void
     {
         $template->label = $renderer->moreLabel();
 
         $value = $this->framework->getAdapter(PageModel::class)->findByPk($value);
+        /** @psalm-suppress RedundantConditionGivenDocblockType - Psalm is confused by adapters type declaration */
         if (! $value instanceof PageModel) {
             $template->value = null;
 

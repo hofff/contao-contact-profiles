@@ -5,20 +5,22 @@ declare(strict_types=1);
 namespace Hofff\Contao\ContactProfiles\Renderer\Field;
 
 use Contao\Controller;
-use Contao\CoreBundle\Framework\ContaoFrameworkInterface;
+use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\FilesModel;
 use Contao\FrontendTemplate;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
+
 use function is_file;
 
 final class ImageFieldRenderer extends AbstractFieldRenderer
 {
-    protected const TEMPLATE = 'hofff_contact_field_image';
+    /** @var string|null */
+    protected $template = 'hofff_contact_field_image';
 
     /** @var string */
     private $projectDir;
 
-    public function __construct(ContaoFrameworkInterface $framework, string $projectDir)
+    public function __construct(ContaoFramework $framework, string $projectDir)
     {
         parent::__construct($framework);
 
@@ -26,11 +28,10 @@ final class ImageFieldRenderer extends AbstractFieldRenderer
     }
 
     /** @param mixed $value */
-    protected function compile(FrontendTemplate $template, $value, ContactProfileRenderer $renderer) : void
+    protected function compile(FrontendTemplate $template, $value, ContactProfileRenderer $renderer): void
     {
-        /** @var FilesModel $model */
         $model = $this->framework->getAdapter(FilesModel::class)->findByUuid($value);
-        if (! $model || ! is_file($this->projectDir . '/' . $model->path)) {
+        if (! $model instanceof FilesModel || ! is_file($this->projectDir . '/' . $model->path)) {
             return;
         }
 
@@ -41,8 +42,10 @@ final class ImageFieldRenderer extends AbstractFieldRenderer
 
         $this->framework->getAdapter(Controller::class)->addImageToTemplate($template, $image, null, null, $model);
 
-        if ($template->profile['caption']) {
-            $template->caption = $template->profile['caption'];
+        if (! $template->profile['caption']) {
+            return;
         }
+
+        $template->caption = $template->profile['caption'];
     }
 }

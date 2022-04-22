@@ -1,7 +1,15 @@
 <div class="contact-profile">
+    <?php $this->block('before') ?>
+    <?php $this->endblock() ?>
+
+    <?php $this->block('fields') ?>
     <?php foreach ($this->fields as $field): ?>
-    <?php if ($this->has($field)): ?>
-        <?= $this->renderer->parseField($field, $this->profile) ?>
-    <?php endif ?>
+        <?php if ($this->has($field)): ?>
+            <?= $this->renderer->parseField($field, $this->profile) ?>
+        <?php endif ?>
     <?php endforeach ?>
+    <?php $this->endblock() ?>
+
+    <?php $this->block('after') ?>
+    <?php $this->endblock() ?>
 </div>

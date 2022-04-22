@@ -7,7 +7,7 @@ namespace Hofff\Contao\ContactProfiles\Event;
 use Contao\ContentElement;
 use Contao\Module;
 use Contao\PageModel;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 final class LoadContactProfilesEvent extends Event
 {
@@ -22,17 +22,22 @@ final class LoadContactProfilesEvent extends Event
     /** @var string[][] */
     private $profiles = [];
 
+    /** @var string[] */
+    private $sources;
+
     /**
      * @param ContentElement|Module $context
+     * @param string[]              $sources
      */
-    public function __construct($context, PageModel $page)
+    public function __construct($context, PageModel $page, array $sources = [])
     {
         $this->context = $context;
         $this->page    = $page;
+        $this->sources = $sources;
     }
 
     /** @param string[][] $profiles */
-    public function setProfiles(array $profiles) : void
+    public function setProfiles(array $profiles): void
     {
         $this->profiles = $profiles;
     }
@@ -43,14 +48,20 @@ final class LoadContactProfilesEvent extends Event
         return $this->context;
     }
 
-    public function page() : PageModel
+    public function page(): PageModel
     {
         return $this->page;
     }
 
     /** @return string[][] */
-    public function profiles() : array
+    public function profiles(): array
     {
         return $this->profiles;
+    }
+
+    /** @return list<string> */
+    public function sources(): array
+    {
+        return $this->sources;
     }
 }

@@ -37,7 +37,7 @@ $GLOBALS['TL_DCA']['tl_contact_category'] = [
                 'href'  => 'table=tl_contact_responsibility',
                 'class' => 'header_hofff_contact_responsibility',
             ],
-            'social_accounts' => [
+            'social_accounts'  => [
                 'label' => &$GLOBALS['TL_LANG']['tl_contact_category']['social_accounts'],
                 'href'  => 'table=tl_contact_social_account',
                 'class' => 'header_hofff_contact_social_accounts',
@@ -58,7 +58,8 @@ $GLOBALS['TL_DCA']['tl_contact_category'] = [
                 'label'      => &$GLOBALS['TL_LANG']['tl_contact_category']['delete'],
                 'href'       => 'act=delete',
                 'icon'       => 'delete.gif',
-                'attributes' => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"',
+                'attributes' => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm']
+                    . '\')) return false; Backend.getScrollOffset();"',
             ],
             'show'       => [
                 'label' => &$GLOBALS['TL_LANG']['tl_contact_category']['show'],
@@ -69,23 +70,31 @@ $GLOBALS['TL_DCA']['tl_contact_category'] = [
     ],
 
     // Palettes
-    'palettes' => ['default' => '{title_legend},title'],
+    'palettes' => ['default' => '{title_legend},title,jumpTo'],
 
     // Fields
     'fields'   => [
-        'id'         => [
+        'id'     => [
             'label'  => ['ID'],
             'search' => true,
             'sql'    => 'int(10) unsigned NOT NULL auto_increment',
         ],
-        'tstamp'     => ['sql' => "int(10) unsigned NOT NULL default '0'"],
-        'title' => [
+        'tstamp' => ['sql' => "int(10) unsigned NOT NULL default '0'"],
+        'title'  => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_category']['title'],
             'exclude'   => true,
             'search'    => true,
             'inputType' => 'text',
             'eval'      => ['mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50'],
             'sql'       => 'varchar(255) NOT NULL default \'\'',
+        ],
+        'jumpTo' => [
+            'exclude'    => true,
+            'inputType'  => 'pageTree',
+            'foreignKey' => 'tl_page.title',
+            'eval'       => ['fieldType' => 'radio', 'tl_class' => 'clr'],
+            'sql'        => 'int(10) unsigned NOT NULL default 0',
+            'relation'   => ['type' => 'hasOne', 'load' => 'lazy'],
         ],
     ],
 ];

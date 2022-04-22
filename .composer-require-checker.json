@@ -6,6 +6,20 @@
     "Contao\\ManagerPlugin\\Bundle\\BundlePluginInterface",
     "Contao\\ManagerPlugin\\Bundle\\Parser\\ParserInterface",
     "Contao\\ManagerPlugin\\Bundle\\Config\\BundleConfig",
-    "TL_MODE"
+    "Contao\\NewsBundle\\ContaoNewsBundle",
+    "Contao\\CalendarBundle\\ContaoCalendarBundle",
+    "Contao\\FaqBundle\\ContaoFaqBundle",
+    "Contao\\NewsModel",
+    "Contao\\NewsArchiveModel",
+    "Contao\\CalendarModel",
+    "Contao\\CalendarEventsModel",
+    "Contao\\FaqModel",
+    "Contao\\FaqCategoryModel",
+    "TL_MODE",
+    "Hofff\\Contao\\SocialTags\\Data\\Data",
+    "Hofff\\Contao\\SocialTags\\Data\\Extractor\\AbstractExtractor",
+    "Hofff\\Contao\\SocialTags\\Data\\OpenGraph\\OpenGraphImageData",
+    "Hofff\\Contao\\SocialTags\\Data\\OpenGraph\\OpenGraphType",
+    "Hofff\\Contao\\SocialTags\\Util\\TypeUtil"
   ]
 }
