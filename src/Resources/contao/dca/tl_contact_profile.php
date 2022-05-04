@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Contao\Config;
-use Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
 use Hofff\Contao\ContactProfiles\EventListener\Dca\AccountTypeOptions;
 use Hofff\Contao\ContactProfiles\EventListener\Dca\ContactProfileDcaListener;
 
@@ -400,8 +399,8 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             ],
             'sql'           => [
                 'type'    => 'blob',
-                'length'  => AbstractMySQLPlatform::LENGTH_LIMIT_BLOB,
                 'notnull' => false,
+                'default' => null,
             ],
         ],
         'gallery'          => [
@@ -419,16 +418,16 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             ],
             'sql'       => [
                 'type'    => 'blob',
-                'length'  => AbstractMySQLPlatform::LENGTH_LIMIT_BLOB,
                 'notnull' => false,
+                'default' => null,
             ],
         ],
         'galleryOrder'     => [
             'label' => &$GLOBALS['TL_LANG']['MSC']['sortOrder'],
             'sql'   => [
                 'type'    => 'blob',
-                'length'  => AbstractMySQLPlatform::LENGTH_LIMIT_BLOB,
                 'notnull' => false,
+                'default' => null,
             ],
         ],
     ],
