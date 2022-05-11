@@ -30,7 +30,7 @@
     "source": "https://github.com/hofff/contao-contact-profiles"
   },
   "require": {
-    "php": "^7.2 || ^8.0",
+    "php": "^7.4 || ^8.0",
     "ext-pdo": "*",
     "ausi/slug-generator": "^1.1",
     "contao/core-bundle": "^4.9",
@@ -54,7 +54,8 @@
     "contao/news-bundle": "^4.9",
     "doctrine/coding-standard": "^8.0",
     "hofff/contao-social-tags": "^1.1",
-    "phpcq/runner-bootstrap": "^1.0@dev"
+    "phpcq/runner-bootstrap": "^1.0@dev",
+    "terminal42/dc_multilingual": "^4.2"
   },
   "conflict": {
     "contao/calendar-bundle": "<4.9 || >=5.0",
@@ -67,7 +68,8 @@
     "contao/calendar-bundle": "Use contact profile for author information",
     "contao/faq-bundle": "Use contact profile for author information",
     "contao/news-bundle": "Use contact profile for author information",
-    "hofff/contao-social-tags": "Generate open graph and twitter cards social tags"
+    "hofff/contao-social-tags": "Generate open graph and twitter cards social tags",
+    "terminal42/dc_multilingual": "For multilingual contact profiles"
   },
   "autoload": {
     "psr-4": {
