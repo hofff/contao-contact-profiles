@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\Reference;
 
 use function sprintf;
 
-final class ImageFieldRendererPass implements CompilerPassInterface
+final class FieldRendererPass implements CompilerPassInterface
 {
     use PriorityTaggedServiceTrait;
 
