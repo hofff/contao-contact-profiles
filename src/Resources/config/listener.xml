@@ -32,7 +32,7 @@
         </service>
 
         <service id="Hofff\Contao\ContactProfiles\EventListener\Dca\ContactProfileOptions" public="true">
-            <argument type="service" id="Hofff\Contao\ContactProfiles\Query\CategorizedContactProfilesQuery" />
+            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository" />
         </service>
 
         <service id="Hofff\Contao\ContactProfiles\EventListener\Dca\SourcesOptions" public="true">

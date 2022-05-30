@@ -4,28 +4,35 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\EventListener\Dca;
 
-use Hofff\Contao\ContactProfiles\Query\CategorizedContactProfilesQuery;
+use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
+use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
 
+use function assert;
 use function sprintf;
 
 final class ContactProfileOptions
 {
-    /** @var CategorizedContactProfilesQuery */
-    private $query;
+    private ProfileRepository $profiles;
 
-    public function __construct(CategorizedContactProfilesQuery $query)
+    public function __construct(ProfileRepository $profiles)
     {
-        $this->query = $query;
+        $this->profiles = $profiles;
     }
 
     /** @return string[] */
     public function __invoke(): array
     {
-        $result  = ($this->query)();
+        $collection = $this->profiles->findAll(['language' => $GLOBALS['TL_LANGUAGE']]);
         $options = [];
 
-        foreach ($result as $row) {
-            $options[$row['id']] = sprintf('%s %s [%s]', $row['lastname'], $row['firstname'], $row['category']);
+        foreach ($collection ?: [] as $profile) {
+            assert($profile instanceof Profile);
+            $options[$profile->profileId()] = sprintf(
+                '%s %s [%s]',
+                $profile->lastname,
+                $profile->firstname,
+                $profile->getRelated('pid')->title
+            );
         }
 
         return $options;
