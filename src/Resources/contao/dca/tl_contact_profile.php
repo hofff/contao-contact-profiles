@@ -51,7 +51,7 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'label'      => &$GLOBALS['TL_LANG']['tl_contact_profile']['delete'],
                 'href'       => 'act=delete',
                 'icon'       => 'delete.gif',
-                'attributes' => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm']
+                'attributes' => 'onclick="if (!confirm(\'' . ($GLOBALS['TL_LANG']['MSC']['deleteConfirm'] ?? '')
                     . '\')) return false; Backend.getScrollOffset();"',
             ],
             'toggle' => [
@@ -87,7 +87,13 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             'search' => true,
             'sql'    => 'int(10) unsigned NOT NULL auto_increment',
         ],
-        'pid'              => ['sql' => "int(10) unsigned NOT NULL default '0'"],
+        'pid'              => [
+            "relation" => [
+                'type' => 'belongsTo',
+                'table' => 'tl_contact_category',
+            ],
+            'sql' => "int(10) unsigned NOT NULL default '0'"
+        ],
         'tstamp'           => ['sql' => "int(10) unsigned NOT NULL default '0'"],
         'alias'            => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['alias'],
