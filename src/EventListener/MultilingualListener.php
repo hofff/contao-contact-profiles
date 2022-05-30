@@ -49,15 +49,15 @@ final class MultilingualListener
         }
 
         $definition = $this->dcaManager->getDefinition($table);
-        $definition->modify(['config', 'dataContainer'], [$this, 'modifyConfigDefinition']);
+        $definition->modify(['config'], [$this, 'modifyConfigDefinition']);
         $definition->modify(['fields'], $this->modifyFieldsDefinition($translatableFields));
     }
 
-    private function modifyConfigDefinition(array $config): array
+    public function modifyConfigDefinition(array $config): array
     {
-        $config['dataContainer'] = Driver::class;
-        $config['langColumn']    = 'multilingual_language';
-        $config['langPid']       = 'multilingual_pid';
+        $config['dataContainer']  = Driver::class;
+        $config['langColumnName'] = 'multilingual_language';
+        $config['langPid']        = 'multilingual_pid';
 
         if ($this->languages) {
             $config['languages'] = $this->languages;
@@ -76,12 +76,12 @@ final class MultilingualListener
     {
         return static function (array $fields) use ($translatableFields): array {
             $fields['multilingual_language']['sql'] = [
-                'types'   => Types::STRING,
+                'type'   => Types::STRING,
                 'length'  => 5,
                 'default' => '',
             ];
             $fields['multilingual_pid']['sql']      = [
-                'types'    => Types::INTEGER,
+                'type'    => Types::INTEGER,
                 'unsigned' => true,
                 'default'  => 0,
             ];

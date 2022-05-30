@@ -6,6 +6,7 @@ namespace Hofff\Contao\ContactProfiles\Renderer\Field;
 
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\FrontendTemplate;
+use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Hofff\Contao\ContactProfiles\Query\ResponsibilitiesQuery;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
 
@@ -25,8 +26,12 @@ final class ResponsibilitiesRenderer extends AbstractFieldRenderer
     }
 
     /** @param mixed $value */
-    protected function compile(FrontendTemplate $template, $value, ContactProfileRenderer $renderer): void
-    {
+    protected function compile(
+        FrontendTemplate $template,
+        $value,
+        Profile $profile,
+        ContactProfileRenderer $renderer
+    ): void {
         $template->value = ($this->query)((array) $value);
     }
 }

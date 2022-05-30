@@ -9,7 +9,7 @@ use Contao\Input;
 use Contao\StringUtil;
 use Contao\System;
 use Hofff\Contao\ContactProfiles\Event\LoadContactProfilesEvent;
-use Hofff\Contao\ContactProfiles\Model\ContactProfileRepository;
+use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -58,8 +58,8 @@ trait ContactProfileInitialsFilterTrait
     {
         $letters = array_fill_keys(range('a', 'z'), 0);
         $special = 0;
-        /** @psalm-var ContactProfileRepository $repository */
-        $repository = System::getContainer()->get(ContactProfileRepository::class);
+        /** @psalm-var ProfileRepository $repository */
+        $repository = System::getContainer()->get(ProfileRepository::class);
 
         switch ($this->hofff_contact_source) {
             case 'dynamic':
@@ -70,7 +70,7 @@ trait ContactProfileInitialsFilterTrait
                 $eventDispatcher->dispatch($event, $event::NAME);
 
                 foreach ($event->profiles() as $profile) {
-                    $letter = iconv('UTF-8', 'ASCII//TRANSLIT', substr($profile['lastname'], 0, 1));
+                    $letter = iconv('UTF-8', 'ASCII//TRANSLIT', substr($profile->lastname, 0, 1));
                     if (isset($letters[$letter])) {
                         $letters[$letter] ++;
                     } else {

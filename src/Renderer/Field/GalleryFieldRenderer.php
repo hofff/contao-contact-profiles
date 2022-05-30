@@ -12,6 +12,7 @@ use Contao\FrontendTemplate;
 use Contao\Model\Collection;
 use Contao\StringUtil;
 use Exception;
+use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
 use stdClass;
 
@@ -42,23 +43,26 @@ final class GalleryFieldRenderer extends AbstractFieldRenderer
     }
 
     /** @param mixed $value */
-    protected function compile(FrontendTemplate $template, $value, ContactProfileRenderer $renderer): void
-    {
-        $images          = $this->fetchImagesOrderedByCustomOrder((array) $value, $template->profile);
+    protected function compile(
+        FrontendTemplate $template,
+        $value,
+        Profile $profile,
+        ContactProfileRenderer $renderer
+    ): void {
+        $images = $this->fetchImagesOrderedByCustomOrder((array) $value, $profile);
         $template->value = $this->compileImages($images, $renderer->imageSize());
     }
 
     /**
      * Apply custom sorting.
      *
-     * @param list<string>        $uuids
-     * @param array<string,mixed> $profile
+     * @param list<string> $uuids
      *
      * @return list<array<string,mixed>>
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function fetchImagesOrderedByCustomOrder(array $uuids, array $profile): array
+    protected function fetchImagesOrderedByCustomOrder(array $uuids, Profile $profile): array
     {
         $collection = FilesModel::findMultipleByUuids($uuids);
         if (! $collection instanceof Collection) {
@@ -66,7 +70,7 @@ final class GalleryFieldRenderer extends AbstractFieldRenderer
         }
 
         $images = $this->prepareFiles($collection);
-        $tmp    = StringUtil::deserialize($profile['galleryOrder']);
+        $tmp    = StringUtil::deserialize($profile->galleryOrder);
 
         if (empty($tmp) || ! is_array($tmp)) {
             return $images;

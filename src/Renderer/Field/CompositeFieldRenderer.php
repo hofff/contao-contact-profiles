@@ -6,6 +6,7 @@ namespace Hofff\Contao\ContactProfiles\Renderer\Field;
 
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\FrontendTemplate;
+use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
 use Hofff\Contao\ContactProfiles\Renderer\FieldRenderer;
 
@@ -25,7 +26,7 @@ final class CompositeFieldRenderer extends AbstractFieldRenderer
     }
 
     /** {@inheritDoc} */
-    public function __invoke(string $field, $value, ContactProfileRenderer $renderer, array $profile): ?string
+    public function __invoke(string $field, $value, ContactProfileRenderer $renderer, Profile $profile): ?string
     {
         if (isset($this->renderer[$field])) {
             return $this->renderer[$field]($field, $value, $renderer, $profile);
@@ -35,7 +36,7 @@ final class CompositeFieldRenderer extends AbstractFieldRenderer
     }
 
     /** @param mixed $value */
-    protected function compile(FrontendTemplate $template, $value, ContactProfileRenderer $renderer): void
+    protected function compile(FrontendTemplate $template, $value, Profile $profile, ContactProfileRenderer $renderer): void
     {
     }
 }

@@ -8,7 +8,7 @@ use Contao\File;
 use Contao\FilesModel;
 use Contao\Model;
 use Contao\PageModel;
-use Hofff\Contao\ContactProfiles\Model\ContactProfile;
+use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Hofff\Contao\SocialTags\Data\Extractor\AbstractExtractor;
 use Hofff\Contao\SocialTags\Data\OpenGraph\OpenGraphImageData;
 use Hofff\Contao\SocialTags\Data\OpenGraph\OpenGraphType;
@@ -26,7 +26,7 @@ final class ContactProfileExtractor extends AbstractExtractor
 {
     public function supports(Model $reference, ?Model $fallback = null): bool
     {
-        if (! $reference instanceof ContactProfile) {
+        if (! $reference instanceof Profile) {
             return false;
         }
 
@@ -48,7 +48,7 @@ final class ContactProfileExtractor extends AbstractExtractor
     /**
      * @param string|resource $strImage
      */
-    private function extractOpenGraphImageData(ContactProfile $contactProfile): OpenGraphImageData
+    private function extractOpenGraphImageData(Profile $contactProfile): OpenGraphImageData
     {
         $imageData = new OpenGraphImageData();
         if ($contactProfile->image === null) {
@@ -68,7 +68,7 @@ final class ContactProfileExtractor extends AbstractExtractor
         return $imageData;
     }
 
-    private function extractOpenGraphTitle(ContactProfile $contactProfile): ?string
+    private function extractOpenGraphTitle(Profile $contactProfile): ?string
     {
         $title = $contactProfile->firstname . ' ' . $contactProfile->lastname;
         if (TypeUtil::isStringWithContent($title)) {
@@ -81,12 +81,12 @@ final class ContactProfileExtractor extends AbstractExtractor
     /**
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    private function extractOpenGraphUrl(ContactProfile $contactProfile): string
+    private function extractOpenGraphUrl(Profile $contactProfile): string
     {
         return $GLOBALS['objPage']->getAbsoluteurl('/' . $contactProfile->alias);
     }
 
-    private function extractOpenGraphDescription(ContactProfile $contactProfile): ?string
+    private function extractOpenGraphDescription(Profile $contactProfile): ?string
     {
         if (! TypeUtil::isStringWithContent($contactProfile->teaser)) {
             return null;
@@ -102,7 +102,7 @@ final class ContactProfileExtractor extends AbstractExtractor
     }
 
     /** @SuppressWarnings(PHPMD.UnusedFormalParameter) */
-    private function extractOpenGraphSiteName(ContactProfile $contactProfile, PageModel $fallback): string
+    private function extractOpenGraphSiteName(Profile $contactProfile, PageModel $fallback): string
     {
         return strip_tags($fallback->rootPageTitle ?: $fallback->rootTitle);
     }

@@ -6,26 +6,24 @@ namespace Hofff\Contao\ContactProfiles\EventListener;
 
 use Contao\CoreBundle\Event\PreviewUrlCreateEvent;
 use Contao\CoreBundle\Framework\ContaoFramework;
-use Hofff\Contao\ContactProfiles\Model\ContactProfileRepository;
+use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
+use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 final class PreviewUrlCreateListener
 {
-    /** @var RequestStack */
-    private $requestStack;
+    private RequestStack $requestStack;
 
-    /** @var ContaoFramework */
-    private $framework;
+    private ContaoFramework $framework;
 
-    /** @var ContactProfileRepository */
-    private $contactProfiles;
+    private ProfileRepository $contactProfiles;
 
     public function __construct(
         RequestStack $requestStack,
         ContaoFramework $framework,
-        ContactProfileRepository $repository
+        ProfileRepository $repository
     ) {
         $this->requestStack    = $requestStack;
         $this->framework       = $framework;
@@ -53,24 +51,21 @@ final class PreviewUrlCreateListener
             return;
         }
 
-        $contactProfile = $this->contactProfiles->fetchById($this->getId($event, $request));
-        if ($contactProfile === null) {
+        $contactProfile = $this->contactProfiles->find($this->getId($event, $request));
+        if (! $contactProfile instanceof Profile) {
             return;
         }
 
-        $event->setQuery('hofff_contact_profile=' . $contactProfile['id']);
+        $event->setQuery('hofff_contact_profile=' . $contactProfile->profileId());
     }
 
-    /**
-     * @return int|string
-     */
-    private function getId(PreviewUrlCreateEvent $event, Request $request)
+    private function getId(PreviewUrlCreateEvent $event, Request $request): int
     {
         // Overwrite the ID if the contact profile settings are edited
         if ($request->query->get('table') === 'tl_contact_profile' && $request->query->get('act') === 'edit') {
             return $request->query->getInt('id');
         }
 
-        return $event->getId();
+        return (int) $event->getId();
     }
 }

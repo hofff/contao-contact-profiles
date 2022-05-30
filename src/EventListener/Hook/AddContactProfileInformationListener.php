@@ -6,21 +6,21 @@ namespace Hofff\Contao\ContactProfiles\EventListener\Hook;
 
 use Contao\StringUtil;
 use Contao\Template;
-use Hofff\Contao\ContactProfiles\Model\ContactProfileRepository;
+use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
 use Hofff\Contao\ContactProfiles\Util\ContactProfileUtil;
 
 use function strpos;
 
 final class AddContactProfileInformationListener
 {
-    /** @var ContactProfileRepository */
-    private $repository;
+    /** @var ProfileRepository */
+    private ProfileRepository $repository;
 
     /** @var string[] */
-    private $templatePrefixes;
+    private array $templatePrefixes;
 
     /** @param string[] $templatePrefixes */
-    public function __construct(ContactProfileRepository $repository, array $templatePrefixes)
+    public function __construct(ProfileRepository $repository, array $templatePrefixes)
     {
         $this->repository       = $repository;
         $this->templatePrefixes = $templatePrefixes;

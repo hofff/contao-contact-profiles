@@ -9,7 +9,7 @@ use Contao\Database;
 use Contao\Date;
 use Contao\PageModel;
 use Doctrine\DBAL\Connection;
-use Hofff\Contao\ContactProfiles\Model\ContactProfileRepository;
+use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
 use Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator;
 
 use function is_int;
@@ -17,22 +17,18 @@ use function is_string;
 
 final class GetSearchablePagesListener
 {
-    /** @var ContaoFramework */
-    private $framework;
+    private ContaoFramework $framework;
 
-    /** @var Connection */
-    private $connection;
+    private Connection $connection;
 
-    /** @var ContactProfileRepository */
-    private $contactProfiles;
+    private ProfileRepository $contactProfiles;
 
-    /** @var ContactProfileUrlGenerator */
-    private $urlGenerator;
+    private ContactProfileUrlGenerator $urlGenerator;
 
     public function __construct(
         ContaoFramework $framework,
         Connection $connection,
-        ContactProfileRepository $contactProfiles,
+        ProfileRepository $contactProfiles,
         ContactProfileUrlGenerator $urlGenerator
     ) {
         $this->framework       = $framework;
@@ -52,7 +48,7 @@ final class GetSearchablePagesListener
 
         foreach ($this->contactProfiles->fetchPublishedByCategories($categoryIds) as $contactProfile) {
             // Detail page of the category is overridden by the contact profile. Page is already processed by Contao.
-            if ($contactProfile['jumpTo'] > 0) {
+            if ($contactProfile->jumpTo > 0) {
                 continue;
             }
 

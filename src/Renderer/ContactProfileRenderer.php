@@ -7,6 +7,7 @@ namespace Hofff\Contao\ContactProfiles\Renderer;
 use Contao\FrontendTemplate;
 use Contao\StringUtil;
 use Hofff\Contao\Consent\Bridge\ConsentId;
+use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator;
 
 use function array_map;
@@ -129,17 +130,16 @@ final class ContactProfileRenderer
         return $this->consentIds[$type] ?? null;
     }
 
-    /** @param string[] $profile */
-    public function render(array $profile): string
+    public function render(Profile $profile): string
     {
         $template = new FrontendTemplate($this->template);
         $template->setData(
             [
                 'renderer' => $this,
                 'fields'   => $this->fields,
-                'profile'  => array_map([StringUtil::class, 'deserialize'], $profile),
+                'profile'  => $profile,
                 'has'      => static function (string $field) use ($template): bool {
-                    return ! empty($template->profile[$field]);
+                    return ! empty($template->profile->$field);
                 },
             ]
         );
@@ -148,15 +148,15 @@ final class ContactProfileRenderer
     }
 
     /** @param string[] $profile */
-    public function generateDetailUrl(array $profile): ?string
+    public function generateDetailUrl(Profile $profile): ?string
     {
         return $this->urlGenerator->generateDetailUrl($profile);
     }
 
     /** @param string[] $profile */
-    public function parseField(string $field, array $profile): string
+    public function parseField(string $field, Profile $profile): string
     {
-        $raw = StringUtil::deserialize($profile[$field] ?? null);
+        $raw = StringUtil::deserialize($profile->$field);
 
         return ($this->fieldRenderer)($field, $raw, $this, $profile) ?? '';
     }

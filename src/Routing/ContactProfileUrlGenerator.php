@@ -8,6 +8,7 @@ use Contao\CoreBundle\Framework\Adapter;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\PageModel;
 use Doctrine\DBAL\Connection;
+use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use InvalidArgumentException;
 use PDO;
 
@@ -38,31 +39,28 @@ final class ContactProfileUrlGenerator
     }
 
     /**
-     * @param array<string,mixed> $profile
-     *
      * @psalm-suppress InvalidReturnType
      * @psalm-suppress InvalidReturnStatement
      */
-    public function getDetailPage(array $profile): ?PageModel
+    public function getDetailPage(Profile $profile): ?PageModel
     {
-        if ($profile['jumpTo']) {
-            return $this->framework->getAdapter(PageModel::class)->findByPk($profile['jumpTo']);
+        if ($profile->jumpTo) {
+            return $this->framework->getAdapter(PageModel::class)->findByPk($profile->jumpTo);
         }
 
-        if (! array_key_exists($profile['pid'], $this->categoryDetailPages)) {
-            $this->categoryDetailPages[$profile['pid']] = $this->fetchCategoryDetailPage((int) $profile['pid']);
+        if (! array_key_exists($profile->pid, $this->categoryDetailPages)) {
+            $this->categoryDetailPages[$profile->pid] = $this->fetchCategoryDetailPage((int) $profile->pid);
         }
 
-        return $this->categoryDetailPages[$profile['pid']];
+        return $this->categoryDetailPages[$profile->pid];
     }
 
-    /** @param array<string,mixed> $profile */
     public function generateUrlWithPage(
-        array $profile,
+        Profile $profile,
         PageModel $pageModel,
         int $referenceType = self::ABSOLUTE_PATH
     ): string {
-        $slug = '/' . ($profile['alias'] ?: $profile['id']);
+        $slug = '/' . ($profile->alias ?: $profile->profileId());
 
         switch ($referenceType) {
             case self::ABSOLUTE_PATH:
@@ -81,8 +79,7 @@ final class ContactProfileUrlGenerator
         }
     }
 
-    /** @param array<string,mixed> $profile */
-    public function generateDetailUrl(array $profile, int $referenceType = self::ABSOLUTE_PATH): ?string
+    public function generateDetailUrl(Profile $profile, int $referenceType = self::ABSOLUTE_PATH): ?string
     {
         $page = $this->getDetailPage($profile);
         if ($page === null) {

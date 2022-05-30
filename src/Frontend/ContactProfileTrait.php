@@ -12,7 +12,9 @@ use Contao\Pagination;
 use Contao\StringUtil;
 use Contao\System;
 use Hofff\Contao\ContactProfiles\Event\LoadContactProfilesEvent;
-use Hofff\Contao\ContactProfiles\Model\ContactProfileRepository;
+use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
+use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
+use Hofff\Contao\ContactProfiles\Model\Profile\Specification\InitialLastnameLetterSpecification;
 use Hofff\Contao\ContactProfiles\Util\ContactProfileUtil;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -45,13 +47,13 @@ trait ContactProfileTrait
         $this->Template->profiles      = $profiles;
         $this->Template->pagination    = $this->generatePagination($total, $pageParameter);
         $this->Template->renderer      = $renderer;
-        $this->Template->renderProfile = static function (array $profile) use ($renderer): string {
+        $this->Template->renderProfile = static function (Profile $profile) use ($renderer): string {
             return $renderer->render($profile);
         };
     }
 
     /**
-     * @return string[][]
+     * @return Profile[]
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
@@ -71,31 +73,35 @@ trait ContactProfileTrait
             return $event->profiles();
         }
 
-        $criteria = $this->buildCriteria();
+        $specification = new InitialLastnameLetterSpecification((string) Input::get('auto_item'));
 
-        /** @psalm-var ContactProfileRepository $repository */
-        $repository = System::getContainer()->get(ContactProfileRepository::class);
-        $order      = $this->hofff_contact_profiles_order_sql ?: null;
+        /** @psalm-var ProfileRepository $repository */
+        $repository = System::getContainer()->get(ProfileRepository::class);
         /** @psalm-suppress RedundantCastGivenDocblockType */
-        $limit = (int) $this->numberOfItems;
+        $options = [
+            'order' => $this->hofff_contact_profiles_order_sql ?: null,
+            'limit' => (int) $this->numberOfItems,
+        ];
+
         /** @psalm-suppress RedundantCastGivenDocblockType */
         $perPage = (int) $this->perPage;
         if ($perPage > 0) {
-            $limit = $perPage;
+            $options['limit'] = $perPage;
         }
 
         switch ($this->hofff_contact_source) {
             case 'categories':
                 $categoryIds = StringUtil::deserialize($this->hofff_contact_categories, true);
 
-                return $repository->fetchPublishedByCategories($categoryIds, $limit, $offset, $order, $criteria);
+                $profiles = $repository->fetchPublishedByCategoriesAndSpecification($categoryIds, $specification, $options);
+
+                return $profiles ? $profiles->getModels() : [];
 
             case 'custom':
             default:
-                /** @psalm-var ContactProfileRepository $repository */
-                $repository = System::getContainer()->get(ContactProfileRepository::class);
                 $profileIds = StringUtil::deserialize($this->hofff_contact_profiles, true);
-                $profiles   = $repository->fetchPublishedByProfileIds($profileIds, $limit, $offset, $order, $criteria);
+                $profiles   = $repository->fetchPublishedByProfileIdsAndSpecification($profileIds, $specification, $options);
+                $profiles   = $profiles ? $profiles->getModels() : [];
                 $order      = StringUtil::deserialize($this->hofff_contact_profiles_order, true);
                 $profiles   = ContactProfileUtil::orderListByIds($profiles, $order);
 
@@ -124,8 +130,8 @@ trait ContactProfileTrait
     /** @param list<array<string,mixed>> $profiles */
     private function countTotal(array $profiles): int
     {
-        /** @psalm-var ContactProfileRepository $repository */
-        $repository = System::getContainer()->get(ContactProfileRepository::class);
+        /** @psalm-var ProfileRepository $repository */
+        $repository = System::getContainer()->get(ProfileRepository::class);
 
         switch ($this->hofff_contact_source) {
             case 'dynamic':

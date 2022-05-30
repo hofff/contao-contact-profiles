@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\SocialTags;
 
-use Hofff\Contao\ContactProfiles\Model\ContactProfile;
+use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Hofff\Contao\SocialTags\Data\Data;
 use Hofff\Contao\SocialTags\Data\SocialTagsFactory;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -23,8 +23,7 @@ final class SocialTagsGenerator
         $this->socialTagsFactory = $socialTagsFactory;
     }
 
-    /** @param array<string,mixed> $profile */
-    public function generate(array $profile): void
+    public function generate(Profile $profile): void
     {
         if ($this->socialTagsFactory === null) {
             return;
@@ -35,9 +34,6 @@ final class SocialTagsGenerator
             return;
         }
 
-        $model = new ContactProfile();
-        $model->setRow($profile);
-
-        $request->attributes->set(Data::class, $this->socialTagsFactory->generateByModel($model));
+        $request->attributes->set(Data::class, $this->socialTagsFactory->generateByModel($profile));
     }
 }

@@ -5,33 +5,35 @@ declare(strict_types=1);
 namespace Hofff\Contao\ContactProfiles\EventListener;
 
 use Contao\CoreBundle\Event\PreviewUrlConvertEvent;
-use Contao\CoreBundle\Framework\Adapter;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\PageModel;
 use Doctrine\DBAL\Connection;
-use Hofff\Contao\ContactProfiles\Model\ContactProfileRepository;
+use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
+use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
+use Netzmacht\Contao\Toolkit\Data\Model\RepositoryManager;
 use PDO;
 use Symfony\Component\HttpFoundation\Request;
 
 final class PreviewUrlConvertListener
 {
-    /** @var ContaoFramework */
-    private $framework;
+    private ContaoFramework $framework;
 
-    /** @var ContactProfileRepository */
-    private $contactProfiles;
+    private RepositoryManager $repositoryManager;
 
-    /** @var Connection */
-    private $connection;
+    private ProfileRepository $contactProfiles;
+
+    private Connection $connection;
 
     public function __construct(
         ContaoFramework $framework,
-        ContactProfileRepository $contactProfiles,
+        RepositoryManager $repositoryManager,
+        ProfileRepository $contactProfiles,
         Connection $connection
     ) {
-        $this->framework       = $framework;
-        $this->contactProfiles = $contactProfiles;
-        $this->connection      = $connection;
+        $this->repositoryManager = $repositoryManager;
+        $this->framework         = $framework;
+        $this->contactProfiles   = $contactProfiles;
+        $this->connection        = $connection;
     }
 
     /**
@@ -45,7 +47,7 @@ final class PreviewUrlConvertListener
 
         $request        = $event->getRequest();
         $contactProfile = $this->getContactProfile($request);
-        if ($contactProfile === null) {
+        if (! $contactProfile instanceof Profile) {
             return;
         }
 
@@ -54,37 +56,34 @@ final class PreviewUrlConvertListener
             return;
         }
 
-        $event->setUrl($detailPage->getPreviewUrl('/' . $contactProfile['alias'] ?: $contactProfile['id']));
+        $event->setUrl($detailPage->getPreviewUrl('/' . $contactProfile->alias ?: $contactProfile->profileId()));
     }
 
     /** @return string[]|null */
-    private function getContactProfile(Request $request): ?array
+    private function getContactProfile(Request $request): ?Profile
     {
         if (! $request->query->has('hofff_contact_profile')) {
             return null;
         }
 
-        return $this->contactProfiles->fetchById($request->query->getInt('hofff_contact_profile'));
+        return $this->contactProfiles->find($request->query->getInt('hofff_contact_profile'));
     }
 
     /**
-     * @param string[] $contactProfile
-     *
      * @psalm-suppress InvalidReturnType
      * @psalm-suppress InvalidReturnStatement
      */
-    private function getDetailPage(array $contactProfile): ?PageModel
+    private function getDetailPage(Profile $contactProfile): ?PageModel
     {
-        /** @var Adapter<PageModel> $adapter */
-        $adapter = $this->framework->getAdapter(PageModel::class);
+        $repository = $this->repositoryManager->getRepository(PageModel::class);
 
-        if ($contactProfile['jumpTo'] > 0) {
-            return $adapter->findByPk($contactProfile['jumpTo']);
+        if ($contactProfile->jumpTo > 0) {
+            return $repository->find((int) $contactProfile->jumpTo);
         }
 
         $statement = $this->connection->executeQuery(
             'SELECT jumpTo from tl_contact_category WHERE id = :categoryId LIMIT 0,1',
-            ['categoryId' => $contactProfile['pid']]
+            ['categoryId' => $contactProfile->pid]
         );
 
         $pageId = $statement->fetch(PDO::FETCH_COLUMN);
@@ -92,6 +91,6 @@ final class PreviewUrlConvertListener
             return null;
         }
 
-        return $adapter->findByPk($pageId);
+        return $repository->find((int) $pageId);
     }
 }

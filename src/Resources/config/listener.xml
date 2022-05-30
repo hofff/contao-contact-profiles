@@ -48,45 +48,49 @@
         </service>
 
         <service id="Hofff\Contao\ContactProfiles\EventListener\Hook\AddContactProfileInformationListener" public="true">
-            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\ContactProfileRepository" />
+            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository" />
             <argument>%hofff.contao_contact_profiles.template_prefixes%</argument>
         </service>
 
         <service id="Hofff\Contao\ContactProfiles\EventListener\Hook\GetSearchablePagesListener" public="true">
             <argument type="service" id="contao.framework" />
             <argument type="service" id="database_connection" />
-            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\ContactProfileRepository" />
+            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository" />
             <argument type="service" id="Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator" />
             <tag name="contao.hook" hook="getSearchablePages"/>
         </service>
 
         <service id="Hofff\Contao\ContactProfiles\EventListener\Hook\InsertTagsListener" public="true">
-            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\ContactProfileRepository"/>
+            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository" />
             <argument type="service" id="Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator" />
             <tag name="contao.hook" hook="replaceInsertTags"/>
         </service>
 
         <service id="Hofff\Contao\ContactProfiles\EventListener\NewsContactProfilesListener">
             <argument type="service" id="contao.framework" />
-            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\ContactProfileRepository" />
-            <tag name="kernel.event_listener" event="hofff.contao_contact_profile.load_contact_profiles" method="onLoadContactProfiles"/>
+            <argument type="service" id="netzmacht.contao_toolkit.repository_manager"/>
+            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository"/>
+            <tag name="kernel.event_listener" event="hofff.contao_contact_profile.load_contact_profiles"/>
         </service>
 
         <service id="Hofff\Contao\ContactProfiles\EventListener\EventsContactProfilesListener">
             <argument type="service" id="contao.framework" />
-            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\ContactProfileRepository" />
-            <tag name="kernel.event_listener" event="hofff.contao_contact_profile.load_contact_profiles" method="onLoadContactProfiles"/>
+            <argument type="service" id="netzmacht.contao_toolkit.repository_manager"/>
+            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository"/>
+            <tag name="kernel.event_listener" event="hofff.contao_contact_profile.load_contact_profiles"/>
         </service>
 
         <service id="Hofff\Contao\ContactProfiles\EventListener\FAQContactProfilesListener">
             <argument type="service" id="contao.framework" />
-            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\ContactProfileRepository" />
-            <tag name="kernel.event_listener" event="hofff.contao_contact_profile.load_contact_profiles" method="onLoadContactProfiles"/>
+            <argument type="service" id="netzmacht.contao_toolkit.repository_manager"/>
+            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository"/>
+            <tag name="kernel.event_listener" event="hofff.contao_contact_profile.load_contact_profiles"/>
         </service>
 
         <service id="Hofff\Contao\ContactProfiles\EventListener\PreviewUrlConvertListener">
             <argument type="service" id="contao.framework" />
-            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\ContactProfileRepository" />
+            <argument type="service" id="netzmacht.contao_toolkit.repository_manager" />
+            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository" />
             <argument type="service" id="database_connection" />
             <tag name="kernel.event_listener" event="contao.preview_url_convert" />
         </service>
@@ -94,8 +98,15 @@
         <service id="Hofff\Contao\ContactProfiles\EventListener\PreviewUrlCreateListener">
             <argument type="service" id="request_stack" />
             <argument type="service" id="contao.framework" />
-            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\ContactProfileRepository" />
+            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository" />
             <tag name="kernel.event_listener" event="contao.preview_url_create" />
+        </service>
+
+        <service id="Hofff\Contao\ContactProfiles\EventListener\MultilingualListener">
+            <argument type="service" id="netzmacht.contao_toolkit.dca.manager"/>
+            <argument>%hofff_contao_contact_profiles.multilingual.languages%</argument>
+            <argument>%hofff_contao_contact_profiles.multilingual.fallback_language%</argument>
+            <argument>%hofff_contao_contact_profiles.multilingual.fields%</argument>
         </service>
     </services>
 </container>

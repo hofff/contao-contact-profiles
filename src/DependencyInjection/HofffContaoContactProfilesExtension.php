@@ -8,6 +8,16 @@ use Hofff\Contao\ContactProfiles\EventListener\EventsContactProfilesListener;
 use Hofff\Contao\ContactProfiles\EventListener\FAQContactProfilesListener;
 use Hofff\Contao\ContactProfiles\EventListener\MultilingualListener;
 use Hofff\Contao\ContactProfiles\EventListener\NewsContactProfilesListener;
+use Hofff\Contao\ContactProfiles\Model\Profile\MonolingualProfile;
+use Hofff\Contao\ContactProfiles\Model\Profile\MultilingualProfile;
+use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
+use Hofff\Contao\ContactProfiles\Model\Responsibility\MonolingualResponsibility;
+use Hofff\Contao\ContactProfiles\Model\Responsibility\MultilingualResponsibility;
+use Hofff\Contao\ContactProfiles\Model\Responsibility\Responsibility;
+use Hofff\Contao\ContactProfiles\Model\Responsibility\ResponsibilityRepository;
+use Hofff\Contao\ContactProfiles\Model\SocialAccount\MonolingualSocialAccount;
+use Hofff\Contao\ContactProfiles\Model\SocialAccount\MultilingualSocialAccount;
+use Hofff\Contao\ContactProfiles\Model\SocialAccount\SocialAccountRepository;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -25,12 +35,13 @@ final class HofffContaoContactProfilesExtension extends Extension
         );
 
         $loader->load('services.xml');
+        $loader->load('repositories.xml');
         $loader->load('listener.xml');
 
         $config  = $this->processConfiguration(new Configuration(), $configs);
         $sources = $config['sources'];
 
-        $this->configureMultilingual($config['multilingual']);
+        $this->configureMultilingual($config['multilingual'], $container);
         $this->checkCalendarBundle($container, $sources);
         $this->checkFaqBundle($container, $sources);
         $this->checkNewsBundle($container, $sources);
@@ -86,6 +97,15 @@ final class HofffContaoContactProfilesExtension extends Extension
         if (! $multilingual['enable']) {
             $container->removeDefinition(MultilingualListener::class);
 
+            $container->getDefinition(ProfileRepository::class)
+                ->addTag('netzmacht.contao_toolkit.repository', ['model' => MonolingualProfile::class]);
+
+            $container->getDefinition(ResponsibilityRepository::class)
+                ->addTag('netzmacht.contao_toolkit.repository', ['model' => MonolingualResponsibility::class]);
+
+            $container->getDefinition(SocialAccountRepository::class)
+                ->addTag('netzmacht.contao_toolkit.repository', ['model' => MonolingualSocialAccount::class]);
+
             return;
         }
 
@@ -106,5 +126,17 @@ final class HofffContaoContactProfilesExtension extends Extension
             'hofff_contao_contact_profiles.multilingual.fallback_language',
             $multilingual['fallback_language'] ?? null
         );
+
+        $container->getDefinition(ProfileRepository::class)
+            ->setArgument(0, MultilingualProfile::class)
+            ->addTag('netzmacht.contao_toolkit.repository', ['model' => MultilingualProfile::class]);
+
+        $container->getDefinition(ResponsibilityRepository::class)
+            ->setArgument(0, MultilingualResponsibility::class)
+            ->addTag('netzmacht.contao_toolkit.repository', ['model' => MultilingualResponsibility::class]);
+
+        $container->getDefinition(SocialAccountRepository::class)
+            ->setArgument(0, MultilingualSocialAccount::class)
+            ->addTag('netzmacht.contao_toolkit.repository', ['model' => MultilingualSocialAccount::class]);
     }
 }

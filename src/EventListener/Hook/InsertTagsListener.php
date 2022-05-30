@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\EventListener\Hook;
 
-use Hofff\Contao\ContactProfiles\Model\ContactProfileRepository;
+use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
 use Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator;
 
 use function explode;
@@ -12,14 +12,12 @@ use function in_array;
 
 final class InsertTagsListener
 {
-    /** @var ContactProfileRepository */
-    private $repository;
+    private ProfileRepository $repository;
 
-    /** @var ContactProfileUrlGenerator */
-    private $urlGenerator;
+    private ContactProfileUrlGenerator $urlGenerator;
 
     public function __construct(
-        ContactProfileRepository $repository,
+        ProfileRepository $repository,
         ContactProfileUrlGenerator $urlGenerator
     ) {
         $this->repository   = $repository;
@@ -42,7 +40,7 @@ final class InsertTagsListener
             return false;
         }
 
-        $profile = $this->repository->fetchById($elements[1]);
+        $profile = $this->repository->find((int) $elements[1]);
         if (! $profile) {
             return '';
         }

@@ -8,6 +8,7 @@ use Contao\Controller;
 use Contao\CoreBundle\Framework\Adapter;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\FrontendTemplate;
+use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
 use Hofff\Contao\ContactProfiles\Renderer\FieldRenderer;
 
@@ -41,7 +42,7 @@ abstract class AbstractFieldRenderer implements FieldRenderer
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public function __invoke(string $field, $value, ContactProfileRenderer $renderer, array $profile): ?string
+    public function __invoke(string $field, $value, ContactProfileRenderer $renderer, Profile $profile): ?string
     {
         if (! $this->hasValue($value)) {
             return null;
@@ -62,7 +63,7 @@ abstract class AbstractFieldRenderer implements FieldRenderer
         $template->value           = $value;
         $template->profile         = $profile;
 
-        $this->compile($template, $value, $renderer);
+        $this->compile($template, $value, $profile, $renderer);
 
         return $template->parse();
     }
@@ -74,5 +75,10 @@ abstract class AbstractFieldRenderer implements FieldRenderer
     }
 
     /** @param mixed $value */
-    abstract protected function compile(FrontendTemplate $template, $value, ContactProfileRenderer $renderer): void;
+    abstract protected function compile(
+        FrontendTemplate $template,
+        $value,
+        Profile $profile,
+        ContactProfileRenderer $renderer
+    ): void;
 }

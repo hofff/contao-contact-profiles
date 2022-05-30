@@ -58,7 +58,7 @@ final class ContactProfileDcaListener
             return $this->connection
                     ->executeQuery(
                         'SELECT id FROM tl_contact_profile WHERE alias=? AND id!=?',
-                        [$alias, $dataContainer->id]
+                        [$alias, $dataContainer->activeRecord->id]
                     )
                     ->rowCount() > 0;
         };

@@ -8,7 +8,8 @@ use Contao\CoreBundle\Exception\PageNotFoundException;
 use Contao\CoreBundle\Routing\ScopeMatcher;
 use Contao\Input;
 use Contao\System;
-use Hofff\Contao\ContactProfiles\Model\ContactProfileRepository;
+use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
+use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
 use Hofff\Contao\ContactProfiles\SocialTags\SocialTagsGenerator;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -18,8 +19,7 @@ trait ContactProfileDetailTrait
 {
     use CreateRendererTrait;
 
-    /** @var array<string,mixed>|null */
-    private $profile;
+    private ?Profile $profile;
 
     /**
      * @SuppressWarnings(PHPMD.Superglobals)
@@ -42,8 +42,8 @@ trait ContactProfileDetailTrait
             throw new PageNotFoundException('Contact profile not found');
         }
 
-        $GLOBALS['objPage']->pageTitle   = trim($this->profile['firstname'] . ' ' . $this->profile['lastname']);
-        $GLOBALS['objPage']->description = $this->prepareMetaDescription((string) $this->profile['teaser']);
+        $GLOBALS['objPage']->pageTitle   = trim($this->profile->firstname . ' ' . $this->profile->lastname);
+        $GLOBALS['objPage']->description = $this->prepareMetaDescription((string) $this->profile->teaser);
 
         /** @psalm-var SocialTagsGenerator $socialTagsGenerator */
         $socialTagsGenerator = System::getContainer()->get(SocialTagsGenerator::class);
@@ -58,16 +58,15 @@ trait ContactProfileDetailTrait
 
         $this->Template->profile       = $this->profile;
         $this->Template->renderer      = $renderer;
-        $this->Template->renderProfile = static function (array $profile) use ($renderer): string {
+        $this->Template->renderProfile = static function (Profile $profile) use ($renderer): string {
             return $renderer->render($profile);
         };
     }
 
-    /** @return array<string,mixed> */
-    private function loadProfile(): ?array
+    private function loadProfile(): ?Profile
     {
-        /** @psalm-var ContactProfileRepository $repository */
-        $repository = System::getContainer()->get(ContactProfileRepository::class);
+        /** @psalm-var ProfileRepository $repository */
+        $repository = System::getContainer()->get(ProfileRepository::class);
 
         return $repository->fetchPublishedByIdOrAlias((string) Input::get('auto_item'));
     }

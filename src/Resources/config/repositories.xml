@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <defaults public="false" autoconfigure="false" autowire="false"/>
+        
+        <service id="Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository" public="true">
+            <argument>Hofff\Contao\ContactProfiles\Model\Profile\MonolingualProfile</argument>
+            <argument type="service" id="database_connection"/>
+            <argument type="service" id="contao.security.token_checker"/>
+        </service>
+
+        <service id="Hofff\Contao\ContactProfiles\Model\Responsibility\ResponsibilityRepository">
+            <argument>Hofff\Contao\ContactProfiles\Model\Responsibility\MonolingualResponsibility</argument>
+        </service>
+
+        <service id="Hofff\Contao\ContactProfiles\Model\SocialAccount\SocialAccountRepository">
+            <argument>Hofff\Contao\ContactProfiles\Model\SocialAccount\MonolingualSocialAccount</argument>
+        </service>
+    </services>
+</container>

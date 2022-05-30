@@ -42,6 +42,7 @@ final class Configuration implements ConfigurationInterface
                             ->defaultValue('-')
                         ->end()
                     ->end()
+                ->end()
                 ->arrayNode('multilingual')
                     ->info('Enable the multilingual feature. It requires that terminal42/dc_multilingual is installed')
                     ->addDefaultsIfNotSet()

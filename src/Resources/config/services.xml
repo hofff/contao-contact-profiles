@@ -24,12 +24,6 @@
             <tag name="contao.migration"/>
         </service>
 
-        <!-- Repository -->
-        <service id="Hofff\Contao\ContactProfiles\Model\ContactProfileRepository" public="true">
-            <argument type="service" id="database_connection"/>
-            <argument type="service" id="contao.security.token_checker"/>
-        </service>
-
         <!-- Url Generator -->
         <service id="Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator" public="true">
             <argument type="service" id="contao.framework" />
@@ -116,7 +110,7 @@
             <argument type="service" id="router"/>
             <argument type="service" id="translator" on-invalid="null"/>
             <argument type="service" id="security.helper"/>
-            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\ContactProfileRepository"/>
+            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository"/>
             <tag name="contao.picker_provider"/>
         </service>
 
