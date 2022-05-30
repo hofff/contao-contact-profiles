@@ -44,11 +44,7 @@
             <argument>%hofff_contao_contact_profiles.alias_pattern%</argument>
         </service>
 
-        <service id="Hofff\Contao\ContactProfiles\EventListener\Dca\ContentDcaListener" public="true">
-            <argument type="service" id="Hofff\Contao\Consent\Bridge\ConsentToolManager" />
-        </service>
-
-        <service id="Hofff\Contao\ContactProfiles\EventListener\Dca\ModuleDcaListener" public="true">
+        <service id="Hofff\Contao\ContactProfiles\EventListener\Dca\ConsentBridgeListener">
             <argument type="service" id="Hofff\Contao\Consent\Bridge\ConsentToolManager" />
         </service>
 

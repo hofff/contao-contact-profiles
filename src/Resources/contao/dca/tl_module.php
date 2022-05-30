@@ -2,17 +2,6 @@
 
 declare(strict_types=1);
 
-use Hofff\Contao\Consent\Bridge\EventListener\Dca\ConsentIdOptions;
-use Hofff\Contao\ContactProfiles\EventListener\Dca\ModuleDcaListener;
-
-/*
- * Config
- */
-$GLOBALS['TL_DCA']['tl_module']['config']['onload_callback'][] = [
-    ModuleDcaListener::class,
-    'initializePalettes',
-];
-
 /*
  * Palettes
  */
@@ -179,7 +168,6 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['hofff_contact_consent_tag_youtube'] =
     'label'            => &$GLOBALS['TL_LANG']['tl_module']['hofff_contact_consent_tag_youtube'],
     'exclude'          => true,
     'inputType'        => 'select',
-    'options_callback' => [ConsentIdOptions::class, '__invoke'],
     'eval'             => [
         'tl_class'           => 'w50',
         'includeBlankOption' => true,
@@ -193,7 +181,6 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['hofff_contact_consent_tag_vimeo'] = [
     'label'            => &$GLOBALS['TL_LANG']['tl_module']['hofff_contact_consent_tag_vimeo'],
     'exclude'          => true,
     'inputType'        => 'select',
-    'options_callback' => [ConsentIdOptions::class, '__invoke'],
     'eval'             => [
         'tl_class'           => 'w50',
         'includeBlankOption' => true,
