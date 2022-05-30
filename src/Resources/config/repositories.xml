@@ -5,6 +5,10 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <defaults public="false" autoconfigure="false" autowire="false"/>
+
+        <service id="Hofff\Contao\ContactProfiles\Model\Category\CategoryRepository">
+            <tag name="netzmacht.contao_toolkit.repository" model="Hofff\Contao\ContactProfiles\Model\Category\Category"/>
+        </service>
         
         <service id="Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository" public="true">
             <argument>Hofff\Contao\ContactProfiles\Model\Profile\MonolingualProfile</argument>
