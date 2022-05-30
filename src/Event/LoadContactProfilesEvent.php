@@ -36,8 +36,8 @@ final class LoadContactProfilesEvent extends Event
         $this->sources = $sources;
     }
 
-    /** @param Profile[] $profiles */
-    public function setProfiles(array $profiles): void
+    /** @param iterable<Profile> $profiles */
+    public function setProfiles(iterable $profiles): void
     {
         $this->profiles = [];
 
