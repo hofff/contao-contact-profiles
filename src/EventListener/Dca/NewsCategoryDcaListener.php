@@ -9,6 +9,7 @@ use Contao\CoreBundle\DataContainer\PaletteManipulator;
 use Contao\CoreBundle\ServiceAnnotation\Callback;
 use Contao\CoreBundle\ServiceAnnotation\Hook;
 use Contao\Input;
+use Hofff\Contao\ContactProfiles\Frontend\NewsCategories\RelatedNewsCategoriesModule;
 use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Netzmacht\Contao\Toolkit\Data\Model\RepositoryManager;
 use Netzmacht\Contao\Toolkit\Dca\DcaManager;
@@ -24,17 +25,23 @@ final class NewsCategoryDcaListener
 {
     private DcaManager $dcaManager;
 
-    /** @var array<string,array<string,mixed>> */
-    private array $bundles;
-
     private RepositoryManager $repositoryManager;
 
-    /** @param array<string,array<string,mixed>> $bundles */
-    public function __construct(DcaManager $dcaManager, RepositoryManager $repositoryManager, array $bundles)
+    public function __construct(DcaManager $dcaManager, RepositoryManager $repositoryManager)
     {
         $this->dcaManager        = $dcaManager;
-        $this->bundles           = $bundles;
         $this->repositoryManager = $repositoryManager;
+    }
+
+    /**
+     * @Hook("initializeSystem")
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    public function onInitializeSystem(): void
+    {
+        // Frontend modules
+        $GLOBALS['FE_MOD']['hofff_contact_profiles']['hofff_contact_profile_related_categories']
+            = RelatedNewsCategoriesModule::class;
     }
 
     /** @Callback(table="tl_news_category", target="config.onload") */
@@ -49,7 +56,7 @@ final class NewsCategoryDcaListener
     /** @Hook("loadDataContainer") */
     public function initializeContactProfileFields(string $table): void
     {
-        if ($table !== Profile::getTable() || isset($this->bundles['CodefogNewsCategoriesBundle'])) {
+        if ($table !== Profile::getTable()) {
             return;
         }
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\DependencyInjection;
 
+use Hofff\Contao\ContactProfiles\EventListener\Dca\NewsCategoryDcaListener;
 use Hofff\Contao\ContactProfiles\EventListener\DynamicSource\EventsContactProfilesListener;
 use Hofff\Contao\ContactProfiles\EventListener\DynamicSource\FAQContactProfilesListener;
 use Hofff\Contao\ContactProfiles\EventListener\DynamicSource\NewsContactProfilesListener;
@@ -110,6 +111,7 @@ final class HofffContaoContactProfilesExtension extends Extension
         }
 
         $container->removeDefinition(NewsContactProfilesListener::class);
+        $container->removeDefinition(NewsCategoryDcaListener::class);
     }
 
     /**
