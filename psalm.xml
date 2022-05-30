@@ -53,8 +53,10 @@
         <class name="Contao\FrontendTemplate"/>
         <class name="Contao\Template"/>
         <class name="Contao\CalendarEventsModel"/>
+        <class name="Contao\ContentModel"/>
         <class name="Contao\FaqModel"/>
         <class name="Contao\NewsModel"/>
         <class name="Contao\Model"/>
+        <class name="Contao\ModuleModel"/>
     </universalObjectCrates>
 </psalm>

@@ -17,7 +17,7 @@ final class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->arrayNode('sources')
-                    ->info('Sources of the contact profiles')
+                    ->info('Dynamic sources of the contact profiles')
                     ->scalarPrototype()
                     ->end()
                 ->end()

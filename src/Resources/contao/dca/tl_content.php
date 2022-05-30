@@ -7,7 +7,6 @@ use Hofff\Contao\ContactProfiles\EventListener\Dca\ContactFieldsOptions;
 use Hofff\Contao\ContactProfiles\EventListener\Dca\ContactProfileOptions;
 use Hofff\Contao\ContactProfiles\EventListener\Dca\ContactTemplateOptions;
 use Hofff\Contao\ContactProfiles\EventListener\Dca\ContentDcaListener;
-use Hofff\Contao\ContactProfiles\EventListener\Dca\SourcesOptions;
 
 /*
  * Config
@@ -97,7 +96,6 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['hofff_contact_source'] = [
     'exclude'   => true,
     'inputType' => 'select',
     'default'   => 'custom',
-    'options'   => ['custom', 'categories', 'dynamic'],
     'reference' => &$GLOBALS['TL_LANG']['tl_content']['hofff_contact_source_options'],
     'eval'      => ['tl_class' => 'clr w50', 'submitOnChange' => true, 'helpwizard' => true],
     'sql'       => 'char(16) NOT NULL default \'custom\'',
@@ -107,7 +105,6 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['hofff_contact_sources'] = [
     'label'            => &$GLOBALS['TL_LANG']['tl_content']['hofff_contact_sources'],
     'exclude'          => true,
     'inputType'        => 'checkbox',
-    'options_callback' => [SourcesOptions::class, '__invoke'],
     'reference'        => &$GLOBALS['TL_LANG']['tl_content']['hofff_contact_sources_options'],
     'eval'             => ['tl_class' => 'clr', 'multiple' => true],
     'sql'              => 'tinyblob NULL',

@@ -115,6 +115,27 @@
             <argument type="service" id="Hofff\Contao\SocialTags\Data\SocialTagsFactory" on-invalid="ignore"/>
         </service>
 
+        <!-- Providers -->
+        <service id="Hofff\Contao\ContactProfiles\Provider\ProfileProvider"
+                 class="Hofff\Contao\ContactProfiles\Provider\CompositeProfileProvider">
+            <argument type="tagged_iterator" tag="hofff_contact_profiles.provider"/>
+        </service>
+
+        <service id="Hofff\Contao\ContactProfiles\Provider\CustomProviderProvider">
+            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository"/>
+            <tag name="hofff_contact_profiles.provider"/>
+        </service>
+
+        <service id="Hofff\Contao\ContactProfiles\Provider\CategoriesProfileProvider">
+            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository"/>
+            <tag name="hofff_contact_profiles.provider"/>
+        </service>
+
+        <service id="Hofff\Contao\ContactProfiles\Provider\DynamicProfileProvider">
+            <argument type="service" id="event_dispatcher"/>
+            <tag name="hofff_contact_profiles.provider"/>
+        </service>
+
         <!--Fragments -->
         <service id="Hofff\Contao\ContactProfiles\Frontend\ContactProfileListController">
             <argument type="service" id="netzmacht.contao_toolkit.template_renderer"/>
@@ -123,9 +144,8 @@
             <argument type="service" id="router"/>
             <argument type="service" id="translator"/>
             <argument type="service" id="contao.security.token_checker"/>
-            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository"/>
+            <argument type="service" id="Hofff\Contao\ContactProfiles\Provider\ProfileProvider"/>
             <argument type="service" id="Hofff\Contao\ContactProfiles\Renderer\ContactProfileRendererFactory"/>
-            <argument type="service" id="event_dispatcher"/>
             <argument type="service" id="netzmacht.contao_toolkit.contao.config_adapter"/>
             <argument type="service" id="netzmacht.contao_toolkit.contao.input_adapter"/>
             <tag name="contao.content_element"
@@ -167,8 +187,7 @@
             <argument type="service" id="router"/>
             <argument type="service" id="translator"/>
             <argument type="service" id="contao.security.token_checker"/>
-            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository"/>
-            <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="Hofff\Contao\ContactProfiles\Provider\ProfileProvider"/>
             <argument type="service" id="netzmacht.contao_toolkit.contao.input_adapter"/>
             <tag name="contao.content_element"
                  type="hofff_contact_profile_initials_filter"

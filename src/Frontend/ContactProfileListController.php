@@ -12,32 +12,25 @@ use Contao\Environment;
 use Contao\Input;
 use Contao\Model;
 use Contao\Pagination;
-use Contao\StringUtil;
-use Hofff\Contao\ContactProfiles\Event\LoadContactProfilesEvent;
 use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
-use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
 use Hofff\Contao\ContactProfiles\Model\Profile\Specification\InitialLastnameLetterSpecification;
+use Hofff\Contao\ContactProfiles\Provider\ProfileProvider;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRendererFactory;
-use Hofff\Contao\ContactProfiles\Util\QueryUtil;
 use Netzmacht\Contao\Toolkit\Response\ResponseTagger;
 use Netzmacht\Contao\Toolkit\Routing\RequestScopeMatcher;
 use Netzmacht\Contao\Toolkit\View\Template\TemplateRenderer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-use function count;
 use function min;
 use function substr;
 
 final class ContactProfileListController extends AbstractHybridController
 {
-    private ProfileRepository $profiles;
-
     private ContactProfileRendererFactory $rendererFactory;
 
-    private EventDispatcherInterface $eventDispatcher;
+    private ProfileProvider $provider;
 
     /** @var Adapter<Config> */
     private Adapter $configAdapter;
@@ -55,9 +48,8 @@ final class ContactProfileListController extends AbstractHybridController
         RouterInterface $router,
         TranslatorInterface $translator,
         TokenChecker $tokenChecker,
-        ProfileRepository $profiles,
+        ProfileProvider $provider,
         ContactProfileRendererFactory $rendererFactory,
-        EventDispatcherInterface $eventDispatcher,
         Adapter $configAdapter,
         Adapter $inputAdapter
     ) {
@@ -71,9 +63,8 @@ final class ContactProfileListController extends AbstractHybridController
             $inputAdapter
         );
 
-        $this->profiles        = $profiles;
+        $this->provider        = $provider;
         $this->rendererFactory = $rendererFactory;
-        $this->eventDispatcher = $eventDispatcher;
         $this->configAdapter   = $configAdapter;
     }
 
@@ -83,12 +74,12 @@ final class ContactProfileListController extends AbstractHybridController
         $renderer      = $this->rendererFactory->create($model);
         $pageParameter = $this->pageParameter($model);
         $offset        = $this->determineOffset($model, $pageParameter);
-        $profiles      = $this->loadProfiles($model, $request, $offset);
+        $profiles      = $this->loadProfiles($model, $offset);
 
         /** @psalm-suppress RedundantCast - Value might be a string */
         $total = $model->numberOfItems > 0
-            ? min((int) $model->numberOfItems, $this->countTotal($model, $profiles))
-            : $this->countTotal($model, $profiles);
+            ? min((int) $model->numberOfItems, $this->provider->countTotal($model, $profiles))
+            : $this->provider->countTotal($model, $profiles);
 
         $data['total']         = $total;
         $data['profiles']      = $profiles;
@@ -110,60 +101,12 @@ final class ContactProfileListController extends AbstractHybridController
      * @psalm-suppress MoreSpecificReturnType
      * @psalm-suppress LessSpecificReturnStatement
      */
-    private function loadProfiles(Model $model, Request $request, int $offset): array
+    private function loadProfiles(Model $model, int $offset): array
     {
-        if ($model->hofff_contact_source === 'dynamic') {
-            if ($this->scopeMatcher->isFrontendRequest($request)) {
-                return [];
-            }
-
-            $sources = StringUtil::deserialize($model->hofff_contact_sources, true);
-            $event   = new LoadContactProfilesEvent($model, $GLOBALS['objPage'], $sources);
-            $this->eventDispatcher->dispatch($event, $event::NAME);
-
-            return $event->profiles();
-        }
-
         /** @psalm-suppress PossiblyNullReference - Input adapter is always present */
         $specification = new InitialLastnameLetterSpecification((string) $this->inputAdapter->get('auto_item'));
 
-        /** @psalm-suppress RedundantCastGivenDocblockType */
-        $options = [
-            'order'  => $model->hofff_contact_profiles_order_sql ?: null,
-            'offset' => $offset,
-            'limit'  => (int) $model->numberOfItems,
-        ];
-
-        /** @psalm-suppress RedundantCastGivenDocblockType */
-        $perPage = (int) $model->perPage;
-        if ($perPage > 0) {
-            $options['limit'] = $perPage;
-        }
-
-        switch ($model->hofff_contact_source) {
-            case 'categories':
-                $categoryIds = StringUtil::deserialize($model->hofff_contact_categories, true);
-                $profiles    = $this->profiles->fetchPublishedByCategoriesAndSpecification(
-                    $categoryIds,
-                    $specification,
-                    $options
-                );
-
-                return $profiles ? $profiles->getModels() : [];
-
-            case 'custom':
-            default:
-                $order            = StringUtil::deserialize($model->hofff_contact_profiles_order, true);
-                $options['order'] = QueryUtil::orderByIds('id', $order);
-                $profileIds       = StringUtil::deserialize($model->hofff_contact_profiles, true);
-                $profiles         = $this->profiles->fetchPublishedByProfileIdsAndSpecification(
-                    $profileIds,
-                    $specification,
-                    $options
-                );
-
-                return $profiles ? $profiles->getModels() : [];
-        }
+        return $this->provider->fetchProfiles($model, $GLOBALS['objPage'], $specification, $offset);
     }
 
     private function determineOffset(Model $model, string $pageParameter): int
@@ -183,26 +126,6 @@ final class ContactProfileListController extends AbstractHybridController
         }
 
         return ($page - 1) * $model->perPage * $model->perPage;
-    }
-
-    /** @param array<Profile> $profiles */
-    private function countTotal(Model $model, array $profiles): int
-    {
-        switch ($model->hofff_contact_source) {
-            case 'dynamic':
-                return count($profiles);
-
-            case 'categories':
-                $categoryIds = StringUtil::deserialize($model->hofff_contact_categories, true);
-
-                return $this->profiles->countPublishedByCategories($categoryIds);
-
-            case 'custom':
-            default:
-                $profileIds = StringUtil::deserialize($model->hofff_contact_profiles, true);
-
-                return $this->profiles->countPublishedByProfileIds($profileIds);
-        }
     }
 
     private function generatePagination(Model $model, int $total, string $pageParameter): string
