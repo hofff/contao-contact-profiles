@@ -19,7 +19,9 @@ use Contao\Versions;
 use Doctrine\DBAL\Connection;
 use Exception;
 use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
+use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
 use Netzmacht\Contao\Toolkit\Dca\DcaManager;
+use RuntimeException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 use function func_get_arg;
@@ -30,6 +32,7 @@ use function preg_replace_callback;
 use function sprintf;
 use function time;
 
+/** @SuppressWarnings(PHPMD.ExcessiveClassComplexity) */
 final class ContactProfileDcaListener
 {
     private SlugGeneratorInterface $slugGenerator;
@@ -40,11 +43,14 @@ final class ContactProfileDcaListener
 
     private DcaManager $dcaManager;
 
+    private ProfileRepository $profiles;
+
     private string $pattern;
 
     public function __construct(
         SlugGeneratorInterface $slugGenerator,
         Connection $connection,
+        ProfileRepository $profiles,
         TranslatorInterface $translator,
         DcaManager $dcaManager,
         string $aliasPattern
@@ -54,6 +60,7 @@ final class ContactProfileDcaListener
         $this->pattern       = $aliasPattern;
         $this->translator    = $translator;
         $this->dcaManager    = $dcaManager;
+        $this->profiles      = $profiles;
     }
 
     /**
@@ -80,15 +87,25 @@ final class ContactProfileDcaListener
 
         // Generate alias if there is none
         if (! $value) {
+            if (! $dataContainer->activeRecord) {
+                throw new RuntimeException('Unable to generate alias');
+            }
+
+            $profile = $this->profiles->findOneBy(
+                ['.id=?'],
+                [$dataContainer->id],
+                ['language' => $dataContainer->activeRecord->multilingual_language]
+            );
+
+            if (! $profile instanceof Profile) {
+                throw new RuntimeException('Unable to generate alias');
+            }
+
             $alias = preg_replace_callback(
                 '/{([^}]+)}/',
                 /** @return mixed */
-                static function (array $matches) use ($dataContainer) {
-                    if (! $dataContainer->activeRecord) {
-                        return null;
-                    }
-
-                    return $dataContainer->activeRecord->{$matches[1]};
+                static function (array $matches) use ($profile) {
+                    return $profile->{$matches[1]};
                 },
                 $this->pattern
             );

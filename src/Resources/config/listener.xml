@@ -41,6 +41,7 @@
         <service id="Hofff\Contao\ContactProfiles\EventListener\Dca\ContactProfileDcaListener">
             <argument type="service" id="hofff_contao_contact_profiles.alias_generator"/>
             <argument type="service" id="database_connection"/>
+            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository"/>
             <argument type="service" id="translator"/>
             <argument type="service" id="netzmacht.contao_toolkit.dca.manager"/>
             <argument>%hofff_contao_contact_profiles.alias_pattern%</argument>
