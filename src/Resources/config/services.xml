@@ -28,6 +28,8 @@
         <service id="Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator" public="true">
             <argument type="service" id="contao.framework"/>
             <argument type="service" id="database_connection"/>
+            <argument type="service" id="router"/>
+            <argument>%contao.preview_script%</argument>
         </service>
 
         <!-- Renderer -->
@@ -137,7 +139,7 @@
         </service>
 
         <!--Fragments -->
-        <service id="Hofff\Contao\ContactProfiles\Frontend\ContactProfileListController">
+        <service id="Hofff\Contao\ContactProfiles\Frontend\Profile\ContactProfileListController">
             <argument type="service" id="netzmacht.contao_toolkit.template_renderer"/>
             <argument type="service" id="netzmacht.contao_toolkit.routing.scope_matcher"/>
             <argument type="service" id="netzmacht.contao_toolkit.response_tagger"/>
@@ -158,7 +160,7 @@
                  method="renderAsFrontendModule"/>
         </service>
 
-        <service id="Hofff\Contao\ContactProfiles\Frontend\ContactProfileDetailController">
+        <service id="Hofff\Contao\ContactProfiles\Frontend\Profile\ContactProfileDetailController">
             <argument type="service" id="netzmacht.contao_toolkit.template_renderer"/>
             <argument type="service" id="netzmacht.contao_toolkit.routing.scope_matcher"/>
             <argument type="service" id="netzmacht.contao_toolkit.response_tagger"/>
@@ -179,7 +181,7 @@
                  method="renderAsFrontendModule"/>
         </service>
 
-        <service id="Hofff\Contao\ContactProfiles\Frontend\ContactProfileInitialsFilterController">
+        <service id="Hofff\Contao\ContactProfiles\Frontend\Profile\ContactProfileInitialsFilterController">
             <argument type="service" id="netzmacht.contao_toolkit.template_renderer"/>
             <argument type="service" id="netzmacht.contao_toolkit.routing.scope_matcher"/>
             <argument type="service" id="netzmacht.contao_toolkit.response_tagger"/>
@@ -196,6 +198,11 @@
                  type="hofff_contact_profile_initials_filter"
                  category="hofff_contact_profiles"
                  method="renderAsFrontendModule"/>
+        </service>
+
+        <!-- Pages -->
+        <service id="Hofff\Contao\ContactProfiles\Controller\ContactProfilePageController">
+            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository"/>
         </service>
     </services>
 </container>

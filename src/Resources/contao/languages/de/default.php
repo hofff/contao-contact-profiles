@@ -11,3 +11,6 @@ $GLOBALS['TL_LANG']['BTN']['tl_contact_social_accounts'][1] = 'Social Media Prof
 
 $GLOBALS['TL_LANG']['MSC']['contactProfilePicker']     = 'Kontaktprofile';
 $GLOBALS['TL_LANG']['MSC']['contactProfileResetLabel'] = 'Alle';
+
+$GLOBALS['TL_LANG']['PTY']['contact_profile'][0] = 'Kontaktprofil';
+$GLOBALS['TL_LANG']['PTY']['contact_profile'][1] = 'Detailseite eines Kontaktprofils';

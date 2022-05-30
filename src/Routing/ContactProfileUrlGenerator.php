@@ -11,6 +11,8 @@ use Doctrine\DBAL\Connection;
 use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use InvalidArgumentException;
 use PDO;
+use Symfony\Cmf\Component\Routing\RouteObjectInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 use function array_key_exists;
 use function sprintf;
@@ -27,13 +29,23 @@ final class ContactProfileUrlGenerator
 
     private Connection $connection;
 
+    private RouterInterface $router;
+
     /** @var array<int|string, ?PageModel> */
     private array $categoryDetailPages = [];
 
-    public function __construct(ContaoFramework $framework, Connection $connection)
-    {
-        $this->framework  = $framework;
-        $this->connection = $connection;
+    private ?string $previewScript;
+
+    public function __construct(
+        ContaoFramework $framework,
+        Connection $connection,
+        RouterInterface $router,
+        ?string $previewScript
+    ) {
+        $this->framework     = $framework;
+        $this->connection    = $connection;
+        $this->router        = $router;
+        $this->previewScript = $previewScript;
     }
 
     /**
@@ -59,6 +71,10 @@ final class ContactProfileUrlGenerator
         int $referenceType = self::ABSOLUTE_PATH
     ): string {
         $slug = '/' . ($profile->alias ?: $profile->profileId());
+
+        if ($pageModel->type === 'contact_profile') {
+            return $this->generateUrlForContactPage($profile, $pageModel, $referenceType);
+        }
 
         switch ($referenceType) {
             case self::ABSOLUTE_PATH:
@@ -107,5 +123,57 @@ final class ContactProfileUrlGenerator
         $adapter = $this->framework->getAdapter(PageModel::class);
 
         return $adapter->findByPk($pageId);
+    }
+
+    private function generateUrlForContactPage(Profile $profile, PageModel $pageModel, int $referenceType): string
+    {
+        switch ($referenceType) {
+            case self::ABSOLUTE_PATH:
+                return $this->router->generate(
+                    RouteObjectInterface::OBJECT_BASED_ROUTE_NAME,
+                    [
+                        RouteObjectInterface::CONTENT_OBJECT => $pageModel,
+                        'alias'                              => $profile->alias ?: $profile->id,
+                    ],
+                    RouterInterface::ABSOLUTE_PATH,
+                );
+
+            case self::ABSOLUTE_URL:
+                return $this->router->generate(
+                    RouteObjectInterface::OBJECT_BASED_ROUTE_NAME,
+                    [
+                        RouteObjectInterface::CONTENT_OBJECT => $pageModel,
+                        'alias'                              => $profile->alias ?: $profile->id,
+                    ],
+                    RouterInterface::ABSOLUTE_URL,
+                );
+
+            case self::PREVIEW_URL:
+                $baseUrl = '';
+                if ($this->previewScript) {
+                    $baseUrl = $this->router->getContext()->getBaseUrl();
+                    $this->router->getContext()->setBaseUrl($this->previewScript);
+                }
+
+                $url = $this->router->generate(
+                    RouteObjectInterface::OBJECT_BASED_ROUTE_NAME,
+                    [
+                        RouteObjectInterface::CONTENT_OBJECT => $pageModel,
+                        'alias'                              => $profile->alias ?: $profile->id,
+                    ],
+                    RouterInterface::ABSOLUTE_PATH,
+                );
+
+                if ($this->previewScript) {
+                    $this->router->getContext()->setBaseUrl($baseUrl);
+                }
+
+                return $url;
+
+            default:
+                throw new InvalidArgumentException(
+                    sprintf('Reference type "%s" is not supported', $referenceType)
+                );
+        }
     }
 }

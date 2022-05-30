@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Hofff\Contao\ContactProfiles\Frontend;
+namespace Hofff\Contao\ContactProfiles\Frontend\Profile;
 
 use Contao\CoreBundle\Exception\PageNotFoundException;
 use Contao\CoreBundle\Framework\Adapter;
@@ -10,6 +10,7 @@ use Contao\CoreBundle\Security\Authentication\Token\TokenChecker;
 use Contao\Input;
 use Contao\Model;
 use Hofff\Contao\ContactProfiles\Event\ProfileDetailPageEvent;
+use Hofff\Contao\ContactProfiles\Frontend\AbstractHybridController;
 use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRendererFactory;
@@ -64,7 +65,7 @@ final class ContactProfileDetailController extends AbstractHybridController
     /** {@inheritDoc} */
     protected function prepareTemplateData(array $data, Request $request, Model $model): array
     {
-        $profile = $this->loadProfile();
+        $profile = $this->loadProfile($request);
         if ($profile === null) {
             throw new PageNotFoundException('Contact profile not found');
         }
@@ -82,8 +83,13 @@ final class ContactProfileDetailController extends AbstractHybridController
         return $data;
     }
 
-    private function loadProfile(): ?Profile
+    private function loadProfile(Request $request): ?Profile
     {
+        $profile = $request->attributes->get(Profile::class);
+        if ($profile instanceof Profile) {
+            return $profile;
+        }
+
         /** @psalm-suppress PossiblyNullReference - Input adapter is always set */
         return $this->profiles->fetchPublishedByIdOrAlias((string) $this->inputAdapter->get('auto_item'));
     }

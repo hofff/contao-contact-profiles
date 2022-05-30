@@ -87,12 +87,13 @@ final class NewsCategoryDcaListener
 
         if (is_a(NewsCategoryModel::class, Multilingual::class, true)) {
             $langPid    = $this->dcaManager->getDefinition(NewsCategoryModel::getTable())->get(['config', 'langPid']);
-            $categoryId = $row[$langPid] ?: $row['id'];
+            $categoryId = (int) ($row[$langPid] ?: $row['id']);
         } else {
-            $categoryId = $row['id'];
+            $categoryId = (int) $row['id'];
         }
 
         while ($categoryId > 0) {
+            /** @psalm-suppress RedundantCondition */
             $category = $categories[$categoryId] ?? $repository->find($categoryId);
             if ($category === null) {
                 break;

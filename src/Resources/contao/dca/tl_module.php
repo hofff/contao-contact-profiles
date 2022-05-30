@@ -7,7 +7,7 @@ declare(strict_types=1);
  */
 $GLOBALS['TL_DCA']['tl_module']['palettes']['__selector__'][] = 'hofff_contact_source';
 
-$GLOBALS['TL_DCA']['tl_module']['palettes']['hofff_contact_profile'] = '{type_legend},type,headline'
+$GLOBALS['TL_DCA']['tl_module']['palettes']['hofff_contact_profile_list'] = '{type_legend},type,headline'
     . ';{profile_legend},hofff_contact_source,hofff_contact_filters,hofff_contact_fields'
     . ';{template_legend:hide},customTpl,hofff_contact_template,hofff_contact_more,size'
     . ';{protected_legend:hide},protected'
@@ -74,6 +74,18 @@ $GLOBALS['TL_DCA']['tl_module']['palettes']['hofff_contact_profile_initials_filt
     . ';{protected_legend:hide},protected'
     . ';{expert_legend:hide},guests,cssID'
     . ';{invisible_legend:hide},invisible,start,stop';
+
+
+$GLOBALS['TL_DCA']['tl_module']['palettes']['hofff_contact_profile_related_categories'] =
+    '{title_legend},name,headline,type'
+    . ';{config_legend},news_showQuantity,news_resetCategories,news_showEmptyCategories'
+    . ',news_enableCanonicalUrls,news_includeSubcategories,showLevel'
+    . ';{reference_legend:hide},news_categoriesRoot'
+    . ';{redirect_legend:hide},news_forceCategoryUrl,jumpTo'
+    . ';{template_legend:hide},navigationTpl,customTpl'
+    . ';{image_legend:hide},news_categoryImgSize'
+    . ';{protected_legend:hide},protected'
+    . ';{expert_legend:hide},guests,cssID,space';
 
 /*
  * Fields

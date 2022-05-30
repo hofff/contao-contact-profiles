@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Hofff\Contao\ContactProfiles\Frontend;
+namespace Hofff\Contao\ContactProfiles\Frontend\Profile;
 
 use Contao\Config;
 use Contao\CoreBundle\Exception\PageNotFoundException;
@@ -13,6 +13,7 @@ use Contao\Input;
 use Contao\Model;
 use Contao\Pagination;
 use Contao\StringUtil;
+use Hofff\Contao\ContactProfiles\Frontend\AbstractHybridController;
 use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Hofff\Contao\ContactProfiles\Model\Profile\Specification\InitialLastnameLetterSpecification;
 use Hofff\Contao\ContactProfiles\Provider\ProfileProvider;

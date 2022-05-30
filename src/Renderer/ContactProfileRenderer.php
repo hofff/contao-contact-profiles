@@ -131,9 +131,6 @@ final class ContactProfileRenderer
                 'renderer' => $this,
                 'fields'   => $this->fields,
                 'profile'  => $profile,
-                'has'      => static function (string $field) use ($template): bool {
-                    return ! empty($template->profile->$field);
-                },
             ]
         );
 
@@ -145,10 +142,15 @@ final class ContactProfileRenderer
         return $this->urlGenerator->generateDetailUrl($profile);
     }
 
+    public function hasFieldValue(string $field, Profile $profile): bool
+    {
+        return $this->fieldRenderer->hasValue($field, $profile);
+    }
+
     public function parseField(string $field, Profile $profile): string
     {
         $raw = StringUtil::deserialize($profile->$field);
 
-        return ($this->fieldRenderer)($field, $raw, $this, $profile) ?? '';
+        return $this->fieldRenderer->render($field, $raw, $this, $profile) ?? '';
     }
 }

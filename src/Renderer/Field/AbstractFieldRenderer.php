@@ -32,12 +32,8 @@ abstract class AbstractFieldRenderer implements FieldRenderer
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public function __invoke(string $field, $value, ContactProfileRenderer $renderer, Profile $profile): ?string
+    public function render(string $field, $value, ContactProfileRenderer $renderer, Profile $profile): ?string
     {
-        if (! $this->hasValue($value)) {
-            return null;
-        }
-
         /** @var Adapter<Controller> $adpater */
         $adpater = $this->framework->getAdapter(Controller::class);
         $adpater->loadDataContainer('tl_contact_profile');
@@ -70,9 +66,9 @@ abstract class AbstractFieldRenderer implements FieldRenderer
     }
 
     /** @param mixed $value */
-    protected function hasValue($value): bool
+    public function hasValue(string $field, Profile $profile): bool
     {
-        return (bool) $value;
+        return (bool) $profile->$field;
     }
 
     /** @param mixed $value */

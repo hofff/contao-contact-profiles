@@ -7,6 +7,7 @@ namespace Hofff\Contao\ContactProfiles\Renderer\Field;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\FilesModel;
 use Contao\FrontendTemplate;
+use Contao\StringUtil;
 use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
 
@@ -24,12 +25,13 @@ final class VideosFieldRenderer extends AbstractFieldRenderer
     }
 
     /** @param mixed $value */
-    protected function hasValue($value): bool
+    public function hasValue(string $field, Profile $profile): bool
     {
-        if (! parent::hasValue($value)) {
+        if (! parent::hasValue($field, $profile)) {
             return false;
         }
 
+        $value    = StringUtil::deserialize($profile->$field);
         $profiles = array_filter(
             (array) $value,
             static function (array $config) {

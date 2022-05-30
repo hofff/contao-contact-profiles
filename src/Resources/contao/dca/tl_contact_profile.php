@@ -94,14 +94,22 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             'exclude'   => true,
             'search'    => true,
             'inputType' => 'text',
-            'eval'      => ['mandatory' => false, 'maxlength' => 255, 'tl_class' => 'w50'],
+            'eval'      => [
+                'mandatory' => false,
+                'maxlength' => 255,
+                'tl_class'  => 'w50',
+            ],
             'sql'       => 'varchar(255) BINARY NOT NULL default \'\'',
         ],
         'salutation'       => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['salutation'],
             'exclude'   => true,
             'inputType' => 'text',
-            'eval'      => ['mandatory' => false, 'maxlength' => 32, 'tl_class' => 'w50'],
+            'eval'      => [
+                'mandatory' => false,
+                'maxlength' => 32,
+                'tl_class'  => 'w50',
+            ],
             'sql'       => 'varchar(32) NOT NULL default \'\'',
 
         ],
@@ -109,14 +117,24 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['title'],
             'exclude'   => true,
             'inputType' => 'text',
-            'eval'      => ['mandatory' => false, 'maxlength' => 255, 'tl_class' => 'w50', 'profileField' => true],
+            'eval'      => [
+                'mandatory'    => false,
+                'maxlength'    => 255,
+                'tl_class'     => 'w50',
+                'profileField' => true,
+            ],
             'sql'       => 'varchar(255) NOT NULL default \'\'',
         ],
         'firstname'        => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['firstname'],
             'exclude'   => true,
             'inputType' => 'text',
-            'eval'      => ['mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50', 'profileField' => true],
+            'eval'      => [
+                'mandatory'    => true,
+                'maxlength'    => 255,
+                'tl_class'     => 'w50',
+                'profileField' => true,
+            ],
             'sql'       => 'varchar(255) NOT NULL default \'\'',
         ],
         'lastname'         => [
@@ -124,21 +142,34 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             'flag'      => 1,
             'exclude'   => true,
             'inputType' => 'text',
-            'eval'      => ['mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50', 'profileField' => true],
+            'eval'      => [
+                'mandatory'    => true,
+                'maxlength'    => 255,
+                'tl_class'     => 'w50',
+                'profileField' => true,
+            ],
             'sql'       => 'varchar(255) NOT NULL default \'\'',
         ],
         'position'         => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['position'],
             'exclude'   => true,
             'inputType' => 'text',
-            'eval'      => ['maxlength' => 255, 'tl_class' => 'clr w50', 'profileField' => true],
+            'eval'      => [
+                'maxlength'    => 255,
+                'tl_class'     => 'clr w50',
+                'profileField' => true,
+            ],
             'sql'       => 'varchar(255) NOT NULL default \'\'',
         ],
         'profession'       => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['profession'],
             'exclude'   => true,
             'inputType' => 'text',
-            'eval'      => ['maxlength' => 255, 'tl_class' => 'w50', 'profileField' => true],
+            'eval'      => [
+                'maxlength'    => 255,
+                'tl_class'     => 'w50',
+                'profileField' => true,
+            ],
             'sql'       => 'varchar(255) NOT NULL default \'\'',
         ],
         'image'            => [
@@ -159,7 +190,11 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['caption'],
             'exclude'   => true,
             'inputType' => 'text',
-            'eval'      => ['maxlength' => 255, 'tl_class' => 'w50', 'profileField' => false],
+            'eval'      => [
+                'maxlength'    => 255,
+                'tl_class'     => 'w50',
+                'profileField' => false,
+            ],
             'sql'       => 'varchar(255) NOT NULL default \'\'',
         ],
         'phone'            => [
@@ -237,7 +272,11 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
         'websiteTitle'     => [
             'exclude'   => true,
             'inputType' => 'text',
-            'eval'      => ['maxlength' => 255, 'tl_class' => 'w50', 'profileField' => false],
+            'eval'      => [
+                'maxlength'    => 255,
+                'tl_class'     => 'w50',
+                'profileField' => false,
+            ],
             'sql'       => 'varchar(255) NOT NULL default \'\'',
         ],
         'accounts'         => [
@@ -275,7 +314,12 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             'exclude'     => true,
             'search'      => true,
             'inputType'   => 'textarea',
-            'eval'        => ['mandatory' => false, 'rte' => 'tinyMCE', 'helpwizard' => true, 'profileField' => true],
+            'eval'        => [
+                'mandatory'    => false,
+                'rte'          => 'tinyMCE',
+                'helpwizard'   => true,
+                'profileField' => true,
+            ],
             'explanation' => 'insertTags',
             'sql'         => 'mediumtext NULL',
         ],
@@ -284,7 +328,12 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             'exclude'     => true,
             'search'      => true,
             'inputType'   => 'textarea',
-            'eval'        => ['mandatory' => false, 'rte' => 'tinyMCE', 'helpwizard' => true, 'profileField' => true],
+            'eval'        => [
+                'mandatory'    => false,
+                'rte'          => 'tinyMCE',
+                'helpwizard'   => true,
+                'profileField' => true,
+            ],
             'explanation' => 'insertTags',
             'sql'         => 'mediumtext NULL',
         ],
@@ -293,7 +342,10 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             'exclude'    => true,
             'inputType'  => 'checkboxWizard',
             'foreignKey' => 'tl_contact_responsibility.name',
-            'eval'       => ['multiple' => true, 'profileField' => true],
+            'eval'       => [
+                'multiple'     => true,
+                'profileField' => true,
+            ],
             'sql'        => 'mediumblob NULL',
         ],
         'statement'        => [
@@ -301,7 +353,12 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             'exclude'     => true,
             'search'      => true,
             'inputType'   => 'textarea',
-            'eval'        => ['mandatory' => false, 'rte' => 'tinyMCE', 'helpwizard' => true, 'profileField' => true],
+            'eval'        => [
+                'mandatory'    => false,
+                'rte'          => 'tinyMCE',
+                'helpwizard'   => true,
+                'profileField' => true,
+            ],
             'explanation' => 'insertTags',
             'sql'         => 'mediumtext NULL',
         ],
@@ -310,9 +367,15 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             'exclude'    => true,
             'inputType'  => 'pageTree',
             'foreignKey' => 'tl_page.title',
-            'eval'       => ['fieldType' => 'radio', 'profileField' => true],
+            'eval'       => [
+                'fieldType'    => 'radio',
+                'profileField' => true,
+            ],
             'sql'        => "int(10) unsigned NOT NULL default '0'",
-            'relation'   => ['type' => 'hasOne', 'load' => 'lazy'],
+            'relation'   => [
+                'type' => 'hasOne',
+                'load' => 'lazy',
+            ],
         ],
         'published'        => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['published'],
@@ -345,7 +408,11 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                     'videoSource' => [
                         'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['videoSource'],
                         'inputType' => 'select',
-                        'options'   => ['local', 'youtube', 'vimeo'],
+                        'options'   => [
+                            'local',
+                            'youtube',
+                            'vimeo',
+                        ],
                         'eval'      => [
                             'includeBlankOption' => true,
                             'style'              => 'width: 100%',
@@ -384,9 +451,19 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                         'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['videoAspect'],
                         'exclude'   => true,
                         'inputType' => 'select',
-                        'options'   => ['16:9', '16:10', '21:9', '4:3', '3:2'],
+                        'options'   => [
+                            '16:9',
+                            '16:10',
+                            '21:9',
+                            '4:3',
+                            '3:2',
+                        ],
                         'reference' => &$GLOBALS['TL_LANG']['tl_contact_profile']['videoAspect'],
-                        'eval'      => ['includeBlankOption' => true, 'nospace' => true, 'tl_class' => 'w50'],
+                        'eval'      => [
+                            'includeBlankOption' => true,
+                            'nospace'            => true,
+                            'tl_class'           => 'w50',
+                        ],
                     ],
                 ],
             ],
@@ -427,9 +504,9 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             'exclude'   => true,
             'inputType' => 'picker',
             'eval'      => [
-                'tl_class' => 'clr long',
-                'multiple' => true,
-                'chosen'   => true,
+                'tl_class'     => 'clr long',
+                'multiple'     => true,
+                'chosen'       => true,
             ],
             'relation'  => [
                 'type'          => 'haste-ManyToMany',

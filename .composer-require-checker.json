@@ -11,6 +11,7 @@
     "Contao\\FaqBundle\\ContaoFaqBundle",
     "Contao\\NewsModel",
     "Contao\\NewsArchiveModel",
+    "Contao\\ModuleNews",
     "Contao\\CalendarModel",
     "Contao\\CalendarEventsModel",
     "Contao\\FaqModel",
@@ -23,6 +24,8 @@
     "Hofff\\Contao\\SocialTags\\Util\\TypeUtil",
     "Codefog\\NewsCategoriesBundle\\CodefogNewsCategoriesBundle",
     "Codefog\\NewsCategoriesBundle\\Model\\NewsCategoryModel",
+    "Codefog\\NewsCategoriesBundle\\NewsCategoriesManager",
+    "Codefog\\NewsCategoriesBundle\\FrontendModule\\NewsCategoriesModule",
     "Terminal42\\DcMultilingualBundle\\Driver",
     "Terminal42\\DcMultilingualBundle\\Model\\Multilingual",
     "Terminal42\\DcMultilingualBundle\\Model\\MultilingualTrait"

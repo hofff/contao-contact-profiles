@@ -6,6 +6,7 @@ namespace Hofff\Contao\ContactProfiles\Renderer\Field;
 
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\FrontendTemplate;
+use Contao\StringUtil;
 use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Hofff\Contao\ContactProfiles\Model\SocialAccount\SocialAccount;
 use Hofff\Contao\ContactProfiles\Model\SocialAccount\SocialAccountRepository;
@@ -32,12 +33,13 @@ final class SocialAccountsRenderer extends AbstractFieldRenderer
     }
 
     /** {@inheritDoc} */
-    protected function hasValue($value): bool
+    public function hasValue(string $field, Profile $profile): bool
     {
-        if (! parent::hasValue($value)) {
+        if (! parent::hasValue($field, $profile)) {
             return false;
         }
 
+        $value    = StringUtil::deserialize($profile->$field);
         $profiles = array_filter(
             (array) $value,
             static function (array $config) {

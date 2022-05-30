@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Hofff\Contao\ContactProfiles\Frontend;
+namespace Hofff\Contao\ContactProfiles\Frontend\Profile;
 
 use Contao\CoreBundle\Framework\Adapter;
 use Contao\CoreBundle\Security\Authentication\Token\TokenChecker;

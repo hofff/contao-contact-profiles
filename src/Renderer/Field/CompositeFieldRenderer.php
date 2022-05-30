@@ -25,14 +25,23 @@ final class CompositeFieldRenderer extends AbstractFieldRenderer
         $this->renderer = $renderer;
     }
 
-    /** {@inheritDoc} */
-    public function __invoke(string $field, $value, ContactProfileRenderer $renderer, Profile $profile): ?string
+    public function hasValue(string $field, Profile $profile): bool
     {
         if (isset($this->renderer[$field])) {
-            return $this->renderer[$field]($field, $value, $renderer, $profile);
+            return $this->renderer[$field]->hasValue($field, $profile);
         }
 
-        return parent::__invoke($field, $value, $renderer, $profile);
+        return parent::hasValue($field, $profile);
+    }
+
+    /** {@inheritDoc} */
+    public function render(string $field, $value, ContactProfileRenderer $renderer, Profile $profile): ?string
+    {
+        if (isset($this->renderer[$field])) {
+            return $this->renderer[$field]->render($field, $value, $renderer, $profile);
+        }
+
+        return parent::render($field, $value, $renderer, $profile);
     }
 
     /** @param mixed $value */
