@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\DependencyInjection\Compiler;
 
-use Hofff\Contao\Consent\Bridge\ConsentId\ConsentIdParser;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -12,11 +11,11 @@ final class ProvideServicesPublicPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {
-        if (! $container->hasDefinition(ConsentIdParser::class)) {
+        if (! $container->hasDefinition('netzmacht.contao_toolkit.repository_manager')) {
             return;
         }
 
-        $definition = $container->getDefinition(ConsentIdParser::class);
+        $definition = $container->getDefinition('netzmacht.contao_toolkit.repository_manager');
         $definition->setPublic(true);
     }
 }
