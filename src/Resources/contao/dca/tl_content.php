@@ -22,7 +22,7 @@ $GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'][] = [
  */
 $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'hofff_contact_source';
 
-$GLOBALS['TL_DCA']['tl_content']['palettes']['hofff_contact_profile'] = '{type_legend},type,headline'
+$GLOBALS['TL_DCA']['tl_content']['palettes']['hofff_contact_profile_list'] = '{type_legend},type,headline'
     . ';{profile_legend},hofff_contact_source,hofff_contact_fields'
     . ';{template_legend:hide},customTpl,hofff_contact_template,hofff_contact_more,size'
     . ';{protected_legend:hide},protected'

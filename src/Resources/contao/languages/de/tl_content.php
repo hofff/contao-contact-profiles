@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 $GLOBALS['TL_LANG']['CTE']['hofff_contact_profiles']                   = 'Kontaktprofile';
-$GLOBALS['TL_LANG']['CTE']['hofff_contact_profile'][0]                 = 'Kontaktprofile';
-$GLOBALS['TL_LANG']['CTE']['hofff_contact_profile'][1]                 = 'Kontaktprofile anzeigen';
-$GLOBALS['TL_LANG']['CTE']['hofff_contact_profile_detail'][0]          = 'Kontaktprofil Details';
+$GLOBALS['TL_LANG']['CTE']['hofff_contact_profile_list'][0]            = 'Kontaktprofil-Liste';
+$GLOBALS['TL_LANG']['CTE']['hofff_contact_profile_list'][1]            = 'Kontaktprofile anzeigen';
+$GLOBALS['TL_LANG']['CTE']['hofff_contact_profile_detail'][0]          = 'Kontaktprofil-Details';
 $GLOBALS['TL_LANG']['CTE']['hofff_contact_profile_detail'][1]          = 'Details eines Kontaktprofils anzeigen';
 $GLOBALS['TL_LANG']['CTE']['hofff_contact_profile_initials_filter'][0] = 'Kontaktprofil Initialen-Filter';
 $GLOBALS['TL_LANG']['CTE']['hofff_contact_profile_initials_filter'][1] = 'Initialen-Filter für die Kontaktprofile';
