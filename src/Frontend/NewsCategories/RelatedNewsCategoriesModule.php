@@ -21,7 +21,11 @@ use function defined;
 use function mb_strtoupper;
 
 /**
- * @property int|string $news_categoriesRoot
+ * @property int|string      $news_categoriesRoot
+ * @property int|string|bool $news_resetCategories
+ * @property int|string|bool $news_includeSubcategories
+ * @property int|string|bool $news_enableCanonicalUrls
+ * @property int|string|bool $news_showQuantity
  * @psalm-suppress PropertyNotSetInConstructor
  */
 final class RelatedNewsCategoriesModule extends NewsCategoriesModule
@@ -38,6 +42,11 @@ final class RelatedNewsCategoriesModule extends NewsCategoriesModule
         $this->repositoryManager = self::getContainer()->get('netzmacht.contao_toolkit.repository_manager');
         /** @psalm-suppress PropertyTypeCoercion */
         $this->requestStack = self::getContainer()->get('request_stack');
+
+        $this->news_resetCategories      = '';
+        $this->news_includeSubcategories = '';
+        $this->news_enableCanonicalUrls  = '';
+        $this->news_showQuantity         = '';
     }
 
     /**
@@ -78,7 +87,7 @@ final class RelatedNewsCategoriesModule extends NewsCategoriesModule
             ['id' => $profile->profileId()]
         );
 
-        $rootId     = StringUtil::deserialize($this->news_categoriesRoot);
+        $rootId     = StringUtil::deserialize($this->news_categoriesRoot) ?: null;
         $repository = $this->repositoryManager->getRepository(NewsCategoryModel::class);
 
         /** @psalm-suppress UndefinedInterfaceMethod */

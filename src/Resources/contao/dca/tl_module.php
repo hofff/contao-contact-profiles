@@ -78,8 +78,7 @@ $GLOBALS['TL_DCA']['tl_module']['palettes']['hofff_contact_profile_initials_filt
 
 $GLOBALS['TL_DCA']['tl_module']['palettes']['hofff_contact_profile_related_categories'] =
     '{title_legend},name,headline,type'
-    . ';{config_legend},news_showQuantity,news_resetCategories,news_showEmptyCategories'
-    . ',news_enableCanonicalUrls,news_includeSubcategories,showLevel'
+    . ';{config_legend},news_showEmptyCategories,news_enableCanonicalUrls,showLevel'
     . ';{reference_legend:hide},news_categoriesRoot'
     . ';{redirect_legend:hide},news_forceCategoryUrl,jumpTo'
     . ';{template_legend:hide},navigationTpl,customTpl'
