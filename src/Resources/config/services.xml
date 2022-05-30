@@ -35,10 +35,6 @@
             <argument type="service" id="database_connection" />
         </service>
 
-        <service id="Hofff\Contao\ContactProfiles\Query\ResponsibilitiesQuery">
-            <argument type="service" id="database_connection" />
-        </service>
-
         <!-- Field renderer -->
         <service id="Hofff\Contao\ContactProfiles\Renderer\FieldRenderer"
                  class="Hofff\Contao\ContactProfiles\Renderer\Field\CompositeFieldRenderer"
@@ -67,7 +63,7 @@
 
         <service id="Hofff\Contao\ContactProfiles\Renderer\Field\ResponsibilitiesRenderer">
             <argument type="service" id="contao.framework" />
-            <argument type="service" id="Hofff\Contao\ContactProfiles\Query\ResponsibilitiesQuery" />
+            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\Responsibility\ResponsibilityRepository" />
             <tag name="hofff_contao_contact_profiles.field_renderer" field="responsibilities" />
         </service>
 

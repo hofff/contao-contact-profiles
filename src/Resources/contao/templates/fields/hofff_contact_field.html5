@@ -1,6 +1,6 @@
 <div class="contact-profile-field contact-profile-field-<?= $this->field ?>">
 <?php $this->block('content') ?>
     <div class="contact-profile-label"><?php $this->block('label') ?><?= $this->label ?><?php $this->endblock() ?></div>
-    <div class="contact-profile-value"><?php $this->block('value') ?><?= $this->value ?><?php $this->endblock() ?></div>
+    <div class="contact-profile-value"><?php $this->block('value') ?><?= $this->renderValue() ?><?php $this->endblock() ?></div>
 <?php $this->endblock(); ?>
 </div>

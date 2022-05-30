@@ -7,7 +7,7 @@ namespace Hofff\Contao\ContactProfiles\Renderer\Field;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\FrontendTemplate;
 use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
-use Hofff\Contao\ContactProfiles\Query\ResponsibilitiesQuery;
+use Hofff\Contao\ContactProfiles\Model\Responsibility\ResponsibilityRepository;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
 
 final class ResponsibilitiesRenderer extends AbstractFieldRenderer
@@ -15,14 +15,13 @@ final class ResponsibilitiesRenderer extends AbstractFieldRenderer
     /** @var string|null */
     protected $template = 'hofff_contact_field_responsibilities';
 
-    /** @var ResponsibilitiesQuery */
-    private $query;
+    private ResponsibilityRepository $responsibilities;
 
-    public function __construct(ContaoFramework $framework, ResponsibilitiesQuery $query)
+    public function __construct(ContaoFramework $framework, ResponsibilityRepository $responsibilities)
     {
         parent::__construct($framework);
 
-        $this->query = $query;
+        $this->responsibilities = $responsibilities;
     }
 
     /** @param mixed $value */
@@ -32,6 +31,6 @@ final class ResponsibilitiesRenderer extends AbstractFieldRenderer
         Profile $profile,
         ContactProfileRenderer $renderer
     ): void {
-        $template->value = ($this->query)((array) $value);
+        $template->value = $this->responsibilities->findMultipleByIds((array) $value);
     }
 }
