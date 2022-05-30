@@ -42,15 +42,21 @@ final class GetSearchablePagesListener
     }
 
     /**
-     * @param string[] $pages
+     * @param string[]                $pages
+     * @param numeric-string|int|null $rootId
      *
      * @return string[]
      */
-    public function __invoke(array $pages, ?int $rootId = null, bool $isSitemap = false): array
+    public function __invoke(array $pages, $rootId = null, bool $isSitemap = false, ?string $language = null): array
     {
+        $rootId      = $rootId ? (int) $rootId : null;
         $categoryIds = $this->fetchCategoriesWithDetailPage($rootId);
+        $collection  = $this->contactProfiles->fetchPublishedByCategories(
+            $categoryIds,
+            ['language' => $language]
+        ) ?: [];
 
-        foreach ($this->contactProfiles->fetchPublishedByCategories($categoryIds) ?: [] as $contactProfile) {
+        foreach ($collection as $contactProfile) {
             // Detail page of the category is overridden by the contact profile. Page is already processed by Contao.
             if ($contactProfile->jumpTo > 0) {
                 continue;

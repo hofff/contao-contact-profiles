@@ -14,6 +14,10 @@
         <defaults public="false" autoconfigure="false" autowire="false" />
 
         <!-- DCA Options -->
+        <service id="Hofff\Contao\ContactProfiles\EventListener\Dca\Options\CategoryOptions">
+            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\Category\CategoryRepository" />
+        </service>
+
         <service id="Hofff\Contao\ContactProfiles\EventListener\Dca\Options\ContactFieldsOptions">
             <argument type="service" id="netzmacht.contao_toolkit.dca.manager"/>
         </service>

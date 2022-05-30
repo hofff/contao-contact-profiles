@@ -5,6 +5,9 @@ declare(strict_types=1);
 /**
  * Table tl_contact_category
  */
+
+use Doctrine\DBAL\Types\Types;
+
 $GLOBALS['TL_DCA']['tl_contact_category'] = [
 
     // Config
@@ -74,26 +77,44 @@ $GLOBALS['TL_DCA']['tl_contact_category'] = [
 
     // Fields
     'fields'   => [
-        'id'     => [
+        'id'               => [
             'label'  => ['ID'],
             'search' => true,
-            'sql'    => 'int(10) unsigned NOT NULL auto_increment',
+            'sql' => [
+                'type'          => Types::INTEGER,
+                'unsigned'      => true,
+                'autoincrement' => true,
+            ],
         ],
-        'tstamp' => ['sql' => "int(10) unsigned NOT NULL default '0'"],
+        'tstamp'           => [
+            'sql'       => [
+                'type'     => Types::INTEGER,
+                'unsigned' => true,
+                'default'  => 0,
+            ],
+        ],
         'title'  => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_category']['title'],
             'exclude'   => true,
             'search'    => true,
             'inputType' => 'text',
             'eval'      => ['mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50'],
-            'sql'       => 'varchar(255) NOT NULL default \'\'',
+            'sql'       => [
+                'type'    => Types::STRING,
+                'length'  => 255,
+                'default' => '',
+            ],
         ],
         'jumpTo' => [
             'exclude'    => true,
             'inputType'  => 'pageTree',
             'foreignKey' => 'tl_page.title',
             'eval'       => ['fieldType' => 'radio', 'tl_class' => 'clr'],
-            'sql'        => 'int(10) unsigned NOT NULL default 0',
+            'sql'        => [
+                'type'     => Types::INTEGER,
+                'unsigned' => true,
+                'default'  => 0,
+            ],
             'relation'   => ['type' => 'hasOne', 'load' => 'lazy'],
         ],
     ],

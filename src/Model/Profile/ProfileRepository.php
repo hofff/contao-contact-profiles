@@ -141,10 +141,13 @@ final class ProfileRepository extends ContaoRepository
         return $this->findBy($columns, $values, $options);
     }
 
-    public function fetchPublishedByIdOrAlias(string $identifier): ?Profile
+    /**
+     * @param array<string,mixed> $options
+     */
+    public function fetchPublishedByIdOrAlias(string $identifier, array $options = []): ?Profile
     {
         if ($this->isMultilingual()) {
-            $columns = ['( .id=? OR IFNULL(translation.alias, .alias)=? )'];
+            $columns = ['( IFNULL(translation.alias, .alias)=? ) OR .id=? '];
             $values  = [$identifier, $identifier];
         } else {
             $columns = ['( .id=? OR .alias=?)'];
@@ -153,7 +156,7 @@ final class ProfileRepository extends ContaoRepository
 
         $this->addPublishedCondition($columns, $values);
 
-        return $this->findOneBy($columns, $values);
+        return $this->findOneBy($columns, $values, $options);
     }
 
     /**

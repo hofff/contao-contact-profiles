@@ -9,6 +9,8 @@ use Doctrine\DBAL\Types\Types;
 use Netzmacht\Contao\Toolkit\Dca\DcaManager;
 use Terminal42\DcMultilingualBundle\Driver;
 
+use function is_array;
+
 final class MultilingualListener
 {
     private DcaManager $dcaManager;
@@ -43,6 +45,10 @@ final class MultilingualListener
         switch ($table) {
             case 'tl_contact_profile':
                 $translatableFields = $this->profileFields;
+                break;
+
+            case 'tl_contact_category':
+                $translatableFields = ['title', 'jumpTo'];
                 break;
 
             case 'tl_contact_responsibility':
@@ -106,6 +112,13 @@ final class MultilingualListener
 
             foreach ($translatableFields as $field) {
                 $fields[$field]['eval']['translatableFor'] = '*';
+
+                if (! isset($fields[$field]['sql']) || ! is_array($fields[$field]['sql'])) {
+                    continue;
+                }
+
+                $fields[$field]['sql']['notnull'] = false;
+                $fields[$field]['sql']['default'] = null;
             }
 
             return $fields;

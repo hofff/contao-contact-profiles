@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\Model\Profile;
 
-use Terminal42\DcMultilingualBundle\Model\MultilingualTrait;
+use Hofff\Contao\ContactProfiles\Model\MultilingualTrait;
 
 final class MultilingualProfile extends Profile
 {

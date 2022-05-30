@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Contao\Config;
+use Doctrine\DBAL\Types\Types;
 
 $GLOBALS['TL_DCA']['tl_contact_profile'] = [
 
@@ -79,16 +80,30 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
         'id'               => [
             'label'  => ['ID'],
             'search' => true,
-            'sql'    => 'int(10) unsigned NOT NULL auto_increment',
+            'sql'       => [
+                'type'          => Types::INTEGER,
+                'unsigned'      => true,
+                'autoincrement' => true,
+            ],
         ],
         'pid'              => [
             'relation' => [
                 'type'  => 'belongsTo',
                 'table' => 'tl_contact_category',
             ],
-            'sql'      => "int(10) unsigned NOT NULL default '0'",
+            'sql'       => [
+                'type'     => Types::INTEGER,
+                'unsigned' => true,
+                'default'  => 0,
+            ],
         ],
-        'tstamp'           => ['sql' => "int(10) unsigned NOT NULL default '0'"],
+        'tstamp'           => [
+            'sql'       => [
+                'type'     => Types::INTEGER,
+                'unsigned' => true,
+                'default'  => 0,
+            ],
+        ],
         'alias'            => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['alias'],
             'exclude'   => true,
@@ -99,7 +114,11 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'maxlength' => 255,
                 'tl_class'  => 'w50',
             ],
-            'sql'       => 'varchar(255) BINARY NOT NULL default \'\'',
+            'sql'       => [
+                'type'    => Types::BINARY,
+                'length'  => 255,
+                'default' => '',
+            ],
         ],
         'salutation'       => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['salutation'],
@@ -110,8 +129,11 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'maxlength' => 32,
                 'tl_class'  => 'w50',
             ],
-            'sql'       => 'varchar(32) NOT NULL default \'\'',
-
+            'sql'       => [
+                'type'    => Types::STRING,
+                'length'  => 32,
+                'default' => '',
+            ],
         ],
         'title'            => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['title'],
@@ -123,7 +145,11 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'tl_class'     => 'w50',
                 'profileField' => true,
             ],
-            'sql'       => 'varchar(255) NOT NULL default \'\'',
+            'sql'       => [
+                'type'    => Types::STRING,
+                'length'  => 255,
+                'default' => '',
+            ],
         ],
         'firstname'        => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['firstname'],
@@ -135,7 +161,11 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'tl_class'     => 'w50',
                 'profileField' => true,
             ],
-            'sql'       => 'varchar(255) NOT NULL default \'\'',
+            'sql'       => [
+                'type'    => Types::STRING,
+                'length'  => 255,
+                'default' => '',
+            ],
         ],
         'lastname'         => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['lastname'],
@@ -148,7 +178,11 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'tl_class'     => 'w50',
                 'profileField' => true,
             ],
-            'sql'       => 'varchar(255) NOT NULL default \'\'',
+            'sql'       => [
+                'type'    => Types::STRING,
+                'length'  => 255,
+                'default' => '',
+            ],
         ],
         'position'         => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['position'],
@@ -159,7 +193,11 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'tl_class'     => 'clr w50',
                 'profileField' => true,
             ],
-            'sql'       => 'varchar(255) NOT NULL default \'\'',
+            'sql'       => [
+                'type'    => Types::STRING,
+                'length'  => 255,
+                'default' => '',
+            ],
         ],
         'profession'       => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['profession'],
@@ -170,7 +208,11 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'tl_class'     => 'w50',
                 'profileField' => true,
             ],
-            'sql'       => 'varchar(255) NOT NULL default \'\'',
+            'sql'       => [
+                'type'    => Types::STRING,
+                'length'  => 255,
+                'default' => '',
+            ],
         ],
         'image'            => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['image'],
@@ -184,7 +226,12 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'extensions'   => Config::get('validImageTypes'),
                 'profileField' => true,
             ],
-            'sql'       => 'binary(16) NULL',
+            'sql'       => [
+                'type'    => Types::BINARY,
+                'length'  => 16,
+                'notnull' => false,
+                'default' => null,
+            ],
         ],
         'caption'          => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['caption'],
@@ -195,7 +242,11 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'tl_class'     => 'w50',
                 'profileField' => false,
             ],
-            'sql'       => 'varchar(255) NOT NULL default \'\'',
+            'sql'       => [
+                'type'    => Types::STRING,
+                'length'  => 255,
+                'default' => '',
+            ],
         ],
         'phone'            => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['phone'],
@@ -209,7 +260,11 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'tl_class'       => 'w50',
                 'profileField'   => true,
             ],
-            'sql'       => 'varchar(64) NOT NULL default \'\'',
+            'sql'       => [
+                'type'    => Types::STRING,
+                'length'  => 64,
+                'default' => '',
+            ],
         ],
         'mobile'           => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['mobile'],
@@ -223,7 +278,11 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'tl_class'       => 'w50',
                 'profileField'   => true,
             ],
-            'sql'       => 'varchar(64) NOT NULL default \'\'',
+            'sql'       => [
+                'type'    => Types::STRING,
+                'length'  => 64,
+                'default' => '',
+            ],
         ],
         'fax'              => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['fax'],
@@ -237,7 +296,11 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'tl_class'       => 'w50',
                 'profileField'   => true,
             ],
-            'sql'       => 'varchar(64) NOT NULL default \'\'',
+            'sql'       => [
+                'type'    => Types::STRING,
+                'length'  => 64,
+                'default' => '',
+            ],
         ],
         'email'            => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['email'],
@@ -251,7 +314,11 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'tl_class'       => 'w50',
                 'profileField'   => true,
             ],
-            'sql'       => 'varchar(255) NOT NULL default \'\'',
+            'sql'       => [
+                'type'    => Types::STRING,
+                'length'  => 255,
+                'default' => '',
+            ],
         ],
         'website'          => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['website'],
@@ -267,7 +334,11 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'profileField'   => true,
                 'dcaPicker'      => true,
             ],
-            'sql'       => 'varchar(255) NOT NULL default \'\'',
+            'sql'       => [
+                'type'    => Types::STRING,
+                'length'  => 255,
+                'default' => '',
+            ],
         ],
         'websiteTitle'     => [
             'exclude'   => true,
@@ -277,7 +348,11 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'tl_class'     => 'w50',
                 'profileField' => false,
             ],
-            'sql'       => 'varchar(255) NOT NULL default \'\'',
+            'sql'       => [
+                'type'    => Types::STRING,
+                'length'  => 255,
+                'default' => '',
+            ],
         ],
         'accounts'         => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['accounts'],
@@ -307,7 +382,11 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                     ],
                 ],
             ],
-            'sql'       => 'blob NULL',
+            'sql'       => [
+                'type'    => Types::BLOB,
+                'notnull' => false,
+                'default' => null,
+            ],
         ],
         'teaser'           => [
             'label'       => &$GLOBALS['TL_LANG']['tl_contact_profile']['teaser'],
@@ -321,7 +400,11 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'profileField' => true,
             ],
             'explanation' => 'insertTags',
-            'sql'         => 'mediumtext NULL',
+            'sql'       => [
+                'type'    => Types::TEXT,
+                'notnull' => false,
+                'default' => null,
+            ],
         ],
         'description'      => [
             'label'       => &$GLOBALS['TL_LANG']['tl_contact_profile']['description'],
@@ -335,7 +418,11 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'profileField' => true,
             ],
             'explanation' => 'insertTags',
-            'sql'         => 'mediumtext NULL',
+            'sql'       => [
+                'type'    => Types::TEXT,
+                'notnull' => false,
+                'default' => null,
+            ],
         ],
         'responsibilities' => [
             'label'      => &$GLOBALS['TL_LANG']['tl_contact_profile']['responsibilities'],
@@ -346,7 +433,11 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'multiple'     => true,
                 'profileField' => true,
             ],
-            'sql'        => 'mediumblob NULL',
+            'sql'       => [
+                'type'    => Types::TEXT,
+                'notnull' => false,
+                'default' => null,
+            ],
         ],
         'statement'        => [
             'label'       => &$GLOBALS['TL_LANG']['tl_contact_profile']['statement'],
@@ -360,7 +451,11 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'profileField' => true,
             ],
             'explanation' => 'insertTags',
-            'sql'         => 'mediumtext NULL',
+            'sql'       => [
+                'type'    => Types::TEXT,
+                'notnull' => false,
+                'default' => null,
+            ],
         ],
         'jumpTo'           => [
             'label'      => &$GLOBALS['TL_LANG']['tl_contact_profile']['jumpTo'],
@@ -371,7 +466,11 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'fieldType'    => 'radio',
                 'profileField' => true,
             ],
-            'sql'        => "int(10) unsigned NOT NULL default '0'",
+            'sql'       => [
+                'type'     => Types::INTEGER,
+                'unsigned' => true,
+                'default'  => 0,
+            ],
             'relation'   => [
                 'type' => 'hasOne',
                 'load' => 'lazy',
@@ -383,7 +482,11 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             'filter'    => true,
             'inputType' => 'checkbox',
             'eval'      => ['doNotCopy' => true],
-            'sql'       => "char(1) NOT NULL default ''",
+            'sql'       => [
+                'type'    => Types::STRING,
+                'length'  => 1,
+                'default' => '',
+            ],
         ],
         'videos'           => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['videos'],

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\Model\Responsibility;
 
-use Terminal42\DcMultilingualBundle\Model\MultilingualTrait;
+use Hofff\Contao\ContactProfiles\Model\MultilingualTrait;
 
 final class MultilingualResponsibility extends Responsibility
 {

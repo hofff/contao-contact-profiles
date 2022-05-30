@@ -28,7 +28,7 @@ final class ContactProfilePageController
     /** @SuppressWarnings(PHPMD.Superglobals) */
     public function __invoke(string $alias, PageModel $pageModel, Request $request): Response
     {
-        $request->attributes->set(Profile::class, $this->fetchProfile($alias));
+        $request->attributes->set(Profile::class, $this->fetchProfile($alias, $pageModel));
 
         // The legacy framework relies on the global $objPage variable
         $GLOBALS['objPage'] = $pageModel;
@@ -36,9 +36,9 @@ final class ContactProfilePageController
         return (new PageRegular())->getResponse($pageModel, true);
     }
 
-    private function fetchProfile(string $alias): Profile
+    private function fetchProfile(string $alias, PageModel $pageModel): Profile
     {
-        $profile = $this->profiles->fetchPublishedByIdOrAlias($alias);
+        $profile = $this->profiles->fetchPublishedByIdOrAlias($alias, ['language' => $pageModel->language]);
         if ($profile === null) {
             throw new PageNotFoundException('Contact profile not found');
         }

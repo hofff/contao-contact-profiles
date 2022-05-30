@@ -7,10 +7,9 @@ namespace Hofff\Contao\ContactProfiles\Routing;
 use Contao\CoreBundle\Framework\Adapter;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\PageModel;
-use Doctrine\DBAL\Connection;
+use Hofff\Contao\ContactProfiles\Model\Category\CategoryRepository;
 use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use InvalidArgumentException;
-use PDO;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -27,9 +26,9 @@ final class ContactProfileUrlGenerator
 
     private ContaoFramework $framework;
 
-    private Connection $connection;
-
     private RouterInterface $router;
+
+    private CategoryRepository $categories;
 
     /** @var array<int|string, ?PageModel> */
     private array $categoryDetailPages = [];
@@ -38,14 +37,14 @@ final class ContactProfileUrlGenerator
 
     public function __construct(
         ContaoFramework $framework,
-        Connection $connection,
         RouterInterface $router,
+        CategoryRepository $categories,
         ?string $previewScript
     ) {
         $this->framework     = $framework;
-        $this->connection    = $connection;
         $this->router        = $router;
         $this->previewScript = $previewScript;
+        $this->categories    = $categories;
     }
 
     /**
@@ -59,7 +58,7 @@ final class ContactProfileUrlGenerator
         }
 
         if (! array_key_exists($profile->pid, $this->categoryDetailPages)) {
-            $this->categoryDetailPages[$profile->pid] = $this->fetchCategoryDetailPage((int) $profile->pid);
+            $this->categoryDetailPages[$profile->pid] = $this->fetchCategoryDetailPage($profile);
         }
 
         return $this->categoryDetailPages[$profile->pid];
@@ -107,22 +106,17 @@ final class ContactProfileUrlGenerator
      * @psalm-suppress InvalidReturnType
      * @psalm-suppress InvalidReturnStatement
      */
-    private function fetchCategoryDetailPage(int $categoryId): ?PageModel
+    private function fetchCategoryDetailPage(Profile $profile): ?PageModel
     {
-        $statement = $this->connection->executeQuery(
-            'SELECT jumpTo from tl_contact_category WHERE id = :categoryId LIMIT 0,1',
-            ['categoryId' => $categoryId]
-        );
-
-        $pageId = $statement->fetch(PDO::FETCH_COLUMN);
-        if ($pageId === false || $pageId < 1) {
+        $category = $this->categories->findOneBy(['.id=?'], [$profile->pid]);
+        if (! $category) {
             return null;
         }
 
         /** @var Adapter<PageModel> $adapter */
         $adapter = $this->framework->getAdapter(PageModel::class);
 
-        return $adapter->findByPk($pageId);
+        return $adapter->findByPk($category->jumpTo);
     }
 
     private function generateUrlForContactPage(Profile $profile, PageModel $pageModel, int $referenceType): string
@@ -133,7 +127,7 @@ final class ContactProfileUrlGenerator
                     RouteObjectInterface::OBJECT_BASED_ROUTE_NAME,
                     [
                         RouteObjectInterface::CONTENT_OBJECT => $pageModel,
-                        'alias'                              => $profile->alias ?: $profile->id,
+                        'alias'                              => $profile->alias ?: $profile->profileId(),
                     ],
                     RouterInterface::ABSOLUTE_PATH,
                 );
@@ -143,7 +137,7 @@ final class ContactProfileUrlGenerator
                     RouteObjectInterface::OBJECT_BASED_ROUTE_NAME,
                     [
                         RouteObjectInterface::CONTENT_OBJECT => $pageModel,
-                        'alias'                              => $profile->alias ?: $profile->id,
+                        'alias'                              => $profile->alias ?: $profile->profileId(),
                     ],
                     RouterInterface::ABSOLUTE_URL,
                 );
@@ -159,7 +153,7 @@ final class ContactProfileUrlGenerator
                     RouteObjectInterface::OBJECT_BASED_ROUTE_NAME,
                     [
                         RouteObjectInterface::CONTENT_OBJECT => $pageModel,
-                        'alias'                              => $profile->alias ?: $profile->id,
+                        'alias'                              => $profile->alias ?: $profile->profileId(),
                     ],
                     RouterInterface::ABSOLUTE_PATH,
                 );

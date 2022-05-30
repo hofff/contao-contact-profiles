@@ -7,6 +7,7 @@
         <defaults public="false" autoconfigure="false" autowire="false"/>
 
         <service id="Hofff\Contao\ContactProfiles\Model\Category\CategoryRepository">
+            <argument>Hofff\Contao\ContactProfiles\Model\Category\MonolingualCategory</argument>
             <tag name="netzmacht.contao_toolkit.repository" model="Hofff\Contao\ContactProfiles\Model\Category\Category"/>
         </service>
         
@@ -14,14 +15,17 @@
             <argument>Hofff\Contao\ContactProfiles\Model\Profile\MonolingualProfile</argument>
             <argument type="service" id="database_connection"/>
             <argument type="service" id="contao.security.token_checker"/>
+            <tag name="netzmacht.contao_toolkit.repository" model="Hofff\Contao\ContactProfiles\Model\Profile\Profile"/>
         </service>
 
         <service id="Hofff\Contao\ContactProfiles\Model\Responsibility\ResponsibilityRepository">
             <argument>Hofff\Contao\ContactProfiles\Model\Responsibility\MonolingualResponsibility</argument>
+            <tag name="netzmacht.contao_toolkit.repository" model="Hofff\Contao\ContactProfiles\Model\Responsibility\Responsibility"/>
         </service>
 
         <service id="Hofff\Contao\ContactProfiles\Model\SocialAccount\SocialAccountRepository">
             <argument>Hofff\Contao\ContactProfiles\Model\SocialAccount\MonolingualSocialAccount</argument>
+            <tag name="netzmacht.contao_toolkit.repository" model="Hofff\Contao\ContactProfiles\Model\SocialAccount\SocialAccount"/>
         </service>
     </services>
 </container>

@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Hofff\Contao\ContactProfiles\Model\SocialAccount;
+namespace Hofff\Contao\ContactProfiles\Model\Category;
 
 use Hofff\Contao\ContactProfiles\Model\MultilingualTrait;
 
-final class MultilingualSocialAccount extends SocialAccount
+final class MultilingualCategory extends Category
 {
     use MultilingualTrait;
 
-    public function socialAccountId(): int
+    public function categoryId(): int
     {
         return (int) $this->getLanguageId();
     }

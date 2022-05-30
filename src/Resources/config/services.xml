@@ -27,8 +27,8 @@
         <!-- Url Generator -->
         <service id="Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator" public="true">
             <argument type="service" id="contao.framework"/>
-            <argument type="service" id="database_connection"/>
             <argument type="service" id="router"/>
+            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\Category\CategoryRepository"/>
             <argument>%contao.preview_script%</argument>
         </service>
 
