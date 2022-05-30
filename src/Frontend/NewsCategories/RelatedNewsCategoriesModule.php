@@ -31,6 +31,7 @@ use function mb_strtoupper;
 final class RelatedNewsCategoriesModule extends NewsCategoriesModule
 {
     /** @var string */
+    // phpcs:ignore SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
     protected $strTemplate = 'mod_hofff_contact_profile_related_categories';
 
     private RepositoryManager $repositoryManager;
