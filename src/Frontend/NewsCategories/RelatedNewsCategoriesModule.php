@@ -30,6 +30,8 @@ use function mb_strtoupper;
  */
 final class RelatedNewsCategoriesModule extends NewsCategoriesModule
 {
+    protected $strTemplate = 'mod_hofff_contact_profile_related_categories';
+
     private RepositoryManager $repositoryManager;
 
     private RequestStack $requestStack;

@@ -1,1 +1,3 @@
-<?php $this->extend('mod_newscategories');
+<?php if ($this->categories): ?>
+<?php $this->extend('mod_newscategories') ?>
+<?php endif ?>
