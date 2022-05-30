@@ -55,5 +55,6 @@
         <class name="Contao\CalendarEventsModel"/>
         <class name="Contao\FaqModel"/>
         <class name="Contao\NewsModel"/>
+        <class name="Contao\Model"/>
     </universalObjectCrates>
 </psalm>

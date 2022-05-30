@@ -5,7 +5,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <defaults public="false" autoconfigure="false" autowire="false"/>
-        
+
         <!-- Alias generator -->
         <service id="hofff_contao_contact_profiles.alias_generator" class="Ausi\SlugGenerator\SlugGenerator">
             <argument>%hofff_contao_contact_profiles.alias_options%</argument>
@@ -26,8 +26,8 @@
 
         <!-- Url Generator -->
         <service id="Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator" public="true">
-            <argument type="service" id="contao.framework" />
-            <argument type="service" id="database_connection" />
+            <argument type="service" id="contao.framework"/>
+            <argument type="service" id="database_connection"/>
         </service>
 
         <!-- Renderer -->
@@ -43,54 +43,54 @@
         <service id="Hofff\Contao\ContactProfiles\Renderer\FieldRenderer"
                  class="Hofff\Contao\ContactProfiles\Renderer\Field\CompositeFieldRenderer"
                  public="true">
-            <argument type="service" id="contao.framework" />
+            <argument type="service" id="contao.framework"/>
             <argument type="collection"/>
         </service>
 
         <service id="Hofff\Contao\ContactProfiles\Renderer\Field\ImageFieldRenderer">
-            <argument type="service" id="contao.framework" />
+            <argument type="service" id="contao.framework"/>
             <argument type="string">%kernel.project_dir%</argument>
-            <tag name="hofff_contao_contact_profiles.field_renderer" field="image" />
+            <tag name="hofff_contao_contact_profiles.field_renderer" field="image"/>
         </service>
 
         <service id="Hofff\Contao\ContactProfiles\Renderer\Field\EmailFieldRenderer">
-            <argument type="service" id="contao.framework" />
+            <argument type="service" id="contao.framework"/>
             <argument type="string">%kernel.project_dir%</argument>
-            <tag name="hofff_contao_contact_profiles.field_renderer" field="email" />
+            <tag name="hofff_contao_contact_profiles.field_renderer" field="email"/>
         </service>
 
         <service id="Hofff\Contao\ContactProfiles\Renderer\Field\SocialAccountsRenderer">
-            <argument type="service" id="contao.framework" />
-            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\SocialAccount\SocialAccountRepository" />
-            <tag name="hofff_contao_contact_profiles.field_renderer" field="accounts" />
+            <argument type="service" id="contao.framework"/>
+            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\SocialAccount\SocialAccountRepository"/>
+            <tag name="hofff_contao_contact_profiles.field_renderer" field="accounts"/>
         </service>
 
         <service id="Hofff\Contao\ContactProfiles\Renderer\Field\ResponsibilitiesRenderer">
-            <argument type="service" id="contao.framework" />
-            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\Responsibility\ResponsibilityRepository" />
-            <tag name="hofff_contao_contact_profiles.field_renderer" field="responsibilities" />
+            <argument type="service" id="contao.framework"/>
+            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\Responsibility\ResponsibilityRepository"/>
+            <tag name="hofff_contao_contact_profiles.field_renderer" field="responsibilities"/>
         </service>
 
         <service id="Hofff\Contao\ContactProfiles\Renderer\Field\JumpToFieldRenderer">
-            <argument type="service" id="contao.framework" />
-            <tag name="hofff_contao_contact_profiles.field_renderer" field="jumpTo" />
+            <argument type="service" id="contao.framework"/>
+            <tag name="hofff_contao_contact_profiles.field_renderer" field="jumpTo"/>
         </service>
 
         <service id="Hofff\Contao\ContactProfiles\Renderer\Field\WebsiteFieldRenderer">
-            <argument type="service" id="contao.framework" />
-            <tag name="hofff_contao_contact_profiles.field_renderer" field="website" />
+            <argument type="service" id="contao.framework"/>
+            <tag name="hofff_contao_contact_profiles.field_renderer" field="website"/>
         </service>
 
         <service id="Hofff\Contao\ContactProfiles\Renderer\Field\VideosFieldRenderer">
-            <argument type="service" id="contao.framework" />
-            <argument type="service" id="Hofff\Contao\Consent\Bridge\ConsentToolManager" />
-            <tag name="hofff_contao_contact_profiles.field_renderer" field="videos" />
+            <argument type="service" id="contao.framework"/>
+            <argument type="service" id="Hofff\Contao\Consent\Bridge\ConsentToolManager"/>
+            <tag name="hofff_contao_contact_profiles.field_renderer" field="videos"/>
         </service>
 
         <service id="Hofff\Contao\ContactProfiles\Renderer\Field\GalleryFieldRenderer">
-            <argument type="service" id="contao.framework" />
+            <argument type="service" id="contao.framework"/>
             <argument>%kernel.project_dir%</argument>
-            <tag name="hofff_contao_contact_profiles.field_renderer" field="gallery" />
+            <tag name="hofff_contao_contact_profiles.field_renderer" field="gallery"/>
         </service>
 
         <service id="Hofff\Contao\ContactProfiles\Picker\ContactProfilePickerProvider">
@@ -113,6 +113,29 @@
         <service id="Hofff\Contao\ContactProfiles\SocialTags\SocialTagsGenerator" public="true">
             <argument type="service" id="request_stack"/>
             <argument type="service" id="Hofff\Contao\SocialTags\Data\SocialTagsFactory" on-invalid="ignore"/>
+        </service>
+
+        <!--Fragments -->
+        <service id="Hofff\Contao\ContactProfiles\Frontend\ContactProfileDetailController">
+            <argument type="service" id="netzmacht.contao_toolkit.template_renderer"/>
+            <argument type="service" id="netzmacht.contao_toolkit.routing.scope_matcher"/>
+            <argument type="service" id="netzmacht.contao_toolkit.response_tagger"/>
+            <argument type="service" id="router"/>
+            <argument type="service" id="translator"/>
+            <argument type="service" id="contao.security.token_checker"/>
+            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository"/>
+            <argument type="service" id="Hofff\Contao\ContactProfiles\SocialTags\SocialTagsGenerator"/>
+            <argument type="service" id="Hofff\Contao\ContactProfiles\Renderer\ContactProfileRendererFactory"/>
+            <argument type="service" id="netzmacht.contao_toolkit.contao.controller_adapter"/>
+            <argument type="service" id="netzmacht.contao_toolkit.contao.input_adapter"/>
+            <tag name="contao.content_element"
+                 type="hofff_contact_profile_detail"
+                 category="hofff_contact_profiles"
+                 method="renderAsContentElement"/>
+            <tag name="contao.frontend_module"
+                 type="hofff_contact_profile_detail"
+                 category="hofff_contact_profiles"
+                 method="renderAsFrontendModule"/>
         </service>
     </services>
 </container>
