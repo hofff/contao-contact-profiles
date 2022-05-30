@@ -42,12 +42,14 @@ final class GetSearchablePagesListener
     }
 
     /**
-     * @param string[] $pages
+     * @param string[]        $pages
+     * @param int|string|null $rootId
      *
      * @return string[]
      */
-    public function __invoke(array $pages, ?int $rootId = null, bool $isSitemap = false): array
+    public function __invoke(array $pages, $rootId = null, bool $isSitemap = false): array
     {
+        $rootId      = $rootId ? (int) $rootId : null;
         $categoryIds = $this->fetchCategoriesWithDetailPage($rootId);
 
         foreach ($this->contactProfiles->fetchPublishedByCategories($categoryIds) as $contactProfile) {
