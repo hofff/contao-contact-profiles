@@ -12,10 +12,12 @@ use Contao\Input;
 use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Netzmacht\Contao\Toolkit\Data\Model\RepositoryManager;
 use Netzmacht\Contao\Toolkit\Dca\DcaManager;
+use Terminal42\DcMultilingualBundle\Model\Multilingual;
 
 use function array_pop;
 use function array_unshift;
 use function implode;
+use function is_a;
 use function sprintf;
 
 final class NewsCategoryDcaListener
@@ -83,13 +85,20 @@ final class NewsCategoryDcaListener
         $categories = [];
         $label      = [];
 
-        $categoryId = $row['id'];
+        if (is_a(NewsCategoryModel::class, Multilingual::class, true)) {
+            $langPid    = $this->dcaManager->getDefinition(NewsCategoryModel::getTable())->get(['config', 'langPid']);
+            $categoryId = $row[$langPid] ?: $row['id'];
+        } else {
+            $categoryId = $row['id'];
+        }
 
         while ($categoryId > 0) {
             $category = $categories[$categoryId] ?? $repository->find($categoryId);
             if ($category === null) {
                 break;
             }
+
+            $categories[$categoryId] = $category;
 
             /** @psalm-suppress UndefinedMagicPropertyFetch */
             $categoryId = (int) $category->pid;

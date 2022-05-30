@@ -18,6 +18,9 @@ use Contao\System;
 use Contao\Versions;
 use Doctrine\DBAL\Connection;
 use Exception;
+use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
+use Netzmacht\Contao\Toolkit\Dca\DcaManager;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 use function func_get_arg;
 use function is_array;
@@ -33,13 +36,24 @@ final class ContactProfileDcaListener
 
     private Connection $connection;
 
+    private TranslatorInterface $translator;
+
+    private DcaManager $dcaManager;
+
     private string $pattern;
 
-    public function __construct(SlugGeneratorInterface $slugGenerator, Connection $connection, string $aliasPattern)
-    {
+    public function __construct(
+        SlugGeneratorInterface $slugGenerator,
+        Connection $connection,
+        TranslatorInterface $translator,
+        DcaManager $dcaManager,
+        string $aliasPattern
+    ) {
         $this->slugGenerator = $slugGenerator;
         $this->connection    = $connection;
         $this->pattern       = $aliasPattern;
+        $this->translator    = $translator;
+        $this->dcaManager    = $dcaManager;
     }
 
     /**
@@ -82,11 +96,11 @@ final class ContactProfileDcaListener
         }
 
         if (preg_match('/^[1-9]\d*$/', $value)) {
-            throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['aliasNumeric'], $value));
+            throw new Exception($this->translator->trans('ERR.aliasNumeric', [$value], 'contao_default'));
         }
 
         if ($aliasExists($value)) {
-            throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['aliasExists'], $value));
+            throw new Exception($this->translator->trans('ERR.aliasExists', [$value], 'contao_default'));
         }
 
         return $value;
@@ -189,7 +203,6 @@ final class ContactProfileDcaListener
      *
      * @throws AccessDeniedException
      *
-     * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -204,8 +217,9 @@ final class ContactProfileDcaListener
         }
 
         // Trigger the onload_callback
-        if (isset($GLOBALS['TL_DCA']['tl_contact_profile']['config']['onload_callback'])) {
-            foreach ($GLOBALS['TL_DCA']['tl_contact_profile']['config']['onload_callback'] as $callback) {
+        $callbacks = $this->dcaManager->getDefinition(Profile::getTable())->get(['config', 'onload_callback']);
+        if (is_array($callbacks)) {
+            foreach ($callbacks as $callback) {
                 if (is_array($callback)) {
                     $callback[0] = System::importStatic($callback[0]);
                     $callback[0]->{$callback[1]}($dataContainer);
@@ -236,8 +250,12 @@ final class ContactProfileDcaListener
         $objVersions->initialize();
 
         // Trigger the save_callback
-        if (is_array($GLOBALS['TL_DCA']['tl_contact_profile']['fields']['published']['save_callback'])) {
-            foreach ($GLOBALS['TL_DCA']['tl_contact_profile']['fields']['published']['save_callback'] as $callback) {
+        $callbacks = $this->dcaManager
+            ->getDefinition(Profile::getTable())
+            ->get(['fields', 'published', 'save_callback']);
+
+        if (is_array($callbacks)) {
+            foreach ($callbacks as $callback) {
                 if (is_array($callback)) {
                     $callback[0] = System::importStatic($callback[0]);
                     $blnVisible  = $callback[0]->{$callback[1]}($dataContainer);
@@ -261,8 +279,12 @@ final class ContactProfileDcaListener
         }
 
         // Trigger the onsubmit_callback
-        if (is_array($GLOBALS['TL_DCA']['tl_contact_profile']['config']['onsubmit_callback'])) {
-            foreach ($GLOBALS['TL_DCA']['tl_contact_profile']['config']['onsubmit_callback'] as $callback) {
+        $callbacks = $this->dcaManager
+            ->getDefinition(Profile::getTable())
+            ->get(['config', 'onsubmit_callback']);
+
+        if (is_array($callbacks)) {
+            foreach ($callbacks as $callback) {
                 if (is_array($callback)) {
                     $callback[0] = System::importStatic($callback[0]);
                     $callback[0]->{$callback[1]}($dataContainer);
