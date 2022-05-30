@@ -11,6 +11,9 @@ use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
+
+use function http_build_query;
 
 final class PreviewUrlCreateListener
 {
@@ -51,12 +54,30 @@ final class PreviewUrlCreateListener
             return;
         }
 
-        $contactProfile = $this->contactProfiles->find($this->getId($event, $request));
+        $profileId = $this->getId($event, $request);
+        $session   = $request->getSession();
+        $bag       = $session->getBag('contao_backend');
+        $locale    = null;
+        if ($bag instanceof AttributeBagInterface) {
+            $locale = $bag->get('dc_multilingual:tl_contact_profile:' . $profileId);
+        }
+
+        $contactProfile = $this->contactProfiles->findOneBy(
+            ['.id=?'],
+            [$this->getId($event, $request)],
+            ['language' => $locale]
+        );
+
         if (! $contactProfile instanceof Profile) {
             return;
         }
 
-        $event->setQuery('hofff_contact_profile=' . $contactProfile->profileId());
+        $event->setQuery(http_build_query(
+            [
+                'hofff_contact_profile' => $contactProfile->profileId(),
+                'locale'                => $locale,
+            ]
+        ));
     }
 
     private function getId(PreviewUrlCreateEvent $event, Request $request): int

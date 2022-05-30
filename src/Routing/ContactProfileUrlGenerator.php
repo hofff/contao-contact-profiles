@@ -48,17 +48,19 @@ final class ContactProfileUrlGenerator
     }
 
     /**
+     * @param array<string,mixed> $options
+     *
      * @psalm-suppress InvalidReturnType
      * @psalm-suppress InvalidReturnStatement
      */
-    public function getDetailPage(Profile $profile): ?PageModel
+    public function getDetailPage(Profile $profile, array $options = []): ?PageModel
     {
         if ($profile->jumpTo) {
             return $this->framework->getAdapter(PageModel::class)->findByPk($profile->jumpTo);
         }
 
         if (! array_key_exists($profile->pid, $this->categoryDetailPages)) {
-            $this->categoryDetailPages[$profile->pid] = $this->fetchCategoryDetailPage($profile);
+            $this->categoryDetailPages[$profile->pid] = $this->fetchCategoryDetailPage($profile, $options);
         }
 
         return $this->categoryDetailPages[$profile->pid];
@@ -92,9 +94,15 @@ final class ContactProfileUrlGenerator
         }
     }
 
-    public function generateDetailUrl(Profile $profile, int $referenceType = self::ABSOLUTE_PATH): ?string
-    {
-        $page = $this->getDetailPage($profile);
+    /**
+     * @param array<string,mixed> $options
+     */
+    public function generateDetailUrl(
+        Profile $profile,
+        int $referenceType = self::ABSOLUTE_PATH,
+        array $options = []
+    ): ?string {
+        $page = $this->getDetailPage($profile, $options);
         if ($page === null) {
             return null;
         }
@@ -103,12 +111,14 @@ final class ContactProfileUrlGenerator
     }
 
     /**
+     * @param array<string,mixed> $options
+     *
      * @psalm-suppress InvalidReturnType
      * @psalm-suppress InvalidReturnStatement
      */
-    private function fetchCategoryDetailPage(Profile $profile): ?PageModel
+    private function fetchCategoryDetailPage(Profile $profile, array $options = []): ?PageModel
     {
-        $category = $this->categories->findOneBy(['.id=?'], [$profile->pid]);
+        $category = $this->categories->findOneBy(['.id=?'], [$profile->pid], $options);
         if (! $category) {
             return null;
         }
