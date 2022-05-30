@@ -106,7 +106,7 @@ final class RelatedNewsCategoriesModule extends NewsCategoriesModule
             return $profile;
         }
 
-        $repository = $this->repositoryManager->getRepository(NewsCategoryModel::class);
+        $repository = $this->repositoryManager->getRepository(Profile::class);
 
         /** @psalm-suppress UndefinedInterfaceMethod */
         return $repository->fetchPublishedByIdOrAlias((string) Input::get('auto_item'));
