@@ -54,6 +54,8 @@
             <argument>%kernel.bundles%</argument>
         </service>
 
+        <service id="Hofff\Contao\ContactProfiles\EventListener\Dca\InitializePalettesListener" />
+
         <service id="Hofff\Contao\ContactProfiles\EventListener\Hook\AddContactProfileInformationListener" public="true">
             <argument type="service" id="Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository" />
             <argument>%hofff.contao_contact_profiles.template_prefixes%</argument>

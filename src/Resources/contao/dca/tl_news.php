@@ -2,13 +2,6 @@
 
 declare(strict_types=1);
 
-use Hofff\Contao\ContactProfiles\EventListener\Dca\NewsDcaListener;
-
-$GLOBALS['TL_DCA']['tl_news']['config']['onload_callback'][] = [
-    NewsDcaListener::class,
-    'initializePalette',
-];
-
 $GLOBALS['TL_DCA']['tl_news']['fields']['hofff_contact_profiles'] = [
     'label'            => &$GLOBALS['TL_LANG']['tl_news']['hofff_contact_profiles'],
     'exclude'          => true,

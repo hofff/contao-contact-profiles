@@ -14,6 +14,7 @@ use function assert;
 use function sprintf;
 
 /**
+ * @Callback(table="tl_calendar_events", target="fields.hofff_contact_profiles.options")
  * @Callback(table="tl_content", target="fields.hofff_contact_profiles.options")
  * @Callback(table="tl_faq", target="fields.hofff_contact_profiles.options")
  * @Callback(table="tl_module", target="fields.hofff_contact_profiles.options")
