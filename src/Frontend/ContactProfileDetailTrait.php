@@ -10,6 +10,7 @@ use Contao\Input;
 use Contao\System;
 use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
+use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRendererFactory;
 use Hofff\Contao\ContactProfiles\SocialTags\SocialTagsGenerator;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -17,8 +18,6 @@ use function trim;
 
 trait ContactProfileDetailTrait
 {
-    use CreateRendererTrait;
-
     private ?Profile $profile;
 
     /**
@@ -54,7 +53,7 @@ trait ContactProfileDetailTrait
 
     protected function compile(): void
     {
-        $renderer = $this->createRenderer();
+        $renderer = System::getContainer()->get(ContactProfileRendererFactory::class)->create($this->getModel());
 
         $this->Template->profile       = $this->profile;
         $this->Template->renderer      = $renderer;

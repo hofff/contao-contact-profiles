@@ -30,6 +30,15 @@
             <argument type="service" id="database_connection" />
         </service>
 
+        <!-- Renderer -->
+        <service id="Hofff\Contao\ContactProfiles\Renderer\ContactProfileRendererFactory" public="true">
+            <argument type="service" id="translator"/>
+            <argument type="service" id="Hofff\Contao\Consent\Bridge\ConsentId\ConsentIdParser"/>
+            <argument type="service" id="Hofff\Contao\ContactProfiles\Renderer\FieldRenderer"/>
+            <argument type="service" id="Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator"/>
+            <argument type="service" id="netzmacht.contao_toolkit.routing.scope_matcher"/>
+        </service>
+
         <!-- Field renderer -->
         <service id="Hofff\Contao\ContactProfiles\Renderer\FieldRenderer"
                  class="Hofff\Contao\ContactProfiles\Renderer\Field\CompositeFieldRenderer"

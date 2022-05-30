@@ -15,6 +15,7 @@ use Hofff\Contao\ContactProfiles\Event\LoadContactProfilesEvent;
 use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
 use Hofff\Contao\ContactProfiles\Model\Profile\Specification\InitialLastnameLetterSpecification;
+use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRendererFactory;
 use Hofff\Contao\ContactProfiles\Util\QueryUtil;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -28,11 +29,9 @@ use const TL_MODE;
 
 trait ContactProfileTrait
 {
-    use CreateRendererTrait;
-
     protected function compile(): void
     {
-        $renderer = $this->createRenderer();
+        $renderer = System::getContainer()->get(ContactProfileRendererFactory::class)->create($this->getModel());
 
         $pageParameter = $this->pageParameter();
         $offset        = $this->determineOffset($pageParameter);
