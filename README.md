@@ -19,9 +19,10 @@ It's also works together with:
 
 ## Features
 
- - Contact profile list module (custom profiles, related profiles, by category)
- - Contact profile detail module
- - Initials filter
+ - Contact profile list module/content element (custom profiles, related profiles, by category)
+ - Contact profile detail module/content element
+ - Initials filter module/content element
+ - Related news categories module
 
 ## Multilingual support
 
