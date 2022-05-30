@@ -199,7 +199,7 @@ final class ContactProfileDcaListener
         }
 
         // Trigger the onload_callback
-        if (is_array($GLOBALS['TL_DCA']['tl_contact_profile']['config']['onload_callback'])) {
+        if (isset($GLOBALS['TL_DCA']['tl_contact_profile']['config']['onload_callback'])) {
             foreach ($GLOBALS['TL_DCA']['tl_contact_profile']['config']['onload_callback'] as $callback) {
                 if (is_array($callback)) {
                     $callback[0] = System::importStatic($callback[0]);
