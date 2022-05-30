@@ -13,5 +13,6 @@ use Contao\Model;
 final class Category extends Model
 {
     /** @var string */
+    // phpcs:ignore SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
     protected static $strTable = 'tl_contact_category';
 }

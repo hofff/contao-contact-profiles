@@ -29,11 +29,9 @@ use function uniqid;
 
 final class GalleryFieldRenderer extends AbstractFieldRenderer
 {
-    /** @var string|null */
-    protected $template = 'hofff_contact_field_gallery';
+    protected ?string $template = 'hofff_contact_field_gallery';
 
-    /** @var string */
-    private $projectDir;
+    private string $projectDir;
 
     public function __construct(ContaoFramework $framework, string $projectDir)
     {

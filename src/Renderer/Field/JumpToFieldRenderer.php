@@ -11,8 +11,7 @@ use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
 
 final class JumpToFieldRenderer extends AbstractFieldRenderer
 {
-    /** @var string|null */
-    protected $template = 'hofff_contact_field_jump_to';
+    protected ?string $template = 'hofff_contact_field_jump_to';
 
     /** @param mixed $value */
     protected function compile(

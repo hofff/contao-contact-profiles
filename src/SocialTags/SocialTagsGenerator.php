@@ -11,11 +11,9 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 final class SocialTagsGenerator
 {
-    /** @var RequestStack */
-    private $requestStack;
+    private RequestStack $requestStack;
 
-    /** @var SocialTagsFactory|null */
-    private $socialTagsFactory;
+    private ?SocialTagsFactory $socialTagsFactory;
 
     public function __construct(RequestStack $requestStack, ?SocialTagsFactory $socialTagsFactory)
     {

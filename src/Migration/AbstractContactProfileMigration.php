@@ -12,14 +12,12 @@ use function serialize;
 
 abstract class AbstractContactProfileMigration extends AbstractMigration
 {
-    /** @var Connection */
-    private $connection;
+    private Connection $connection;
 
     /** @var string[] */
-    private $sources;
+    private array $sources;
 
-    /** @var string */
-    private $table;
+    private string $table;
 
     /** @param string[] $sources */
     public function __construct(Connection $connection, array $sources, string $table)

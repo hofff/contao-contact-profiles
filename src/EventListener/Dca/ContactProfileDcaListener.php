@@ -29,14 +29,11 @@ use function time;
 
 final class ContactProfileDcaListener
 {
-    /** @var SlugGeneratorInterface */
-    private $slugGenerator;
+    private SlugGeneratorInterface $slugGenerator;
 
-    /** @var Connection */
-    private $connection;
+    private Connection $connection;
 
-    /** @var string */
-    private $pattern;
+    private string $pattern;
 
     public function __construct(SlugGeneratorInterface $slugGenerator, Connection $connection, string $aliasPattern)
     {

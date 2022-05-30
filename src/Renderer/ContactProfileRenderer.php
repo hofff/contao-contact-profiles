@@ -16,32 +16,27 @@ final class ContactProfileRenderer
 
     private const DEFAULT_FIELD_TEMPLATE = 'hofff_contact_field';
 
-    /** @var FieldRenderer */
-    private $fieldRenderer;
+    private FieldRenderer $fieldRenderer;
 
     /** @var string[] */
-    private $fields = [];
+    private array $fields = [];
 
     /** @var string[]|null */
-    private $imageSize;
+    private ?array $imageSize = null;
 
-    /** @var string */
-    private $template = self::DEFAULT_TEMPLATE;
+    private string $template = self::DEFAULT_TEMPLATE;
 
     /** @var string[] */
-    private $fieldTemplates = [];
+    private array $fieldTemplates = [];
 
-    /** @var string */
-    private $defaultFieldTemplate;
+    private string $defaultFieldTemplate;
 
-    /** @var string */
-    private $moreLabel;
+    private string $moreLabel;
 
     /** @var array<string,ConsentId> */
-    private $consentIds = [];
+    private array $consentIds = [];
 
-    /** @var ContactProfileUrlGenerator */
-    private $urlGenerator;
+    private ContactProfileUrlGenerator $urlGenerator;
 
     public function __construct(
         FieldRenderer $fieldRenderer,

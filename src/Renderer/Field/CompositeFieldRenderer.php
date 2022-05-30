@@ -13,7 +13,7 @@ use Hofff\Contao\ContactProfiles\Renderer\FieldRenderer;
 final class CompositeFieldRenderer extends AbstractFieldRenderer
 {
     /** @var FieldRenderer[] */
-    private $renderer;
+    private array $renderer;
 
     /**
      * @param FieldRenderer[] $renderer

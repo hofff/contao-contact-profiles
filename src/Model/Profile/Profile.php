@@ -23,6 +23,7 @@ use Contao\Model;
 abstract class Profile extends Model
 {
     /** @var string */
+    // phpcs:ignore SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
     protected static $strTable = 'tl_contact_profile';
 
     abstract public function profileId(): int;

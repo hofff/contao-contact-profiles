@@ -10,8 +10,7 @@ use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
 
 final class EmailFieldRenderer extends AbstractFieldRenderer
 {
-    /** @var string|null */
-    protected $template = 'hofff_contact_field_email';
+    protected ?string $template = 'hofff_contact_field_email';
 
     /** @param mixed $value */
     protected function compile(

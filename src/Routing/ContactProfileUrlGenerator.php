@@ -23,14 +23,12 @@ final class ContactProfileUrlGenerator
 
     public const PREVIEW_URL = 2;
 
-    /** @var ContaoFramework */
-    private $framework;
+    private ContaoFramework $framework;
 
-    /** @var Connection */
-    private $connection;
+    private Connection $connection;
 
     /** @var array<int|string, ?PageModel> */
-    private $categoryDetailPages = [];
+    private array $categoryDetailPages = [];
 
     public function __construct(ContaoFramework $framework, Connection $connection)
     {

@@ -12,6 +12,7 @@ use Contao\Model;
 abstract class Responsibility extends Model
 {
     /** @var string */
+    // phpcs:ignore SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
     protected static $strTable = 'tl_contact_responsibility';
 
     abstract public function responsibilityId(): int;

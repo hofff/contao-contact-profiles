@@ -12,8 +12,7 @@ use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
 
 final class ResponsibilitiesRenderer extends AbstractFieldRenderer
 {
-    /** @var string|null */
-    protected $template = 'hofff_contact_field_responsibilities';
+    protected ?string $template = 'hofff_contact_field_responsibilities';
 
     private ResponsibilityRepository $responsibilities;
 

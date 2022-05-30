@@ -17,11 +17,10 @@ use function array_merge;
 
 final class SocialAccountsRenderer extends AbstractFieldRenderer
 {
-    /** @var string|null */
-    protected $template = 'hofff_contact_field_accounts';
+    protected ?string $template = 'hofff_contact_field_accounts';
 
     /** @var array<string|int,SocialAccount|null> */
-    private $accounts = [];
+    private array $accounts = [];
 
     private SocialAccountRepository $socialAccounts;
 

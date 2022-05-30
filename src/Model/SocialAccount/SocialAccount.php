@@ -13,6 +13,7 @@ use Contao\Model;
 abstract class SocialAccount extends Model
 {
     /** @var string */
+    // phpcs:ignore SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
     protected static $strTable = 'tl_contact_social_account';
 
     abstract public function socialAccountId(): int;

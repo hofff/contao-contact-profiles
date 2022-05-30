@@ -16,8 +16,7 @@ use function str_replace;
 
 final class VideosFieldRenderer extends AbstractFieldRenderer
 {
-    /** @var string|null */
-    protected $template = 'hofff_contact_field_videos';
+    protected ?string $template = 'hofff_contact_field_videos';
 
     public function __construct(ContaoFramework $framework)
     {

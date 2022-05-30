@@ -11,8 +11,7 @@ use function count;
 
 final class ContentDcaListener
 {
-    /** @var ConsentToolManager */
-    private $consentToolManager;
+    private ConsentToolManager $consentToolManager;
 
     public function __construct(ConsentToolManager $consentToolManager)
     {

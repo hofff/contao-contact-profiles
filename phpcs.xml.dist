@@ -35,10 +35,4 @@
             <property name="enableObjectTypeHint" value="false" />
         </properties>
     </rule>
-
-    <rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint">
-        <properties>
-            <property name="enableNativeTypeHint" value="false" />
-        </properties>
-    </rule>
 </ruleset>

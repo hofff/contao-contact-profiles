@@ -18,27 +18,13 @@ use function method_exists;
 
 abstract class AbstractFieldRenderer implements FieldRenderer
 {
-    /** @deprecated use $template property */
-    protected const TEMPLATE = null;
+    protected ContaoFramework $framework;
 
-    /** @var ContaoFramework */
-    protected $framework;
+    protected ?string $template = null;
 
-    /** @var string|null */
-    protected $template = null;
-
-    // phpcs:disable SlevomatCodingStandard.Classes.DisallowLateStaticBindingForConstants.DisallowedLateStaticBindingForConstant
     public function __construct(ContaoFramework $framework)
     {
         $this->framework = $framework;
-
-        /** @psalm-suppress DeprecatedConstant */
-        if (static::TEMPLATE === null) {
-            return;
-        }
-
-        /** @psalm-suppress DeprecatedConstant */
-        $this->template = static::TEMPLATE;
     }
 
     /**
