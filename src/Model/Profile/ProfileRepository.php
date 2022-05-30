@@ -56,6 +56,19 @@ final class ProfileRepository extends ContaoRepository
         return $this->countBy($columns, $values);
     }
 
+    public function fetchPublishedByProfileIds($profileIds, array $options): ?Collection
+    {
+        if ($profileIds === []) {
+            return null;
+        }
+
+        $columns = ['.id IN(?' . str_repeat(',?', count($profileIds) - 1) . ')'];
+        $values  = $profileIds;
+        $this->addPublishedCondition($columns, $values);
+
+        return $this->findBy($columns, $values, $options);
+    }
+
     public function fetchPublishedByProfileIdsAndSpecification(
         array $profileIds,
         Specification $specification,

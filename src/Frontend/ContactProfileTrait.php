@@ -15,7 +15,6 @@ use Hofff\Contao\ContactProfiles\Event\LoadContactProfilesEvent;
 use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
 use Hofff\Contao\ContactProfiles\Model\Profile\Specification\InitialLastnameLetterSpecification;
-use Hofff\Contao\ContactProfiles\Util\ContactProfileUtil;
 use Hofff\Contao\ContactProfiles\Util\QueryUtil;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
