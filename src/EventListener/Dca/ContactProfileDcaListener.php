@@ -47,80 +47,123 @@ final class ContactProfileDcaListener
 
     private string $pattern;
 
+    private bool $multilingual;
+
+    private ?string $fallbackLanguage;
+
     public function __construct(
         SlugGeneratorInterface $slugGenerator,
         Connection $connection,
         ProfileRepository $profiles,
         TranslatorInterface $translator,
         DcaManager $dcaManager,
-        string $aliasPattern
+        string $aliasPattern,
+        bool $multilingual,
+        ?string $fallbackLanguage
     ) {
-        $this->slugGenerator = $slugGenerator;
-        $this->connection    = $connection;
-        $this->pattern       = $aliasPattern;
-        $this->translator    = $translator;
-        $this->dcaManager    = $dcaManager;
-        $this->profiles      = $profiles;
+        $this->slugGenerator    = $slugGenerator;
+        $this->connection       = $connection;
+        $this->pattern          = $aliasPattern;
+        $this->translator       = $translator;
+        $this->dcaManager       = $dcaManager;
+        $this->profiles         = $profiles;
+        $this->multilingual     = $multilingual;
+        $this->fallbackLanguage = $fallbackLanguage;
     }
 
     /**
      * @param mixed $value
      *
      * @Callback(table="tl_contact_profile", target="fields.alias.save")
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function generateAlias($value, DataContainer $dataContainer): string
     {
-        $aliasExists = function (string $alias) use ($dataContainer): bool {
-            if (! $dataContainer->activeRecord) {
-                return false;
-            }
-
-            return $this->connection
-                    ->executeQuery(
-                        'SELECT id FROM tl_contact_profile WHERE alias=? AND id!=?',
-                        [$alias, $dataContainer->activeRecord->id]
-                    )
-                    ->rowCount() > 0;
-        };
-
         // Generate alias if there is none
         if (! $value) {
-            if (! $dataContainer->activeRecord) {
-                throw new RuntimeException('Unable to generate alias');
-            }
-
-            $profile = $this->profiles->findOneBy(
-                ['.id=?'],
-                [$dataContainer->id],
-                ['language' => $dataContainer->activeRecord->multilingual_language]
-            );
-
-            if (! $profile instanceof Profile) {
-                throw new RuntimeException('Unable to generate alias');
-            }
-
-            $alias = preg_replace_callback(
-                '/{([^}]+)}/',
-                /** @return mixed */
-                static function (array $matches) use ($profile) {
-                    return $profile->{$matches[1]};
-                },
-                $this->pattern
-            );
-            $value = $this->slugGenerator->generate($alias);
+            $value = $this->determineAlias($dataContainer);
         }
 
         if (preg_match('/^[1-9]\d*$/', $value)) {
             throw new Exception($this->translator->trans('ERR.aliasNumeric', [$value], 'contao_default'));
         }
 
-        if ($aliasExists($value)) {
+        if ($this->aliasExists($value, $dataContainer)) {
             throw new Exception($this->translator->trans('ERR.aliasExists', [$value], 'contao_default'));
         }
 
         return $value;
+    }
+
+    private function determineAlias(DataContainer $dataContainer): string
+    {
+        if (! $dataContainer->activeRecord) {
+            throw new RuntimeException('Unable to generate alias');
+        }
+
+        $profile = $this->profiles->findOneBy(
+            ['.id=?'],
+            [$dataContainer->id],
+            ['language' => $dataContainer->activeRecord->multilingual_language]
+        );
+
+        if (! $profile instanceof Profile) {
+            throw new RuntimeException('Unable to generate alias');
+        }
+
+        $alias = preg_replace_callback(
+            '/{([^}]+)}/',
+            /** @return mixed */
+            static function (array $matches) use ($profile) {
+                return $profile->{$matches[1]};
+            },
+            $this->pattern
+        );
+
+        $options = [];
+        if ($this->multilingual) {
+            if ($dataContainer->activeRecord->multilingual_language) {
+                $options['locale'] = $dataContainer->activeRecord->multilingual_language;
+            } elseif ($this->fallbackLanguage) {
+                $options['locale'] = $this->fallbackLanguage;
+            }
+        }
+
+        $alias  = $this->slugGenerator->generate($alias, $options);
+        $value  = $this->slugGenerator->generate($alias, $options);
+        $suffix = 2;
+
+        while ($this->aliasExists($value, $dataContainer)) {
+            $value = $alias . '-' . $suffix++;
+        }
+
+        return $value;
+    }
+
+    private function aliasExists(string $alias, DataContainer $dataContainer): bool
+    {
+        if (! $dataContainer->activeRecord) {
+            return false;
+        }
+
+        if ($this->multilingual) {
+            return $this->connection
+                    ->executeQuery(
+                        'SELECT id FROM tl_contact_profile WHERE alias=? AND id!=? AND multilingual_language=?',
+                        [
+                            $alias,
+                            $dataContainer->activeRecord->id,
+                            $dataContainer->activeRecord->multilingual_language,
+                        ]
+                    )
+                    ->rowCount() > 0;
+        }
+
+        return $this->connection
+                ->executeQuery(
+                    'SELECT id FROM tl_contact_profile WHERE alias=? AND id!=?',
+                    [$alias, $dataContainer->activeRecord->id]
+                )
+                ->rowCount() > 0;
     }
 
     /**
