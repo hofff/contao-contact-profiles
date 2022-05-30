@@ -49,10 +49,9 @@ abstract class SourceListener
             return;
         }
 
-        $profiles = $this->fetchProfiles($sourceModel);
-
-        /** @psalm-suppress ArgumentTypeCoercion */
-        $event->setProfiles($profiles ? $profiles->getModels() : []);
+        foreach ($this->fetchProfiles($sourceModel) ?: [] as $model) {
+            $event->addProfile($model);
+        }
     }
 
     abstract protected function source(): string;

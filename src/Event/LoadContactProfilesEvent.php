@@ -9,6 +9,7 @@ use Contao\PageModel;
 use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Symfony\Contracts\EventDispatcher\Event;
 
+use function array_values;
 use function in_array;
 
 final class LoadContactProfilesEvent extends Event
@@ -19,7 +20,7 @@ final class LoadContactProfilesEvent extends Event
 
     private PageModel $page;
 
-    /** @var Profile[] */
+    /** @var array<int,Profile> */
     private array $profiles = [];
 
     /** @var string[] */
@@ -38,7 +39,11 @@ final class LoadContactProfilesEvent extends Event
     /** @param Profile[] $profiles */
     public function setProfiles(array $profiles): void
     {
-        $this->profiles = $profiles;
+        $this->profiles = [];
+
+        foreach ($profiles as $profile) {
+            $this->addProfile($profile);
+        }
     }
 
     public function context(): Model
@@ -51,10 +56,10 @@ final class LoadContactProfilesEvent extends Event
         return $this->page;
     }
 
-    /** @return Profile[] */
+    /** @return list<Profile> */
     public function profiles(): array
     {
-        return $this->profiles;
+        return array_values($this->profiles);
     }
 
     /** @return list<string> */
@@ -66,5 +71,10 @@ final class LoadContactProfilesEvent extends Event
     public function hasSource(string $source): bool
     {
         return in_array($source, $this->sources, true);
+    }
+
+    public function addProfile(Profile $profile): void
+    {
+        $this->profiles[$profile->profileId()] = $profile;
     }
 }
