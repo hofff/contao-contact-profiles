@@ -116,6 +116,12 @@
             <tag name="kernel.event_listener" event="contao.preview_url_create" />
         </service>
 
+        <service id="Hofff\Contao\ContactProfiles\EventListener\DetailPageListener">
+            <argument type="service" id="netzmacht.contao_toolkit.contao.controller_adapter"/>
+            <argument type="service" id="Hofff\Contao\ContactProfiles\SocialTags\SocialTagsGenerator"/>
+            <tag name="kernel.event_listener" event="hofff.contao_contact_profile.profile_detail_page"/>
+        </service>
+
         <service id="Hofff\Contao\ContactProfiles\EventListener\MultilingualListener">
             <argument type="service" id="netzmacht.contao_toolkit.dca.manager"/>
             <argument>%hofff_contao_contact_profiles.multilingual.languages%</argument>

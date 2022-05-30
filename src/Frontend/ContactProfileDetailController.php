@@ -4,42 +4,33 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\Frontend;
 
-use Contao\Controller;
 use Contao\CoreBundle\Exception\PageNotFoundException;
 use Contao\CoreBundle\Framework\Adapter;
 use Contao\CoreBundle\Security\Authentication\Token\TokenChecker;
 use Contao\Input;
 use Contao\Model;
-use Contao\StringUtil;
+use Hofff\Contao\ContactProfiles\Event\ProfileDetailPageEvent;
 use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRendererFactory;
-use Hofff\Contao\ContactProfiles\SocialTags\SocialTagsGenerator;
 use Netzmacht\Contao\Toolkit\Response\ResponseTagger;
 use Netzmacht\Contao\Toolkit\Routing\RequestScopeMatcher;
 use Netzmacht\Contao\Toolkit\View\Template\TemplateRenderer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-
-use function str_replace;
-use function strip_tags;
-use function trim;
 
 final class ContactProfileDetailController extends AbstractHybridController
 {
     private ProfileRepository $profiles;
 
-    private SocialTagsGenerator $socialTagsGenerator;
-
-    /** @var Adapter<Controller> */
-    private Adapter $controllerAdapter;
-
     private ContactProfileRendererFactory $rendererFactory;
 
+    private EventDispatcherInterface $eventDispatcher;
+
     /**
-     * @param Adapter<Controller> $controllerAdapter
-     * @param Adapter<Input>      $inputAdapter
+     * @param Adapter<Input> $inputAdapter
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -51,9 +42,8 @@ final class ContactProfileDetailController extends AbstractHybridController
         TranslatorInterface $translator,
         TokenChecker $tokenChecker,
         ProfileRepository $profiles,
-        SocialTagsGenerator $socialTagsGenerator,
+        EventDispatcherInterface $eventDispatcher,
         ContactProfileRendererFactory $rendererFactory,
-        Adapter $controllerAdapter,
         Adapter $inputAdapter
     ) {
         parent::__construct(
@@ -66,17 +56,12 @@ final class ContactProfileDetailController extends AbstractHybridController
             $inputAdapter
         );
 
-        $this->profiles            = $profiles;
-        $this->socialTagsGenerator = $socialTagsGenerator;
-        $this->rendererFactory     = $rendererFactory;
-        $this->controllerAdapter   = $controllerAdapter;
+        $this->profiles        = $profiles;
+        $this->rendererFactory = $rendererFactory;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     */
+    /** {@inheritDoc} */
     protected function prepareTemplateData(array $data, Request $request, Model $model): array
     {
         $profile = $this->loadProfile();
@@ -84,10 +69,7 @@ final class ContactProfileDetailController extends AbstractHybridController
             throw new PageNotFoundException('Contact profile not found');
         }
 
-        $GLOBALS['objPage']->pageTitle   = trim($profile->firstname . ' ' . $profile->lastname);
-        $GLOBALS['objPage']->description = $this->prepareMetaDescription((string) $profile->teaser);
-
-        $this->socialTagsGenerator->generate($profile);
+        $this->eventDispatcher->dispatch(new ProfileDetailPageEvent($profile, $model), ProfileDetailPageEvent::NAME);
 
         $renderer = $this->rendererFactory->create($model);
 
@@ -104,15 +86,5 @@ final class ContactProfileDetailController extends AbstractHybridController
     {
         /** @psalm-suppress PossiblyNullReference - Input adapter is always set */
         return $this->profiles->fetchPublishedByIdOrAlias((string) $this->inputAdapter->get('auto_item'));
-    }
-
-    private function prepareMetaDescription(string $text): string
-    {
-        $text = $this->controllerAdapter->replaceInsertTags($text, false);
-        $text = strip_tags($text);
-        $text = str_replace("\n", ' ', $text);
-        $text = StringUtil::substr($text, 320);
-
-        return trim($text);
     }
 }
