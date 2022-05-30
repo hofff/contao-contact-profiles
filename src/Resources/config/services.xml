@@ -31,18 +31,6 @@
         </service>
 
         <!-- Queries -->
-        <service id="Hofff\Contao\ContactProfiles\Query\PublishedContactProfilesQuery" public="true">
-            <argument type="service" id="database_connection"/>
-        </service>
-
-        <service id="Hofff\Contao\ContactProfiles\Query\PublishedContactProfilesByCategoriesQuery" public="true">
-            <argument type="service" id="database_connection"/>
-        </service>
-
-        <service id="Hofff\Contao\ContactProfiles\Query\CategorizedContactProfilesQuery">
-            <argument type="service" id="database_connection"/>
-        </service>
-
         <service id="Hofff\Contao\ContactProfiles\Query\SocialAccountQuery">
             <argument type="service" id="database_connection" />
         </service>
