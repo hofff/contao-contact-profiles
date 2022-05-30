@@ -49,6 +49,7 @@
 
         <service id="Hofff\Contao\ContactProfiles\EventListener\Dca\NewsCategoryDcaListener">
             <argument type="service" id="netzmacht.contao_toolkit.dca.manager"/>
+            <argument type="service" id="netzmacht.contao_toolkit.repository_manager"/>
             <argument>%kernel.bundles%</argument>
         </service>
 
