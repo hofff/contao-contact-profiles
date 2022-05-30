@@ -21,8 +21,8 @@
             <argument type="service" id="contao.framework" />
         </service>
 
-        <service id="Hofff\Contao\ContactProfiles\EventListener\Dca\AccountTypeOptions" public="true">
-            <argument type="service" id="database_connection" />
+        <service id="Hofff\Contao\ContactProfiles\EventListener\Dca\SocialAccountTypeOptions" public="true">
+            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\SocialAccount\SocialAccountRepository" />
         </service>
 
         <service id="Hofff\Contao\ContactProfiles\EventListener\Dca\ContactProfileDcaListener" public="true">

@@ -87,7 +87,11 @@ final class ContactProfileDcaListener
         return $value;
     }
 
-    /** @param string[] $row */
+    /**
+     * @param string[] $row
+     *
+     * @Callback(table="tl_contact_profile", target="list.sorting.child_record")
+     */
     public function generateRow(array $row): string
     {
         $label = $row['lastname'];
@@ -109,6 +113,7 @@ final class ContactProfileDcaListener
      * @return list<array<string,mixed>>
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @Callback(table="tl_contact_profile", target="fields.videos.save")
      */
     public function saveVideos($values, DataContainer $dataContainer): array
     {
@@ -132,6 +137,8 @@ final class ContactProfileDcaListener
      * Return the "toggle visibility" button
      *
      * @param string[] $row
+     *
+     * @Callback(table="tl_contact_profile", target="list.operations.toggle.button")
      */
     public function toggleIcon(
         array $row,

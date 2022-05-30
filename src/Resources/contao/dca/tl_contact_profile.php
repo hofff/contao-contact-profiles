@@ -3,8 +3,6 @@
 declare(strict_types=1);
 
 use Contao\Config;
-use Hofff\Contao\ContactProfiles\EventListener\Dca\AccountTypeOptions;
-use Hofff\Contao\ContactProfiles\EventListener\Dca\ContactProfileDcaListener;
 
 $GLOBALS['TL_DCA']['tl_contact_profile'] = [
 
@@ -28,10 +26,6 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             'fields'                => ['lastname', 'firstname'],
             'headerFields'          => ['title'],
             'panelLayout'           => 'filter;sort,search,limit',
-            'child_record_callback' => [
-                ContactProfileDcaListener::class,
-                'generateRow',
-            ],
         ],
         'global_operations' => [
             'all' => [
@@ -58,7 +52,6 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'label'           => &$GLOBALS['TL_LANG']['tl_contact_profile']['toggle'],
                 'icon'            => 'visible.svg',
                 'attributes'      => 'onclick="Backend.getScrollOffset();return AjaxRequest.toggleVisibility(this,%s)"',
-                'button_callback' => [ContactProfileDcaListener::class, 'toggleIcon'],
                 'showInHeader'    => true,
             ],
             'show'   => [
@@ -257,10 +250,6 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                     'type' => [
                         'label'            => &$GLOBALS['TL_LANG']['tl_contact_profile']['accountType'],
                         'inputType'        => 'select',
-                        'options_callback' => [
-                            AccountTypeOptions::class,
-                            '__invoke',
-                        ],
                         'eval'             => [
                             'includeBlankOption' => true,
                             'tl_class'           => 'w50',
@@ -336,9 +325,6 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             'label'         => &$GLOBALS['TL_LANG']['tl_contact_profile']['videos'],
             'exclude'       => true,
             'inputType'     => 'multiColumnWizard',
-            'save_callback' => [
-                [ContactProfileDcaListener::class, 'saveVideos'],
-            ],
             'eval'          => [
                 'tl_class'     => 'clr',
                 'profileField' => true,
