@@ -69,6 +69,10 @@
             <argument>%hofff.contao_contact_profiles.template_prefixes%</argument>
         </service>
 
+        <service id="Hofff\Contao\ContactProfiles\EventListener\Dca\PageDcaListener">
+            <argument type="service" id="database_connection"/>
+        </service>
+
         <service id="Hofff\Contao\ContactProfiles\EventListener\Hook\GetSearchablePagesListener">
             <argument type="service" id="contao.framework" />
             <argument type="service" id="database_connection" />
