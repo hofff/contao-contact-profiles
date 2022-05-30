@@ -39,4 +39,3 @@ $GLOBALS['FE_MOD']['hofff_contact_profiles']['hofff_contact_profile_initials_fil
 
 // Hooks
 $GLOBALS['TL_HOOKS']['parseTemplate'][] = [AddContactProfileInformationListener::class, 'onParseTemplate'];
-

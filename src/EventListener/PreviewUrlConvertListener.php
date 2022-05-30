@@ -56,10 +56,9 @@ final class PreviewUrlConvertListener
             return;
         }
 
-        $event->setUrl($detailPage->getPreviewUrl('/' . $contactProfile->alias ?: $contactProfile->profileId()));
+        $event->setUrl($detailPage->getPreviewUrl('/' . ($contactProfile->alias ?: $contactProfile->profileId())));
     }
 
-    /** @return string[]|null */
     private function getContactProfile(Request $request): ?Profile
     {
         if (! $request->query->has('hofff_contact_profile')) {

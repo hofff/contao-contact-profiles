@@ -6,6 +6,10 @@ namespace Hofff\Contao\ContactProfiles\Model\Category;
 
 use Contao\Model;
 
+/**
+ * @property numeric-string|int $id
+ * @property string             $title
+ */
 final class Category extends Model
 {
     /** @var string */

@@ -20,7 +20,7 @@ final class SocialAccountsRenderer extends AbstractFieldRenderer
     /** @var string|null */
     protected $template = 'hofff_contact_field_accounts';
 
-    /** @var array<string|int,SocialAccount> */
+    /** @var array<string|int,SocialAccount|null> */
     private $accounts = [];
 
     private SocialAccountRepository $socialAccounts;
@@ -49,9 +49,7 @@ final class SocialAccountsRenderer extends AbstractFieldRenderer
         return $profiles !== [];
     }
 
-    /**
-     * @param mixed $value
-     */
+    /** {@inheritDoc} */
     protected function compile(
         FrontendTemplate $template,
         $value,
@@ -76,11 +74,10 @@ final class SocialAccountsRenderer extends AbstractFieldRenderer
         $template->value = $compiled;
     }
 
-    /** @return string[] */
     private function accountById(int $type): ?SocialAccount
     {
         if (! array_key_exists($type, $this->accounts)) {
-            $this->accounts[$type] = $this->socialAccounts->find((int) $type);
+            $this->accounts[$type] = $this->socialAccounts->find($type);
         }
 
         return $this->accounts[$type];

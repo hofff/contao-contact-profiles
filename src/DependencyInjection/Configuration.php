@@ -74,7 +74,7 @@ final class Configuration implements ConfigurationInterface
                                     'description',
                                     'statement',
                                     'jumpTo',
-                                    'videos'
+                                    'videos',
                                 ]
                             )
                             ->scalarPrototype()

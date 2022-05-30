@@ -36,7 +36,11 @@ final class CompositeFieldRenderer extends AbstractFieldRenderer
     }
 
     /** @param mixed $value */
-    protected function compile(FrontendTemplate $template, $value, Profile $profile, ContactProfileRenderer $renderer): void
-    {
+    protected function compile(
+        FrontendTemplate $template,
+        $value,
+        Profile $profile,
+        ContactProfileRenderer $renderer
+    ): void {
     }
 }

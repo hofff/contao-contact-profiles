@@ -7,21 +7,28 @@ namespace Hofff\Contao\ContactProfiles\Model\Profile;
 use Contao\CoreBundle\Security\Authentication\Token\TokenChecker;
 use Contao\Model\Collection;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\ForwardCompatibility\Result as ForwardCompatibilityResult;
 use Doctrine\DBAL\Query\QueryBuilder;
+use Doctrine\DBAL\Result;
 use Netzmacht\Contao\Toolkit\Data\Model\ContaoRepository;
 use Netzmacht\Contao\Toolkit\Data\Model\Specification;
+use Terminal42\DcMultilingualBundle\QueryBuilder\MultilingualQueryBuilderInterface;
 
+use function count;
 use function str_repeat;
 use function str_replace;
 
-/** @extends ProfileRepository<Profile> */
+/**
+ * @extends ContaoRepository<Profile>
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ */
 final class ProfileRepository extends ContaoRepository
 {
     private Connection $connection;
 
     private TokenChecker $tokenChecker;
 
-
+    /** @psalm-param class-string<Profile> $modelClass */
     public function __construct(string $modelClass, Connection $connection, TokenChecker $tokenChecker)
     {
         parent::__construct($modelClass);
@@ -30,6 +37,7 @@ final class ProfileRepository extends ContaoRepository
         $this->connection   = $connection;
     }
 
+    /** @param list<string|int> $categoryIds */
     public function countPublishedByCategories(array $categoryIds): int
     {
         if ($categoryIds === []) {
@@ -43,6 +51,7 @@ final class ProfileRepository extends ContaoRepository
         return $this->countBy($columns, $values);
     }
 
+    /** @param list<string|int> $profileIds */
     public function countPublishedByProfileIds(array $profileIds): int
     {
         if ($profileIds === []) {
@@ -56,7 +65,11 @@ final class ProfileRepository extends ContaoRepository
         return $this->countBy($columns, $values);
     }
 
-    public function fetchPublishedByProfileIds($profileIds, array $options): ?Collection
+    /**
+     * @param list<string|int>    $profileIds
+     * @param array<string,mixed> $options
+     */
+    public function fetchPublishedByProfileIds(array $profileIds, array $options = []): ?Collection
     {
         if ($profileIds === []) {
             return null;
@@ -69,10 +82,14 @@ final class ProfileRepository extends ContaoRepository
         return $this->findBy($columns, $values, $options);
     }
 
+    /**
+     * @param list<string|int>    $profileIds
+     * @param array<string,mixed> $options
+     */
     public function fetchPublishedByProfileIdsAndSpecification(
         array $profileIds,
         Specification $specification,
-        array $options
+        array $options = []
     ): ?Collection {
         if ($profileIds === []) {
             return null;
@@ -86,6 +103,10 @@ final class ProfileRepository extends ContaoRepository
         return $this->findBy($columns, $values, $options);
     }
 
+    /**
+     * @param list<string|int>    $categoryIds
+     * @param array<string,mixed> $options
+     */
     public function fetchPublishedByCategories(array $categoryIds, array $options = []): ?Collection
     {
         if ($categoryIds === []) {
@@ -99,6 +120,10 @@ final class ProfileRepository extends ContaoRepository
         return $this->findBy($columns, $values, $options);
     }
 
+    /**
+     * @param list<string|int>    $categoryIds
+     * @param array<string,mixed> $options
+     */
     public function fetchPublishedByCategoriesAndSpecification(
         array $categoryIds,
         Specification $specification,
@@ -128,12 +153,18 @@ final class ProfileRepository extends ContaoRepository
 
         $this->addPublishedCondition($columns, $values);
 
-        return $this->findBy($columns, $values);
+        return $this->findOneBy($columns, $values);
     }
 
+    /**
+     * @param list<string|int> $categoryIds
+     *
+     * @return list<array<string,mixed>>
+     */
     public function fetchInitialsOfPublishedByCategories(array $categoryIds): array
     {
-        $query  = $this->createFetchPublishedInitialsQuery();
+        $query = $this->createFetchPublishedInitialsQuery();
+        /** @psalm-var Result|ForwardCompatibilityResult $result */
         $result = $query
             ->andWhere($this->getTableName() . '.pid IN (:categoryIds)')
             ->setParameter('categoryIds', $categoryIds, Connection::PARAM_STR_ARRAY)
@@ -142,9 +173,15 @@ final class ProfileRepository extends ContaoRepository
         return $result->fetchAllAssociative();
     }
 
+    /**
+     * @param list<string|int> $profileIds
+     *
+     * @return list<array<string,mixed>>
+     */
     public function fetchInitialsOfPublishedByProfileIds(array $profileIds): array
     {
-        $query  = $this->createFetchPublishedInitialsQuery();
+        $query = $this->createFetchPublishedInitialsQuery();
+        /** @psalm-var Result|ForwardCompatibilityResult $result */
         $result = $query
             ->andWhere($this->getTableName() . '.id IN (:profileIds)')
             ->setParameter('profileIds', $profileIds, Connection::PARAM_STR_ARRAY)
@@ -163,6 +200,10 @@ final class ProfileRepository extends ContaoRepository
         return $this->findMultipleByIds($result->fetchFirstColumn());
     }
 
+    /**
+     * @param list<string> $columns
+     * @param list<mixed>  $values
+     */
     private function addPublishedCondition(array &$columns, array &$values): void
     {
         if ($this->tokenChecker->isPreviewMode()) {
@@ -173,21 +214,25 @@ final class ProfileRepository extends ContaoRepository
         $values[]  = '1';
     }
 
+    /** @SuppressWarnings(PHPMD.Superglobals) */
     private function createFetchPublishedInitialsQuery(): QueryBuilder
     {
         if ($this->isMultilingual()) {
-            $multilingualQueryBuilder = MultilingualProfile::getMultilingualQueryBuilder();
-            $language                 = str_replace('-', '_', $GLOBALS['TL_LANGUAGE']);
+            /** @psalm-var MultilingualQueryBuilderInterface $multilingualBuilder */
+            $multilingualBuilder = MultilingualProfile::getMultilingualQueryBuilder();
+            $language            = isset($GLOBALS['TL_LANGUAGE'])
+                ? str_replace('-', '_', $GLOBALS['TL_LANGUAGE'])
+                : '';
 
             // Consider the fallback language
             $fallbackLanguage = MultilingualProfile::getFallbackLanguage();
-            if (null !== $fallbackLanguage && $fallbackLanguage === $language) {
+            if ($fallbackLanguage !== null && $language === $fallbackLanguage) {
                 $language = '';
             }
 
-            $multilingualQueryBuilder->buildQueryBuilderForFind($language);
+            $multilingualBuilder->buildQueryBuilderForFind($language);
 
-            $queryBuilder = $multilingualQueryBuilder->getQueryBuilder();
+            $queryBuilder = $multilingualBuilder->getQueryBuilder();
             $queryBuilder
                 ->addSelect(
                     'LOWER(
@@ -202,7 +247,7 @@ final class ProfileRepository extends ContaoRepository
                 ->from($this->getTableName());
         }
 
-        $queryBuilder->addSelect('COUNT(' . $this->getTableName()  . '.id) AS count');
+        $queryBuilder->addSelect('COUNT(' . $this->getTableName() . '.id) AS count');
         $queryBuilder->groupBy('letter');
 
         if (! $this->tokenChecker->isPreviewMode()) {
@@ -214,9 +259,6 @@ final class ProfileRepository extends ContaoRepository
         return $queryBuilder;
     }
 
-    /**
-     * @return bool
-     */
     private function isMultilingual(): bool
     {
         return $this->getModelClass() === MultilingualProfile::class;

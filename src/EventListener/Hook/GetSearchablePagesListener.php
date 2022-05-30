@@ -46,7 +46,7 @@ final class GetSearchablePagesListener
     {
         $categoryIds = $this->fetchCategoriesWithDetailPage($rootId);
 
-        foreach ($this->contactProfiles->fetchPublishedByCategories($categoryIds) as $contactProfile) {
+        foreach ($this->contactProfiles->fetchPublishedByCategories($categoryIds) ?: [] as $contactProfile) {
             // Detail page of the category is overridden by the contact profile. Page is already processed by Contao.
             if ($contactProfile->jumpTo > 0) {
                 continue;

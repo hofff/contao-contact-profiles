@@ -56,8 +56,10 @@ trait ContactProfileTrait
      * @return Profile[]
      *
      * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @psalm-suppress MoreSpecificReturnType
      */
-    private function loadProfiles(int $offset): iterable
+    private function loadProfiles(int $offset): array
     {
         if ($this->hofff_contact_source === 'dynamic') {
             if (defined('TL_MODE') && TL_MODE !== 'FE') {
@@ -79,8 +81,9 @@ trait ContactProfileTrait
         $repository = System::getContainer()->get(ProfileRepository::class);
         /** @psalm-suppress RedundantCastGivenDocblockType */
         $options = [
-            'order' => $this->hofff_contact_profiles_order_sql ?: null,
-            'limit' => (int) $this->numberOfItems,
+            'order'  => $this->hofff_contact_profiles_order_sql ?: null,
+            'offset' => $offset,
+            'limit'  => (int) $this->numberOfItems,
         ];
 
         /** @psalm-suppress RedundantCastGivenDocblockType */
@@ -92,8 +95,11 @@ trait ContactProfileTrait
         switch ($this->hofff_contact_source) {
             case 'categories':
                 $categoryIds = StringUtil::deserialize($this->hofff_contact_categories, true);
-
-                $profiles = $repository->fetchPublishedByCategoriesAndSpecification($categoryIds, $specification, $options);
+                $profiles    = $repository->fetchPublishedByCategoriesAndSpecification(
+                    $categoryIds,
+                    $specification,
+                    $options
+                );
 
                 return $profiles ? $profiles->getModels() : [];
 
@@ -102,7 +108,11 @@ trait ContactProfileTrait
                 $order            = StringUtil::deserialize($this->hofff_contact_profiles_order, true);
                 $options['order'] = QueryUtil::orderByIds('id', $order);
                 $profileIds       = StringUtil::deserialize($this->hofff_contact_profiles, true);
-                $profiles         = $repository->fetchPublishedByProfileIdsAndSpecification($profileIds, $specification, $options);
+                $profiles         = $repository->fetchPublishedByProfileIdsAndSpecification(
+                    $profileIds,
+                    $specification,
+                    $options
+                );
 
                 return $profiles ? $profiles->getModels() : [];
         }
@@ -126,7 +136,7 @@ trait ContactProfileTrait
         return ($page - 1) * $this->perPage * $this->perPage;
     }
 
-    /** @param list<array<string,mixed>> $profiles */
+    /** @param array<Profile> $profiles */
     private function countTotal(array $profiles): int
     {
         /** @psalm-var ProfileRepository $repository */

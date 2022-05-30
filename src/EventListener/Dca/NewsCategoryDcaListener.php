@@ -8,7 +8,6 @@ use Codefog\NewsCategoriesBundle\Model\NewsCategoryModel;
 use Contao\CoreBundle\DataContainer\PaletteManipulator;
 use Contao\CoreBundle\ServiceAnnotation\Callback;
 use Contao\CoreBundle\ServiceAnnotation\Hook;
-use Contao\DataContainer;
 use Contao\Input;
 use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Netzmacht\Contao\Toolkit\Data\Model\RepositoryManager;
@@ -17,15 +16,18 @@ use Netzmacht\Contao\Toolkit\Dca\DcaManager;
 use function array_pop;
 use function array_unshift;
 use function implode;
+use function sprintf;
 
 final class NewsCategoryDcaListener
 {
     private DcaManager $dcaManager;
 
+    /** @var array<string,array<string,mixed>> */
     private array $bundles;
 
     private RepositoryManager $repositoryManager;
 
+    /** @param array<string,array<string,mixed>> $bundles */
     public function __construct(DcaManager $dcaManager, RepositoryManager $repositoryManager, array $bundles)
     {
         $this->dcaManager        = $dcaManager;
@@ -49,18 +51,29 @@ final class NewsCategoryDcaListener
             return;
         }
 
-        $this->dcaManager->getDefinition(
-            Profile::getTable())->modify(['fields'],
-            function (array $fields): array {
-                unset ($fields['news_categories']);
+        $this->dcaManager
+            ->getDefinition(Profile::getTable())
+            ->modify(
+                ['fields'],
+                /**
+                 * @param array<string,array<string,mixed>> $fields
+                 *
+                 * @return array<string,array<string,mixed>> $fields
+                 */
+                static function (array $fields): array {
+                    unset($fields['news_categories']);
 
-                return $fields;
-            }
-        );
+                    return $fields;
+                }
+            );
     }
 
-    /** @Callback(table="tl_news_category", target="list.label.label") */
-    public function newsCategoryOptions(array $row, ?string $originalLabel, DataContainer $dataContainer): ?string
+    /**
+     * @param array<string,mixed> $row
+     *
+     * @Callback(table="tl_news_category", target="list.label.label")
+     */
+    public function newsCategoryOptions(array $row, ?string $originalLabel): ?string
     {
         if (Input::get('do') !== 'hofff_contact_profiles') {
             return $originalLabel;
@@ -78,7 +91,8 @@ final class NewsCategoryDcaListener
                 break;
             }
 
-            $categoryId = $category->pid;
+            /** @psalm-suppress UndefinedMagicPropertyFetch */
+            $categoryId = (int) $category->pid;
 
             array_unshift($label, $category->getTitle());
         }

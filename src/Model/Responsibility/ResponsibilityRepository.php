@@ -9,5 +9,4 @@ use Netzmacht\Contao\Toolkit\Data\Model\ContaoRepository;
 /** @extends ContaoRepository<Responsibility> */
 final class ResponsibilityRepository extends ContaoRepository
 {
-
 }

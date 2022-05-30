@@ -14,7 +14,8 @@ use Contao\Model;
  * @property string|null        $image
  * @property string             $firstname
  * @property string             $lastname
- * @property string             $teaser
+ * @property string|null        $teaser
+ * @property string|null        $description
  * @property string             $websiteTitle
  * @property string             $caption
  * @property string|null        $galleryOrder

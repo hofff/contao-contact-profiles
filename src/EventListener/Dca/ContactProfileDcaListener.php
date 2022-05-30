@@ -55,6 +55,10 @@ final class ContactProfileDcaListener
     public function generateAlias($value, DataContainer $dataContainer): string
     {
         $aliasExists = function (string $alias) use ($dataContainer): bool {
+            if (! $dataContainer->activeRecord) {
+                return false;
+            }
+
             return $this->connection
                     ->executeQuery(
                         'SELECT id FROM tl_contact_profile WHERE alias=? AND id!=?',
@@ -69,6 +73,10 @@ final class ContactProfileDcaListener
                 '/{([^}]+)}/',
                 /** @return mixed */
                 static function (array $matches) use ($dataContainer) {
+                    if (! $dataContainer->activeRecord) {
+                        return null;
+                    }
+
                     return $dataContainer->activeRecord->{$matches[1]};
                 },
                 $this->pattern

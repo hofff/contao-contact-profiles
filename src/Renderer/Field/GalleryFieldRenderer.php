@@ -49,7 +49,7 @@ final class GalleryFieldRenderer extends AbstractFieldRenderer
         Profile $profile,
         ContactProfileRenderer $renderer
     ): void {
-        $images = $this->fetchImagesOrderedByCustomOrder((array) $value, $profile);
+        $images          = $this->fetchImagesOrderedByCustomOrder((array) $value, $profile);
         $template->value = $this->compileImages($images, $renderer->imageSize());
     }
 

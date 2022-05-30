@@ -20,6 +20,7 @@ final class NewsCategoryProfilesListener extends SourceListener
     {
         $repository = $this->repositoryManager->getRepository(NewsCategoryModel::class);
 
+        /** @psalm-suppress UndefinedInterfaceMethod */
         return $repository->findPublishedByIdOrAlias($alias);
     }
 

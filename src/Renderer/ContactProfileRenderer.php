@@ -10,8 +10,6 @@ use Hofff\Contao\Consent\Bridge\ConsentId;
 use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator;
 
-use function array_map;
-
 final class ContactProfileRenderer
 {
     private const DEFAULT_TEMPLATE = 'hofff_contact_profile_default';
@@ -147,13 +145,11 @@ final class ContactProfileRenderer
         return $template->parse();
     }
 
-    /** @param string[] $profile */
     public function generateDetailUrl(Profile $profile): ?string
     {
         return $this->urlGenerator->generateDetailUrl($profile);
     }
 
-    /** @param string[] $profile */
     public function parseField(string $field, Profile $profile): string
     {
         $raw = StringUtil::deserialize($profile->$field);

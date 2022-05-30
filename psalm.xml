@@ -37,8 +37,15 @@
         <UndefinedDocblockClass>
             <errorLevel type="suppress">
                 <referencedClass name="UnitEnum"/>
+                <referencedClass name="Doctrine\DBAL\ForwardCompatibility\Result"/>
             </errorLevel>
         </UndefinedDocblockClass>
+        <UndefinedMagicPropertyFetch>
+            <errorLevel type="suppress">
+                <referencedProperty name="Contao\Model::$hofff_contact_profiles"/>
+                <referencedProperty name="Contao\Model::$hofff_contact_profiles_order"/>
+            </errorLevel>
+        </UndefinedMagicPropertyFetch>
     </issueHandlers>
 
     <universalObjectCrates>

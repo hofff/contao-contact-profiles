@@ -20,6 +20,11 @@
     "Hofff\\Contao\\SocialTags\\Data\\Extractor\\AbstractExtractor",
     "Hofff\\Contao\\SocialTags\\Data\\OpenGraph\\OpenGraphImageData",
     "Hofff\\Contao\\SocialTags\\Data\\OpenGraph\\OpenGraphType",
-    "Hofff\\Contao\\SocialTags\\Util\\TypeUtil"
+    "Hofff\\Contao\\SocialTags\\Util\\TypeUtil",
+    "Codefog\\NewsCategoriesBundle\\CodefogNewsCategoriesBundle",
+    "Codefog\\NewsCategoriesBundle\\Model\\NewsCategoryModel",
+    "Terminal42\\DcMultilingualBundle\\Driver",
+    "Terminal42\\DcMultilingualBundle\\Model\\Multilingual",
+    "Terminal42\\DcMultilingualBundle\\Model\\MultilingualTrait"
   ]
 }

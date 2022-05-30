@@ -10,15 +10,12 @@ use Netzmacht\Contao\Toolkit\Data\Model\Specification;
 
 use function is_numeric;
 use function range;
-use function substr;
+use function stripos;
 
 final class InitialLastnameLetterSpecification implements Specification
 {
     private string $letter;
 
-    /**
-     * @param string $letter
-     */
     public function __construct(string $letter)
     {
         $this->letter = $letter;
@@ -35,12 +32,13 @@ final class InitialLastnameLetterSpecification implements Specification
         }
 
         if ($this->letter === 'numeric') {
-            return (is_numeric(substr($model->lastname, 0, 1)));
+            return is_numeric($model->lastname[0] ?? null);
         }
 
         return stripos($model->lastname, $this->letter) === 0;
     }
 
+    /** {@inheritDoc} */
     public function buildQuery(array &$columns, array &$values): void
     {
         if ($this->letter === '') {

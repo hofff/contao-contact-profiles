@@ -7,6 +7,7 @@ namespace Hofff\Contao\ContactProfiles\Picker;
 use Contao\CoreBundle\Picker\AbstractInsertTagPickerProvider;
 use Contao\CoreBundle\Picker\DcaPickerProviderInterface;
 use Contao\CoreBundle\Picker\PickerConfig;
+use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
 use Knp\Menu\FactoryInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -17,10 +18,8 @@ use function sprintf;
 
 final class ContactProfilePickerProvider extends AbstractInsertTagPickerProvider implements DcaPickerProviderInterface
 {
-    /** @var Security */
     private Security $security;
 
-    /** @var ProfileRepository */
     private ProfileRepository $repository;
 
     public function __construct(
@@ -109,7 +108,7 @@ final class ContactProfilePickerProvider extends AbstractInsertTagPickerProvider
     private function getCategoryId($categoryId): ?int
     {
         $profile = $this->repository->find((int) $categoryId);
-        if ($profile) {
+        if ($profile instanceof Profile) {
             return (int) $profile->pid;
         }
 

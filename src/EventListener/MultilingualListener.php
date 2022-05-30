@@ -13,12 +13,18 @@ final class MultilingualListener
 {
     private DcaManager $dcaManager;
 
+    /** @var list<string>|null */
     private ?array $languages;
 
     private ?string $fallbackLanguage;
 
+    /** @var list<string> */
     private array $profileFields;
 
+    /**
+     * @param list<string>|null $languages
+     * @param list<string>      $profileFields
+     */
     public function __construct(
         DcaManager $dcaManager,
         ?array $languages,
@@ -53,8 +59,14 @@ final class MultilingualListener
         $definition->modify(['fields'], $this->modifyFieldsDefinition($translatableFields));
     }
 
+    /**
+     * @param array<string,mixed> $config
+     *
+     * @return array<string,mixed>
+     */
     public function modifyConfigDefinition(array $config): array
     {
+        /** @psalm-suppress MissingDependency */
         $config['dataContainer']  = Driver::class;
         $config['langColumnName'] = 'multilingual_language';
         $config['langPid']        = 'multilingual_pid';
@@ -72,8 +84,14 @@ final class MultilingualListener
         return $config;
     }
 
+    /** @param list<string> $translatableFields */
     private function modifyFieldsDefinition(array $translatableFields): callable
     {
+        /**
+         * @param array<string,array<string,mixed>>
+         *
+         * @return array<string,array<string,mixed>>
+         */
         return static function (array $fields) use ($translatableFields): array {
             $fields['multilingual_language']['sql'] = [
                 'type'   => Types::STRING,

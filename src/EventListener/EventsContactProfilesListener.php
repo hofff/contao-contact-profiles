@@ -24,6 +24,7 @@ final class EventsContactProfilesListener extends SourceListener
 
         $repository = $this->repositoryManager->getRepository(CalendarEventsModel::class);
 
+        /** @psalm-suppress UndefinedInterfaceMethod */
         return $repository->findPublishedByParentAndIdOrAlias($alias, [$newsArchive->id]);
     }
 
@@ -34,6 +35,7 @@ final class EventsContactProfilesListener extends SourceListener
     {
         $repository = $this->repositoryManager->getRepository(CalendarModel::class);
 
+        /** @psalm-suppress UndefinedInterfaceMethod */
         return $repository->findOneByJumpTo($GLOBALS['objPage']->id);
     }
 }

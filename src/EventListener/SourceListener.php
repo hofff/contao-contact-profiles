@@ -51,7 +51,8 @@ abstract class SourceListener
 
         $profiles = $this->fetchProfiles($sourceModel);
 
-        $event->setProfiles($profiles ? $profiles->getModels(): []);
+        /** @psalm-suppress ArgumentTypeCoercion */
+        $event->setProfiles($profiles ? $profiles->getModels() : []);
     }
 
     abstract protected function source(): string;

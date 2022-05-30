@@ -11,6 +11,7 @@ use Contao\FrontendTemplate;
 use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
 use Hofff\Contao\ContactProfiles\Renderer\FieldRenderer;
+
 use function is_object;
 use function is_scalar;
 use function method_exists;
@@ -65,7 +66,7 @@ abstract class AbstractFieldRenderer implements FieldRenderer
         $template->label           = $GLOBALS['TL_DCA']['tl_contact_profile']['fields'][$field]['label'][0] ?? $field;
         $template->value           = $value;
         $template->profile         = $profile;
-        $template->renderValue     = function () use ($value) {
+        $template->renderValue     = /** @psalm-return mixed|scalar */ static function () use ($value) {
             if (is_scalar($value)) {
                 return $value;
             }

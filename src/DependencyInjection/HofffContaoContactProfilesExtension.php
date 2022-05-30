@@ -13,7 +13,6 @@ use Hofff\Contao\ContactProfiles\Model\Profile\MultilingualProfile;
 use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
 use Hofff\Contao\ContactProfiles\Model\Responsibility\MonolingualResponsibility;
 use Hofff\Contao\ContactProfiles\Model\Responsibility\MultilingualResponsibility;
-use Hofff\Contao\ContactProfiles\Model\Responsibility\Responsibility;
 use Hofff\Contao\ContactProfiles\Model\Responsibility\ResponsibilityRepository;
 use Hofff\Contao\ContactProfiles\Model\SocialAccount\MonolingualSocialAccount;
 use Hofff\Contao\ContactProfiles\Model\SocialAccount\MultilingualSocialAccount;
@@ -24,6 +23,14 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
+/**
+ * @psalm-type TMultilingaulConfig = array{
+ *     enable: bool,
+ *     languages?: list<string>|null,
+ *     fallbackLanguage: ?string,
+ *     fields: list<string>|null,
+ * }
+ */
 final class HofffContaoContactProfilesExtension extends Extension
 {
     /** {@inheritDoc} */
@@ -106,7 +113,11 @@ final class HofffContaoContactProfilesExtension extends Extension
         $container->removeDefinition(NewsContactProfilesListener::class);
     }
 
-
+    /**
+     * @param array<string,mixed> $multilingual
+     *
+     * @psalm-param TMultilingaulConfig $multilingual
+     */
     private function configureMultilingual(array $multilingual, ContainerBuilder $container): void
     {
         if (! $multilingual['enable']) {

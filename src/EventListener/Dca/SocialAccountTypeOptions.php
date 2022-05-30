@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Hofff\Contao\ContactProfiles\EventListener\Dca;
 
 use Contao\CoreBundle\ServiceAnnotation\Callback;
+use Contao\Model\Collection;
 use Hofff\Contao\ContactProfiles\Model\SocialAccount\SocialAccount;
 use Hofff\Contao\ContactProfiles\Model\SocialAccount\SocialAccountRepository;
 
@@ -25,8 +26,11 @@ final class SocialAccountTypeOptions
     {
         $options    = [];
         $collection = $this->socialAccounts->findAll(['order' => '.name']);
+        if (! $collection instanceof Collection) {
+            return $options;
+        }
 
-        foreach ($collection ?: [] as $account) {
+        foreach ($collection as $account) {
             assert($account instanceof SocialAccount);
 
             $options[$account->socialAccountId()] = $account->name;

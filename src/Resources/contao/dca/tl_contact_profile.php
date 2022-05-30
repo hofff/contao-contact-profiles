@@ -82,7 +82,7 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             'sql'    => 'int(10) unsigned NOT NULL auto_increment',
         ],
         'pid'              => [
-            "relation" => [
+            'relation' => [
                 'type'  => 'belongsTo',
                 'table' => 'tl_contact_category',
             ],

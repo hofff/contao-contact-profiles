@@ -13,7 +13,6 @@ use function strpos;
 
 final class AddContactProfileInformationListener
 {
-    /** @var ProfileRepository */
     private ProfileRepository $repository;
 
     /** @var string[] */

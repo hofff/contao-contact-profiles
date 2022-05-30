@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\EventListener\Dca;
 
+use Contao\Model\Collection;
+use Hofff\Contao\ContactProfiles\Model\Category\Category;
 use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
 
@@ -19,19 +21,29 @@ final class ContactProfileOptions
         $this->profiles = $profiles;
     }
 
-    /** @return string[] */
+    /**
+     * @return string[]
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
     public function __invoke(): array
     {
         $collection = $this->profiles->findAll(['language' => $GLOBALS['TL_LANGUAGE']]);
-        $options = [];
+        $options    = [];
+        if (! $collection instanceof Collection) {
+            return $options;
+        }
 
-        foreach ($collection ?: [] as $profile) {
+        foreach ($collection as $profile) {
             assert($profile instanceof Profile);
+            $category = $profile->getRelated('pid');
+
+            /** @psalm-suppress DocblockTypeContradiction */
             $options[$profile->profileId()] = sprintf(
                 '%s %s [%s]',
                 $profile->lastname,
                 $profile->firstname,
-                $profile->getRelated('pid')->title
+                $category instanceof Category ? $category->title : $profile->pid,
             );
         }
 
