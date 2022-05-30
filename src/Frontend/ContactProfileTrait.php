@@ -16,6 +16,7 @@ use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
 use Hofff\Contao\ContactProfiles\Model\Profile\Specification\InitialLastnameLetterSpecification;
 use Hofff\Contao\ContactProfiles\Util\ContactProfileUtil;
+use Hofff\Contao\ContactProfiles\Util\QueryUtil;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 use function count;
@@ -99,13 +100,12 @@ trait ContactProfileTrait
 
             case 'custom':
             default:
-                $profileIds = StringUtil::deserialize($this->hofff_contact_profiles, true);
-                $profiles   = $repository->fetchPublishedByProfileIdsAndSpecification($profileIds, $specification, $options);
-                $profiles   = $profiles ? $profiles->getModels() : [];
-                $order      = StringUtil::deserialize($this->hofff_contact_profiles_order, true);
-                $profiles   = ContactProfileUtil::orderListByIds($profiles, $order);
+                $order            = StringUtil::deserialize($this->hofff_contact_profiles_order, true);
+                $options['order'] = QueryUtil::orderByIds('id', $order);
+                $profileIds       = StringUtil::deserialize($this->hofff_contact_profiles, true);
+                $profiles         = $repository->fetchPublishedByProfileIdsAndSpecification($profileIds, $specification, $options);
 
-                return $profiles;
+                return $profiles ? $profiles->getModels() : [];
         }
     }
 
