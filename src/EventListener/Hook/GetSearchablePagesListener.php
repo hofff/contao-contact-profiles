@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Hofff\Contao\ContactProfiles\EventListener\Hook;
 
 use Contao\CoreBundle\Framework\ContaoFramework;
+use Contao\CoreBundle\ServiceAnnotation\Hook;
 use Contao\Database;
 use Contao\Date;
 use Contao\PageModel;
@@ -15,6 +16,9 @@ use Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator;
 use function is_int;
 use function is_string;
 
+/**
+ * @Hook("getSearchablePages")
+ */
 final class GetSearchablePagesListener
 {
     private ContaoFramework $framework;

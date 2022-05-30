@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use Hofff\Contao\ContactProfiles\EventListener\Hook\AddContactProfileInformationListener;
-
 // Backend module
 $GLOBALS['BE_MOD']['content']['hofff_contact_profiles'] = [
     'tables'     => [
@@ -14,6 +12,3 @@ $GLOBALS['BE_MOD']['content']['hofff_contact_profiles'] = [
     ],
     'stylesheet' => ['bundles/hofffcontaocontactprofiles/css/background.css'],
 ];
-
-// Hooks
-$GLOBALS['TL_HOOKS']['parseTemplate'][] = [AddContactProfileInformationListener::class, 'onParseTemplate'];

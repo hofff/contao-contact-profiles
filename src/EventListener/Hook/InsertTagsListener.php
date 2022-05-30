@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\EventListener\Hook;
 
+use Contao\CoreBundle\ServiceAnnotation\Hook;
 use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
 use Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator;
 
 use function explode;
 use function in_array;
 
+/**
+ * @Hook("replaceInsertTags")
+ */
 final class InsertTagsListener
 {
     private ProfileRepository $repository;
