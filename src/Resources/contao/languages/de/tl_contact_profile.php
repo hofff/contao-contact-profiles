@@ -3,13 +3,14 @@
 declare(strict_types=1);
 
 // Legends
-$GLOBALS['TL_LANG']['tl_contact_profile']['personal_legend']  = 'Persönliche Informationen';
-$GLOBALS['TL_LANG']['tl_contact_profile']['contact_legend']   = 'Kontaktinformationen';
-$GLOBALS['TL_LANG']['tl_contact_profile']['details_legend']   = 'Details';
-$GLOBALS['TL_LANG']['tl_contact_profile']['redirect_legend']  = 'Weiterleitung';
-$GLOBALS['TL_LANG']['tl_contact_profile']['published_legend'] = 'Veröffentlichen';
-$GLOBALS['TL_LANG']['tl_contact_profile']['videos_legend']    = 'Videos';
-$GLOBALS['TL_LANG']['tl_contact_profile']['gallery_legend']   = 'Galerie';
+$GLOBALS['TL_LANG']['tl_contact_profile']['personal_legend']        = 'Persönliche Informationen';
+$GLOBALS['TL_LANG']['tl_contact_profile']['contact_legend']         = 'Kontaktinformationen';
+$GLOBALS['TL_LANG']['tl_contact_profile']['details_legend']         = 'Details';
+$GLOBALS['TL_LANG']['tl_contact_profile']['redirect_legend']        = 'Weiterleitung';
+$GLOBALS['TL_LANG']['tl_contact_profile']['published_legend']       = 'Veröffentlichen';
+$GLOBALS['TL_LANG']['tl_contact_profile']['videos_legend']          = 'Videos';
+$GLOBALS['TL_LANG']['tl_contact_profile']['gallery_legend']         = 'Galerie';
+$GLOBALS['TL_LANG']['tl_contact_profile']['news_categories_legend'] = 'Nachrichten-Kategorien';
 
 // Operations
 $GLOBALS['TL_LANG']['tl_contact_profile']['new'][0]    = 'Neu';
@@ -80,3 +81,5 @@ $GLOBALS['TL_LANG']['tl_contact_profile']['responsibilities'][0] = 'Zuständigke
 $GLOBALS['TL_LANG']['tl_contact_profile']['responsibilities'][1] = 'Sie können Zuständigkeiten aus der vordefinierten Liste auswählen';
 $GLOBALS['TL_LANG']['tl_contact_profile']['published'][0]        = 'Veröffentlichen';
 $GLOBALS['TL_LANG']['tl_contact_profile']['published'][1]        = 'Kontaktprofil wird auf der Website angezeigt';
+$GLOBALS['TL_LANG']['tl_contact_profile']['news_categories'][0]  = 'Nachrichten-Kategorien';
+$GLOBALS['TL_LANG']['tl_contact_profile']['news_categories'][1]  = 'Zugeordnete Nachrichten-Kategorien';

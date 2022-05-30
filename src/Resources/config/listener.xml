@@ -47,6 +47,11 @@
             <argument type="service" id="Hofff\Contao\Consent\Bridge\ConsentToolManager" />
         </service>
 
+        <service id="Hofff\Contao\ContactProfiles\EventListener\Dca\NewsCategoryDcaListener">
+            <argument type="service" id="netzmacht.contao_toolkit.dca.manager"/>
+            <argument>%kernel.bundles%</argument>
+        </service>
+
         <service id="Hofff\Contao\ContactProfiles\EventListener\Hook\AddContactProfileInformationListener" public="true">
             <argument type="service" id="Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository" />
             <argument>%hofff.contao_contact_profiles.template_prefixes%</argument>
@@ -81,6 +86,13 @@
         </service>
 
         <service id="Hofff\Contao\ContactProfiles\EventListener\FAQContactProfilesListener">
+            <argument type="service" id="contao.framework" />
+            <argument type="service" id="netzmacht.contao_toolkit.repository_manager"/>
+            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository"/>
+            <tag name="kernel.event_listener" event="hofff.contao_contact_profile.load_contact_profiles"/>
+        </service>
+
+        <service id="Hofff\Contao\ContactProfiles\EventListener\NewsCategoryProfilesListener">
             <argument type="service" id="contao.framework" />
             <argument type="service" id="netzmacht.contao_toolkit.repository_manager"/>
             <argument type="service" id="Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository"/>

@@ -45,9 +45,11 @@
     "symfony/http-foundation": "^4.4 || ^5.0",
     "symfony/http-kernel": "^4.4 || ^5.0",
     "symfony/routing": "^4.4 || ^5.0",
-    "symfony/security-core": "^4.4 || ^5.0"
+    "symfony/security-core": "^4.4 || ^5.0",
+    "codefog/contao-haste": "^4.25"
   },
   "require-dev": {
+    "codefog/contao-news_categories": "^3.4",
     "contao/calendar-bundle": "^4.9",
     "contao/faq-bundle": "^4.9",
     "contao/manager-plugin": "^2.0",
@@ -58,6 +60,7 @@
     "terminal42/dc_multilingual": "^4.2"
   },
   "conflict": {
+    "codefog/contao-news_categories": "<3.4 || >= 4.0",
     "contao/calendar-bundle": "<4.9 || >=5.0",
     "contao/faq-bundle": "<4.9 || >=5.0",
     "contao/manager-plugin": "<2.0 || >=3.0",
@@ -65,6 +68,7 @@
     "hofff/contao-social-tags": "<1.1 || >=2.0"
   },
   "suggest": {
+    "codefog/contao-news_categories": "Add relations between contact profiles and news categories",
     "contao/calendar-bundle": "Use contact profile for author information",
     "contao/faq-bundle": "Use contact profile for author information",
     "contao/news-bundle": "Use contact profile for author information",
@@ -80,7 +84,8 @@
     "allow-plugins": {
       "dealerdirect/phpcodesniffer-composer-installer": true,
       "contao-components/installer": false,
-      "contao/manager-plugin": true
+      "contao/manager-plugin": true,
+      "contao-community-alliance/composer-plugin": true
     }
   },
   "extra": {

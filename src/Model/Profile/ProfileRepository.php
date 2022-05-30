@@ -140,6 +140,16 @@ final class ProfileRepository extends ContaoRepository
         return $result->fetchAllAssociative();
     }
 
+    public function findByNewsCategory(int $newsCategoryId): ?Collection
+    {
+        $result = $this->connection->executeQuery(
+            'SELECT contact_profile_id FROM tl_contact_profile_news_category WHERE news_category_id=:id',
+            ['id' => $newsCategoryId]
+        );
+
+        return $this->findMultipleByIds($result->fetchFirstColumn());
+    }
+
     private function addPublishedCondition(array &$columns, array &$values): void
     {
         if ($this->tokenChecker->isPreviewMode()) {

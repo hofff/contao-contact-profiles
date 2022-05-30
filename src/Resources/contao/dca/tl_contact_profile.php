@@ -22,10 +22,10 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
     // List
     'list'     => [
         'sorting'           => [
-            'mode'                  => 4,
-            'fields'                => ['lastname', 'firstname'],
-            'headerFields'          => ['title'],
-            'panelLayout'           => 'filter;sort,search,limit',
+            'mode'         => 4,
+            'fields'       => ['lastname', 'firstname'],
+            'headerFields' => ['title'],
+            'panelLayout'  => 'filter;sort,search,limit',
         ],
         'global_operations' => [
             'all' => [
@@ -49,10 +49,10 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                     . '\')) return false; Backend.getScrollOffset();"',
             ],
             'toggle' => [
-                'label'           => &$GLOBALS['TL_LANG']['tl_contact_profile']['toggle'],
-                'icon'            => 'visible.svg',
-                'attributes'      => 'onclick="Backend.getScrollOffset();return AjaxRequest.toggleVisibility(this,%s)"',
-                'showInHeader'    => true,
+                'label'        => &$GLOBALS['TL_LANG']['tl_contact_profile']['toggle'],
+                'icon'         => 'visible.svg',
+                'attributes'   => 'onclick="Backend.getScrollOffset();return AjaxRequest.toggleVisibility(this,%s)"',
+                'showInHeader' => true,
             ],
             'show'   => [
                 'label' => &$GLOBALS['TL_LANG']['tl_contact_profile']['show'],
@@ -70,6 +70,7 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             . ';{gallery_legend:hide},gallery'
             . ';{videos_legend:hide},videos'
             . ';{redirect_legend},jumpTo'
+            . ';{news_categories_legend},news_categories'
             . ';{published_legend},published',
     ],
 
@@ -82,10 +83,10 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
         ],
         'pid'              => [
             "relation" => [
-                'type' => 'belongsTo',
+                'type'  => 'belongsTo',
                 'table' => 'tl_contact_category',
             ],
-            'sql' => "int(10) unsigned NOT NULL default '0'"
+            'sql'      => "int(10) unsigned NOT NULL default '0'",
         ],
         'tstamp'           => ['sql' => "int(10) unsigned NOT NULL default '0'"],
         'alias'            => [
@@ -248,9 +249,9 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'profileField' => true,
                 'columnFields' => [
                     'type' => [
-                        'label'            => &$GLOBALS['TL_LANG']['tl_contact_profile']['accountType'],
-                        'inputType'        => 'select',
-                        'eval'             => [
+                        'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['accountType'],
+                        'inputType' => 'select',
+                        'eval'      => [
                             'includeBlankOption' => true,
                             'tl_class'           => 'w50',
                             'style'              => 'width: 100%',
@@ -322,10 +323,10 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             'sql'       => "char(1) NOT NULL default ''",
         ],
         'videos'           => [
-            'label'         => &$GLOBALS['TL_LANG']['tl_contact_profile']['videos'],
-            'exclude'       => true,
-            'inputType'     => 'multiColumnWizard',
-            'eval'          => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['videos'],
+            'exclude'   => true,
+            'inputType' => 'multiColumnWizard',
+            'eval'      => [
                 'tl_class'     => 'clr',
                 'profileField' => true,
                 'columnFields' => [
@@ -389,7 +390,7 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                     ],
                 ],
             ],
-            'sql'           => [
+            'sql'       => [
                 'type'    => 'blob',
                 'notnull' => false,
                 'default' => null,
@@ -420,6 +421,20 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'type'    => 'blob',
                 'notnull' => false,
                 'default' => null,
+            ],
+        ],
+        'news_categories'  => [
+            'exclude'   => true,
+            'inputType' => 'picker',
+            'eval'      => [
+                'tl_class' => 'clr long',
+                'multiple' => true,
+                'chosen'   => true,
+            ],
+            'relation'  => [
+                'type'          => 'haste-ManyToMany',
+                'table'         => 'tl_news_category',
+                'relationTable' => 'tl_contact_profile_news_category',
             ],
         ],
     ],

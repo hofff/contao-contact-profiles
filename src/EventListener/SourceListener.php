@@ -8,6 +8,7 @@ use Contao\Config;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\Input;
 use Contao\Model;
+use Contao\Model\Collection;
 use Contao\StringUtil;
 use Hofff\Contao\ContactProfiles\Event\LoadContactProfilesEvent;
 use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
@@ -48,12 +49,7 @@ abstract class SourceListener
             return;
         }
 
-        $profileIds = StringUtil::deserialize($sourceModel->hofff_contact_profiles, true);
-        $order      = StringUtil::deserialize($sourceModel->hofff_contact_profiles_order, true);
-        $profiles   = $this->repository->fetchPublishedByProfileIds(
-            $profileIds,
-            ['order' => QueryUtil::orderByIds('id', $order)]
-        );
+        $profiles = $this->fetchProfiles($sourceModel);
 
         $event->setProfiles($profiles ? $profiles->getModels(): []);
     }
@@ -79,5 +75,16 @@ abstract class SourceListener
         }
 
         return $inputAdapter->__call('get', ['items']);
+    }
+
+    protected function fetchProfiles(Model $sourceModel): ?Collection
+    {
+        $profileIds = StringUtil::deserialize($sourceModel->hofff_contact_profiles, true);
+        $order      = StringUtil::deserialize($sourceModel->hofff_contact_profiles_order, true);
+
+        return $this->repository->fetchPublishedByProfileIds(
+            $profileIds,
+            ['order' => QueryUtil::orderByIds('id', $order)]
+        );
     }
 }

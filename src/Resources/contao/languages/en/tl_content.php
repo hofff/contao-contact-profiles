@@ -42,9 +42,11 @@ $GLOBALS['TL_LANG']['tl_content']['hofff_contact_source_options']['categories'][
 $GLOBALS['TL_LANG']['tl_content']['hofff_contact_source_options']['dynamic'][0]    = 'Dynamic sources';
 $GLOBALS['TL_LANG']['tl_content']['hofff_contact_source_options']['dynamic'][1]    = 'Retrieve contact profiles from a dynamic source.';
 
-$GLOBALS['TL_LANG']['tl_content']['hofff_contact_sources_options']['news'][0]  = 'News';
-$GLOBALS['TL_LANG']['tl_content']['hofff_contact_sources_options']['news'][1]  = 'Contact profiles assigned to a news.';
-$GLOBALS['TL_LANG']['tl_content']['hofff_contact_sources_options']['event'][0] = 'Event';
-$GLOBALS['TL_LANG']['tl_content']['hofff_contact_sources_options']['event'][1] = 'Contact profiles assigned to an event.';
-$GLOBALS['TL_LANG']['tl_content']['hofff_contact_sources_options']['faq'][0]   = 'FAQ';
-$GLOBALS['TL_LANG']['tl_content']['hofff_contact_sources_options']['faq'][1]   = 'Contact profiles assigned to a faq.';
+$GLOBALS['TL_LANG']['tl_content']['hofff_contact_sources_options']['news'][0]            = 'News';
+$GLOBALS['TL_LANG']['tl_content']['hofff_contact_sources_options']['news'][1]            = 'Contact profiles assigned to a news.';
+$GLOBALS['TL_LANG']['tl_content']['hofff_contact_sources_options']['event'][0]           = 'Event';
+$GLOBALS['TL_LANG']['tl_content']['hofff_contact_sources_options']['event'][1]           = 'Contact profiles assigned to an event.';
+$GLOBALS['TL_LANG']['tl_content']['hofff_contact_sources_options']['faq'][0]             = 'FAQ';
+$GLOBALS['TL_LANG']['tl_content']['hofff_contact_sources_options']['faq'][1]             = 'Contact profiles assigned to a faq.';
+$GLOBALS['TL_LANG']['tl_content']['hofff_contact_sources_options']['news_categories'][0] = 'News categories';
+$GLOBALS['TL_LANG']['tl_content']['hofff_contact_sources_options']['news_categories'][1] = 'Contact profiles assigned to a news category.';

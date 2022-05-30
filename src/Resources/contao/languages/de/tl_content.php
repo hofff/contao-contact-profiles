@@ -42,9 +42,11 @@ $GLOBALS['TL_LANG']['tl_content']['hofff_contact_source_options']['categories'][
 $GLOBALS['TL_LANG']['tl_content']['hofff_contact_source_options']['dynamic'][0]    = 'Dynamische Bezugsquelle';
 $GLOBALS['TL_LANG']['tl_content']['hofff_contact_source_options']['dynamic'][1]    = 'Listen Sie Kontaktprofile dynamischer Bezugsquellen auf.';
 
-$GLOBALS['TL_LANG']['tl_content']['hofff_contact_sources_options']['news'][0]  = 'Nachricht';
-$GLOBALS['TL_LANG']['tl_content']['hofff_contact_sources_options']['news'][1]  = 'Kontaktprofile einer Nachricht zugewiesen';
-$GLOBALS['TL_LANG']['tl_content']['hofff_contact_sources_options']['event'][0] = 'Event';
-$GLOBALS['TL_LANG']['tl_content']['hofff_contact_sources_options']['event'][1] = 'Kontaktprofile einem Event zugewiesen';
-$GLOBALS['TL_LANG']['tl_content']['hofff_contact_sources_options']['faq'][0]   = 'FAQ';
-$GLOBALS['TL_LANG']['tl_content']['hofff_contact_sources_options']['faq'][1]   = 'Kontaktprofile einer FAQ zugewiesen';
+$GLOBALS['TL_LANG']['tl_content']['hofff_contact_sources_options']['news'][0]            = 'Nachricht';
+$GLOBALS['TL_LANG']['tl_content']['hofff_contact_sources_options']['news'][1]            = 'Kontaktprofile einer Nachricht zugewiesen';
+$GLOBALS['TL_LANG']['tl_content']['hofff_contact_sources_options']['event'][0]           = 'Event';
+$GLOBALS['TL_LANG']['tl_content']['hofff_contact_sources_options']['event'][1]           = 'Kontaktprofile einem Event zugewiesen';
+$GLOBALS['TL_LANG']['tl_content']['hofff_contact_sources_options']['faq'][0]             = 'FAQ';
+$GLOBALS['TL_LANG']['tl_content']['hofff_contact_sources_options']['faq'][1]             = 'Kontaktprofile einer FAQ zugewiesen';
+$GLOBALS['TL_LANG']['tl_content']['hofff_contact_sources_options']['news_categories'][0] = 'Nachrichten-Kategorie';
+$GLOBALS['TL_LANG']['tl_content']['hofff_contact_sources_options']['news_categories'][1] = 'Kontaktprofile einer Nachrichten-Kategorie zugeordnet';

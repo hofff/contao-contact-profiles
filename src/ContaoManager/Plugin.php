@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\ContaoManager;
 
+use Codefog\NewsCategoriesBundle\CodefogNewsCategoriesBundle;
 use Contao\CalendarBundle\ContaoCalendarBundle;
 use Contao\CoreBundle\ContaoCoreBundle;
 use Contao\FaqBundle\ContaoFaqBundle;
@@ -31,6 +32,7 @@ final class Plugin implements BundlePluginInterface
                     ContaoCalendarBundle::class,
                     ContaoFaqBundle::class,
                     HofffContaoConsentBridgeBundle::class,
+                    CodefogNewsCategoriesBundle::class,
                 ]
             ),
         ];

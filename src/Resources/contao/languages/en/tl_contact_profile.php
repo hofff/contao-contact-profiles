@@ -3,13 +3,14 @@
 declare(strict_types=1);
 
 // Legends
-$GLOBALS['TL_LANG']['tl_contact_profile']['personal_legend']  = 'Personal information';
-$GLOBALS['TL_LANG']['tl_contact_profile']['contact_legend']   = 'Contact information';
-$GLOBALS['TL_LANG']['tl_contact_profile']['details_legend']   = 'Details';
-$GLOBALS['TL_LANG']['tl_contact_profile']['redirect_legend']  = 'Redirect';
-$GLOBALS['TL_LANG']['tl_contact_profile']['published_legend'] = 'Published';
-$GLOBALS['TL_LANG']['tl_contact_profile']['videos_legend']    = 'Videos';
-$GLOBALS['TL_LANG']['tl_contact_profile']['gallery_legend']   = 'Gallery';
+$GLOBALS['TL_LANG']['tl_contact_profile']['personal_legend']        = 'Personal information';
+$GLOBALS['TL_LANG']['tl_contact_profile']['contact_legend']         = 'Contact information';
+$GLOBALS['TL_LANG']['tl_contact_profile']['details_legend']         = 'Details';
+$GLOBALS['TL_LANG']['tl_contact_profile']['redirect_legend']        = 'Redirect';
+$GLOBALS['TL_LANG']['tl_contact_profile']['published_legend']       = 'Published';
+$GLOBALS['TL_LANG']['tl_contact_profile']['videos_legend']          = 'Videos';
+$GLOBALS['TL_LANG']['tl_contact_profile']['gallery_legend']         = 'Gallery';
+$GLOBALS['TL_LANG']['tl_contact_profile']['news_categories_legend'] = 'News categories';
 
 // Operations
 $GLOBALS['TL_LANG']['tl_contact_profile']['new'][0]    = 'New';
@@ -82,3 +83,5 @@ $GLOBALS['TL_LANG']['tl_contact_profile']['responsibilities'][0] = 'Responsibili
 $GLOBALS['TL_LANG']['tl_contact_profile']['responsibilities'][1] = 'You can select responsibilities from the defined list.';
 $GLOBALS['TL_LANG']['tl_contact_profile']['published'][0]        = 'Published';
 $GLOBALS['TL_LANG']['tl_contact_profile']['published'][1]        = 'Contact will be shown in the frontend.';
+$GLOBALS['TL_LANG']['tl_contact_profile']['news_categories'][0]  = 'News categories';
+$GLOBALS['TL_LANG']['tl_contact_profile']['news_categories'][1]  = 'Assigned news categories.';

@@ -45,6 +45,7 @@ final class HofffContaoContactProfilesExtension extends Extension
         $this->checkCalendarBundle($container, $sources);
         $this->checkFaqBundle($container, $sources);
         $this->checkNewsBundle($container, $sources);
+        $this->checkNewsCategoriesBundle($container, $sources);
 
         $container->setParameter('hofff_contao_contact_profiles.sources', $sources);
 
@@ -91,6 +92,20 @@ final class HofffContaoContactProfilesExtension extends Extension
 
         $container->removeDefinition(NewsContactProfilesListener::class);
     }
+
+    /** @param list<string> $sources */
+    private function checkNewsCategoriesBundle(ContainerBuilder $container, array &$sources): void
+    {
+        $bundles = $container->getParameter('kernel.bundles');
+        if (isset($bundles['CodefogNewsCategoriesBundle'])) {
+            $sources[] = 'news_categories';
+
+            return;
+        }
+
+        $container->removeDefinition(NewsContactProfilesListener::class);
+    }
+
 
     private function configureMultilingual(array $multilingual, ContainerBuilder $container): void
     {
