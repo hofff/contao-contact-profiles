@@ -89,12 +89,12 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['hofff_contact_source'] = [
 ];
 
 $GLOBALS['TL_DCA']['tl_content']['fields']['hofff_contact_sources'] = [
-    'label'            => &$GLOBALS['TL_LANG']['tl_content']['hofff_contact_sources'],
-    'exclude'          => true,
-    'inputType'        => 'checkbox',
-    'reference'        => &$GLOBALS['TL_LANG']['tl_content']['hofff_contact_sources_options'],
-    'eval'             => ['tl_class' => 'clr', 'multiple' => true],
-    'sql'              => 'tinyblob NULL',
+    'label'     => &$GLOBALS['TL_LANG']['tl_content']['hofff_contact_sources'],
+    'exclude'   => true,
+    'inputType' => 'checkbox',
+    'reference' => &$GLOBALS['TL_LANG']['tl_content']['hofff_contact_sources_options'],
+    'eval'      => ['tl_class' => 'clr', 'multiple' => true],
+    'sql'       => 'tinyblob NULL',
 ];
 
 $GLOBALS['TL_DCA']['tl_content']['fields']['hofff_contact_categories'] = [
@@ -107,46 +107,46 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['hofff_contact_categories'] = [
 ];
 
 $GLOBALS['TL_DCA']['tl_content']['fields']['hofff_contact_profiles'] = [
-    'label'            => &$GLOBALS['TL_LANG']['tl_content']['hofff_contact_profiles'],
-    'inputType'        => 'picker',
-    'eval'             => [
+    'label'     => &$GLOBALS['TL_LANG']['tl_content']['hofff_contact_profiles'],
+    'inputType' => 'picker',
+    'eval'      => [
         'orderField' => 'hofff_contact_profiles_order',
         'tl_class'   => 'clr long',
         'multiple'   => true,
         'chosen'     => true,
     ],
-    'relation'         => [
+    'relation'  => [
         'type'  => 'hasMany',
         'table' => 'tl_contact_profile',
     ],
-    'sql'              => 'blob NULL',
+    'sql'       => 'blob NULL',
 ];
 
 $GLOBALS['TL_DCA']['tl_content']['fields']['hofff_contact_profiles_order'] = ['sql' => 'blob NULL'];
 
 $GLOBALS['TL_DCA']['tl_content']['fields']['hofff_contact_filters'] = [
-    'exclude'          => true,
-    'inputType'        => 'checkbox',
-    'options'          => ['initials'],
-    'reference'        => &$GLOBALS['TL_LANG']['tl_content']['hofff_contact_filters_options'],
-    'eval'             => ['tl_class' => 'clr', 'multiple' => true, 'helpwizard' => true],
-    'sql'              => 'tinyblob NULL',
+    'exclude'   => true,
+    'inputType' => 'checkbox',
+    'options'   => ['initials'],
+    'reference' => &$GLOBALS['TL_LANG']['tl_content']['hofff_contact_filters_options'],
+    'eval'      => ['tl_class' => 'clr', 'multiple' => true, 'helpwizard' => true],
+    'sql'       => 'tinyblob NULL',
 ];
 
 $GLOBALS['TL_DCA']['tl_content']['fields']['hofff_contact_fields'] = [
-    'label'            => &$GLOBALS['TL_LANG']['tl_content']['hofff_contact_fields'],
-    'exclude'          => true,
-    'inputType'        => 'checkboxWizard',
-    'eval'             => ['tl_class' => 'clr', 'multiple' => true],
-    'sql'              => 'blob NULL',
+    'label'     => &$GLOBALS['TL_LANG']['tl_content']['hofff_contact_fields'],
+    'exclude'   => true,
+    'inputType' => 'checkboxWizard',
+    'eval'      => ['tl_class' => 'clr', 'multiple' => true],
+    'sql'       => 'blob NULL',
 ];
 
 $GLOBALS['TL_DCA']['tl_content']['fields']['hofff_contact_template'] = [
-    'label'            => &$GLOBALS['TL_LANG']['tl_content']['hofff_contact_template'],
-    'exclude'          => true,
-    'inputType'        => 'select',
-    'eval'             => ['includeBlankOption' => true, 'chosen' => true, 'tl_class' => 'w50'],
-    'sql'              => "varchar(64) NOT NULL default ''",
+    'label'     => &$GLOBALS['TL_LANG']['tl_content']['hofff_contact_template'],
+    'exclude'   => true,
+    'inputType' => 'select',
+    'eval'      => ['includeBlankOption' => true, 'chosen' => true, 'tl_class' => 'w50'],
+    'sql'       => "varchar(64) NOT NULL default ''",
 ];
 
 $GLOBALS['TL_DCA']['tl_content']['fields']['hofff_contact_more'] = [
@@ -165,27 +165,27 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['hofff_contact_profiles_order_sql'] =
 ];
 
 $GLOBALS['TL_DCA']['tl_content']['fields']['hofff_contact_consent_tag_youtube'] = [
-    'label'            => &$GLOBALS['TL_LANG']['tl_content']['hofff_contact_consent_tag_youtube'],
-    'exclude'          => true,
-    'inputType'        => 'select',
-    'eval'             => [
+    'label'     => &$GLOBALS['TL_LANG']['tl_content']['hofff_contact_consent_tag_youtube'],
+    'exclude'   => true,
+    'inputType' => 'select',
+    'eval'      => [
         'tl_class'           => 'w50',
         'includeBlankOption' => true,
         'chosen'             => true,
         'multiple'           => false,
     ],
-    'sql'              => ['type' => 'string', 'default' => null, 'notnull' => false],
+    'sql'       => ['type' => 'string', 'default' => null, 'notnull' => false],
 ];
 
 $GLOBALS['TL_DCA']['tl_content']['fields']['hofff_contact_consent_tag_vimeo'] = [
-    'label'            => &$GLOBALS['TL_LANG']['tl_content']['hofff_contact_consent_tag_vimeo'],
-    'exclude'          => true,
-    'inputType'        => 'select',
-    'eval'             => [
+    'label'     => &$GLOBALS['TL_LANG']['tl_content']['hofff_contact_consent_tag_vimeo'],
+    'exclude'   => true,
+    'inputType' => 'select',
+    'eval'      => [
         'tl_class'           => 'w50',
         'includeBlankOption' => true,
         'chosen'             => true,
         'multiple'           => false,
     ],
-    'sql'              => ['type' => 'string', 'default' => null, 'notnull' => false],
+    'sql'       => ['type' => 'string', 'default' => null, 'notnull' => false],
 ];

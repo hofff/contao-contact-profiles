@@ -9,21 +9,21 @@ $GLOBALS['TL_DCA']['tl_contact_responsibility'] = [
 
     // Config
     'config'   => [
-        'dataContainer'    => 'Table',
-        'sql'              => [
+        'dataContainer' => 'Table',
+        'sql'           => [
             'keys' => ['id' => 'primary'],
         ],
     ],
 
     // List
     'list'     => [
-        'sorting'    => [
+        'sorting'           => [
             'mode'        => 1,
             'fields'      => ['name'],
             'flag'        => 1,
             'panelLayout' => 'search',
         ],
-        'label'      => [
+        'label'             => [
             'fields' => ['name'],
             'format' => '%s',
         ],
@@ -34,7 +34,7 @@ $GLOBALS['TL_DCA']['tl_contact_responsibility'] = [
                 'class' => 'header_back',
             ],
         ],
-        'operations' => [
+        'operations'        => [
             'edit'   => [
                 'label' => &$GLOBALS['TL_LANG']['tl_contact_responsibility']['edit'],
                 'href'  => 'act=edit',
@@ -66,7 +66,7 @@ $GLOBALS['TL_DCA']['tl_contact_responsibility'] = [
             'sql'    => 'int(10) unsigned NOT NULL auto_increment',
         ],
         'tstamp' => ['sql' => "int(10) unsigned NOT NULL default '0'"],
-        'name'  => [
+        'name'   => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_responsibility']['name'],
             'exclude'   => true,
             'search'    => true,
