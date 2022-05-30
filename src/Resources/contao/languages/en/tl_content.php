@@ -34,6 +34,8 @@ $GLOBALS['TL_LANG']['tl_content']['hofff_contact_consent_tag_youtube'][0] = 'You
 $GLOBALS['TL_LANG']['tl_content']['hofff_contact_consent_tag_youtube'][1] = 'Assign a consent ID for youtube videos.';
 $GLOBALS['TL_LANG']['tl_content']['hofff_contact_consent_tag_vimeo'][0]   = 'Vimeo consent tag';
 $GLOBALS['TL_LANG']['tl_content']['hofff_contact_consent_tag_vimeo'][1]   = 'Assign a consent ID for vimeo videos.';
+$GLOBALS['TL_LANG']['tl_content']['hofff_contact_filters'][0]             = 'Kontaktprofil-Filter';
+$GLOBALS['TL_LANG']['tl_content']['hofff_contact_filters'][1]             = 'Bitte wählen Sie die Filter aus, die berücksichtigt werden sollen.';
 
 $GLOBALS['TL_LANG']['tl_content']['hofff_contact_source_options']['custom'][0]     = 'Custom';
 $GLOBALS['TL_LANG']['tl_content']['hofff_contact_source_options']['custom'][1]     = 'Choose custom contact profiles.';
@@ -50,3 +52,6 @@ $GLOBALS['TL_LANG']['tl_content']['hofff_contact_sources_options']['faq'][0]    
 $GLOBALS['TL_LANG']['tl_content']['hofff_contact_sources_options']['faq'][1]             = 'Contact profiles assigned to a faq.';
 $GLOBALS['TL_LANG']['tl_content']['hofff_contact_sources_options']['news_categories'][0] = 'News categories';
 $GLOBALS['TL_LANG']['tl_content']['hofff_contact_sources_options']['news_categories'][1] = 'Contact profiles assigned to a news category.';
+
+$GLOBALS['TL_LANG']['tl_content']['hofff_contact_filters_options']['initials'][0] = 'Initialen-Filter';
+$GLOBALS['TL_LANG']['tl_content']['hofff_contact_filters_options']['initials'][1] = 'Filtert die Profile anhand des ersten Buchstaben des Nachnamens';

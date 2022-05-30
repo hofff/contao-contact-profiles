@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Hofff\Contao\ContactProfiles\EventListener;
+namespace Hofff\Contao\ContactProfiles\EventListener\DynamicSource;
 
 use Contao\CalendarEventsModel;
 use Contao\CalendarModel;
 use Contao\Model;
 
-final class EventsContactProfilesListener extends SourceListener
+final class EventsContactProfilesListener extends DynamicSourceListener
 {
     protected function source(): string
     {

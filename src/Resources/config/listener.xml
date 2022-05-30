@@ -76,28 +76,28 @@
             <tag name="contao.hook" hook="replaceInsertTags"/>
         </service>
 
-        <service id="Hofff\Contao\ContactProfiles\EventListener\NewsContactProfilesListener">
+        <service id="Hofff\Contao\ContactProfiles\EventListener\DynamicSource\NewsContactProfilesListener">
             <argument type="service" id="contao.framework" />
             <argument type="service" id="netzmacht.contao_toolkit.repository_manager"/>
             <argument type="service" id="Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository"/>
             <tag name="kernel.event_listener" event="hofff.contao_contact_profile.load_contact_profiles"/>
         </service>
 
-        <service id="Hofff\Contao\ContactProfiles\EventListener\EventsContactProfilesListener">
+        <service id="Hofff\Contao\ContactProfiles\EventListener\DynamicSource\EventsContactProfilesListener">
             <argument type="service" id="contao.framework" />
             <argument type="service" id="netzmacht.contao_toolkit.repository_manager"/>
             <argument type="service" id="Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository"/>
             <tag name="kernel.event_listener" event="hofff.contao_contact_profile.load_contact_profiles"/>
         </service>
 
-        <service id="Hofff\Contao\ContactProfiles\EventListener\FAQContactProfilesListener">
+        <service id="Hofff\Contao\ContactProfiles\EventListener\DynamicSource\FAQContactProfilesListener">
             <argument type="service" id="contao.framework" />
             <argument type="service" id="netzmacht.contao_toolkit.repository_manager"/>
             <argument type="service" id="Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository"/>
             <tag name="kernel.event_listener" event="hofff.contao_contact_profile.load_contact_profiles"/>
         </service>
 
-        <service id="Hofff\Contao\ContactProfiles\EventListener\NewsCategoryProfilesListener">
+        <service id="Hofff\Contao\ContactProfiles\EventListener\DynamicSource\NewsCategoryProfilesListener">
             <argument type="service" id="contao.framework" />
             <argument type="service" id="netzmacht.contao_toolkit.repository_manager"/>
             <argument type="service" id="Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository"/>

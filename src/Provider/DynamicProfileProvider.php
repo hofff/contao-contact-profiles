@@ -29,11 +29,15 @@ final class DynamicProfileProvider extends AbstractProfileProvider
     }
 
     /** {@inheritDoc} */
-    public function fetchProfiles(Model $model, PageModel $pageModel, Specification $specification, int $offset): array
+    public function fetchProfiles(Model $model, PageModel $pageModel, ?Specification $specification, int $offset): array
     {
         $sources = StringUtil::deserialize($model->hofff_contact_sources, true);
         $event   = new LoadContactProfilesEvent($model, $pageModel, $sources);
         $this->eventDispatcher->dispatch($event, $event::NAME);
+
+        if ($specification === null) {
+            return $event->profiles();
+        }
 
         $profiles = [];
 

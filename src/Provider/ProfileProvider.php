@@ -16,7 +16,12 @@ interface ProfileProvider
     public function supports(Model $model): bool;
 
     /** @return list<Profile> */
-    public function fetchProfiles(Model $model, PageModel $pageModel, Specification $specification, int $offset): array;
+    public function fetchProfiles(
+        Model $model,
+        PageModel $pageModel,
+        ?Specification $specification,
+        int $offset
+    ): array;
 
     /** @param list<Profile> $profiles */
     public function countTotal(Model $model, array $profiles): int;

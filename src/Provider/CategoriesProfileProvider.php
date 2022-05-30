@@ -30,15 +30,20 @@ final class CategoriesProfileProvider extends AbstractProfileProvider
      *
      * @psalm-suppress MoreSpecificReturnType
      */
-    public function fetchProfiles(Model $model, PageModel $pageModel, Specification $specification, int $offset): array
+    public function fetchProfiles(Model $model, PageModel $pageModel, ?Specification $specification, int $offset): array
     {
         $categoryIds = StringUtil::deserialize($model->hofff_contact_categories, true);
         $options     = $this->fetchProfilesOptions($model, $offset);
-        $profiles    = $this->profiles->fetchPublishedByCategoriesAndSpecification(
-            $categoryIds,
-            $specification,
-            $options
-        );
+
+        if ($specification) {
+            $profiles = $this->profiles->fetchPublishedByCategoriesAndSpecification(
+                $categoryIds,
+                $specification,
+                $options
+            );
+        } else {
+            $profiles = $this->profiles->fetchPublishedByCategories($categoryIds, $options);
+        }
 
         /** @psalm-suppress LessSpecificReturnStatement */
         return $profiles ? $profiles->getModels() : [];

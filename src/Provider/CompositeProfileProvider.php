@@ -45,7 +45,7 @@ final class CompositeProfileProvider implements ProfileProvider
     }
 
     /** {@inheritDoc} */
-    public function fetchProfiles(Model $model, PageModel $pageModel, Specification $specification, int $offset): array
+    public function fetchProfiles(Model $model, PageModel $pageModel, ?Specification $specification, int $offset): array
     {
         return $this->provider($model)->fetchProfiles($model, $pageModel, $specification, $offset);
     }

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Hofff\Contao\ContactProfiles\EventListener;
+namespace Hofff\Contao\ContactProfiles\EventListener\DynamicSource;
 
 use Contao\FaqCategoryModel;
 use Contao\FaqModel;
 use Contao\Model;
 
-final class FAQContactProfilesListener extends SourceListener
+final class FAQContactProfilesListener extends DynamicSourceListener
 {
     protected function source(): string
     {

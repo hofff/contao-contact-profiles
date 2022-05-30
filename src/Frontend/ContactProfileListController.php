@@ -12,6 +12,7 @@ use Contao\Environment;
 use Contao\Input;
 use Contao\Model;
 use Contao\Pagination;
+use Contao\StringUtil;
 use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Hofff\Contao\ContactProfiles\Model\Profile\Specification\InitialLastnameLetterSpecification;
 use Hofff\Contao\ContactProfiles\Provider\ProfileProvider;
@@ -23,6 +24,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+use function in_array;
 use function min;
 use function substr;
 
@@ -103,8 +105,13 @@ final class ContactProfileListController extends AbstractHybridController
      */
     private function loadProfiles(Model $model, int $offset): array
     {
-        /** @psalm-suppress PossiblyNullReference - Input adapter is always present */
-        $specification = new InitialLastnameLetterSpecification((string) $this->inputAdapter->get('auto_item'));
+        $filters       = StringUtil::deserialize($model->hofff_contact_filters, true);
+        $specification = null;
+
+        if (in_array('initials', $filters, true)) {
+            /** @psalm-suppress PossiblyNullReference - Input adapter is always present */
+            $specification = new InitialLastnameLetterSpecification((string) $this->inputAdapter->get('auto_item'));
+        }
 
         return $this->provider->fetchProfiles($model, $GLOBALS['objPage'], $specification, $offset);
     }

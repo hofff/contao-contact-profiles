@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Hofff\Contao\ContactProfiles\EventListener;
+namespace Hofff\Contao\ContactProfiles\EventListener\DynamicSource;
 
 use Contao\Config;
 use Contao\CoreBundle\Framework\ContaoFramework;
@@ -15,7 +15,7 @@ use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
 use Hofff\Contao\ContactProfiles\Util\QueryUtil;
 use Netzmacht\Contao\Toolkit\Data\Model\RepositoryManager;
 
-abstract class SourceListener
+abstract class DynamicSourceListener
 {
     protected ContaoFramework $framework;
 

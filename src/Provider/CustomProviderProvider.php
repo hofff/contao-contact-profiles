@@ -31,7 +31,7 @@ final class CustomProviderProvider extends AbstractProfileProvider
      *
      * @psalm-suppress MoreSpecificReturnType
      */
-    public function fetchProfiles(Model $model, PageModel $pageModel, Specification $specification, int $offset): array
+    public function fetchProfiles(Model $model, PageModel $pageModel, ?Specification $specification, int $offset): array
     {
         $options = $this->fetchProfilesOptions($model, $offset);
         if ($options['order'] === null) {
@@ -40,11 +40,16 @@ final class CustomProviderProvider extends AbstractProfileProvider
         }
 
         $profileIds = StringUtil::deserialize($model->hofff_contact_profiles, true);
-        $profiles   = $this->profiles->fetchPublishedByProfileIdsAndSpecification(
-            $profileIds,
-            $specification,
-            $options
-        );
+
+        if ($specification) {
+            $profiles = $this->profiles->fetchPublishedByProfileIdsAndSpecification(
+                $profileIds,
+                $specification,
+                $options
+            );
+        } else {
+            $profiles = $this->profiles->fetchPublishedByProfileIds($profileIds, $options);
+        }
 
         /** @psalm-suppress LessSpecificReturnStatement */
         return $profiles ? $profiles->getModels() : [];

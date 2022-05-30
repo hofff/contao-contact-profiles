@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\DependencyInjection;
 
-use Hofff\Contao\ContactProfiles\EventListener\EventsContactProfilesListener;
-use Hofff\Contao\ContactProfiles\EventListener\FAQContactProfilesListener;
+use Hofff\Contao\ContactProfiles\EventListener\DynamicSource\EventsContactProfilesListener;
+use Hofff\Contao\ContactProfiles\EventListener\DynamicSource\FAQContactProfilesListener;
+use Hofff\Contao\ContactProfiles\EventListener\DynamicSource\NewsContactProfilesListener;
 use Hofff\Contao\ContactProfiles\EventListener\MultilingualListener;
-use Hofff\Contao\ContactProfiles\EventListener\NewsContactProfilesListener;
 use Hofff\Contao\ContactProfiles\Model\Profile\MonolingualProfile;
 use Hofff\Contao\ContactProfiles\Model\Profile\MultilingualProfile;
 use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;

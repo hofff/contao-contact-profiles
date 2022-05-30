@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Hofff\Contao\ContactProfiles\EventListener;
+namespace Hofff\Contao\ContactProfiles\EventListener\DynamicSource;
 
 use Contao\Model;
 use Contao\NewsArchiveModel;
 use Contao\NewsModel;
 
-final class NewsContactProfilesListener extends SourceListener
+final class NewsContactProfilesListener extends DynamicSourceListener
 {
     protected function source(): string
     {

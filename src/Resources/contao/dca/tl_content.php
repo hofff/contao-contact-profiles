@@ -22,14 +22,15 @@ $GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'][] = [
 $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'hofff_contact_source';
 
 $GLOBALS['TL_DCA']['tl_content']['palettes']['hofff_contact_profile_list'] = '{type_legend},type,headline'
-    . ';{profile_legend},hofff_contact_source,hofff_contact_fields'
+    . ';{profile_legend},hofff_contact_source,hofff_contact_filters,hofff_contact_fields'
     . ';{template_legend:hide},customTpl,hofff_contact_template,hofff_contact_more,size'
     . ';{protected_legend:hide},protected'
     . ';{expert_legend:hide},guests,cssID'
     . ';{invisible_legend:hide},invisible,start,stop';
 
 $GLOBALS['TL_DCA']['tl_content']['palettes']['hofff_contact_profile_listcustom'] = '{type_legend},type,headline'
-    . ';{profile_legend},hofff_contact_source,hofff_contact_profiles,perPage,numberOfItems,hofff_contact_fields'
+    . ';{profile_legend},hofff_contact_source,hofff_contact_profiles,perPage,numberOfItems,hofff_contact_filters'
+    . ',hofff_contact_fields'
     . ';{template_legend:hide},customTpl,hofff_contact_template,hofff_contact_more,size'
     . ';{protected_legend:hide},protected'
     . ';{expert_legend:hide},guests,cssID'
@@ -37,14 +38,14 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['hofff_contact_profile_listcustom']
 
 $GLOBALS['TL_DCA']['tl_content']['palettes']['hofff_contact_profile_listcategories'] = '{type_legend},type,headline'
     . ';{profile_legend},hofff_contact_source,hofff_contact_categories,perPage,numberOfItems'
-    . ',hofff_contact_profiles_order_sql,hofff_contact_fields'
+    . ',hofff_contact_profiles_order_sql,hofff_contact_filters,hofff_contact_fields'
     . ';{template_legend:hide},customTpl,hofff_contact_template,hofff_contact_more,size'
     . ';{protected_legend:hide},protected'
     . ';{expert_legend:hide},guests,cssID'
     . ';{invisible_legend:hide},invisible,start,stop';
 
 $GLOBALS['TL_DCA']['tl_content']['palettes']['hofff_contact_profile_listdynamic'] = '{type_legend},type,headline'
-    . ';{profile_legend},hofff_contact_source,hofff_contact_sources,hofff_contact_fields'
+    . ';{profile_legend},hofff_contact_source,hofff_contact_sources,hofff_contact_filters,hofff_contact_fields'
     . ';{template_legend:hide},customTpl,hofff_contact_template,hofff_contact_more,size'
     . ';{protected_legend:hide},protected'
     . ';{expert_legend:hide},guests,cssID'
@@ -137,6 +138,15 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['hofff_contact_profiles'] = [
 ];
 
 $GLOBALS['TL_DCA']['tl_content']['fields']['hofff_contact_profiles_order'] = ['sql' => 'blob NULL'];
+
+$GLOBALS['TL_DCA']['tl_content']['fields']['hofff_contact_filters'] = [
+    'exclude'          => true,
+    'inputType'        => 'checkbox',
+    'options'          => ['initials'],
+    'reference'        => &$GLOBALS['TL_LANG']['tl_content']['hofff_contact_filters_options'],
+    'eval'             => ['tl_class' => 'clr', 'multiple' => true, 'helpwizard' => true],
+    'sql'              => 'tinyblob NULL',
+];
 
 $GLOBALS['TL_DCA']['tl_content']['fields']['hofff_contact_fields'] = [
     'label'            => &$GLOBALS['TL_LANG']['tl_content']['hofff_contact_fields'],

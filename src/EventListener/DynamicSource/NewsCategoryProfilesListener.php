@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Hofff\Contao\ContactProfiles\EventListener;
+namespace Hofff\Contao\ContactProfiles\EventListener\DynamicSource;
 
 use Codefog\NewsCategoriesBundle\Model\NewsCategoryModel;
 use Contao\Model;
 use Contao\Model\Collection;
 use Terminal42\DcMultilingualBundle\Model\Multilingual;
 
-final class NewsCategoryProfilesListener extends SourceListener
+final class NewsCategoryProfilesListener extends DynamicSourceListener
 {
     protected function source(): string
     {
