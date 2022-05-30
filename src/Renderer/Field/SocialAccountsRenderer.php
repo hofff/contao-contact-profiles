@@ -7,7 +7,8 @@ namespace Hofff\Contao\ContactProfiles\Renderer\Field;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\FrontendTemplate;
 use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
-use Hofff\Contao\ContactProfiles\Query\SocialAccountQuery;
+use Hofff\Contao\ContactProfiles\Model\SocialAccount\SocialAccount;
+use Hofff\Contao\ContactProfiles\Model\SocialAccount\SocialAccountRepository;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
 
 use function array_filter;
@@ -19,17 +20,16 @@ final class SocialAccountsRenderer extends AbstractFieldRenderer
     /** @var string|null */
     protected $template = 'hofff_contact_field_accounts';
 
-    /** @var SocialAccountQuery */
-    private $query;
-
-    /** @var string[][] */
+    /** @var array<string|int,SocialAccount> */
     private $accounts = [];
 
-    public function __construct(ContaoFramework $framework, SocialAccountQuery $query)
+    private SocialAccountRepository $socialAccounts;
+
+    public function __construct(ContaoFramework $framework, SocialAccountRepository $socialAccounts)
     {
         parent::__construct($framework);
 
-        $this->query = $query;
+        $this->socialAccounts = $socialAccounts;
     }
 
     /** {@inheritDoc} */
@@ -70,17 +70,17 @@ final class SocialAccountsRenderer extends AbstractFieldRenderer
                 continue;
             }
 
-            $compiled[] = array_merge($config, $account);
+            $compiled[] = array_merge($config, $account->row());
         }
 
         $template->value = $compiled;
     }
 
     /** @return string[] */
-    private function accountById(int $type): array
+    private function accountById(int $type): ?SocialAccount
     {
         if (! array_key_exists($type, $this->accounts)) {
-            $this->accounts[$type] = ($this->query)($type);
+            $this->accounts[$type] = $this->socialAccounts->find((int) $type);
         }
 
         return $this->accounts[$type];

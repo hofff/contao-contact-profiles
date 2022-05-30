@@ -30,11 +30,6 @@
             <argument type="service" id="database_connection" />
         </service>
 
-        <!-- Queries -->
-        <service id="Hofff\Contao\ContactProfiles\Query\SocialAccountQuery">
-            <argument type="service" id="database_connection" />
-        </service>
-
         <!-- Field renderer -->
         <service id="Hofff\Contao\ContactProfiles\Renderer\FieldRenderer"
                  class="Hofff\Contao\ContactProfiles\Renderer\Field\CompositeFieldRenderer"
@@ -57,7 +52,7 @@
 
         <service id="Hofff\Contao\ContactProfiles\Renderer\Field\SocialAccountsRenderer">
             <argument type="service" id="contao.framework" />
-            <argument type="service" id="Hofff\Contao\ContactProfiles\Query\SocialAccountQuery" />
+            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\SocialAccount\SocialAccountRepository" />
             <tag name="hofff_contao_contact_profiles.field_renderer" field="accounts" />
         </service>
 
