@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Hofff\Contao\ContactProfiles\EventListener\Dca;
+namespace Hofff\Contao\ContactProfiles\EventListener\Dca\Options;
 
 use Contao\CoreBundle\ServiceAnnotation\Callback;
 

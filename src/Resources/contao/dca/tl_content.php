@@ -3,9 +3,6 @@
 declare(strict_types=1);
 
 use Hofff\Contao\Consent\Bridge\EventListener\Dca\ConsentIdOptions;
-use Hofff\Contao\ContactProfiles\EventListener\Dca\ContactFieldsOptions;
-use Hofff\Contao\ContactProfiles\EventListener\Dca\ContactProfileOptions;
-use Hofff\Contao\ContactProfiles\EventListener\Dca\ContactTemplateOptions;
 use Hofff\Contao\ContactProfiles\EventListener\Dca\ContentDcaListener;
 
 /*
@@ -123,7 +120,6 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['hofff_contact_categories'] = [
 $GLOBALS['TL_DCA']['tl_content']['fields']['hofff_contact_profiles'] = [
     'label'            => &$GLOBALS['TL_LANG']['tl_content']['hofff_contact_profiles'],
     'inputType'        => 'picker',
-    'options_callback' => [ContactProfileOptions::class, '__invoke'],
     'eval'             => [
         'orderField' => 'hofff_contact_profiles_order',
         'tl_class'   => 'clr long',
@@ -152,7 +148,6 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['hofff_contact_fields'] = [
     'label'            => &$GLOBALS['TL_LANG']['tl_content']['hofff_contact_fields'],
     'exclude'          => true,
     'inputType'        => 'checkboxWizard',
-    'options_callback' => [ContactFieldsOptions::class, '__invoke'],
     'eval'             => ['tl_class' => 'clr', 'multiple' => true],
     'sql'              => 'blob NULL',
 ];
@@ -161,7 +156,6 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['hofff_contact_template'] = [
     'label'            => &$GLOBALS['TL_LANG']['tl_content']['hofff_contact_template'],
     'exclude'          => true,
     'inputType'        => 'select',
-    'options_callback' => [ContactTemplateOptions::class, '__invoke'],
     'eval'             => ['includeBlankOption' => true, 'chosen' => true, 'tl_class' => 'w50'],
     'sql'              => "varchar(64) NOT NULL default ''",
 ];

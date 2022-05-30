@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Hofff\Contao\ContactProfiles\EventListener\Dca\CalendarEventsDcaListener;
-use Hofff\Contao\ContactProfiles\EventListener\Dca\ContactProfileOptions;
+use Hofff\Contao\ContactProfiles\EventListener\Dca\Options\ContactProfileOptions;
 
 $GLOBALS['TL_DCA']['tl_calendar_events']['config']['onload_callback'][] = [
     CalendarEventsDcaListener::class,

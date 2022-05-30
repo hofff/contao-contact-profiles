@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Hofff\Contao\ContactProfiles\EventListener\Dca;
+namespace Hofff\Contao\ContactProfiles\EventListener\Dca\Options;
 
+use Contao\CoreBundle\ServiceAnnotation\Callback;
 use Contao\Model\Collection;
 use Hofff\Contao\ContactProfiles\Model\Category\Category;
 use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
@@ -12,6 +13,13 @@ use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
 use function assert;
 use function sprintf;
 
+/**
+ * @Callback(table="tl_content", target="fields.hofff_contact_profiles.options")
+ * @Callback(table="tl_faq", target="fields.hofff_contact_profiles.options")
+ * @Callback(table="tl_module", target="fields.hofff_contact_profiles.options")
+ * @Callback(table="tl_news", target="fields.hofff_contact_profiles.options")
+ * @Callback(table="tl_news_category", target="fields.hofff_contact_profiles.options")
+ */
 final class ContactProfileOptions
 {
     private ProfileRepository $profiles;
