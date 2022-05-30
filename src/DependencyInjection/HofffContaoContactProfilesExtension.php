@@ -10,15 +10,13 @@ use Hofff\Contao\ContactProfiles\EventListener\DynamicSource\FAQContactProfilesL
 use Hofff\Contao\ContactProfiles\EventListener\DynamicSource\NewsContactProfilesListener;
 use Hofff\Contao\ContactProfiles\EventListener\MultilingualListener;
 use Hofff\Contao\ContactProfiles\Model\Category\CategoryRepository;
-use Hofff\Contao\ContactProfiles\Model\Category\MultilingualCategory;
-use Hofff\Contao\ContactProfiles\Model\Profile\MultilingualProfile;
 use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
-use Hofff\Contao\ContactProfiles\Model\Responsibility\MultilingualResponsibility;
 use Hofff\Contao\ContactProfiles\Model\Responsibility\ResponsibilityRepository;
-use Hofff\Contao\ContactProfiles\Model\SocialAccount\MultilingualSocialAccount;
 use Hofff\Contao\ContactProfiles\Model\SocialAccount\SocialAccountRepository;
+use Netzmacht\Contao\Toolkit\Data\Model\Repository;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
@@ -30,9 +28,18 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
  *     fallbackLanguage: ?string,
  *     fields: list<string>|null,
  * }
+ * @SuppressWarnings(PHPMD.LongVariable)
  */
 final class HofffContaoContactProfilesExtension extends Extension
 {
+    /** @var list<class-string<Repository>> */
+    private array $multilingualRepositories = [
+        CategoryRepository::class,
+        ProfileRepository::class,
+        ResponsibilityRepository::class,
+        SocialAccountRepository::class,
+    ];
+
     /** {@inheritDoc} */
     public function load(array $configs, ContainerBuilder $container): void
     {
@@ -48,7 +55,7 @@ final class HofffContaoContactProfilesExtension extends Extension
         $config  = $this->processConfiguration(new Configuration(), $configs);
         $sources = $config['sources'];
 
-        $this->configureMultilingual($config['multilingual'], $container);
+        $this->configureMultilingual($config['multilingual'], $container, $loader);
         $this->checkCalendarBundle($container, $sources);
         $this->checkFaqBundle($container, $sources);
         $this->checkNewsBundle($container, $sources);
@@ -119,8 +126,11 @@ final class HofffContaoContactProfilesExtension extends Extension
      *
      * @psalm-param TMultilingaulConfig $multilingual
      */
-    private function configureMultilingual(array $multilingual, ContainerBuilder $container): void
-    {
+    private function configureMultilingual(
+        array $multilingual,
+        ContainerBuilder $container,
+        LoaderInterface $loader
+    ): void {
         if (! $multilingual['enable']) {
             $container->removeDefinition(MultilingualListener::class);
 
@@ -134,6 +144,8 @@ final class HofffContaoContactProfilesExtension extends Extension
             );
         }
 
+        $loader->load('multilingual.xml');
+
         $container->setParameter('hofff_contao_contact_profiles.multilingual.enable', $multilingual['enable']);
         $container->setParameter('hofff_contao_contact_profiles.multilingual.fields', $multilingual['fields']);
         $container->setParameter(
@@ -145,16 +157,15 @@ final class HofffContaoContactProfilesExtension extends Extension
             $multilingual['fallback_language'] ?? null
         );
 
-        $container->getDefinition(CategoryRepository::class)
-            ->setArgument(0, MultilingualCategory::class);
-
-        $container->getDefinition(ProfileRepository::class)
-            ->setArgument(0, MultilingualProfile::class);
-
-        $container->getDefinition(ResponsibilityRepository::class)
-            ->setArgument(0, MultilingualResponsibility::class);
-
-        $container->getDefinition(SocialAccountRepository::class)
-            ->setArgument(0, MultilingualSocialAccount::class);
+        $parameters = $container->getParameterBag();
+        foreach ($this->multilingualRepositories as $repository) {
+            $definition = $container->getDefinition($repository);
+            $definition->addTag(
+                'netzmacht.contao_toolkit.repository',
+                [
+                    'model' => $parameters->resolveValue($definition->getArgument(0)),
+                ]
+            );
+        }
     }
 }

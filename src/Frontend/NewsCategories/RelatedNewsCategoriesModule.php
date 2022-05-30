@@ -72,6 +72,7 @@ final class RelatedNewsCategoriesModule extends NewsCategoriesModule
         $this->manager               = System::getContainer()->get('codefog_news_categories.manager');
         $this->currentNewsCategories = $this->getCurrentNewsCategories();
 
+        // NewsCategoriesModule::generate() checks news archives which is irrelevant here
         return ModuleNews::generate();
     }
 

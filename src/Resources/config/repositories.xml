@@ -3,28 +3,35 @@
 <container xmlns="http://symfony.com/schema/dic/services"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <parameters>
+        <parameter key="hofff_contao_contact_profiles.model.category">Hofff\Contao\ContactProfiles\Model\Category\MonolingualCategory</parameter>
+        <parameter key="hofff_contao_contact_profiles.model.profile">Hofff\Contao\ContactProfiles\Model\Profile\MonolingualProfile</parameter>
+        <parameter key="hofff_contao_contact_profiles.model.responsibility">Hofff\Contao\ContactProfiles\Model\Responsibility\MonolingualResponsibility</parameter>
+        <parameter key="hofff_contao_contact_profiles.model.social_account">Hofff\Contao\ContactProfiles\Model\SocialAccount\MonolingualSocialAccount</parameter>
+    </parameters>
     <services>
         <defaults public="false" autoconfigure="false" autowire="false"/>
 
         <service id="Hofff\Contao\ContactProfiles\Model\Category\CategoryRepository">
-            <argument>Hofff\Contao\ContactProfiles\Model\Category\MonolingualCategory</argument>
+            <argument>%hofff_contao_contact_profiles.model.category%</argument>
             <tag name="netzmacht.contao_toolkit.repository" model="Hofff\Contao\ContactProfiles\Model\Category\Category"/>
         </service>
         
         <service id="Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository" public="true">
-            <argument>Hofff\Contao\ContactProfiles\Model\Profile\MonolingualProfile</argument>
+            <argument>%hofff_contao_contact_profiles.model.profile%</argument>
             <argument type="service" id="database_connection"/>
             <argument type="service" id="contao.security.token_checker"/>
             <tag name="netzmacht.contao_toolkit.repository" model="Hofff\Contao\ContactProfiles\Model\Profile\Profile"/>
         </service>
 
         <service id="Hofff\Contao\ContactProfiles\Model\Responsibility\ResponsibilityRepository">
+            <argument>%hofff_contao_contact_profiles.model.responsibility%</argument>
             <argument>Hofff\Contao\ContactProfiles\Model\Responsibility\MonolingualResponsibility</argument>
             <tag name="netzmacht.contao_toolkit.repository" model="Hofff\Contao\ContactProfiles\Model\Responsibility\Responsibility"/>
         </service>
 
         <service id="Hofff\Contao\ContactProfiles\Model\SocialAccount\SocialAccountRepository">
-            <argument>Hofff\Contao\ContactProfiles\Model\SocialAccount\MonolingualSocialAccount</argument>
+            <argument>%hofff_contao_contact_profiles.model.social_account%</argument>
             <tag name="netzmacht.contao_toolkit.repository" model="Hofff\Contao\ContactProfiles\Model\SocialAccount\SocialAccount"/>
         </service>
     </services>
