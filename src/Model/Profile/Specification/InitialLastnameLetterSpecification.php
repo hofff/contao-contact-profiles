@@ -48,14 +48,14 @@ final class InitialLastnameLetterSpecification implements Specification
         if ($this->letter === 'numeric') {
             $letters = range('a', 'z');
             foreach ($letters as $letter) {
-                $columns[] = 'p.lastname NOT LIKE ?';
+                $columns[] = '.lastname NOT LIKE ?';
                 $values[]  = $letter . '%';
             }
 
             return;
         }
 
-        $columns[] = 'p.lastname LIKE ?';
+        $columns[] = '.lastname LIKE ?';
         $values[]  = $this->letter . '%';
     }
 }

@@ -234,7 +234,7 @@ final class ProfileRepository extends ContaoRepository
 
             $queryBuilder = $multilingualBuilder->getQueryBuilder();
             $queryBuilder
-                ->addSelect(
+                ->select(
                     'LOWER(
                       SUBSTR(
                         IFNULL(translation.lastname, ' . $this->getTableName() . '.lastname), 1, 1)

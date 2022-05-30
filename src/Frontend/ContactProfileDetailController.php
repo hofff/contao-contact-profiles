@@ -15,7 +15,6 @@ use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRendererFactory;
 use Hofff\Contao\ContactProfiles\SocialTags\SocialTagsGenerator;
-use Netzmacht\Contao\Toolkit\Controller\Hybrid\AbstractHybridController;
 use Netzmacht\Contao\Toolkit\Response\ResponseTagger;
 use Netzmacht\Contao\Toolkit\Routing\RequestScopeMatcher;
 use Netzmacht\Contao\Toolkit\View\Template\TemplateRenderer;
@@ -71,12 +70,6 @@ final class ContactProfileDetailController extends AbstractHybridController
         $this->socialTagsGenerator = $socialTagsGenerator;
         $this->rendererFactory     = $rendererFactory;
         $this->controllerAdapter   = $controllerAdapter;
-    }
-
-    /** @SuppressWarnings(PHPMD.UnusedFormalParameter) */
-    protected function isBackendRequest(Request $request): bool
-    {
-        return $this->scopeMatcher->isBackendRequest($request);
     }
 
     /**

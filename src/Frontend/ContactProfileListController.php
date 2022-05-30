@@ -19,7 +19,6 @@ use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
 use Hofff\Contao\ContactProfiles\Model\Profile\Specification\InitialLastnameLetterSpecification;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRendererFactory;
 use Hofff\Contao\ContactProfiles\Util\QueryUtil;
-use Netzmacht\Contao\Toolkit\Controller\Hybrid\AbstractHybridController;
 use Netzmacht\Contao\Toolkit\Response\ResponseTagger;
 use Netzmacht\Contao\Toolkit\Routing\RequestScopeMatcher;
 use Netzmacht\Contao\Toolkit\View\Template\TemplateRenderer;
@@ -76,11 +75,6 @@ final class ContactProfileListController extends AbstractHybridController
         $this->rendererFactory = $rendererFactory;
         $this->eventDispatcher = $eventDispatcher;
         $this->configAdapter   = $configAdapter;
-    }
-
-    protected function isBackendRequest(Request $request): bool
-    {
-        return $this->scopeMatcher->isBackendRequest($request);
     }
 
     /** {@inheritDoc} */

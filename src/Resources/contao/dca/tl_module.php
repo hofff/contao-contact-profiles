@@ -29,14 +29,14 @@ $GLOBALS['TL_DCA']['tl_module']['palettes']['hofff_contact_profile'] = '{type_le
     . ';{expert_legend:hide},guests,cssID'
     . ';{invisible_legend:hide},invisible,start,stop';
 
-$GLOBALS['TL_DCA']['tl_module']['palettes']['hofff_contact_profilecustom'] = '{type_legend},type,headline'
+$GLOBALS['TL_DCA']['tl_module']['palettes']['hofff_contact_profile_listcustom'] = '{type_legend},type,headline'
     . ';{profile_legend},hofff_contact_source,hofff_contact_profiles,perPage,numberOfItems,hofff_contact_fields'
     . ';{template_legend:hide},customTpl,hofff_contact_template,hofff_contact_more,size'
     . ';{protected_legend:hide},protected'
     . ';{expert_legend:hide},guests,cssID'
     . ';{invisible_legend:hide},invisible,start,stop';
 
-$GLOBALS['TL_DCA']['tl_module']['palettes']['hofff_contact_profilecategories'] = '{type_legend},type,headline'
+$GLOBALS['TL_DCA']['tl_module']['palettes']['hofff_contact_profile_listcategories'] = '{type_legend},type,headline'
     . ';{profile_legend},hofff_contact_source,hofff_contact_categories,perPage,numberOfItems'
     . ',hofff_contact_profiles_order_sql,hofff_contact_fields'
     . ';{template_legend:hide},customTpl,hofff_contact_template,hofff_contact_more,size'
@@ -44,7 +44,7 @@ $GLOBALS['TL_DCA']['tl_module']['palettes']['hofff_contact_profilecategories'] =
     . ';{expert_legend:hide},guests,cssID'
     . ';{invisible_legend:hide},invisible,start,stop';
 
-$GLOBALS['TL_DCA']['tl_module']['palettes']['hofff_contact_profiledynamic'] = '{type_legend},type,headline'
+$GLOBALS['TL_DCA']['tl_module']['palettes']['hofff_contact_profile_listdynamic'] = '{type_legend},type,headline'
     . ';{profile_legend},hofff_contact_source,hofff_contact_sources,hofff_contact_fields'
     . ';{template_legend:hide},customTpl,hofff_contact_template,hofff_contact_more,size'
     . ';{protected_legend:hide},protected'
