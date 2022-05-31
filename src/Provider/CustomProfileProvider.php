@@ -12,7 +12,7 @@ use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
 use Hofff\Contao\ContactProfiles\Util\QueryUtil;
 use Netzmacht\Contao\Toolkit\Data\Model\Specification;
 
-final class CustomProviderProvider extends AbstractProfileProvider
+final class CustomProfileProvider extends AbstractProfileProvider
 {
     private ProfileRepository $profiles;
 

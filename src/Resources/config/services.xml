@@ -123,7 +123,7 @@
             <argument type="tagged_iterator" tag="hofff_contact_profiles.provider"/>
         </service>
 
-        <service id="Hofff\Contao\ContactProfiles\Provider\CustomProviderProvider">
+        <service id="Hofff\Contao\ContactProfiles\Provider\CustomProfileProvider">
             <argument type="service" id="Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository"/>
             <tag name="hofff_contact_profiles.provider"/>
         </service>
