@@ -131,6 +131,8 @@ final class HofffContaoContactProfilesExtension extends Extension
         ContainerBuilder $container,
         LoaderInterface $loader
     ): void {
+        $container->setParameter('hofff_contao_contact_profiles.multilingual.enable', $multilingual['enable']);
+
         if (! $multilingual['enable']) {
             $container->removeDefinition(MultilingualListener::class);
 
@@ -146,7 +148,6 @@ final class HofffContaoContactProfilesExtension extends Extension
 
         $loader->load('multilingual.xml');
 
-        $container->setParameter('hofff_contao_contact_profiles.multilingual.enable', $multilingual['enable']);
         $container->setParameter('hofff_contao_contact_profiles.multilingual.fields', $multilingual['fields']);
         $container->setParameter(
             'hofff_contao_contact_profiles.multilingual.languages',
