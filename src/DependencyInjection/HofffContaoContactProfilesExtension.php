@@ -132,6 +132,15 @@ final class HofffContaoContactProfilesExtension extends Extension
         LoaderInterface $loader
     ): void {
         $container->setParameter('hofff_contao_contact_profiles.multilingual.enable', $multilingual['enable']);
+        $container->setParameter('hofff_contao_contact_profiles.multilingual.fields', $multilingual['fields']);
+        $container->setParameter(
+            'hofff_contao_contact_profiles.multilingual.languages',
+            $multilingual['languages'] ?? null
+        );
+        $container->setParameter(
+            'hofff_contao_contact_profiles.multilingual.fallback_language',
+            $multilingual['fallback_language'] ?? null
+        );
 
         if (! $multilingual['enable']) {
             $container->removeDefinition(MultilingualListener::class);
@@ -147,16 +156,6 @@ final class HofffContaoContactProfilesExtension extends Extension
         }
 
         $loader->load('multilingual.xml');
-
-        $container->setParameter('hofff_contao_contact_profiles.multilingual.fields', $multilingual['fields']);
-        $container->setParameter(
-            'hofff_contao_contact_profiles.multilingual.languages',
-            $multilingual['languages'] ?? null
-        );
-        $container->setParameter(
-            'hofff_contao_contact_profiles.multilingual.fallback_language',
-            $multilingual['fallback_language'] ?? null
-        );
 
         $parameters = $container->getParameterBag();
         foreach ($this->multilingualRepositories as $repository) {
