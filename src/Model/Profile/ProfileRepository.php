@@ -14,6 +14,7 @@ use Netzmacht\Contao\Toolkit\Data\Model\ContaoRepository;
 use Netzmacht\Contao\Toolkit\Data\Model\Specification;
 use Terminal42\DcMultilingualBundle\QueryBuilder\MultilingualQueryBuilderInterface;
 
+use function array_values;
 use function count;
 use function str_repeat;
 use function str_replace;
@@ -173,7 +174,7 @@ final class ProfileRepository extends ContaoRepository
             ->setParameter('categoryIds', $categoryIds, Connection::PARAM_STR_ARRAY)
             ->execute();
 
-        return $result->fetchAllAssociative();
+        return array_values($result->fetchAllAssociative());
     }
 
     /**
@@ -190,7 +191,7 @@ final class ProfileRepository extends ContaoRepository
             ->setParameter('profileIds', $profileIds, Connection::PARAM_STR_ARRAY)
             ->execute();
 
-        return $result->fetchAllAssociative();
+        return array_values($result->fetchAllAssociative());
     }
 
     public function findByNewsCategory(int $newsCategoryId): ?Collection
