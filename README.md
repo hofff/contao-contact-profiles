@@ -11,6 +11,8 @@ It's also works together with:
 
  - [HofffContaoSocialTagsBundle](https://github.com/hofff/contao-social-tags/): Automatic generation of opengraph and twitter card tags
  - [HofffContaoConsentBridgeBundle](https://github.com/hofff/contao-consent-bridge): Consent integration for YouTube and Vimeo videos
+ - [Terminal42DcMultilingualBundle](https://github.com/terminal42/contao-DC_Multilingual): For multilingual profiles
+ - [HofffContaoLanguageRelationsBundle](https://github.com/hofff/contao-language-relations): For switching between multilingual profiles
 
 ## Requirements
 

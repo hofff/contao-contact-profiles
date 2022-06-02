@@ -14,6 +14,7 @@ use Contao\ManagerPlugin\Bundle\Parser\ParserInterface;
 use Contao\NewsBundle\ContaoNewsBundle;
 use Hofff\Contao\Consent\Bridge\HofffContaoConsentBridgeBundle;
 use Hofff\Contao\ContactProfiles\HofffContaoContactProfilesBundle;
+use Hofff\Contao\LanguageRelations\HofffContaoLanguageRelationsBundle;
 
 final class Plugin implements BundlePluginInterface
 {
@@ -32,6 +33,7 @@ final class Plugin implements BundlePluginInterface
                     ContaoCalendarBundle::class,
                     ContaoFaqBundle::class,
                     HofffContaoConsentBridgeBundle::class,
+                    HofffContaoLanguageRelationsBundle::class,
                     CodefogNewsCategoriesBundle::class,
                 ]
             ),

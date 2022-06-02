@@ -30,7 +30,7 @@ final class ContactProfileUrlGenerator
 
     private CategoryRepository $categories;
 
-    /** @var array<int|string, ?PageModel> */
+    /** @var array<int|string, array<string,?PageModel>> */
     private array $categoryDetailPages = [];
 
     private ?string $previewScript;
@@ -52,6 +52,7 @@ final class ContactProfileUrlGenerator
      *
      * @psalm-suppress InvalidReturnType
      * @psalm-suppress InvalidReturnStatement
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function getDetailPage(Profile $profile, array $options = []): ?PageModel
     {
@@ -59,11 +60,16 @@ final class ContactProfileUrlGenerator
             return $this->framework->getAdapter(PageModel::class)->findByPk($profile->jumpTo);
         }
 
-        if (! array_key_exists($profile->pid, $this->categoryDetailPages)) {
-            $this->categoryDetailPages[$profile->pid] = $this->fetchCategoryDetailPage($profile, $options);
+        $language = $options['language'] ?? $GLOBALS['TL_LANGUAGE'];
+
+        if (
+            ! array_key_exists($profile->pid, $this->categoryDetailPages)
+            || ! array_key_exists($language, $this->categoryDetailPages[$profile->pid])
+        ) {
+            $this->categoryDetailPages[$profile->pid][$language] = $this->fetchCategoryDetailPage($profile, $options);
         }
 
-        return $this->categoryDetailPages[$profile->pid];
+        return $this->categoryDetailPages[$profile->pid][$language];
     }
 
     public function generateUrlWithPage(

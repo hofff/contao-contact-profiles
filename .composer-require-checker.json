@@ -28,6 +28,8 @@
     "Codefog\\NewsCategoriesBundle\\FrontendModule\\NewsCategoriesModule",
     "Terminal42\\DcMultilingualBundle\\Driver",
     "Terminal42\\DcMultilingualBundle\\Model\\Multilingual",
-    "Terminal42\\DcMultilingualBundle\\Model\\MultilingualTrait"
+    "Terminal42\\DcMultilingualBundle\\Model\\MultilingualTrait",
+    "Hofff\\Contao\\LanguageRelations\\HofffContaoLanguageRelationsBundle",
+    "Hofff\\Contao\\LanguageRelations\\Module\\ModuleLanguageSwitcher"
   ]
 }

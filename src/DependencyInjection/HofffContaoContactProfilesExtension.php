@@ -8,6 +8,7 @@ use Hofff\Contao\ContactProfiles\EventListener\Dca\NewsCategoryDcaListener;
 use Hofff\Contao\ContactProfiles\EventListener\DynamicSource\EventsContactProfilesListener;
 use Hofff\Contao\ContactProfiles\EventListener\DynamicSource\FAQContactProfilesListener;
 use Hofff\Contao\ContactProfiles\EventListener\DynamicSource\NewsContactProfilesListener;
+use Hofff\Contao\ContactProfiles\EventListener\Hook\LanguageRelationsListener;
 use Hofff\Contao\ContactProfiles\EventListener\MultilingualListener;
 use Hofff\Contao\ContactProfiles\Model\Category\CategoryRepository;
 use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
@@ -60,6 +61,7 @@ final class HofffContaoContactProfilesExtension extends Extension
         $this->checkFaqBundle($container, $sources);
         $this->checkNewsBundle($container, $sources);
         $this->checkNewsCategoriesBundle($container, $sources);
+        $this->checkLanguageRelationsBundle($container, $config['multilingual']['enable']);
 
         $container->setParameter('hofff_contao_contact_profiles.sources', $sources);
 
@@ -167,5 +169,15 @@ final class HofffContaoContactProfilesExtension extends Extension
                 ]
             );
         }
+    }
+
+    private function checkLanguageRelationsBundle(ContainerBuilder $container, bool $multilingual): void
+    {
+        $bundles = $container->getParameter('kernel.bundles');
+        if ($multilingual && isset($bundles['HofffContaoLanguageRelationsBundle'])) {
+            return;
+        }
+
+        $container->removeDefinition(LanguageRelationsListener::class);
     }
 }

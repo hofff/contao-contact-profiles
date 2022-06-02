@@ -58,6 +58,7 @@
     "contao/manager-plugin": "^2.0",
     "contao/news-bundle": "^4.9",
     "doctrine/coding-standard": "^8.0",
+    "hofff/contao-language-relations": "^3.0",
     "hofff/contao-social-tags": "^1.1",
     "phpcq/runner-bootstrap": "^1.0@dev",
     "terminal42/dc_multilingual": "^4.2"
@@ -68,6 +69,7 @@
     "contao/faq-bundle": "<4.9 || >=5.0",
     "contao/manager-plugin": "<2.0 || >=3.0",
     "contao/news-bundle": "<4.9 || >=5.0",
+    "hofff/contao-language-relations": "<3.0 || >= 4.0",
     "hofff/contao-social-tags": "<1.1 || >=2.0"
   },
   "suggest": {
@@ -75,6 +77,7 @@
     "contao/calendar-bundle": "Use contact profile for author information",
     "contao/faq-bundle": "Use contact profile for author information",
     "contao/news-bundle": "Use contact profile for author information",
+    "hofff/contao-language-relations": "Switch between translated language profiles",
     "hofff/contao-social-tags": "Generate open graph and twitter cards social tags",
     "terminal42/dc_multilingual": "For multilingual contact profiles"
   },

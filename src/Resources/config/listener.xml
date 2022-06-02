@@ -85,6 +85,12 @@
             <argument type="service" id="Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator" />
         </service>
 
+        <service id="Hofff\Contao\ContactProfiles\EventListener\Hook\LanguageRelationsListener">
+            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository"/>
+            <argument type="service" id="Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator"/>
+            <argument type="service" id="request_stack"/>
+        </service>
+
         <service id="Hofff\Contao\ContactProfiles\EventListener\DynamicSource\NewsContactProfilesListener">
             <argument type="service" id="contao.framework" />
             <argument type="service" id="netzmacht.contao_toolkit.repository_manager"/>
