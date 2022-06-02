@@ -57,7 +57,7 @@
     "contao/faq-bundle": "^4.9",
     "contao/manager-plugin": "^2.0",
     "contao/news-bundle": "^4.9",
-    "doctrine/coding-standard": "^8.0",
+    "doctrine/coding-standard": "^9.0",
     "hofff/contao-language-relations": "^3.0",
     "hofff/contao-social-tags": "^1.1",
     "phpcq/runner-bootstrap": "^1.0@dev",

@@ -125,7 +125,6 @@ final class HofffContaoContactProfilesExtension extends Extension
 
     /**
      * @param array<string,mixed> $multilingual
-     *
      * @psalm-param TMultilingaulConfig $multilingual
      */
     private function configureMultilingual(
