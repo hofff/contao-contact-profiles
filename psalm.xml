@@ -14,6 +14,11 @@
     </projectFiles>
 
     <issueHandlers>
+        <DeprecatedClass>
+            <errorLevel type="suppress">
+                <referencedClass name="Contao\CoreBundle\Framework\ContaoFrameworkInterface"/>
+            </errorLevel>
+        </DeprecatedClass>
         <DeprecatedMethod errorLevel="suppress">
             <errorLevel type="suppress">
                 <referencedMethod name="Symfony\Component\HttpFoundation\RequestStack::getMasterRequest"/>

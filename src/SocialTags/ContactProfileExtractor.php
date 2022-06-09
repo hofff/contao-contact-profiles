@@ -4,15 +4,18 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\SocialTags;
 
+use Contao\CoreBundle\Framework\ContaoFrameworkInterface;
 use Contao\File;
 use Contao\FilesModel;
 use Contao\Model;
 use Contao\PageModel;
 use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
+use Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator;
 use Hofff\Contao\SocialTags\Data\Extractor\AbstractExtractor;
 use Hofff\Contao\SocialTags\Data\OpenGraph\OpenGraphImageData;
 use Hofff\Contao\SocialTags\Data\OpenGraph\OpenGraphType;
 use Hofff\Contao\SocialTags\Util\TypeUtil;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 use function is_file;
 use function method_exists;
@@ -24,6 +27,19 @@ use function ucfirst;
 /** @SuppressWarnings(PHPMD.UnusedPrivateMethod) */
 final class ContactProfileExtractor extends AbstractExtractor
 {
+    private ContactProfileUrlGenerator $urlGenerator;
+
+    public function __construct(
+        ContaoFrameworkInterface $framework,
+        RequestStack $requestStack,
+        ContactProfileUrlGenerator $urlGenerator,
+        string $projectDir
+    ) {
+        parent::__construct($framework, $requestStack, $projectDir);
+
+        $this->urlGenerator = $urlGenerator;
+    }
+
     public function supports(Model $reference, ?Model $fallback = null): bool
     {
         if (! $reference instanceof Profile) {
@@ -78,12 +94,12 @@ final class ContactProfileExtractor extends AbstractExtractor
         return null;
     }
 
-    /**
-     * @SuppressWarnings(PHPMD.Superglobals)
-     */
     private function extractOpenGraphUrl(Profile $contactProfile): string
     {
-        return $GLOBALS['objPage']->getAbsoluteurl('/' . $contactProfile->alias);
+        return (string) $this->urlGenerator->generateDetailUrl(
+            $contactProfile,
+            ContactProfileUrlGenerator::ABSOLUTE_URL
+        );
     }
 
     private function extractOpenGraphDescription(Profile $contactProfile): ?string
