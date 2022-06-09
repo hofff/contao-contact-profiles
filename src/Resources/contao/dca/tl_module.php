@@ -5,6 +5,10 @@ declare(strict_types=1);
 /*
  * Palettes
  */
+
+use Contao\CoreBundle\DataContainer\PaletteManipulator;
+use Contao\CoreBundle\DataContainer\PaletteNotFoundException;
+
 $GLOBALS['TL_DCA']['tl_module']['palettes']['__selector__'][] = 'hofff_contact_source';
 
 $GLOBALS['TL_DCA']['tl_module']['palettes']['hofff_contact_profile_list'] = '{type_legend},type,headline'
@@ -85,6 +89,16 @@ $GLOBALS['TL_DCA']['tl_module']['palettes']['hofff_contact_profile_related_categ
     . ';{image_legend:hide},news_categoryImgSize'
     . ';{protected_legend:hide},protected'
     . ';{expert_legend:hide},guests,cssID,space';
+
+(static function (): void {
+    try {
+        PaletteManipulator::create()
+            ->addField('hofff_contact_related_events', 'config_legend', PaletteManipulator::POSITION_APPEND)
+            ->applyToPalette('eventlist', 'tl_module');
+    } catch (PaletteNotFoundException $exception) {
+        // Palette does not exist, so calendar is not installed
+    }
+})();
 
 /*
  * Fields
@@ -199,4 +213,11 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['hofff_contact_consent_tag_vimeo'] = [
         'multiple'           => false,
     ],
     'sql'       => ['type' => 'string', 'default' => null, 'notnull' => false],
+];
+
+$GLOBALS['TL_DCA']['tl_module']['fields']['hofff_contact_related_events'] = [
+    'exclude'   => true,
+    'inputType' => 'checkbox',
+    'eval'      => ['tl_class' => 'clr'],
+    'sql'       => ['type' => 'string', 'length' => 1, 'notnull' => true, 'default' => ''],
 ];

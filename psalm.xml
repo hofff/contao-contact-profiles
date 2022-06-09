@@ -57,6 +57,7 @@
         <class name="Contao\FaqModel"/>
         <class name="Contao\NewsModel"/>
         <class name="Contao\Model"/>
+        <class name="Contao\Module"/>
         <class name="Contao\ModuleModel"/>
         <class name="Contao\PageModel"/>
     </universalObjectCrates>

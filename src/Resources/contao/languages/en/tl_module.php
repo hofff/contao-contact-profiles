@@ -29,6 +29,8 @@ $GLOBALS['TL_LANG']['tl_module']['hofff_contact_consent_tag_vimeo'][0]   = 'Vime
 $GLOBALS['TL_LANG']['tl_module']['hofff_contact_consent_tag_vimeo'][1]   = 'Assign a consent ID for vimeo videos.';
 $GLOBALS['TL_LANG']['tl_module']['hofff_contact_filters'][0]             = 'Contact profile filters';
 $GLOBALS['TL_LANG']['tl_module']['hofff_contact_filters'][1]             = 'Please select the filters which will be recognized.';
+$GLOBALS['TL_LANG']['tl_module']['hofff_contact_related_events'][0]      = 'Contact profile related events only';
+$GLOBALS['TL_LANG']['tl_module']['hofff_contact_related_events'][1]      = 'Filter events by active contact profile.';
 
 $GLOBALS['TL_LANG']['tl_module']['hofff_contact_source_options']['custom'][0]     = 'Custom';
 $GLOBALS['TL_LANG']['tl_module']['hofff_contact_source_options']['custom'][1]     = 'Choose custom contact profiles.';

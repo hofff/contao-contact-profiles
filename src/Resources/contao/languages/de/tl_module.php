@@ -25,6 +25,8 @@ $GLOBALS['TL_LANG']['tl_module']['hofff_contact_consent_tag_youtube'][0] = 'Yout
 $GLOBALS['TL_LANG']['tl_module']['hofff_contact_consent_tag_youtube'][1] = 'Weisen Sie bei Bearf eine Consent Tag für Youtube-Videos zu.';
 $GLOBALS['TL_LANG']['tl_module']['hofff_contact_consent_tag_vimeo'][0]   = 'Vimeo Consent Tag';
 $GLOBALS['TL_LANG']['tl_module']['hofff_contact_consent_tag_vimeo'][1]   = 'Weisen Sie bei Bearf eine Consent Tag für Viemo-Videos zu.';
+$GLOBALS['TL_LANG']['tl_module']['hofff_contact_related_events'][0]      = 'Nur Events des Kontaktprofils';
+$GLOBALS['TL_LANG']['tl_module']['hofff_contact_related_events'][1]      = 'Events werden nach dem aktiven Kontaktprofil gefiltert.';
 
 $GLOBALS['TL_LANG']['tl_module']['hofff_contact_source_options']['custom'][0]     = 'Manuelle Auswahl';
 $GLOBALS['TL_LANG']['tl_module']['hofff_contact_source_options']['custom'][1]     = 'Wählen Sie manuell die Kontaktprofile aus';
