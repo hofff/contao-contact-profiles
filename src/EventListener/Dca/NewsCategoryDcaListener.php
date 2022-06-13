@@ -62,18 +62,22 @@ final class NewsCategoryDcaListener
 
         $this->dcaManager
             ->getDefinition(Profile::getTable())
-            ->modify(
-                ['fields'],
-                /**
-                 * @param array<string,array<string,mixed>> $fields
-                 *
-                 * @return array<string,array<string,mixed>> $fields
-                 */
-                static function (array $fields): array {
-                    unset($fields['news_categories']);
-
-                    return $fields;
-                }
+            ->set(
+                ['fields', 'news_categories'],
+                [
+                    'exclude'   => true,
+                    'inputType' => 'picker',
+                    'eval'      => [
+                        'tl_class'     => 'clr long',
+                        'multiple'     => true,
+                        'chosen'       => true,
+                    ],
+                    'relation'  => [
+                        'type'          => 'haste-ManyToMany',
+                        'table'         => 'tl_news_category',
+                        'relationTable' => 'tl_contact_profile_news_category',
+                    ],
+                ]
             );
     }
 
