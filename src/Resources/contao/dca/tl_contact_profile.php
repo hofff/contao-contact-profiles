@@ -125,9 +125,10 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             'exclude'   => true,
             'inputType' => 'text',
             'eval'      => [
-                'mandatory' => false,
-                'maxlength' => 32,
-                'tl_class'  => 'w50',
+                'mandatory'    => false,
+                'maxlength'    => 32,
+                'tl_class'     => 'w50',
+                'profileField' => true,
             ],
             'sql'       => [
                 'type'    => Types::STRING,
