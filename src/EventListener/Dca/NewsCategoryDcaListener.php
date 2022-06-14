@@ -66,7 +66,7 @@ final class NewsCategoryDcaListener
                 ['fields', 'news_categories'],
                 [
                     'exclude'   => true,
-                    'inputType' => 'picker',
+                    'inputType' => 'newsCategoriesPicker',
                     'eval'      => [
                         'tl_class'     => 'clr long',
                         'multiple'     => true,
