@@ -604,5 +604,19 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'default' => null,
             ],
         ],
+        'news_categories'  => [
+            'exclude'   => true,
+            'inputType' => 'picker',
+            'eval'      => [
+                'tl_class'     => 'clr long',
+                'multiple'     => true,
+                'chosen'       => true,
+            ],
+            'relation'  => [
+                'type'          => 'haste-ManyToMany',
+                'table'         => 'tl_news_category',
+                'relationTable' => 'tl_contact_profile_news_category',
+            ],
+        ],
     ],
 ];

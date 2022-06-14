@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\EventListener\Dca;
 
+use Codefog\NewsCategoriesBundle\CodefogNewsCategoriesBundle;
 use Codefog\NewsCategoriesBundle\Model\NewsCategoryModel;
 use Contao\CoreBundle\DataContainer\PaletteManipulator;
 use Contao\CoreBundle\ServiceAnnotation\Callback;
@@ -27,10 +28,15 @@ final class NewsCategoryDcaListener
 
     private RepositoryManager $repositoryManager;
 
-    public function __construct(DcaManager $dcaManager, RepositoryManager $repositoryManager)
+    /** @var array<string,string,> */
+    private array $bundles;
+
+    /** @param array<string,string> $bundles */
+    public function __construct(DcaManager $dcaManager, RepositoryManager $repositoryManager, array $bundles)
     {
         $this->dcaManager        = $dcaManager;
         $this->repositoryManager = $repositoryManager;
+        $this->bundles           = $bundles;
     }
 
     /**
@@ -60,25 +66,17 @@ final class NewsCategoryDcaListener
             return;
         }
 
+        if (isset($this->bundles['CodefogNewsCategoriesBundle'])) {
+            return;
+        }
+
         $this->dcaManager
             ->getDefinition(Profile::getTable())
-            ->set(
-                ['fields', 'news_categories'],
-                [
-                    'exclude'   => true,
-                    'inputType' => 'newsCategoriesPicker',
-                    'eval'      => [
-                        'tl_class'     => 'clr long',
-                        'multiple'     => true,
-                        'chosen'       => true,
-                    ],
-                    'relation'  => [
-                        'type'          => 'haste-ManyToMany',
-                        'table'         => 'tl_news_category',
-                        'relationTable' => 'tl_contact_profile_news_category',
-                    ],
-                ]
-            );
+            ->modify('fields', function (array $fields) {
+                unset ($fields['news_categories']);
+
+                return $fields;
+            });
     }
 
     /**
