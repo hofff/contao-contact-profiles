@@ -63,7 +63,9 @@
             <argument>%kernel.bundles%</argument>
         </service>
 
-        <service id="Hofff\Contao\ContactProfiles\EventListener\Dca\InitializePalettesListener" />
+        <service id="Hofff\Contao\ContactProfiles\EventListener\Dca\InitializePalettesListener">
+            <argument type="service" id="netzmacht.contao_toolkit.dca.manager"/>
+        </service>
 
         <service id="Hofff\Contao\ContactProfiles\EventListener\Hook\AddContactProfileInformationListener">
             <argument type="service" id="Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository" />
