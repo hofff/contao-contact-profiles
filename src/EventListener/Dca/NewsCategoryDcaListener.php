@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\EventListener\Dca;
 
-use Codefog\NewsCategoriesBundle\CodefogNewsCategoriesBundle;
 use Codefog\NewsCategoriesBundle\Model\NewsCategoryModel;
 use Contao\CoreBundle\DataContainer\PaletteManipulator;
 use Contao\CoreBundle\ServiceAnnotation\Callback;
@@ -28,7 +27,7 @@ final class NewsCategoryDcaListener
 
     private RepositoryManager $repositoryManager;
 
-    /** @var array<string,string,> */
+    /** @var array<string,string> */
     private array $bundles;
 
     /** @param array<string,string> $bundles */
@@ -72,8 +71,8 @@ final class NewsCategoryDcaListener
 
         $this->dcaManager
             ->getDefinition(Profile::getTable())
-            ->modify('fields', function (array $fields) {
-                unset ($fields['news_categories']);
+            ->modify('fields', static function (array $fields): array {
+                unset($fields['news_categories']);
 
                 return $fields;
             });
