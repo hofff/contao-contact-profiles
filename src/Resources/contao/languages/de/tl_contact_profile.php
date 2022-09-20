@@ -83,3 +83,7 @@ $GLOBALS['TL_LANG']['tl_contact_profile']['published'][0]        = 'Veröffentli
 $GLOBALS['TL_LANG']['tl_contact_profile']['published'][1]        = 'Kontaktprofil wird auf der Website angezeigt';
 $GLOBALS['TL_LANG']['tl_contact_profile']['news_categories'][0]  = 'Nachrichten-Kategorien';
 $GLOBALS['TL_LANG']['tl_contact_profile']['news_categories'][1]  = 'Zugeordnete Nachrichten-Kategorien';
+$GLOBALS['TL_LANG']['tl_contact_profile']['accountType'][0]      = 'Dienst';
+$GLOBALS['TL_LANG']['tl_contact_profile']['accountType'][1]      = 'Wählen Sie den Dienst des Social Media Profils aus.';
+$GLOBALS['TL_LANG']['tl_contact_profile']['accountUrl'][0]       = 'Url';
+$GLOBALS['TL_LANG']['tl_contact_profile']['accountUrl'][1]       = 'Geben Sie die Url zu dem Social Media Profil an.';

@@ -373,7 +373,7 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                         ],
                     ],
                     'url'  => [
-                        'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['url'],
+                        'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['accountUrl'],
                         'inputType' => 'text',
                         'eval'      => [
                             'maxlength' => 128,

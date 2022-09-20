@@ -85,3 +85,7 @@ $GLOBALS['TL_LANG']['tl_contact_profile']['published'][0]        = 'Published';
 $GLOBALS['TL_LANG']['tl_contact_profile']['published'][1]        = 'Contact will be shown in the frontend.';
 $GLOBALS['TL_LANG']['tl_contact_profile']['news_categories'][0]  = 'News categories';
 $GLOBALS['TL_LANG']['tl_contact_profile']['news_categories'][1]  = 'Assigned news categories.';
+$GLOBALS['TL_LANG']['tl_contact_profile']['accountType'][0]      = 'Account type';
+$GLOBALS['TL_LANG']['tl_contact_profile']['accountType'][1]      = 'Select the social account type';
+$GLOBALS['TL_LANG']['tl_contact_profile']['accountUrl'][0]       = 'Account url';
+$GLOBALS['TL_LANG']['tl_contact_profile']['accountUrl'][1]       = 'Select url of the related social media account.';
