@@ -22,6 +22,7 @@ use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
 use Netzmacht\Contao\Toolkit\Dca\DcaManager;
 use RuntimeException;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 use function func_get_arg;
@@ -45,6 +46,8 @@ final class ContactProfileDcaListener
 
     private ProfileRepository $profiles;
 
+    private SessionInterface $session;
+
     private string $pattern;
 
     private bool $multilingual;
@@ -57,6 +60,7 @@ final class ContactProfileDcaListener
         ProfileRepository $profiles,
         TranslatorInterface $translator,
         DcaManager $dcaManager,
+        SessionInterface $session,
         string $aliasPattern,
         bool $multilingual,
         ?string $fallbackLanguage
@@ -68,7 +72,19 @@ final class ContactProfileDcaListener
         $this->dcaManager       = $dcaManager;
         $this->profiles         = $profiles;
         $this->multilingual     = $multilingual;
+        $this->session          = $session;
         $this->fallbackLanguage = $fallbackLanguage;
+    }
+
+    /** @Callback(table="tl_contact_profile", target="config.onload") */
+    public function onLoad(): void
+    {
+        $sorting = $this->session->getBag('contao_backend')->get('sorting')['tl_contact_profile'] ?? null;
+
+        // Only set sorting as the first field if custom sorting is chosen.
+        if ($sorting === 'sorting') {
+            $this->dcaManager->getDefinition('tl_contact_profile')->set(['list', 'sorting', 'fields'], ['sorting']);
+        }
     }
 
     /**

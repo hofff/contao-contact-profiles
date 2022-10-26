@@ -80,7 +80,7 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
         'id'               => [
             'label'  => ['ID'],
             'search' => true,
-            'sql'       => [
+            'sql'    => [
                 'type'          => Types::INTEGER,
                 'unsigned'      => true,
                 'autoincrement' => true,
@@ -91,14 +91,22 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'type'  => 'belongsTo',
                 'table' => 'tl_contact_category',
             ],
-            'sql'       => [
+            'sql'      => [
                 'type'     => Types::INTEGER,
                 'unsigned' => true,
                 'default'  => 0,
             ],
         ],
         'tstamp'           => [
-            'sql'       => [
+            'sql' => [
+                'type'     => Types::INTEGER,
+                'unsigned' => true,
+                'default'  => 0,
+            ],
+        ],
+        'sorting'          => [
+            'sorting' => true,
+            'sql'     => [
                 'type'     => Types::INTEGER,
                 'unsigned' => true,
                 'default'  => 0,
@@ -155,6 +163,7 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
         'firstname'        => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['firstname'],
             'exclude'   => true,
+            'sorting'   => true,
             'inputType' => 'text',
             'eval'      => [
                 'mandatory'    => true,
@@ -172,6 +181,7 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_profile']['lastname'],
             'flag'      => 1,
             'exclude'   => true,
+            'sorting'   => true,
             'inputType' => 'text',
             'eval'      => [
                 'mandatory'    => true,
@@ -401,7 +411,7 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'profileField' => true,
             ],
             'explanation' => 'insertTags',
-            'sql'       => [
+            'sql'         => [
                 'type'    => Types::TEXT,
                 'notnull' => false,
                 'default' => null,
@@ -419,7 +429,7 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'profileField' => true,
             ],
             'explanation' => 'insertTags',
-            'sql'       => [
+            'sql'         => [
                 'type'    => Types::TEXT,
                 'notnull' => false,
                 'default' => null,
@@ -434,7 +444,7 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'multiple'     => true,
                 'profileField' => true,
             ],
-            'sql'       => [
+            'sql'        => [
                 'type'    => Types::TEXT,
                 'notnull' => false,
                 'default' => null,
@@ -452,7 +462,7 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'profileField' => true,
             ],
             'explanation' => 'insertTags',
-            'sql'       => [
+            'sql'         => [
                 'type'    => Types::TEXT,
                 'notnull' => false,
                 'default' => null,
@@ -467,7 +477,7 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'fieldType'    => 'radio',
                 'profileField' => true,
             ],
-            'sql'       => [
+            'sql'        => [
                 'type'     => Types::INTEGER,
                 'unsigned' => true,
                 'default'  => 0,
@@ -608,9 +618,9 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
             'exclude'   => true,
             'inputType' => 'picker',
             'eval'      => [
-                'tl_class'     => 'clr long',
-                'multiple'     => true,
-                'chosen'       => true,
+                'tl_class' => 'clr long',
+                'multiple' => true,
+                'chosen'   => true,
             ],
             'relation'  => [
                 'type'          => 'haste-ManyToMany',
