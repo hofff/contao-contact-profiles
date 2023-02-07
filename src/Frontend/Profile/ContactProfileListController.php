@@ -133,7 +133,7 @@ final class ContactProfileListController extends AbstractHybridController
             throw new PageNotFoundException('Page not found: ' . Environment::get('uri'));
         }
 
-        return ($page - 1) * $model->perPage * $model->perPage;
+        return ($page - 1) * $model->perPage;
     }
 
     private function generatePagination(Model $model, int $total, string $pageParameter): string
