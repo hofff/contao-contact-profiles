@@ -145,18 +145,16 @@ final class HofffContaoContactProfilesExtension extends Extension
 
         if (! $multilingual['enable']) {
             $container->removeDefinition(MultilingualListener::class);
+        } else {
+            $bundles = $container->getParameter('kernel.bundles');
+            if (! isset($bundles['Terminal42DcMultilingualBundle'])) {
+                throw new InvalidConfigurationException(
+                    'Enable multilingual support of contact profiles requires terminal42/dc_multilingual'
+                );
+            }
 
-            return;
+            $loader->load('multilingual.xml');
         }
-
-        $bundles = $container->getParameter('kernel.bundles');
-        if (! isset($bundles['Terminal42DcMultilingualBundle'])) {
-            throw new InvalidConfigurationException(
-                'Enable multilingual support of contact profiles requires terminal42/dc_multilingual'
-            );
-        }
-
-        $loader->load('multilingual.xml');
 
         $parameters = $container->getParameterBag();
         foreach ($this->multilingualRepositories as $repository) {
