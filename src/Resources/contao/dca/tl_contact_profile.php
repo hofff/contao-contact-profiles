@@ -42,12 +42,21 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
                 'href'  => 'act=edit',
                 'icon'  => 'edit.gif',
             ],
+            'copy'   => [
+                'href'            => 'act=paste&amp;mode=copy',
+                'icon'            => 'copy.svg',
+                'attributes'      => 'onclick="Backend.getScrollOffset()"',
+            ],
+            'cut'    => [
+                'href'       => 'act=paste&amp;mode=cut',
+                'icon'       => 'cut.svg',
+                'attributes' => 'onclick="Backend.getScrollOffset()"',
+            ],
             'delete' => [
                 'label'      => &$GLOBALS['TL_LANG']['tl_contact_profile']['delete'],
                 'href'       => 'act=delete',
                 'icon'       => 'delete.gif',
-                'attributes' => 'onclick="if (!confirm(\'' . ($GLOBALS['TL_LANG']['MSC']['deleteConfirm'] ?? '')
-                    . '\')) return false; Backend.getScrollOffset();"',
+                'attributes' => 'onclick="if (!confirm(\'' . ($GLOBALS['TL_LANG']['MSC']['deleteConfirm'] ?? '') . '\')) return false; Backend.getScrollOffset();"',
             ],
             'toggle' => [
                 'label'        => &$GLOBALS['TL_LANG']['tl_contact_profile']['toggle'],
@@ -65,14 +74,7 @@ $GLOBALS['TL_DCA']['tl_contact_profile'] = [
 
     // Palettes
     'palettes' => [
-        'default' => '{personal_legend},salutation,title,firstname,lastname,alias,position,profession,image,caption'
-            . ';{contact_legend},phone,mobile,fax,email,website,websiteTitle,accounts'
-            . ';{details_legend},teaser,description,statement,responsibilities'
-            . ';{gallery_legend:hide},gallery'
-            . ';{videos_legend:hide},videos'
-            . ';{redirect_legend},jumpTo'
-            . ';{news_categories_legend},news_categories'
-            . ';{published_legend},published',
+        'default' => '{personal_legend},salutation,title,firstname,lastname,alias,position,profession,image,caption' . ';{contact_legend},phone,mobile,fax,email,website,websiteTitle,accounts' . ';{details_legend},teaser,description,statement,responsibilities' . ';{gallery_legend:hide},gallery' . ';{videos_legend:hide},videos' . ';{redirect_legend},jumpTo' . ';{news_categories_legend},news_categories' . ';{published_legend},published',
     ],
 
     // Fields
