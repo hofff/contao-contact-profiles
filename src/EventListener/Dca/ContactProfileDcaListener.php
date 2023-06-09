@@ -79,12 +79,15 @@ final class ContactProfileDcaListener
     /** @Callback(table="tl_contact_profile", target="config.onload") */
     public function onLoad(): void
     {
+        /** @psalm-suppress UndefinedInterfaceMethod */
         $sorting = $this->session->getBag('contao_backend')->get('sorting')['tl_contact_profile'] ?? null;
 
         // Only set sorting as the first field if custom sorting is chosen.
-        if ($sorting === 'sorting') {
-            $this->dcaManager->getDefinition('tl_contact_profile')->set(['list', 'sorting', 'fields'], ['sorting']);
+        if ($sorting !== 'sorting') {
+            return;
         }
+
+        $this->dcaManager->getDefinition('tl_contact_profile')->set(['list', 'sorting', 'fields'], ['sorting']);
     }
 
     /**

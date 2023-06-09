@@ -36,9 +36,14 @@ final class AddContactProfileInformationListener
         }
 
         $profileIds = StringUtil::deserialize($template->hofff_contact_profiles, true);
-        $order      = StringUtil::deserialize($template->hofff_contact_profiles_order, true);
-        $options    = ['order' => QueryUtil::orderByIds('id', $order)];
-        $profiles   = $this->repository->fetchPublishedByProfileIds($profileIds, $options);
+        $order      = StringUtil::deserialize($template->hofff_contact_profiles_order, true) ?: $profileIds;
+        $options    = [];
+
+        if ($order) {
+            $options['order'] = QueryUtil::orderByIds('id', $order);
+        }
+
+        $profiles = $this->repository->fetchPublishedByProfileIds($profileIds, $options);
 
         $template->contactProfiles = $profiles;
     }

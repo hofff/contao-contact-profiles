@@ -33,13 +33,16 @@ final class CustomProfileProvider extends AbstractProfileProvider
      */
     public function fetchProfiles(Model $model, PageModel $pageModel, ?Specification $specification, int $offset): array
     {
-        $options = $this->fetchProfilesOptions($model, $offset);
-        if ($options['order'] === null) {
-            $order            = StringUtil::deserialize($model->hofff_contact_profiles_order, true);
-            $options['order'] = QueryUtil::orderByIds('id', $order);
-        }
-
+        $options    = $this->fetchProfilesOptions($model, $offset);
         $profileIds = StringUtil::deserialize($model->hofff_contact_profiles, true);
+
+        if ($options['order'] === null) {
+            $order = StringUtil::deserialize($model->hofff_contact_profiles_order, true) ?: $profileIds;
+
+            if ($order) {
+                $options['order'] = QueryUtil::orderByIds('id', $order);
+            }
+        }
 
         if ($specification) {
             $profiles = $this->profiles->fetchPublishedByProfileIdsAndSpecification(

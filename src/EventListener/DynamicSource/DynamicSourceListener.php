@@ -80,11 +80,13 @@ abstract class DynamicSourceListener
     protected function fetchProfiles(Model $sourceModel): ?Collection
     {
         $profileIds = StringUtil::deserialize($sourceModel->hofff_contact_profiles, true);
-        $order      = StringUtil::deserialize($sourceModel->hofff_contact_profiles_order, true);
+        $order      = StringUtil::deserialize($sourceModel->hofff_contact_profiles_order, true) ?: $profileIds;
+        $options    = [];
 
-        return $this->repository->fetchPublishedByProfileIds(
-            $profileIds,
-            ['order' => QueryUtil::orderByIds('id', $order)]
-        );
+        if ($order) {
+            $options['order'] = QueryUtil::orderByIds('id', $order);
+        }
+
+        return $this->repository->fetchPublishedByProfileIds($profileIds, $options);
     }
 }
