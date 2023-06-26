@@ -19,6 +19,7 @@ use Contao\Model;
  * @property string             $websiteTitle
  * @property string             $caption
  * @property string|null        $galleryOrder
+ * @property string|null        $accounts
  */
 abstract class Profile extends Model
 {

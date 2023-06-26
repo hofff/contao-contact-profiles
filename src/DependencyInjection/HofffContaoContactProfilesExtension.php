@@ -23,10 +23,10 @@ use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
 /**
- * @psalm-type TMultilingaulConfig = array{
+ * @psalm-type TMultilingualConfig = array{
  *     enable: bool,
  *     languages?: list<string>|null,
- *     fallbackLanguage: ?string,
+ *     fallback_language: ?string,
  *     fields: list<string>|null,
  * }
  * @SuppressWarnings(PHPMD.LongVariable)
@@ -125,7 +125,7 @@ final class HofffContaoContactProfilesExtension extends Extension
 
     /**
      * @param array<string,mixed> $multilingual
-     * @psalm-param TMultilingaulConfig $multilingual
+     * @psalm-param TMultilingualConfig $multilingual
      */
     private function configureMultilingual(
         array $multilingual,

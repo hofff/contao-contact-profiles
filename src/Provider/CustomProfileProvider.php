@@ -69,6 +69,7 @@ final class CustomProfileProvider extends AbstractProfileProvider
     /** {@inheritDoc} */
     protected function fetchInitials(Model $model, PageModel $pageModel): Generator
     {
+        /** @psalm-var list<int|string> $profileIds */
         $profileIds = StringUtil::deserialize($model->hofff_contact_profiles, true);
 
         foreach ($this->profiles->fetchInitialsOfPublishedByProfileIds($profileIds) as $row) {

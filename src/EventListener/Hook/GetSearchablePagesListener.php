@@ -77,7 +77,12 @@ final class GetSearchablePagesListener
         return $pages;
     }
 
-    /** @return array<array-key,mixed> */
+    /**
+     * @return list<int|string>
+     *
+     * @psalm-suppress MoreSpecificReturnType
+     * @psalm-suppress LessSpecificReturnStatement
+     */
     private function fetchCategoriesWithDetailPage(?int $rootId): array
     {
         $pageIds      = $this->getPageIds($rootId);

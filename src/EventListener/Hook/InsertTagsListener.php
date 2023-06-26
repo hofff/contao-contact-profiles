@@ -40,7 +40,7 @@ final class InsertTagsListener
     {
         $elements = explode('::', $tag, 2);
 
-        if ($elements[0] !== 'contact_profile_url') {
+        if ($elements[0] !== 'contact_profile_url' || ! isset($elements[1])) {
             return false;
         }
 

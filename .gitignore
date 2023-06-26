@@ -8,5 +8,6 @@
 !/composer.json
 !phpcs.xml.dist
 !.phpcq.yaml.dist
+!.phpcq.lock
 !/.github
 !/psalm.xml

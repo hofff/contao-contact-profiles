@@ -21,7 +21,7 @@ final class ContactProfileRenderer
     /** @var string[] */
     private array $fields = [];
 
-    /** @var string[]|null */
+    /** @var list<string>|null */
     private ?array $imageSize = null;
 
     private string $template = self::DEFAULT_TEMPLATE;
@@ -92,7 +92,7 @@ final class ContactProfileRenderer
         return $default ?: $this->defaultFieldTemplate;
     }
 
-    /** @param string[] $imageSize */
+    /** @param list<string> $imageSize */
     public function withImageSize(array $imageSize): self
     {
         $this->imageSize = $imageSize;
@@ -107,7 +107,7 @@ final class ContactProfileRenderer
         return $this;
     }
 
-    /** @return string[]|null */
+    /** @return list<string>|null */
     public function imageSize(): ?array
     {
         return $this->imageSize;

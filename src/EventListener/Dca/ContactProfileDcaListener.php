@@ -228,6 +228,7 @@ final class ContactProfileDcaListener
             }
         }
 
+        /** @psalm-suppress LessSpecificReturnStatement */
         return $values;
     }
 

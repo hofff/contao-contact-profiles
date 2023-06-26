@@ -14,7 +14,6 @@ use Contao\StringUtil;
 use Exception;
 use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
-use stdClass;
 
 use function array_filter;
 use function array_flip;
@@ -47,6 +46,7 @@ final class GalleryFieldRenderer extends AbstractFieldRenderer
         Profile $profile,
         ContactProfileRenderer $renderer
     ): void {
+        /** @psalm-suppress ArgumentTypeCoercion */
         $images          = $this->fetchImagesOrderedByCustomOrder((array) $value, $profile);
         $template->value = $this->compileImages($images, $renderer->imageSize());
     }
@@ -158,7 +158,7 @@ final class GalleryFieldRenderer extends AbstractFieldRenderer
      * @param list<array<string,mixed>> $images
      * @param list<string>|null         $imageSize
      *
-     * @return list<stdClass>
+     * @return list<object>
      */
     private function compileImages(array $images, ?array $imageSize): array
     {

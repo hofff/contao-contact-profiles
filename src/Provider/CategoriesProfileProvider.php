@@ -52,6 +52,7 @@ final class CategoriesProfileProvider extends AbstractProfileProvider
     /** {@inheritDoc} */
     public function countTotal(Model $model, array $profiles): int
     {
+        /** @psalm-var list<int|string> $categoryIds */
         $categoryIds = StringUtil::deserialize($model->hofff_contact_categories, true);
 
         return $this->profiles->countPublishedByCategories($categoryIds);
@@ -60,6 +61,7 @@ final class CategoriesProfileProvider extends AbstractProfileProvider
     /** {@inheritDoc} */
     protected function fetchInitials(Model $model, PageModel $pageModel): Generator
     {
+        /** @psalm-var list<int|string> $categoryIds */
         $categoryIds = StringUtil::deserialize($model->hofff_contact_categories, true);
 
         foreach ($this->profiles->fetchInitialsOfPublishedByCategories($categoryIds) as $row) {

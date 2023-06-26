@@ -96,13 +96,9 @@ final class ContactProfileListController extends AbstractHybridController
     }
 
     /**
-     * @return Profile[]
+     * @return list<Profile>
      *
      * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     *
-     * @psalm-suppress MoreSpecificReturnType
-     * @psalm-suppress LessSpecificReturnStatement
      */
     private function loadProfiles(Model $model, int $offset): array
     {

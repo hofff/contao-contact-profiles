@@ -23,11 +23,11 @@ final class LoadContactProfilesEvent extends Event
     /** @var array<int,Profile> */
     private array $profiles = [];
 
-    /** @var string[] */
+    /** @var list<string> */
     private array $sources;
 
     /**
-     * @param string[] $sources
+     * @param list<string> $sources
      */
     public function __construct(Model $context, PageModel $page, array $sources = [])
     {
