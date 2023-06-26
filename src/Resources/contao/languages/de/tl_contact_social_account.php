@@ -22,7 +22,9 @@ $GLOBALS['TL_LANG']['tl_contact_social_account']['social_accounts'][0]  = 'Socia
 $GLOBALS['TL_LANG']['tl_contact_social_account']['social_accounts'][1]  = 'Social Media Profile verwalten';
 
 // Fields
-$GLOBALS['TL_LANG']['tl_contact_social_account']['name'][0]  = 'Titel';
-$GLOBALS['TL_LANG']['tl_contact_social_account']['name'][1]  = 'Titel des Social Media Profils';
-$GLOBALS['TL_LANG']['tl_contact_social_account']['class'][0] = 'CSS-Klasse';
-$GLOBALS['TL_LANG']['tl_contact_social_account']['class'][1] = 'Definieren Sie eine benutzerdefinierte CSS-Klasse, um den Link des Social Media Profils zu gestalten.';
+$GLOBALS['TL_LANG']['tl_contact_social_account']['name'][0]           = 'Titel';
+$GLOBALS['TL_LANG']['tl_contact_social_account']['name'][1]           = 'Titel des Social Media Profils';
+$GLOBALS['TL_LANG']['tl_contact_social_account']['class'][0]          = 'CSS-Klasse';
+$GLOBALS['TL_LANG']['tl_contact_social_account']['class'][1]          = 'Definieren Sie eine benutzerdefinierte CSS-Klasse, um den Link des Social Media Profils zu gestalten.';
+$GLOBALS['TL_LANG']['tl_contact_social_account']['twitterCreator'][0] = 'Für Twitter creator verwenden';
+$GLOBALS['TL_LANG']['tl_contact_social_account']['twitterCreator'][1] = 'Diesen Account für den twitter:creator MetaTag der Twitter Card Metadaten.';

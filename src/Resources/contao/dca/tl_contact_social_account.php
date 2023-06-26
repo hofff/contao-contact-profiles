@@ -59,7 +59,7 @@ $GLOBALS['TL_DCA']['tl_contact_social_account'] = [
     ],
 
     // Palettes
-    'palettes' => ['default' => '{name_legend},name,class'],
+    'palettes' => ['default' => '{name_legend},name,class,twitterCreator'],
 
     // Fields
     'fields'   => [
@@ -100,6 +100,17 @@ $GLOBALS['TL_DCA']['tl_contact_social_account'] = [
             'sql'       => [
                 'type'    => Types::STRING,
                 'length'  => 32,
+                'default' => '',
+            ],
+        ],
+        'twitterCreator' => [
+            'exclude'   => true,
+            'filter'    => true,
+            'inputType' => 'checkbox',
+            'eval'      => ['tl_class' => 'w50'],
+            'sql'       => [
+                'type'    => Types::STRING,
+                'length'  => 1,
                 'default' => '',
             ],
         ],

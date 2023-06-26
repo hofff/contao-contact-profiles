@@ -109,6 +109,7 @@
             <argument type="service" id="contao.framework"/>
             <argument type="service" id="request_stack"/>
             <argument type="service" id="Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator"/>
+            <argument type="service" id="Hofff\Contao\ContactProfiles\Model\SocialAccount\SocialAccountRepository"/>
             <argument>%kernel.project_dir%</argument>
             <tag name="Hofff\Contao\SocialTags\Data\Extractor"/>
         </service>
