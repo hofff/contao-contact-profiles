@@ -133,7 +133,7 @@ final class ContactProfileDcaListener
             '/{([^}]+)}/',
             /** @return mixed */
             static function (array $matches) use ($profile) {
-                return $profile->{$matches[1]};
+                return StringUtil::prepareSlug($profile->{$matches[1]});
             },
             $this->pattern
         );
