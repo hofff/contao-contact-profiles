@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Hofff\Contao\ContactProfiles\SocialTags;
 
 use Contao\CoreBundle\Framework\ContaoFramework;
+use Contao\CoreBundle\InsertTag\InsertTagParser;
+use Contao\CoreBundle\Routing\ResponseContext\ResponseContextAccessor;
 use Contao\File;
-use Contao\FilesModel;
-use Contao\Model;
 use Contao\PageModel;
 use Contao\StringUtil;
 use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
@@ -15,40 +15,53 @@ use Hofff\Contao\ContactProfiles\Model\SocialAccount\SocialAccount;
 use Hofff\Contao\ContactProfiles\Model\SocialAccount\SocialAccountRepository;
 use Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator;
 use Hofff\Contao\SocialTags\Data\Extractor\AbstractExtractor;
+use Hofff\Contao\SocialTags\Data\OpenGraph\OpenGraphExtractor;
 use Hofff\Contao\SocialTags\Data\OpenGraph\OpenGraphImageData;
 use Hofff\Contao\SocialTags\Data\OpenGraph\OpenGraphType;
+use Hofff\Contao\SocialTags\Data\TwitterCards\TwitterCardsExtractor;
 use Hofff\Contao\SocialTags\Util\TypeUtil;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-use function is_file;
-use function method_exists;
 use function str_replace;
 use function strip_tags;
 use function strpos;
 use function trim;
-use function ucfirst;
 
-/** @SuppressWarnings(PHPMD.UnusedPrivateMethod) */
-final class ContactProfileExtractor extends AbstractExtractor
+/**
+ * @implements OpenGraphExtractor<Profile, PageModel>
+ * @implements TwitterCardsExtractor<Profile, PageModel>
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods))
+ */
+final class ContactProfileExtractor extends AbstractExtractor implements OpenGraphExtractor, TwitterCardsExtractor
 {
     private ContactProfileUrlGenerator $urlGenerator;
 
     private SocialAccountRepository $socialAccounts;
 
+    /** @SuppressWarnings(PHPMD.LongVariable) */
     public function __construct(
         ContaoFramework $framework,
         RequestStack $requestStack,
+        ResponseContextAccessor $responseContextAccessor,
+        InsertTagParser $insertTagParser,
         ContactProfileUrlGenerator $urlGenerator,
         SocialAccountRepository $socialAccounts,
-        string $projectDir
+        string $projectDir,
     ) {
-        parent::__construct($framework, $requestStack, $projectDir);
+        parent::__construct($framework, $requestStack, $responseContextAccessor, $insertTagParser, $projectDir);
 
         $this->urlGenerator   = $urlGenerator;
         $this->socialAccounts = $socialAccounts;
     }
 
-    public function supports(Model $reference, ?Model $fallback = null): bool
+    /** {@inheritDoc} */
+    public function supportedDataContainers(): array
+    {
+        return [Profile::getTable()];
+    }
+
+    public function supports(object $reference, object|null $fallback = null): bool
     {
         if (! $reference instanceof Profile) {
             return false;
@@ -57,33 +70,15 @@ final class ContactProfileExtractor extends AbstractExtractor
         return $fallback instanceof PageModel;
     }
 
-    /** @return mixed */
-    public function extract(string $type, string $field, Model $reference, ?Model $fallback = null)
-    {
-        $methodName = 'extract' . ucfirst($type) . ucfirst($field);
-
-        if ($methodName !== __FUNCTION__ && method_exists($this, $methodName)) {
-            return $this->$methodName($reference, $fallback);
-        }
-
-        return null;
-    }
-
-    /**
-     * @param string|resource $strImage
-     */
-    private function extractOpenGraphImageData(Profile $contactProfile): OpenGraphImageData
+    public function extractOpenGraphImageData(object $reference, object|null $fallback = null): OpenGraphImageData
     {
         $imageData = new OpenGraphImageData();
-        if ($contactProfile->image === null) {
-            return $imageData;
-        }
+        $file      = $this->getImage('image', $reference);
+        $fileUrl   = $this->getFileUrl($file);
 
-        $fileModel = FilesModel::findByUuid($contactProfile->image);
-
-        if ($fileModel instanceof FilesModel && is_file($this->projectDir . '/' . $fileModel->path)) {
-            $objImage = new File($fileModel->path);
-            $imageData->setURL($this->getBaseUrl() . $fileModel->path);
+        if ($file && $fileUrl !== null) {
+            $objImage = new File($file->path);
+            $imageData->setURL($fileUrl);
             $imageData->setMIMEType($objImage->mime);
             $imageData->setWidth($objImage->width);
             $imageData->setHeight($objImage->height);
@@ -92,32 +87,33 @@ final class ContactProfileExtractor extends AbstractExtractor
         return $imageData;
     }
 
-    private function extractOpenGraphTitle(Profile $contactProfile): ?string
+    public function extractOpenGraphTitle(object $reference, object|null $fallback = null): string
     {
-        $title = $contactProfile->firstname . ' ' . $contactProfile->lastname;
+        $title = trim($reference->firstname . ' ' . $reference->lastname);
+        /** @psalm-suppress RedundantConditionGivenDocblockType */
         if (TypeUtil::isStringWithContent($title)) {
             return $this->replaceInsertTags($title);
         }
 
-        return null;
+        return '';
     }
 
-    private function extractOpenGraphUrl(Profile $contactProfile): string
+    public function extractOpenGraphUrl(object $reference, object|null $fallback = null): string
     {
         return (string) $this->urlGenerator->generateDetailUrl(
-            $contactProfile,
+            $reference,
             ContactProfileUrlGenerator::ABSOLUTE_URL
         );
     }
 
-    private function extractOpenGraphDescription(Profile $contactProfile): ?string
+    public function extractOpenGraphDescription(object $reference, object|null $fallback = null): string|null
     {
-        if (! TypeUtil::isStringWithContent($contactProfile->teaser)) {
+        if (! TypeUtil::isStringWithContent($reference->teaser)) {
             return null;
         }
 
         /** @psalm-var string $description */
-        $description = $contactProfile->teaser;
+        $description = $reference->teaser;
         $description = trim(str_replace(["\n", "\r"], [' ', ''], $description));
         $description = $this->replaceInsertTags($description);
         $description = strip_tags($description);
@@ -126,34 +122,35 @@ final class ContactProfileExtractor extends AbstractExtractor
     }
 
     /** @SuppressWarnings(PHPMD.UnusedFormalParameter) */
-    private function extractOpenGraphSiteName(Profile $contactProfile, PageModel $fallback): string
+    public function extractOpenGraphSiteName(object $reference, object|null $fallback = null): string
     {
-        return strip_tags($fallback->rootPageTitle ?: $fallback->rootTitle);
+        return $fallback ? strip_tags($fallback->rootPageTitle ?: $fallback->rootTitle) : '';
     }
 
-    private function extractOpenGraphType(): OpenGraphType
+    public function extractOpenGraphType(object $reference, object|null $fallback = null): OpenGraphType
     {
         return new OpenGraphType('profile');
     }
 
-    private function extractTwitterTitle(Profile $contactProfile): ?string
+    public function extractTwitterTitle(object $reference, object|null $fallback = null): string
     {
-        $title = $contactProfile->firstname . ' ' . $contactProfile->lastname;
+        $title = trim($reference->firstname . ' ' . $reference->lastname);
+        /** @psalm-suppress RedundantConditionGivenDocblockType */
         if (TypeUtil::isStringWithContent($title)) {
             return $this->replaceInsertTags($title);
         }
 
-        return null;
+        return '';
     }
 
-    private function extractTwitterDescription(Profile $contactProfile): ?string
+    public function extractTwitterDescription(object $reference, object|null $fallback = null): ?string
     {
-        if (! TypeUtil::isStringWithContent($contactProfile->teaser)) {
+        if (! TypeUtil::isStringWithContent($reference->teaser)) {
             return null;
         }
 
         /** @psalm-var string $description */
-        $description = $contactProfile->teaser;
+        $description = $reference->teaser;
         $description = trim(str_replace(["\n", "\r"], [' ', ''], $description));
         $description = $this->replaceInsertTags($description);
         $description = strip_tags($description);
@@ -162,34 +159,25 @@ final class ContactProfileExtractor extends AbstractExtractor
     }
 
     /** @SuppressWarnings(PHPMD.UnusedFormalParameter) */
-    private function extractTwitterSite(Profile $contactProfile, PageModel $referencePage): ?string
+    public function extractTwitterSite(object $reference, object|null $fallback = null): ?string
     {
-        return $referencePage->hofff_st_twitter_site ?: null;
+        /** @psalm-suppress RiskyTruthyFalsyComparison */
+        return $fallback?->hofff_st_twitter_site ?: null;
     }
 
-    private function extractTwitterImage(Profile $contactProfile): ?string
+    public function extractTwitterImage(object $reference, object|null $fallback = null): ?string
     {
-        if (! $contactProfile->image) {
-            return null;
-        }
-
-        $file = FilesModel::findByUuid($contactProfile->image);
-
-        if ($file && is_file($this->projectDir . '/' . $file->path)) {
-            return $this->getBaseUrl() . $file->path;
-        }
-
-        return null;
+        return $this->getFileUrl($this->getImage('image', $reference));
     }
 
-    private function extractTwitterCreator(Profile $contactProfile): ?string
+    public function extractTwitterCreator(object $reference, object|null $fallback = null): ?string
     {
         $socialAccount = $this->socialAccounts->findOneBy(['.twitterCreator=?'], ['1']);
         if (! $socialAccount instanceof SocialAccount) {
             return null;
         }
 
-        $accounts = StringUtil::deserialize($contactProfile->accounts, true);
+        $accounts = StringUtil::deserialize($reference->accounts, true);
 
         foreach ($accounts as $account) {
             if ((int) $account['type'] !== (int) $socialAccount->id) {

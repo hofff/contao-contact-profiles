@@ -27,11 +27,11 @@ final class SocialTagsGenerator
             return;
         }
 
-        $request = $this->requestStack->getMasterRequest();
+        $request = $this->requestStack->getMainRequest();
         if ($request === null) {
             return;
         }
 
-        $request->attributes->set(Data::class, $this->socialTagsFactory->generateByModel($profile));
+        $request->attributes->set(Data::class, $this->socialTagsFactory->generate($profile));
     }
 }
