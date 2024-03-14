@@ -104,6 +104,8 @@ tasks:
     config:
       ignore_output:
         - '#Root package is not of type "project", we will not installing Contao extensions.#'
+        - '#Root package is not of type "project" or "contao-theme", we will not be installing Contao extensions.#'
+        - '#> pre-command-run: Contao\\ManagerPlugin\\Composer\\ArtifactsPlugin->preCommandRun#'
 
   composer-normalize-fix:
     plugin: composer-normalize

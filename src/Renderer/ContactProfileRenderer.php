@@ -89,7 +89,7 @@ final class ContactProfileRenderer
             return $this->fieldTemplates[$field];
         }
 
-        return $default ?: $this->defaultFieldTemplate;
+        return $default ?? $this->defaultFieldTemplate;
     }
 
     /** @param list<string> $imageSize */

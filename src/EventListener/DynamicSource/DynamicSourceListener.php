@@ -40,7 +40,7 @@ abstract class DynamicSourceListener
         }
 
         $alias = $this->getAlias();
-        if (! $alias) {
+        if ($alias === null) {
             return;
         }
 

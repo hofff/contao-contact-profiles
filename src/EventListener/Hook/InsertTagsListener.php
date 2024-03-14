@@ -53,6 +53,7 @@ final class InsertTagsListener
             ? ContactProfileUrlGenerator::ABSOLUTE_URL
             : ContactProfileUrlGenerator::ABSOLUTE_PATH;
 
+        /** @psalm-suppress RiskyTruthyFalsyComparison */
         return $this->urlGenerator->generateDetailUrl($profile, $referenceType) ?: false;
     }
 }

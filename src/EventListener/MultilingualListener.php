@@ -77,11 +77,11 @@ final class MultilingualListener
         $config['langColumnName'] = 'multilingual_language';
         $config['langPid']        = 'multilingual_pid';
 
-        if ($this->languages) {
+        if ($this->languages !== []) {
             $config['languages'] = $this->languages;
         }
 
-        if ($this->fallbackLanguage) {
+        if ($this->fallbackLanguage !== null) {
             $config['fallbackLang'] = $this->fallbackLanguage;
         }
 

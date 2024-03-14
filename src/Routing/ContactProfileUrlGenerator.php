@@ -160,7 +160,7 @@ final class ContactProfileUrlGenerator
 
             case self::PREVIEW_URL:
                 $baseUrl = '';
-                if ($this->previewScript) {
+                if ($this->previewScript !== null) {
                     $baseUrl = $this->router->getContext()->getBaseUrl();
                     $this->router->getContext()->setBaseUrl($this->previewScript);
                 }
@@ -174,7 +174,7 @@ final class ContactProfileUrlGenerator
                     RouterInterface::ABSOLUTE_PATH,
                 );
 
-                if ($this->previewScript) {
+                if ($this->previewScript !== null) {
                     $this->router->getContext()->setBaseUrl($baseUrl);
                 }
 

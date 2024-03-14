@@ -9,12 +9,10 @@ use Contao\CoreBundle\ServiceAnnotation\Hook;
 use Contao\Database;
 use Contao\Date;
 use Contao\PageModel;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
 use Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator;
-
-use function is_int;
-use function is_string;
 
 /**
  * @Hook("getSearchablePages")
@@ -49,7 +47,8 @@ final class GetSearchablePagesListener
      */
     public function __invoke(array $pages, $rootId = null, bool $isSitemap = false, ?string $language = null): array
     {
-        $rootId      = $rootId ? (int) $rootId : null;
+        $rootId ??= (int) $rootId;
+        /** @psalm-suppress PossiblyInvalidArgument */
         $categoryIds = $this->fetchCategoriesWithDetailPage($rootId);
         $collection  = $this->contactProfiles->fetchPublishedByCategories(
             $categoryIds,
@@ -95,15 +94,10 @@ final class GetSearchablePagesListener
         if ($pageIds !== []) {
             $queryBuilder
                 ->andWhere('jumpTo IN (:pageIds)')
-                ->setParameter('pageIds', $pageIds, Connection::PARAM_STR_ARRAY);
+                ->setParameter('pageIds', $pageIds, ArrayParameterType::STRING);
         }
 
-        $result = $queryBuilder->execute();
-        if (is_string($result) || is_int($result)) {
-            return [];
-        }
-
-        return $result->fetchFirstColumn();
+        return $queryBuilder->executeQuery()->fetchFirstColumn();
     }
 
     /** @return array<array-key,mixed> */

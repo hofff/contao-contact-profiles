@@ -66,6 +66,7 @@ final class DynamicProfileProvider extends AbstractProfileProvider
         $this->eventDispatcher->dispatch($event, $event::NAME);
 
         foreach ($event->profiles() as $profile) {
+            /** @psalm-suppress RiskyTruthyFalsyComparison */
             if (! ($profile->lastname[0] ?? null)) {
                 continue;
             }

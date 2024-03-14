@@ -6,16 +6,15 @@ namespace Hofff\Contao\ContactProfiles\Model\Profile;
 
 use Contao\CoreBundle\Security\Authentication\Token\TokenChecker;
 use Contao\Model\Collection;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\ForwardCompatibility\Result as ForwardCompatibilityResult;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Doctrine\DBAL\Result;
 use Netzmacht\Contao\Toolkit\Data\Model\ContaoRepository;
 use Netzmacht\Contao\Toolkit\Data\Model\Specification;
 use Terminal42\DcMultilingualBundle\QueryBuilder\MultilingualQueryBuilderInterface;
 
-use function array_values;
 use function count;
+use function is_string;
 use function str_repeat;
 use function str_replace;
 
@@ -167,14 +166,12 @@ final class ProfileRepository extends ContaoRepository
      */
     public function fetchInitialsOfPublishedByCategories(array $categoryIds): array
     {
-        $query = $this->createFetchPublishedInitialsQuery();
-        /** @psalm-var Result|ForwardCompatibilityResult $result */
-        $result = $query
+        $result = $this->createFetchPublishedInitialsQuery()
             ->andWhere($this->getTableName() . '.pid IN (:categoryIds)')
-            ->setParameter('categoryIds', $categoryIds, Connection::PARAM_STR_ARRAY)
-            ->execute();
+            ->setParameter('categoryIds', $categoryIds, ArrayParameterType::STRING)
+            ->executeQuery();
 
-        return array_values($result->fetchAllAssociative());
+        return $result->fetchAllAssociative();
     }
 
     /**
@@ -184,14 +181,12 @@ final class ProfileRepository extends ContaoRepository
      */
     public function fetchInitialsOfPublishedByProfileIds(array $profileIds): array
     {
-        $query = $this->createFetchPublishedInitialsQuery();
-        /** @psalm-var Result|ForwardCompatibilityResult $result */
-        $result = $query
+        $result = $this->createFetchPublishedInitialsQuery()
             ->andWhere($this->getTableName() . '.id IN (:profileIds)')
-            ->setParameter('profileIds', $profileIds, Connection::PARAM_STR_ARRAY)
-            ->execute();
+            ->setParameter('profileIds', $profileIds, ArrayParameterType::STRING)
+            ->executeQuery();
 
-        return array_values($result->fetchAllAssociative());
+        return $result->fetchAllAssociative();
     }
 
     public function findByNewsCategory(int $newsCategoryId): ?Collection
@@ -224,7 +219,7 @@ final class ProfileRepository extends ContaoRepository
         if ($this->isMultilingual()) {
             /** @psalm-var MultilingualQueryBuilderInterface $multilingualBuilder */
             $multilingualBuilder = MultilingualProfile::getMultilingualQueryBuilder();
-            $language            = isset($GLOBALS['TL_LANGUAGE'])
+            $language            = isset($GLOBALS['TL_LANGUAGE']) && is_string($GLOBALS['TL_LANGUAGE'])
                 ? str_replace('-', '_', $GLOBALS['TL_LANGUAGE'])
                 : '';
 

@@ -75,6 +75,7 @@ final class VideosFieldRenderer extends AbstractFieldRenderer
                 (array) $value
             ),
             static function (array $video): bool {
+                /** @psalm-suppress RiskyTruthyFalsyComparison */
                 return ! empty($video['url']);
             }
         );

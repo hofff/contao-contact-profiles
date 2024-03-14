@@ -103,7 +103,7 @@ final class NewsCategoryDcaListener
         while ($categoryId > 0) {
             /** @psalm-suppress RedundantCondition */
             $category = $categories[$categoryId] ?? $repository->find($categoryId);
-            if ($category === null) {
+            if (! $category instanceof NewsCategoryModel) {
                 break;
             }
 

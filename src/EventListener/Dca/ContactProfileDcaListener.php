@@ -142,7 +142,7 @@ final class ContactProfileDcaListener
         if ($this->multilingual) {
             if ($dataContainer->activeRecord->multilingual_language) {
                 $options['locale'] = $dataContainer->activeRecord->multilingual_language;
-            } elseif ($this->fallbackLanguage) {
+            } elseif ($this->fallbackLanguage !== null) {
                 $options['locale'] = $this->fallbackLanguage;
             }
         }
@@ -248,6 +248,7 @@ final class ContactProfileDcaListener
         string $attributes
     ): string {
         if (Input::get('tid') !== null && Input::get('tid') !== '') {
+            /** @psalm-suppress RiskyTruthyFalsyComparison */
             $this->toggleVisibility(
                 (int) Input::get('tid'),
                 (Input::get('state') === '1'),
@@ -338,9 +339,9 @@ final class ContactProfileDcaListener
             foreach ($callbacks as $callback) {
                 if (is_array($callback)) {
                     $callback[0] = System::importStatic($callback[0]);
-                    $blnVisible  = $callback[0]->{$callback[1]}($dataContainer);
+                    $blnVisible  = (bool) $callback[0]->{$callback[1]}($dataContainer);
                 } elseif (is_callable($callback)) {
-                    $blnVisible = $callback($dataContainer);
+                    $blnVisible = (bool) $callback($dataContainer);
                 }
             }
         }
