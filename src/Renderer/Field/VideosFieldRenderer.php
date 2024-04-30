@@ -53,7 +53,7 @@ final class VideosFieldRenderer extends AbstractFieldRenderer
         $template->value    = array_filter(
             array_map(
                 static function (array $video) {
-                    $video['aspect'] = str_replace(':', '', $video['aspect']);
+                    $video['aspect'] = str_replace(':', '', $video['aspect'] ?? '');
 
                     switch ($video['videoSource']) {
                         case 'youtube':
