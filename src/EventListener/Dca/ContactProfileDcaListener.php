@@ -102,10 +102,6 @@ final class ContactProfileDcaListener
             $value = $this->determineAlias($dataContainer);
         }
 
-        if (preg_match('/^[1-9]\d*$/', $value)) {
-            throw new Exception($this->translator->trans('ERR.aliasNumeric', [$value], 'contao_default'));
-        }
-
         if ($this->aliasExists($value, $dataContainer)) {
             throw new Exception($this->translator->trans('ERR.aliasExists', [$value], 'contao_default'));
         }
