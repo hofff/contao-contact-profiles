@@ -10,16 +10,15 @@ use Contao\StringUtil;
 use Generator;
 use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
 use Netzmacht\Contao\Toolkit\Data\Model\Specification;
+use Override;
 
 final class CategoriesProfileProvider extends AbstractProfileProvider
 {
-    private ProfileRepository $profiles;
-
-    public function __construct(ProfileRepository $profiles)
+    public function __construct(private ProfileRepository $profiles)
     {
-        $this->profiles = $profiles;
     }
 
+    #[Override]
     public function name(): string
     {
         return 'categories';
@@ -30,8 +29,13 @@ final class CategoriesProfileProvider extends AbstractProfileProvider
      *
      * @psalm-suppress MoreSpecificReturnType
      */
-    public function fetchProfiles(Model $model, PageModel $pageModel, ?Specification $specification, int $offset): array
-    {
+    #[Override]
+    public function fetchProfiles(
+        Model $model,
+        PageModel $pageModel,
+        Specification|null $specification,
+        int $offset,
+    ): array {
         $categoryIds = StringUtil::deserialize($model->hofff_contact_categories, true);
         $options     = $this->fetchProfilesOptions($model, $offset);
 
@@ -39,7 +43,7 @@ final class CategoriesProfileProvider extends AbstractProfileProvider
             $profiles = $this->profiles->fetchPublishedByCategoriesAndSpecification(
                 $categoryIds,
                 $specification,
-                $options
+                $options,
             );
         } else {
             $profiles = $this->profiles->fetchPublishedByCategories($categoryIds, $options);
@@ -50,6 +54,7 @@ final class CategoriesProfileProvider extends AbstractProfileProvider
     }
 
     /** {@inheritDoc} */
+    #[Override]
     public function countTotal(Model $model, array $profiles): int
     {
         /** @psalm-var list<int|string> $categoryIds */
@@ -59,6 +64,7 @@ final class CategoriesProfileProvider extends AbstractProfileProvider
     }
 
     /** {@inheritDoc} */
+    #[Override]
     protected function fetchInitials(Model $model, PageModel $pageModel): Generator
     {
         /** @psalm-var list<int|string> $categoryIds */

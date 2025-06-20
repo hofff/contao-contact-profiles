@@ -11,32 +11,21 @@ use Contao\Date;
 use Contao\PageModel;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
+use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
 use Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator;
 
-/**
- * @Hook("getSearchablePages")
- */
+use function assert;
+
+/** @Hook("getSearchablePages") */
 final class GetSearchablePagesListener
 {
-    private ContaoFramework $framework;
-
-    private Connection $connection;
-
-    private ProfileRepository $contactProfiles;
-
-    private ContactProfileUrlGenerator $urlGenerator;
-
     public function __construct(
-        ContaoFramework $framework,
-        Connection $connection,
-        ProfileRepository $contactProfiles,
-        ContactProfileUrlGenerator $urlGenerator
+        private ContaoFramework $framework,
+        private Connection $connection,
+        private ProfileRepository $contactProfiles,
+        private ContactProfileUrlGenerator $urlGenerator,
     ) {
-        $this->framework       = $framework;
-        $this->connection      = $connection;
-        $this->contactProfiles = $contactProfiles;
-        $this->urlGenerator    = $urlGenerator;
     }
 
     /**
@@ -45,17 +34,19 @@ final class GetSearchablePagesListener
      *
      * @return string[]
      */
-    public function __invoke(array $pages, $rootId = null, bool $isSitemap = false, ?string $language = null): array
+    public function __invoke(array $pages, $rootId = null, bool $isSitemap = false, string|null $language = null): array
     {
         $rootId ??= (int) $rootId;
         /** @psalm-suppress PossiblyInvalidArgument */
         $categoryIds = $this->fetchCategoriesWithDetailPage($rootId);
         $collection  = $this->contactProfiles->fetchPublishedByCategories(
             $categoryIds,
-            ['language' => $language]
+            ['language' => $language],
         ) ?: [];
 
         foreach ($collection as $contactProfile) {
+            assert($contactProfile instanceof Profile);
+
             // Detail page of the category is overridden by the contact profile. Page is already processed by Contao.
             if ($contactProfile->jumpTo > 0) {
                 continue;
@@ -69,7 +60,7 @@ final class GetSearchablePagesListener
             $pages[] = $this->urlGenerator->generateUrlWithPage(
                 $contactProfile,
                 $detailPage,
-                ContactProfileUrlGenerator::ABSOLUTE_URL
+                ContactProfileUrlGenerator::ABSOLUTE_URL,
             );
         }
 
@@ -82,7 +73,7 @@ final class GetSearchablePagesListener
      * @psalm-suppress MoreSpecificReturnType
      * @psalm-suppress LessSpecificReturnStatement
      */
-    private function fetchCategoriesWithDetailPage(?int $rootId): array
+    private function fetchCategoriesWithDetailPage(int|null $rootId): array
     {
         $pageIds      = $this->getPageIds($rootId);
         $queryBuilder = $this->connection
@@ -101,7 +92,7 @@ final class GetSearchablePagesListener
     }
 
     /** @return array<array-key,mixed> */
-    private function getPageIds(?int $rootId): array
+    private function getPageIds(int|null $rootId): array
     {
         if ($rootId === null || $rootId === 0) {
             return [];

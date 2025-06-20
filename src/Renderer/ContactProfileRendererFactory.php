@@ -14,28 +14,13 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class ContactProfileRendererFactory
 {
-    private TranslatorInterface $translator;
-
-    private ConsentIdParser $consentIdParser;
-
-    private FieldRenderer $fieldRenderer;
-
-    private ContactProfileUrlGenerator $urlGenerator;
-
-    private RequestScopeMatcher $scopeMatcher;
-
     public function __construct(
-        TranslatorInterface $translator,
-        ConsentIdParser $consentIdParser,
-        FieldRenderer $fieldRenderer,
-        ContactProfileUrlGenerator $urlGenerator,
-        RequestScopeMatcher $scopeMatcher
+        private TranslatorInterface $translator,
+        private ConsentIdParser $consentIdParser,
+        private FieldRenderer $fieldRenderer,
+        private ContactProfileUrlGenerator $urlGenerator,
+        private RequestScopeMatcher $scopeMatcher,
     ) {
-        $this->translator      = $translator;
-        $this->consentIdParser = $consentIdParser;
-        $this->fieldRenderer   = $fieldRenderer;
-        $this->urlGenerator    = $urlGenerator;
-        $this->scopeMatcher    = $scopeMatcher;
     }
 
     public function create(Model $model): ContactProfileRenderer
@@ -69,7 +54,7 @@ final class ContactProfileRendererFactory
 
         try {
             $renderer->withConsentId($type, $this->consentIdParser->parse($model->{$key}));
-        } catch (InvalidArgumentException $exception) {
+        } catch (InvalidArgumentException) {
             // Do nothing. Probably consent id isn't supported anymore
         }
     }

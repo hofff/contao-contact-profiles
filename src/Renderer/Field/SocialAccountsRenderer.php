@@ -11,6 +11,7 @@ use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Hofff\Contao\ContactProfiles\Model\SocialAccount\SocialAccount;
 use Hofff\Contao\ContactProfiles\Model\SocialAccount\SocialAccountRepository;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
+use Override;
 
 use function array_filter;
 use function array_key_exists;
@@ -18,21 +19,18 @@ use function array_merge;
 
 final class SocialAccountsRenderer extends AbstractFieldRenderer
 {
-    protected ?string $template = 'hofff_contact_field_accounts';
+    protected string|null $template = 'hofff_contact_field_accounts';
 
     /** @var array<string|int,SocialAccount|null> */
     private array $accounts = [];
 
-    private SocialAccountRepository $socialAccounts;
-
-    public function __construct(ContaoFramework $framework, SocialAccountRepository $socialAccounts)
+    public function __construct(ContaoFramework $framework, private SocialAccountRepository $socialAccounts)
     {
         parent::__construct($framework);
-
-        $this->socialAccounts = $socialAccounts;
     }
 
     /** {@inheritDoc} */
+    #[Override]
     public function hasValue(string $field, Profile $profile): bool
     {
         if (! parent::hasValue($field, $profile)) {
@@ -44,18 +42,19 @@ final class SocialAccountsRenderer extends AbstractFieldRenderer
             (array) $value,
             static function (array $config) {
                 return $config['type'] !== '' && $config['url'] !== '';
-            }
+            },
         );
 
         return $profiles !== [];
     }
 
     /** {@inheritDoc} */
+    #[Override]
     protected function compile(
         FrontendTemplate $template,
         $value,
         Profile $profile,
-        ContactProfileRenderer $renderer
+        ContactProfileRenderer $renderer,
     ): void {
         $compiled = [];
 
@@ -75,7 +74,7 @@ final class SocialAccountsRenderer extends AbstractFieldRenderer
         $template->value = $compiled;
     }
 
-    private function accountById(int $type): ?SocialAccount
+    private function accountById(int $type): SocialAccount|null
     {
         if (! array_key_exists($type, $this->accounts)) {
             $this->accounts[$type] = $this->socialAccounts->find($type);

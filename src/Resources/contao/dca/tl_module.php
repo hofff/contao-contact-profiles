@@ -95,7 +95,7 @@ $GLOBALS['TL_DCA']['tl_module']['palettes']['hofff_contact_profile_related_categ
         PaletteManipulator::create()
             ->addField('hofff_contact_related_events', 'config_legend', PaletteManipulator::POSITION_APPEND)
             ->applyToPalette('eventlist', 'tl_module');
-    } catch (PaletteNotFoundException $exception) {
+    } catch (PaletteNotFoundException) {
         // Palette does not exist, so calendar is not installed
     }
 })();

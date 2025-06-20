@@ -14,11 +14,8 @@ use function assert;
 /** @Callback(table="tl_contact_profile", target="fields.accounts.eval.columnFields.type.options") */
 final class SocialAccountTypeOptions
 {
-    private SocialAccountRepository $socialAccounts;
-
-    public function __construct(SocialAccountRepository $socialAccounts)
+    public function __construct(private SocialAccountRepository $socialAccounts)
     {
-        $this->socialAccounts = $socialAccounts;
     }
 
     /** @return string[] */

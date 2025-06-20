@@ -10,8 +10,6 @@ interface FieldRenderer
 {
     public function hasValue(string $field, Profile $profile): bool;
 
-    /**
-     * @param mixed $value
-     */
-    public function render(string $field, $value, ContactProfileRenderer $renderer, Profile $profile): ?string;
+    /** @param mixed $value */
+    public function render(string $field, $value, ContactProfileRenderer $renderer, Profile $profile): string|null;
 }

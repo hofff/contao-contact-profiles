@@ -7,9 +7,10 @@ namespace Hofff\Contao\ContactProfiles\EventListener\Dca;
 use Ausi\SlugGenerator\SlugGeneratorInterface;
 use Contao\Backend;
 use Contao\BackendUser;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
 use Contao\CoreBundle\Exception\AccessDeniedException;
 use Contao\CoreBundle\ServiceAnnotation\Callback;
-use Contao\Database;
+use Contao\Database\Result;
 use Contao\DataContainer;
 use Contao\Image;
 use Contao\Input;
@@ -36,44 +37,20 @@ use function time;
 /** @SuppressWarnings(PHPMD.ExcessiveClassComplexity) */
 final class ContactProfileDcaListener
 {
-    private SlugGeneratorInterface $slugGenerator;
-
-    private Connection $connection;
-
-    private TranslatorInterface $translator;
-
-    private DcaManager $dcaManager;
-
-    private ProfileRepository $profiles;
-
-    private SessionInterface $session;
-
     private string $pattern;
 
-    private bool $multilingual;
-
-    private ?string $fallbackLanguage;
-
     public function __construct(
-        SlugGeneratorInterface $slugGenerator,
-        Connection $connection,
-        ProfileRepository $profiles,
-        TranslatorInterface $translator,
-        DcaManager $dcaManager,
-        SessionInterface $session,
+        private SlugGeneratorInterface $slugGenerator,
+        private Connection $connection,
+        private ProfileRepository $profiles,
+        private TranslatorInterface $translator,
+        private DcaManager $dcaManager,
+        private SessionInterface $session,
         string $aliasPattern,
-        bool $multilingual,
-        ?string $fallbackLanguage
+        private bool $multilingual,
+        private string|null $fallbackLanguage,
     ) {
-        $this->slugGenerator    = $slugGenerator;
-        $this->connection       = $connection;
-        $this->pattern          = $aliasPattern;
-        $this->translator       = $translator;
-        $this->dcaManager       = $dcaManager;
-        $this->profiles         = $profiles;
-        $this->multilingual     = $multilingual;
-        $this->session          = $session;
-        $this->fallbackLanguage = $fallbackLanguage;
+        $this->pattern = $aliasPattern;
     }
 
     /** @Callback(table="tl_contact_profile", target="config.onload") */
@@ -111,6 +88,7 @@ final class ContactProfileDcaListener
 
     private function determineAlias(DataContainer $dataContainer): string
     {
+        /** @psalm-suppress UndefinedMagicPropertyFetch */
         if (! $dataContainer->activeRecord) {
             throw new RuntimeException('Unable to generate alias');
         }
@@ -118,20 +96,20 @@ final class ContactProfileDcaListener
         $profile = $this->profiles->findOneBy(
             ['.id=?'],
             [$dataContainer->id],
-            ['language' => $dataContainer->activeRecord->multilingual_language]
+            ['language' => $dataContainer->activeRecord->multilingual_language],
         );
 
         if (! $profile instanceof Profile) {
             throw new RuntimeException('Unable to generate alias');
         }
 
-        $alias = preg_replace_callback(
+        $alias = (string) preg_replace_callback(
             '/{([^}]+)}/',
             /** @return mixed */
             static function (array $matches) use ($profile) {
                 return StringUtil::prepareSlug($profile->{$matches[1]});
             },
-            $this->pattern
+            $this->pattern,
         );
 
         $options = [];
@@ -168,7 +146,7 @@ final class ContactProfileDcaListener
                             $alias,
                             $dataContainer->activeRecord->id,
                             $dataContainer->activeRecord->multilingual_language,
-                        ]
+                        ],
                     )
                     ->rowCount() > 0;
         }
@@ -176,16 +154,13 @@ final class ContactProfileDcaListener
         return $this->connection
                 ->executeQuery(
                     'SELECT id FROM tl_contact_profile WHERE alias=? AND id!=?',
-                    [$alias, $dataContainer->activeRecord->id]
+                    [$alias, $dataContainer->activeRecord->id],
                 )
                 ->rowCount() > 0;
     }
 
-    /**
-     * @param string[] $row
-     *
-     * @Callback(table="tl_contact_profile", target="list.sorting.child_record")
-     */
+    /** @param string[] $row */
+    #[AsCallback('tl_contact_profile', 'list.sorting.child_record')]
     public function generateRow(array $row): string
     {
         $label = $row['lastname'];
@@ -207,8 +182,8 @@ final class ContactProfileDcaListener
      * @return list<array<string,mixed>>
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @Callback(table="tl_contact_profile", target="fields.videos.save")
      */
+    #[AsCallback('tl_contact_profile', 'fields.videos.save')]
     public function saveVideos($values, DataContainer $dataContainer): array
     {
         $values = StringUtil::deserialize($values, true);
@@ -232,23 +207,25 @@ final class ContactProfileDcaListener
      * Return the "toggle visibility" button
      *
      * @param string[] $row
-     *
-     * @Callback(table="tl_contact_profile", target="list.operations.toggle.button")
      */
+    #[AsCallback('tl_contact_profile', 'list.operations.toggle.button')]
     public function toggleIcon(
         array $row,
-        ?string $href,
+        string|null $href,
         string $label,
         string $title,
         string $icon,
-        string $attributes
+        string $attributes,
     ): string {
         if (Input::get('tid') !== null && Input::get('tid') !== '') {
-            /** @psalm-suppress RiskyTruthyFalsyComparison */
+            /**
+             * @psalm-suppress RiskyTruthyFalsyComparison
+             * @psalm-suppress RiskyCast
+             */
             $this->toggleVisibility(
                 (int) Input::get('tid'),
                 (Input::get('state') === '1'),
-                (@func_get_arg(12) ?: null)
+                (@func_get_arg(12) ?: null),
             );
             Backend::redirect(Backend::getReferer());
         }
@@ -271,7 +248,7 @@ final class ContactProfileDcaListener
             Backend::addToUrl($href),
             StringUtil::specialchars($title),
             $attributes,
-            Image::getHtml($icon, $label, 'data-state="' . ($row['published'] ? 1 : 0) . '"')
+            Image::getHtml($icon, $label, 'data-state="' . ($row['published'] ? 1 : 0) . '"'),
         );
     }
 
@@ -283,7 +260,7 @@ final class ContactProfileDcaListener
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function toggleVisibility(int $intId, bool $blnVisible, ?DataContainer $dataContainer = null): void
+    public function toggleVisibility(int $intId, bool $blnVisible, DataContainer|null $dataContainer = null): void
     {
         // Set the ID and action
         Input::setGet('id', $intId);
@@ -314,12 +291,16 @@ final class ContactProfileDcaListener
 
         // Set the current record
         if ($dataContainer) {
-            $objRow = Database::getInstance()->prepare('SELECT * FROM tl_contact_profile WHERE id=?')
-                ->limit(1)
-                ->execute($intId);
+            $result = $this->connection->executeQuery(
+                'SELECT * FROM tl_contact_profile WHERE id=? LIMIT 0,1',
+                [$intId],
+            );
 
-            if ($objRow->numRows) {
-                $dataContainer->activeRecord = $objRow;
+            if ($result->rowCount() > 0) {
+                $dataContainer->activeRecord = new Result(
+                    $result,
+                    'SELECT * FROM tl_contact_profile WHERE id=? LIMIT 0,1',
+                );
             }
         }
 
@@ -345,10 +326,11 @@ final class ContactProfileDcaListener
         $time = time();
 
         // Update the database
-        Database::getInstance()
-            ->prepare('UPDATE tl_contact_profile %s WHERE id=?')
-            ->set(['tstamp' => $time, 'published' => ($blnVisible ? '1' : '')])
-            ->execute($intId);
+        $this->connection->update(
+            'tl_contact_profile',
+            ['tstamp' => $time, 'published' => ($blnVisible ? '1' : '')],
+            ['id' => $intId],
+        );
 
         if ($dataContainer && $dataContainer->activeRecord) {
             $dataContainer->activeRecord->tstamp    = $time;
@@ -374,14 +356,8 @@ final class ContactProfileDcaListener
         $objVersions->create();
     }
 
-    /**
-     * Extract the YouTube ID from an URL
-     *
-     * @param mixed $varValue
-     *
-     * @return mixed
-     */
-    public function extractYouTubeId($varValue)
+    /** Extract the YouTube ID from a URL */
+    public function extractYouTubeId(mixed $varValue): mixed
     {
         $matches = [];
 
@@ -389,7 +365,7 @@ final class ContactProfileDcaListener
             preg_match(
                 '%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i',
                 $varValue,
-                $matches
+                $matches,
             )
         ) {
             $varValue = $matches[1];
@@ -398,14 +374,8 @@ final class ContactProfileDcaListener
         return $varValue;
     }
 
-    /**
-     * Extract the Vimeo ID from an URL
-     *
-     * @param mixed $varValue
-     *
-     * @return mixed
-     */
-    public function extractVimeoId($varValue)
+    /** Extract the Vimeo ID from a URL */
+    public function extractVimeoId(mixed $varValue): mixed
     {
         $matches = [];
 
@@ -413,7 +383,7 @@ final class ContactProfileDcaListener
             preg_match(
                 '%vimeo\.com/(?:channels/(?:\w+/)?|groups/(?:[^/]+)/videos/|album/(?:\d+)/video/)?(\d+)(?:$|/|\?)%i',
                 $varValue,
-                $matches
+                $matches,
             )
         ) {
             $varValue = $matches[1];

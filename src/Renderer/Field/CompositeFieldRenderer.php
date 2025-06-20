@@ -9,22 +9,17 @@ use Contao\FrontendTemplate;
 use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
 use Hofff\Contao\ContactProfiles\Renderer\FieldRenderer;
+use Override;
 
 final class CompositeFieldRenderer extends AbstractFieldRenderer
 {
-    /** @var FieldRenderer[] */
-    private array $renderer;
-
-    /**
-     * @param FieldRenderer[] $renderer
-     */
-    public function __construct(ContaoFramework $framework, array $renderer)
+    /** @param FieldRenderer[] $renderer */
+    public function __construct(ContaoFramework $framework, private array $renderer)
     {
         parent::__construct($framework);
-
-        $this->renderer = $renderer;
     }
 
+    #[Override]
     public function hasValue(string $field, Profile $profile): bool
     {
         if (isset($this->renderer[$field])) {
@@ -35,7 +30,8 @@ final class CompositeFieldRenderer extends AbstractFieldRenderer
     }
 
     /** {@inheritDoc} */
-    public function render(string $field, $value, ContactProfileRenderer $renderer, Profile $profile): ?string
+    #[Override]
+    public function render(string $field, $value, ContactProfileRenderer $renderer, Profile $profile): string|null
     {
         if (isset($this->renderer[$field])) {
             return $this->renderer[$field]->render($field, $value, $renderer, $profile);
@@ -45,11 +41,12 @@ final class CompositeFieldRenderer extends AbstractFieldRenderer
     }
 
     /** @param mixed $value */
+    #[Override]
     protected function compile(
         FrontendTemplate $template,
         $value,
         Profile $profile,
-        ContactProfileRenderer $renderer
+        ContactProfileRenderer $renderer,
     ): void {
     }
 }

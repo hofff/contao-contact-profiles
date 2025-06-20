@@ -17,19 +17,13 @@ use function http_build_query;
 
 final class PreviewUrlCreateListener
 {
-    private RequestStack $requestStack;
-
-    private ContaoFramework $framework;
-
     private ProfileRepository $contactProfiles;
 
     public function __construct(
-        RequestStack $requestStack,
-        ContaoFramework $framework,
-        ProfileRepository $repository
+        private RequestStack $requestStack,
+        private ContaoFramework $framework,
+        ProfileRepository $repository,
     ) {
-        $this->requestStack    = $requestStack;
-        $this->framework       = $framework;
         $this->contactProfiles = $repository;
     }
 
@@ -65,7 +59,7 @@ final class PreviewUrlCreateListener
         $contactProfile = $this->contactProfiles->findOneBy(
             ['.id=?'],
             [$this->getId($event, $request)],
-            ['language' => $locale]
+            ['language' => $locale],
         );
 
         if (! $contactProfile instanceof Profile) {
@@ -76,7 +70,7 @@ final class PreviewUrlCreateListener
             [
                 'hofff_contact_profile' => $contactProfile->profileId(),
                 'locale'                => $locale,
-            ]
+            ],
         ));
     }
 

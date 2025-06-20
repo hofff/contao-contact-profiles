@@ -7,15 +7,18 @@ namespace Hofff\Contao\ContactProfiles\EventListener\DynamicSource;
 use Contao\Model;
 use Contao\NewsArchiveModel;
 use Contao\NewsModel;
+use Override;
 
 final class NewsContactProfilesListener extends DynamicSourceListener
 {
+    #[Override]
     protected function source(): string
     {
         return 'news';
     }
 
-    protected function fetchSource(string $alias): ?Model
+    #[Override]
+    protected function fetchSource(string $alias): Model|null
     {
         $newsArchive = $this->getNewsArchive();
         if (! $newsArchive) {
@@ -27,10 +30,8 @@ final class NewsContactProfilesListener extends DynamicSourceListener
         return $repository->__call('findPublishedByParentAndIdOrAlias', [$alias, [$newsArchive->id]]);
     }
 
-    /**
-     * @SuppressWarnings(PHPMD.Superglobals)
-     */
-    private function getNewsArchive(): ?NewsArchiveModel
+    /** @SuppressWarnings(PHPMD.Superglobals) */
+    private function getNewsArchive(): NewsArchiveModel|null
     {
         $repository = $this->framework->getAdapter(NewsArchiveModel::class);
 

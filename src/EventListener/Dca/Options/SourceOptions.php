@@ -13,15 +13,9 @@ use Hofff\Contao\ContactProfiles\Provider\ProfileProvider;
  */
 final class SourceOptions
 {
-    /** @var iterable<ProfileProvider> */
-    private iterable $providers;
-
-    /**
-     * @param iterable<ProfileProvider> $providers
-     */
-    public function __construct(iterable $providers)
+    /** @param iterable<ProfileProvider> $providers */
+    public function __construct(private iterable $providers)
     {
-        $this->providers = $providers;
     }
 
     /** @return list<string> */

@@ -19,13 +19,13 @@ interface ProfileProvider
     public function fetchProfiles(
         Model $model,
         PageModel $pageModel,
-        ?Specification $specification,
-        int $offset
+        Specification|null $specification,
+        int $offset,
     ): array;
 
     /** @param list<Profile> $profiles */
     public function countTotal(Model $model, array $profiles): int;
 
-    /** @return array<string,int> */
+    /** @return array<string|int,int> */
     public function calculateInitials(Model $model, PageModel $pageModel): array;
 }

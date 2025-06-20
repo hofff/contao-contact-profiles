@@ -13,11 +13,8 @@ use function count;
 
 final class ConsentBridgeListener
 {
-    private ConsentToolManager $consentToolManager;
-
-    public function __construct(ConsentToolManager $consentToolManager)
+    public function __construct(private ConsentToolManager $consentToolManager)
     {
-        $this->consentToolManager = $consentToolManager;
     }
 
     /**
@@ -35,7 +32,7 @@ final class ConsentBridgeListener
             ->addField(
                 ['hofff_contact_consent_tag_youtube', 'hofff_contact_consent_tag_vimeo'],
                 'hofff_consent_bridge_legend',
-                PaletteManipulator::POSITION_APPEND
+                PaletteManipulator::POSITION_APPEND,
             )
             ->applyToPalette('hofff_contact_profile_list', $dataContainer->table)
             ->applyToPalette('hofff_contact_profile_listcustom', $dataContainer->table)

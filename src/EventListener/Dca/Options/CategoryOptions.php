@@ -4,21 +4,19 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\EventListener\Dca\Options;
 
-use Contao\CoreBundle\ServiceAnnotation\Callback;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
 use Contao\Model\Collection;
+use Hofff\Contao\ContactProfiles\Model\Category\Category;
 use Hofff\Contao\ContactProfiles\Model\Category\CategoryRepository;
 
-/**
- * @Callback(table="tl_content", target="fields.hofff_contact_categories.options")
- * @Callback(table="tl_module", target="fields.hofff_contact_categories.options")
- */
+use function assert;
+
+#[AsCallback('tl_content', 'fields.hofff_contact_categories.options')]
+#[AsCallback('tl_module', 'fields.hofff_contact_categories.options')]
 final class CategoryOptions
 {
-    private CategoryRepository $categories;
-
-    public function __construct(CategoryRepository $categories)
+    public function __construct(private readonly CategoryRepository $categories)
     {
-        $this->categories = $categories;
     }
 
     /** @return array<int,string> */
@@ -32,6 +30,7 @@ final class CategoryOptions
         }
 
         foreach ($collection as $category) {
+            assert($category instanceof Category);
             $options[$category->categoryId()] = $category->title;
         }
 

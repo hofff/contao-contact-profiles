@@ -13,20 +13,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 final class PreviewUrlConvertListener
 {
-    private ContaoFramework $framework;
-
-    private ProfileRepository $contactProfiles;
-
-    private ContactProfileUrlGenerator $urlGenerator;
-
     public function __construct(
-        ContaoFramework $framework,
-        ProfileRepository $contactProfiles,
-        ContactProfileUrlGenerator $urlGenerator
+        private ContaoFramework $framework,
+        private ProfileRepository $contactProfiles,
+        private ContactProfileUrlGenerator $urlGenerator,
     ) {
-        $this->framework       = $framework;
-        $this->contactProfiles = $contactProfiles;
-        $this->urlGenerator    = $urlGenerator;
     }
 
     /**
@@ -52,7 +43,7 @@ final class PreviewUrlConvertListener
         $url = $this->urlGenerator->generateDetailUrl(
             $contactProfile,
             ContactProfileUrlGenerator::PREVIEW_URL,
-            $options
+            $options,
         );
 
         if ($url === null) {
@@ -63,7 +54,7 @@ final class PreviewUrlConvertListener
     }
 
     /** @param array<string,mixed> $options */
-    private function getContactProfile(Request $request, array $options): ?Profile
+    private function getContactProfile(Request $request, array $options): Profile|null
     {
         if (! $request->query->has('hofff_contact_profile')) {
             return null;
@@ -72,7 +63,7 @@ final class PreviewUrlConvertListener
         return $this->contactProfiles->findOneBy(
             ['.id=?'],
             [$request->query->getInt('hofff_contact_profile')],
-            $options
+            $options,
         );
     }
 }

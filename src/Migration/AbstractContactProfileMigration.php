@@ -7,36 +7,28 @@ namespace Hofff\Contao\ContactProfiles\Migration;
 use Contao\CoreBundle\Migration\AbstractMigration;
 use Contao\CoreBundle\Migration\MigrationResult;
 use Doctrine\DBAL\Connection;
+use Override;
 
 use function serialize;
 
 abstract class AbstractContactProfileMigration extends AbstractMigration
 {
-    private Connection $connection;
-
-    /** @var string[] */
-    private array $sources;
-
-    private string $table;
-
     /** @param string[] $sources */
-    public function __construct(Connection $connection, array $sources, string $table)
+    public function __construct(private Connection $connection, private array $sources, private string $table)
     {
-        $this->connection = $connection;
-        $this->sources    = $sources;
-        $this->table      = $table;
     }
 
+    #[Override]
     public function shouldRun(): bool
     {
-        $schemaManager = $this->connection->getSchemaManager();
+        $schemaManager = $this->connection->createSchemaManager();
         if (! $schemaManager->tablesExist($this->table)) {
             return false;
         }
 
         $statement = $this->connection->executeQuery(
             'SELECT count(id) FROM ' . $this->table . ' WHERE type=:type LIMIT 0,1',
-            ['type' => 'hofff_contact_profile']
+            ['type' => 'hofff_contact_profile'],
         );
 
         if ($statement->fetchOne() > 0) {
@@ -52,27 +44,28 @@ abstract class AbstractContactProfileMigration extends AbstractMigration
         return isset($columns['hofff_contact_dynamic']);
     }
 
+    #[Override]
     public function run(): MigrationResult
     {
-        $schemaManager = $this->connection->getSchemaManager();
+        $schemaManager = $this->connection->createSchemaManager();
         $columns       = $schemaManager->listTableColumns($this->table);
 
         if (! isset($columns['hofff_contact_source'])) {
             $this->connection->executeStatement(
-                'ALTER TABLE ' . $this->table . ' ADD hofff_contact_source char(16) NOT NULL DEFAULT \'custom\''
+                'ALTER TABLE ' . $this->table . ' ADD hofff_contact_source char(16) NOT NULL DEFAULT \'custom\'',
             );
         }
 
         if (! isset($columns['hofff_contact_sources'])) {
             $this->connection->executeStatement(
-                'ALTER TABLE ' . $this->table . ' ADD hofff_contact_sources TINYBLOB null'
+                'ALTER TABLE ' . $this->table . ' ADD hofff_contact_sources TINYBLOB null',
             );
         }
 
         $this->connection->update(
             $this->table,
             ['type' => 'hofff_contact_profile_list'],
-            ['type' => 'hofff_contact_profile']
+            ['type' => 'hofff_contact_profile'],
         );
 
         if (isset($columns['hofff_contact_dynamic'])) {
@@ -85,7 +78,7 @@ abstract class AbstractContactProfileMigration extends AbstractMigration
                 [
                     'type'                  => 'hofff_contact_profile',
                     'hofff_contact_dynamic' => 1,
-                ]
+                ],
             );
 
             $this->connection->executeStatement('ALTER TABLE ' . $this->table . ' DROP hofff_contact_dynamic');

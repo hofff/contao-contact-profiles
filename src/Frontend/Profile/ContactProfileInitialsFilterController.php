@@ -13,14 +13,13 @@ use Netzmacht\Contao\Toolkit\Controller\Hybrid\AbstractHybridController;
 use Netzmacht\Contao\Toolkit\Response\ResponseTagger;
 use Netzmacht\Contao\Toolkit\Routing\RequestScopeMatcher;
 use Netzmacht\Contao\Toolkit\View\Template\TemplateRenderer;
+use Override;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class ContactProfileInitialsFilterController extends AbstractHybridController
 {
-    private ProfileProvider $provider;
-
     /** @param Adapter<Input> $inputAdapter */
     public function __construct(
         TemplateRenderer $templateRenderer,
@@ -29,8 +28,8 @@ final class ContactProfileInitialsFilterController extends AbstractHybridControl
         RouterInterface $router,
         TranslatorInterface $translator,
         TokenChecker $tokenChecker,
-        ProfileProvider $provider,
-        Adapter $inputAdapter
+        private ProfileProvider $provider,
+        Adapter $inputAdapter,
     ) {
         parent::__construct(
             $templateRenderer,
@@ -39,10 +38,8 @@ final class ContactProfileInitialsFilterController extends AbstractHybridControl
             $router,
             $translator,
             $tokenChecker,
-            $inputAdapter
+            $inputAdapter,
         );
-
-        $this->provider = $provider;
     }
 
     /**
@@ -50,9 +47,13 @@ final class ContactProfileInitialsFilterController extends AbstractHybridControl
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
+    #[Override]
     protected function prepareTemplateData(array $data, Request $request, Model $model): array
     {
-        /** @psalm-suppress PossiblyNullReference - Input adapter is always set */
+        /**
+         * @psalm-suppress PossiblyNullReference - Input adapter is always set
+         * @psalm-suppress PossiblyInvalidCast
+         */
         $data['activeLetter'] = (string) $this->inputAdapter->get('auto_item');
         $data['letters']      = $this->provider->calculateInitials($model, $GLOBALS['objPage']);
         $data['resetUrl']     = $GLOBALS['objPage']->getFrontendUrl();

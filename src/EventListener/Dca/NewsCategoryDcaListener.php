@@ -6,8 +6,8 @@ namespace Hofff\Contao\ContactProfiles\EventListener\Dca;
 
 use Codefog\NewsCategoriesBundle\Model\NewsCategoryModel;
 use Contao\CoreBundle\DataContainer\PaletteManipulator;
-use Contao\CoreBundle\ServiceAnnotation\Callback;
-use Contao\CoreBundle\ServiceAnnotation\Hook;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
 use Contao\Input;
 use Hofff\Contao\ContactProfiles\Frontend\NewsCategories\RelatedNewsCategoriesModule;
 use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
@@ -23,25 +23,16 @@ use function sprintf;
 
 final class NewsCategoryDcaListener
 {
-    private DcaManager $dcaManager;
-
-    private RepositoryManager $repositoryManager;
-
-    /** @var array<string,string> */
-    private array $bundles;
-
     /** @param array<string,string> $bundles */
-    public function __construct(DcaManager $dcaManager, RepositoryManager $repositoryManager, array $bundles)
-    {
-        $this->dcaManager        = $dcaManager;
-        $this->repositoryManager = $repositoryManager;
-        $this->bundles           = $bundles;
+    public function __construct(
+        private readonly DcaManager $dcaManager,
+        private readonly RepositoryManager $repositoryManager,
+        private readonly array $bundles,
+    ) {
     }
 
-    /**
-     * @Hook("initializeSystem")
-     * @SuppressWarnings(PHPMD.Superglobals)
-     */
+    /** @SuppressWarnings(PHPMD.Superglobals) */
+    #[AsHook('initializeSystem')]
     public function onInitializeSystem(): void
     {
         // Frontend modules
@@ -49,7 +40,7 @@ final class NewsCategoryDcaListener
             = RelatedNewsCategoriesModule::class;
     }
 
-    /** @Callback(table="tl_news_category", target="config.onload") */
+    #[AsCallback('tl_news_category', 'config.onload')]
     public function initializeNewsCategoryPalette(): void
     {
         PaletteManipulator::create()
@@ -58,7 +49,7 @@ final class NewsCategoryDcaListener
             ->applyToPalette('default', 'tl_news_category');
     }
 
-    /** @Hook("loadDataContainer") */
+    #[AsHook('loadDataContainer')]
     public function initializeContactProfileFields(string $table): void
     {
         if ($table !== Profile::getTable()) {
@@ -78,12 +69,9 @@ final class NewsCategoryDcaListener
             });
     }
 
-    /**
-     * @param array<string,mixed> $row
-     *
-     * @Callback(table="tl_news_category", target="list.label.label")
-     */
-    public function newsCategoryOptions(array $row, ?string $originalLabel): ?string
+    /** @param array<string,mixed> $row */
+    #[AsCallback('tl_news_category', 'list.label.label')]
+    public function newsCategoryOptions(array $row, string|null $originalLabel): string|null
     {
         if (Input::get('do') !== 'hofff_contact_profiles') {
             return $originalLabel;
@@ -123,7 +111,7 @@ final class NewsCategoryDcaListener
         return sprintf(
             '<span class="tl_gray">%s / </span> %s',
             implode(' / ', $label),
-            $last
+            $last ?? '',
         );
     }
 }

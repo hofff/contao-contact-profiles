@@ -21,23 +21,18 @@ use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRendererFactory;
 use Netzmacht\Contao\Toolkit\Response\ResponseTagger;
 use Netzmacht\Contao\Toolkit\Routing\RequestScopeMatcher;
 use Netzmacht\Contao\Toolkit\View\Template\TemplateRenderer;
+use Override;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 use function in_array;
+use function is_numeric;
 use function min;
 use function substr;
 
 final class ContactProfileListController extends AbstractHybridController
 {
-    private ContactProfileRendererFactory $rendererFactory;
-
-    private ProfileProvider $provider;
-
-    /** @var Adapter<Config> */
-    private Adapter $configAdapter;
-
     /**
      * @param Adapter<Config> $configAdapter
      * @param Adapter<Input>  $inputAdapter
@@ -51,10 +46,10 @@ final class ContactProfileListController extends AbstractHybridController
         RouterInterface $router,
         TranslatorInterface $translator,
         TokenChecker $tokenChecker,
-        ProfileProvider $provider,
-        ContactProfileRendererFactory $rendererFactory,
-        Adapter $configAdapter,
-        Adapter $inputAdapter
+        private ProfileProvider $provider,
+        private ContactProfileRendererFactory $rendererFactory,
+        private Adapter $configAdapter,
+        Adapter $inputAdapter,
     ) {
         parent::__construct(
             $templateRenderer,
@@ -63,15 +58,12 @@ final class ContactProfileListController extends AbstractHybridController
             $router,
             $translator,
             $tokenChecker,
-            $inputAdapter
+            $inputAdapter,
         );
-
-        $this->provider        = $provider;
-        $this->rendererFactory = $rendererFactory;
-        $this->configAdapter   = $configAdapter;
     }
 
     /** {@inheritDoc} */
+    #[Override]
     protected function prepareTemplateData(array $data, Request $request, Model $model): array
     {
         $renderer      = $this->rendererFactory->create($model);
@@ -106,7 +98,10 @@ final class ContactProfileListController extends AbstractHybridController
         $specification = null;
 
         if (in_array('initials', $filters, true)) {
-            /** @psalm-suppress PossiblyNullReference - Input adapter is always present */
+            /**
+             * @psalm-suppress PossiblyNullReference - Input adapter is always present
+             * @psalm-suppress PossiblyInvalidCast
+             */
             $specification = new InitialLastnameLetterSpecification((string) $this->inputAdapter->get('auto_item'));
         }
 
@@ -125,11 +120,11 @@ final class ContactProfileListController extends AbstractHybridController
             $page = 1;
         }
 
-        if ($page < 1) {
+        if (! is_numeric($page) || $page < 1) {
             throw new PageNotFoundException('Page not found: ' . Environment::get('uri'));
         }
 
-        return ($page - 1) * $model->perPage;
+        return ((int) $page - 1) * $model->perPage;
     }
 
     private function generatePagination(Model $model, int $total, string $pageParameter): string
@@ -142,7 +137,7 @@ final class ContactProfileListController extends AbstractHybridController
             $total,
             $model->perPage,
             $this->configAdapter->get('maxPaginationLinks'),
-            $pageParameter
+            $pageParameter,
         );
 
         return $pagination->generate("\n ");

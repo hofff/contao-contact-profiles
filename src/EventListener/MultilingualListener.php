@@ -13,30 +13,16 @@ use function is_array;
 
 final class MultilingualListener
 {
-    private DcaManager $dcaManager;
-
-    /** @var list<string>|null */
-    private ?array $languages;
-
-    private ?string $fallbackLanguage;
-
-    /** @var list<string> */
-    private array $profileFields;
-
     /**
      * @param list<string>|null $languages
      * @param list<string>      $profileFields
      */
     public function __construct(
-        DcaManager $dcaManager,
-        ?array $languages,
-        ?string $fallbackLanguage,
-        array $profileFields
+        private DcaManager $dcaManager,
+        private array|null $languages,
+        private string|null $fallbackLanguage,
+        private array $profileFields,
     ) {
-        $this->dcaManager       = $dcaManager;
-        $this->languages        = $languages;
-        $this->fallbackLanguage = $fallbackLanguage;
-        $this->profileFields    = $profileFields;
     }
 
     /** @Hook("loadDataContainer") */

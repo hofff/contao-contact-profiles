@@ -23,11 +23,8 @@ use function sprintf;
  */
 final class ContactProfileOptions
 {
-    private ProfileRepository $profiles;
-
-    public function __construct(ProfileRepository $profiles)
+    public function __construct(private ProfileRepository $profiles)
     {
-        $this->profiles = $profiles;
     }
 
     /**

@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\EventListener;
 
-use Contao\Controller;
-use Contao\CoreBundle\Framework\Adapter;
+use Contao\CoreBundle\InsertTag\InsertTagParser;
 use Contao\StringUtil;
 use Hofff\Contao\ContactProfiles\Event\ProfileDetailPageEvent;
 use Hofff\Contao\ContactProfiles\SocialTags\SocialTagsGenerator;
@@ -16,18 +15,10 @@ use function trim;
 
 final class DetailPageListener
 {
-    /** @var Adapter<Controller> */
-    private Adapter $controllerAdapter;
-
-    private SocialTagsGenerator $socialTagsGenerator;
-
-    /**
-     * @param Adapter<Controller> $controllerAdapter
-     */
-    public function __construct(Adapter $controllerAdapter, SocialTagsGenerator $socialTagsGenerator)
-    {
-        $this->controllerAdapter   = $controllerAdapter;
-        $this->socialTagsGenerator = $socialTagsGenerator;
+    public function __construct(
+        private readonly InsertTagParser $insertTagParser,
+        private readonly SocialTagsGenerator $socialTagsGenerator,
+    ) {
     }
 
     /** @SuppressWarnings(PHPMD.Superglobals) */
@@ -47,7 +38,7 @@ final class DetailPageListener
 
     private function prepareMetaDescription(string $text): string
     {
-        $text = $this->controllerAdapter->replaceInsertTags($text, false);
+        $text = $this->insertTagParser->replaceInline($text);
         $text = strip_tags($text);
         $text = str_replace("\n", ' ', $text);
         $text = StringUtil::substr($text, 320);

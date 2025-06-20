@@ -9,6 +9,7 @@ use Contao\Model;
 use Contao\ModuleModel;
 use Contao\PageModel;
 use Netzmacht\Contao\Toolkit\Data\Model\Specification;
+use Override;
 use RuntimeException;
 
 use function get_class;
@@ -18,9 +19,7 @@ final class CompositeProfileProvider implements ProfileProvider
     /** @var array<string,ProfileProvider> */
     private array $providers = [];
 
-    /**
-     * @param ProfileProvider[] $providers
-     */
+    /** @param ProfileProvider[] $providers */
     public function __construct(iterable $providers)
     {
         foreach ($providers as $provider) {
@@ -28,11 +27,13 @@ final class CompositeProfileProvider implements ProfileProvider
         }
     }
 
+    #[Override]
     public function name(): string
     {
         return 'composite';
     }
 
+    #[Override]
     public function supports(Model $model): bool
     {
         foreach ($this->providers as $provider) {
@@ -45,18 +46,25 @@ final class CompositeProfileProvider implements ProfileProvider
     }
 
     /** {@inheritDoc} */
-    public function fetchProfiles(Model $model, PageModel $pageModel, ?Specification $specification, int $offset): array
-    {
+    #[Override]
+    public function fetchProfiles(
+        Model $model,
+        PageModel $pageModel,
+        Specification|null $specification,
+        int $offset,
+    ): array {
         return $this->provider($model)->fetchProfiles($model, $pageModel, $specification, $offset);
     }
 
     /** {@inheritDoc} */
+    #[Override]
     public function countTotal(Model $model, array $profiles): int
     {
         return $this->provider($model)->countTotal($model, $profiles);
     }
 
     /** {@inheritDoc} */
+    #[Override]
     public function calculateInitials(Model $model, PageModel $pageModel): array
     {
         return $this->provider($model)->calculateInitials($model, $pageModel);

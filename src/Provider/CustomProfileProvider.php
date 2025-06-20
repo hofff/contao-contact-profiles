@@ -11,16 +11,15 @@ use Generator;
 use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
 use Hofff\Contao\ContactProfiles\Util\QueryUtil;
 use Netzmacht\Contao\Toolkit\Data\Model\Specification;
+use Override;
 
 final class CustomProfileProvider extends AbstractProfileProvider
 {
-    private ProfileRepository $profiles;
-
-    public function __construct(ProfileRepository $profiles)
+    public function __construct(private ProfileRepository $profiles)
     {
-        $this->profiles = $profiles;
     }
 
+    #[Override]
     public function name(): string
     {
         return 'custom';
@@ -31,8 +30,13 @@ final class CustomProfileProvider extends AbstractProfileProvider
      *
      * @psalm-suppress MoreSpecificReturnType
      */
-    public function fetchProfiles(Model $model, PageModel $pageModel, ?Specification $specification, int $offset): array
-    {
+    #[Override]
+    public function fetchProfiles(
+        Model $model,
+        PageModel $pageModel,
+        Specification|null $specification,
+        int $offset,
+    ): array {
         $options    = $this->fetchProfilesOptions($model, $offset);
         $profileIds = StringUtil::deserialize($model->hofff_contact_profiles, true);
 
@@ -48,7 +52,7 @@ final class CustomProfileProvider extends AbstractProfileProvider
             $profiles = $this->profiles->fetchPublishedByProfileIdsAndSpecification(
                 $profileIds,
                 $specification,
-                $options
+                $options,
             );
         } else {
             $profiles = $this->profiles->fetchPublishedByProfileIds($profileIds, $options);
@@ -59,6 +63,7 @@ final class CustomProfileProvider extends AbstractProfileProvider
     }
 
     /** {@inheritDoc} */
+    #[Override]
     public function countTotal(Model $model, array $profiles): int
     {
         $profileIds = StringUtil::deserialize($model->hofff_contact_profiles, true);
@@ -67,6 +72,7 @@ final class CustomProfileProvider extends AbstractProfileProvider
     }
 
     /** {@inheritDoc} */
+    #[Override]
     protected function fetchInitials(Model $model, PageModel $pageModel): Generator
     {
         /** @psalm-var list<int|string> $profileIds */

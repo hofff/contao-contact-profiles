@@ -14,26 +14,14 @@ use function in_array;
 
 final class LoadContactProfilesEvent extends Event
 {
-    public const NAME = 'hofff.contao_contact_profile.load_contact_profiles';
-
-    private Model $context;
-
-    private PageModel $page;
+    public const string NAME = 'hofff.contao_contact_profile.load_contact_profiles';
 
     /** @var array<int,Profile> */
     private array $profiles = [];
 
-    /** @var list<string> */
-    private array $sources;
-
-    /**
-     * @param list<string> $sources
-     */
-    public function __construct(Model $context, PageModel $page, array $sources = [])
+    /** @param list<string> $sources */
+    public function __construct(private Model $context, private PageModel $page, private array $sources = [])
     {
-        $this->context = $context;
-        $this->page    = $page;
-        $this->sources = $sources;
     }
 
     /** @param iterable<Profile> $profiles */

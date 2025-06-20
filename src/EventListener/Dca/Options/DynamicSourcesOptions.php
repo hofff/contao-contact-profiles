@@ -12,13 +12,9 @@ use Contao\CoreBundle\ServiceAnnotation\Callback;
  */
 final class DynamicSourcesOptions
 {
-    /** @var list<string> */
-    private $sources;
-
     /** @param list<string> $sources */
-    public function __construct(array $sources)
+    public function __construct(private array $sources)
     {
-        $this->sources = $sources;
     }
 
     /** @return list<string> */

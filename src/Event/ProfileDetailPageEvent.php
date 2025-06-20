@@ -10,16 +10,10 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 final class ProfileDetailPageEvent extends Event
 {
-    public const NAME = 'hofff.contao_contact_profile.profile_detail_page';
+    public const string NAME = 'hofff.contao_contact_profile.profile_detail_page';
 
-    private Profile $profile;
-
-    private Model $configuration;
-
-    public function __construct(Profile $profile, Model $configuration)
+    public function __construct(private Profile $profile, private Model $configuration)
     {
-        $this->profile       = $profile;
-        $this->configuration = $configuration;
     }
 
     public function profile(): Profile

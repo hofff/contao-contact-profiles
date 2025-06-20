@@ -13,16 +13,11 @@ use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * @Page(type="contact_profile", path="{alias}", requirements={"alias": ".+"})
- */
+/** @Page(type="contact_profile", path="{alias}", requirements={"alias": ".+"}) */
 final class ContactProfilePageController
 {
-    private ProfileRepository $profiles;
-
-    public function __construct(ProfileRepository $profiles)
+    public function __construct(private ProfileRepository $profiles)
     {
-        $this->profiles = $profiles;
     }
 
     /** @SuppressWarnings(PHPMD.Superglobals) */

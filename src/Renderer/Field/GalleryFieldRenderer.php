@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\Renderer\Field;
 
-use Contao\Controller;
 use Contao\CoreBundle\Framework\ContaoFramework;
+use Contao\CoreBundle\Image\Studio\Studio;
 use Contao\File;
 use Contao\FilesModel;
 use Contao\FrontendTemplate;
@@ -14,6 +14,7 @@ use Contao\StringUtil;
 use Exception;
 use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
+use Override;
 
 use function array_filter;
 use function array_flip;
@@ -28,23 +29,23 @@ use function uniqid;
 
 final class GalleryFieldRenderer extends AbstractFieldRenderer
 {
-    protected ?string $template = 'hofff_contact_field_gallery';
+    protected string|null $template = 'hofff_contact_field_gallery';
 
-    private string $projectDir;
-
-    public function __construct(ContaoFramework $framework, string $projectDir)
-    {
+    public function __construct(
+        ContaoFramework $framework,
+        private string $projectDir,
+        private readonly Studio $imageStudio,
+    ) {
         parent::__construct($framework);
-
-        $this->projectDir = $projectDir;
     }
 
     /** @param mixed $value */
+    #[Override]
     protected function compile(
         FrontendTemplate $template,
         $value,
         Profile $profile,
-        ContactProfileRenderer $renderer
+        ContactProfileRenderer $renderer,
     ): void {
         /** @psalm-suppress ArgumentTypeCoercion */
         $images          = $this->fetchImagesOrderedByCustomOrder((array) $value, $profile);
@@ -79,7 +80,7 @@ final class GalleryFieldRenderer extends AbstractFieldRenderer
             /** @param mixed $value */
             static function ($value): void {
             },
-            array_flip($tmp)
+            array_flip($tmp),
         );
 
         // Move the matching elements to their position in $order
@@ -160,7 +161,7 @@ final class GalleryFieldRenderer extends AbstractFieldRenderer
      *
      * @return list<object>
      */
-    private function compileImages(array $images, ?array $imageSize): array
+    private function compileImages(array $images, array|null $imageSize): array
     {
         $compiled   = [];
         $lightBoxId = 'lightbox[lb' . uniqid() . ']';
@@ -172,13 +173,12 @@ final class GalleryFieldRenderer extends AbstractFieldRenderer
             // Add size and margin
             $image['size'] = $imageSize;
 
-            Controller::addImageToTemplate(
-                $cell,
-                $image,
-                null,
-                $lightBoxId,
-                $image['filesModel']
-            );
+            $this->imageStudio->createFigureBuilder()
+                ->fromFilesModel($image['filesModel'])
+                ->setSize($imageSize)
+                ->setLightboxGroupIdentifier($lightBoxId)
+                ->build()
+                ->applyLegacyTemplateData($cell);
 
             if ($cell->picture['class']) {
                 $cell->picture['class'] = trim($cell->picture['class']);

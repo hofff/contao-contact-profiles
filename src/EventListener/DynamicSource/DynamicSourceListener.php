@@ -11,26 +11,20 @@ use Contao\Model;
 use Contao\Model\Collection;
 use Contao\StringUtil;
 use Hofff\Contao\ContactProfiles\Event\LoadContactProfilesEvent;
+use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
 use Hofff\Contao\ContactProfiles\Util\QueryUtil;
 use Netzmacht\Contao\Toolkit\Data\Model\RepositoryManager;
 
+use function assert;
+
 abstract class DynamicSourceListener
 {
-    protected ContaoFramework $framework;
-
-    protected RepositoryManager $repositoryManager;
-
-    protected ProfileRepository $repository;
-
     public function __construct(
-        ContaoFramework $framework,
-        RepositoryManager $repositoryManager,
-        ProfileRepository $repository
+        protected ContaoFramework $framework,
+        protected RepositoryManager $repositoryManager,
+        protected ProfileRepository $repository,
     ) {
-        $this->framework         = $framework;
-        $this->repository        = $repository;
-        $this->repositoryManager = $repositoryManager;
     }
 
     public function __invoke(LoadContactProfilesEvent $event): void
@@ -50,18 +44,17 @@ abstract class DynamicSourceListener
         }
 
         foreach ($this->fetchProfiles($sourceModel) ?: [] as $model) {
+            assert($model instanceof Profile);
             $event->addProfile($model);
         }
     }
 
     abstract protected function source(): string;
 
-    abstract protected function fetchSource(string $alias): ?Model;
+    abstract protected function fetchSource(string $alias): Model|null;
 
-    /**
-     * @SuppressWarnings(PHPMD.Superglobals)
-     */
-    protected function getAlias(): ?string
+    /** @SuppressWarnings(PHPMD.Superglobals) */
+    protected function getAlias(): string|null
     {
         if (! isset($GLOBALS['objPage'])) {
             return null;
@@ -77,7 +70,7 @@ abstract class DynamicSourceListener
         return $inputAdapter->__call('get', ['items']);
     }
 
-    protected function fetchProfiles(Model $sourceModel): ?Collection
+    protected function fetchProfiles(Model $sourceModel): Collection|null
     {
         $profileIds = StringUtil::deserialize($sourceModel->hofff_contact_profiles, true);
         $order      = StringUtil::deserialize($sourceModel->hofff_contact_profiles_order, true) ?: $profileIds;

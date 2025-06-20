@@ -16,20 +16,11 @@ use function trim;
 /** @Hook("hofff_language_relations_language_switcher") */
 final class LanguageRelationsListener
 {
-    private ProfileRepository $profiles;
-
-    private ContactProfileUrlGenerator $urlGenerator;
-
-    private RequestStack $requestStack;
-
     public function __construct(
-        ProfileRepository $profiles,
-        ContactProfileUrlGenerator $urlGenerator,
-        RequestStack $requestStack
+        private ProfileRepository $profiles,
+        private ContactProfileUrlGenerator $urlGenerator,
+        private RequestStack $requestStack,
     ) {
-        $this->profiles     = $profiles;
-        $this->urlGenerator = $urlGenerator;
-        $this->requestStack = $requestStack;
     }
 
     /**
@@ -60,7 +51,7 @@ final class LanguageRelationsListener
             $translatedProfile = $this->profiles->findOneBy(
                 ['.id=?'],
                 [$profile->profileId()],
-                ['language' => $language]
+                ['language' => $language],
             );
 
             if (! $translatedProfile) {

@@ -142,7 +142,7 @@
         </service>
 
         <service id="Hofff\Contao\ContactProfiles\EventListener\DetailPageListener">
-            <argument type="service" id="netzmacht.contao_toolkit.contao.controller_adapter"/>
+            <argument type="service" id="contao.insert_tag.parser"/>
             <argument type="service" id="Hofff\Contao\ContactProfiles\SocialTags\SocialTagsGenerator"/>
             <tag name="kernel.event_listener" event="hofff.contao_contact_profile.profile_detail_page"/>
         </service>

@@ -15,6 +15,7 @@ use Contao\StringUtil;
 use Contao\System;
 use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Netzmacht\Contao\Toolkit\Data\Model\RepositoryManager;
+use Override;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 use function defined;
@@ -58,6 +59,7 @@ final class RelatedNewsCategoriesModule extends NewsCategoriesModule
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
+    #[Override]
     public function generate(): string
     {
         if (defined('TL_MODE') && TL_MODE === 'BE') {
@@ -80,7 +82,8 @@ final class RelatedNewsCategoriesModule extends NewsCategoriesModule
         return ModuleNews::generate();
     }
 
-    protected function getCategories(): ?Collection
+    #[Override]
+    protected function getCategories(): Collection|null
     {
         $profile = $this->loadProfile();
         if ($profile === null) {
@@ -89,7 +92,7 @@ final class RelatedNewsCategoriesModule extends NewsCategoriesModule
 
         $result = $this->repositoryManager->getConnection()->executeQuery(
             'SELECT news_category_id FROM tl_contact_profile_news_category WHERE contact_profile_id=:id',
-            ['id' => $profile->profileId()]
+            ['id' => $profile->profileId()],
         );
 
         $rootId     = StringUtil::deserialize($this->news_categoriesRoot) ?: null;
@@ -99,7 +102,7 @@ final class RelatedNewsCategoriesModule extends NewsCategoriesModule
         return $repository->findPublishedByIds($result->fetchFirstColumn(), $rootId);
     }
 
-    private function loadProfile(): ?Profile
+    private function loadProfile(): Profile|null
     {
         $request = $this->requestStack->getCurrentRequest();
         if ($request === null) {
@@ -113,7 +116,10 @@ final class RelatedNewsCategoriesModule extends NewsCategoriesModule
 
         $repository = $this->repositoryManager->getRepository(Profile::class);
 
-        /** @psalm-suppress UndefinedInterfaceMethod */
+        /**
+         * @psalm-suppress UndefinedInterfaceMethod
+         * @psalm-suppress PossiblyInvalidCast
+         */
         return $repository->fetchPublishedByIdOrAlias((string) Input::get('auto_item'));
     }
 }

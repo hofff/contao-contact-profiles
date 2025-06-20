@@ -7,15 +7,18 @@ namespace Hofff\Contao\ContactProfiles\EventListener\DynamicSource;
 use Contao\CalendarEventsModel;
 use Contao\CalendarModel;
 use Contao\Model;
+use Override;
 
 final class EventsContactProfilesListener extends DynamicSourceListener
 {
+    #[Override]
     protected function source(): string
     {
         return 'event';
     }
 
-    protected function fetchSource(string $alias): ?Model
+    #[Override]
+    protected function fetchSource(string $alias): Model|null
     {
         $newsArchive = $this->getCalendar();
         if (! $newsArchive) {
@@ -28,10 +31,8 @@ final class EventsContactProfilesListener extends DynamicSourceListener
         return $repository->findPublishedByParentAndIdOrAlias($alias, [$newsArchive->id]);
     }
 
-    /**
-     * @SuppressWarnings(PHPMD.Superglobals)
-     */
-    private function getCalendar(): ?CalendarModel
+    /** @SuppressWarnings(PHPMD.Superglobals) */
+    private function getCalendar(): CalendarModel|null
     {
         $repository = $this->repositoryManager->getRepository(CalendarModel::class);
 

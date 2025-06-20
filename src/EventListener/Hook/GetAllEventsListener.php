@@ -15,11 +15,8 @@ use function in_array;
 /** @Hook("getAllEvents") */
 final class GetAllEventsListener
 {
-    private RequestStack $requestStack;
-
-    public function __construct(RequestStack $requestStack)
+    public function __construct(private RequestStack $requestStack)
     {
-        $this->requestStack = $requestStack;
     }
 
     /**
@@ -54,7 +51,7 @@ final class GetAllEventsListener
         return $events;
     }
 
-    private function getActiveProfile(Module $module): ?Profile
+    private function getActiveProfile(Module $module): Profile|null
     {
         if (! $module->hofff_contact_related_events) {
             return null;

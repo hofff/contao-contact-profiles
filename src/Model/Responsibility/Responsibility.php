@@ -6,9 +6,7 @@ namespace Hofff\Contao\ContactProfiles\Model\Responsibility;
 
 use Contao\Model;
 
-/**
- * @property numeric-string|int $id
- */
+/** @property numeric-string|int $id */
 abstract class Responsibility extends Model
 {
     /** @var string */

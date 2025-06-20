@@ -7,6 +7,7 @@ namespace Hofff\Contao\ContactProfiles\Model\Profile\Specification;
 use Contao\Model;
 use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Netzmacht\Contao\Toolkit\Data\Model\Specification;
+use Override;
 
 use function is_numeric;
 use function range;
@@ -14,13 +15,11 @@ use function stripos;
 
 final class InitialLastnameLetterSpecification implements Specification
 {
-    private string $letter;
-
-    public function __construct(string $letter)
+    public function __construct(private string $letter)
     {
-        $this->letter = $letter;
     }
 
+    #[Override]
     public function isSatisfiedBy(Model $model): bool
     {
         if (! $model instanceof Profile) {
@@ -39,6 +38,7 @@ final class InitialLastnameLetterSpecification implements Specification
     }
 
     /** {@inheritDoc} */
+    #[Override]
     public function buildQuery(array &$columns, array &$values): void
     {
         if ($this->letter === '') {

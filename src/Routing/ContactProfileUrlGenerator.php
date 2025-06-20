@@ -18,33 +18,21 @@ use function sprintf;
 
 final class ContactProfileUrlGenerator
 {
-    public const ABSOLUTE_PATH = 1;
+    public const int ABSOLUTE_PATH = 1;
 
-    public const ABSOLUTE_URL = 0;
+    public const int ABSOLUTE_URL = 0;
 
-    public const PREVIEW_URL = 2;
-
-    private ContaoFramework $framework;
-
-    private RouterInterface $router;
-
-    private CategoryRepository $categories;
+    public const int PREVIEW_URL = 2;
 
     /** @var array<int|string, array<string,?PageModel>> */
     private array $categoryDetailPages = [];
 
-    private ?string $previewScript;
-
     public function __construct(
-        ContaoFramework $framework,
-        RouterInterface $router,
-        CategoryRepository $categories,
-        ?string $previewScript
+        private ContaoFramework $framework,
+        private RouterInterface $router,
+        private CategoryRepository $categories,
+        private string|null $previewScript,
     ) {
-        $this->framework     = $framework;
-        $this->router        = $router;
-        $this->previewScript = $previewScript;
-        $this->categories    = $categories;
     }
 
     /**
@@ -54,7 +42,7 @@ final class ContactProfileUrlGenerator
      * @psalm-suppress InvalidReturnStatement
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public function getDetailPage(Profile $profile, array $options = []): ?PageModel
+    public function getDetailPage(Profile $profile, array $options = []): PageModel|null
     {
         if ($profile->jumpTo) {
             return $this->framework->getAdapter(PageModel::class)->findByPk($profile->jumpTo);
@@ -75,7 +63,7 @@ final class ContactProfileUrlGenerator
     public function generateUrlWithPage(
         Profile $profile,
         PageModel $pageModel,
-        int $referenceType = self::ABSOLUTE_PATH
+        int $referenceType = self::ABSOLUTE_PATH,
     ): string {
         $slug = '/' . ($profile->alias ?: $profile->profileId());
 
@@ -95,19 +83,17 @@ final class ContactProfileUrlGenerator
 
             default:
                 throw new InvalidArgumentException(
-                    sprintf('Reference type "%s" is not supported', $referenceType)
+                    sprintf('Reference type "%s" is not supported', $referenceType),
                 );
         }
     }
 
-    /**
-     * @param array<string,mixed> $options
-     */
+    /** @param array<string,mixed> $options */
     public function generateDetailUrl(
         Profile $profile,
         int $referenceType = self::ABSOLUTE_PATH,
-        array $options = []
-    ): ?string {
+        array $options = [],
+    ): string|null {
         $page = $this->getDetailPage($profile, $options);
         if ($page === null) {
             return null;
@@ -122,7 +108,7 @@ final class ContactProfileUrlGenerator
      * @psalm-suppress InvalidReturnType
      * @psalm-suppress InvalidReturnStatement
      */
-    private function fetchCategoryDetailPage(Profile $profile, array $options = []): ?PageModel
+    private function fetchCategoryDetailPage(Profile $profile, array $options = []): PageModel|null
     {
         $category = $this->categories->findOneBy(['.id=?'], [$profile->pid], $options);
         if (! $category) {
@@ -182,7 +168,7 @@ final class ContactProfileUrlGenerator
 
             default:
                 throw new InvalidArgumentException(
-                    sprintf('Reference type "%s" is not supported', $referenceType)
+                    sprintf('Reference type "%s" is not supported', $referenceType),
                 );
         }
     }

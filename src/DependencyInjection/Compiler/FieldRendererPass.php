@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Hofff\Contao\ContactProfiles\DependencyInjection\Compiler;
 
 use Hofff\Contao\ContactProfiles\Renderer\FieldRenderer;
+use Override;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Compiler\PriorityTaggedServiceTrait;
@@ -17,6 +18,7 @@ final class FieldRendererPass implements CompilerPassInterface
 {
     use PriorityTaggedServiceTrait;
 
+    #[Override]
     public function process(ContainerBuilder $container): void
     {
         if (! $container->hasDefinition(FieldRenderer::class)) {
@@ -31,7 +33,7 @@ final class FieldRendererPass implements CompilerPassInterface
             foreach ($tags as $attributes) {
                 if (! isset($attributes['field'])) {
                     throw new InvalidConfigurationException(
-                        sprintf('Service "%s" tagged as field renderer but no field defined', $id)
+                        sprintf('Service "%s" tagged as field renderer but no field defined', $id),
                     );
                 }
 

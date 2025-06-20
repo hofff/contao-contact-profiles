@@ -13,11 +13,8 @@ use function is_array;
 
 final class InitializePalettesListener
 {
-    private DcaManager $dcaManager;
-
-    public function __construct(DcaManager $dcaManager)
+    public function __construct(private DcaManager $dcaManager)
     {
-        $this->dcaManager = $dcaManager;
     }
 
     /**
@@ -39,7 +36,7 @@ final class InitializePalettesListener
                 ->addField(
                     'hofff_contact_profiles',
                     'hofff_contact_profiles_legend',
-                    PaletteManipulator::POSITION_APPEND
+                    PaletteManipulator::POSITION_APPEND,
                 )
                 ->applyToPalette($palette, $dataContainer->table);
         }

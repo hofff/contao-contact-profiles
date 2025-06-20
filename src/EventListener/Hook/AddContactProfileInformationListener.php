@@ -12,21 +12,12 @@ use Hofff\Contao\ContactProfiles\Util\QueryUtil;
 
 use function strpos;
 
-/**
- * @Hook("parseTemplate")
- */
+/** @Hook("parseTemplate") */
 final class AddContactProfileInformationListener
 {
-    private ProfileRepository $repository;
-
-    /** @var string[] */
-    private array $templatePrefixes;
-
     /** @param string[] $templatePrefixes */
-    public function __construct(ProfileRepository $repository, array $templatePrefixes)
+    public function __construct(private ProfileRepository $repository, private array $templatePrefixes)
     {
-        $this->repository       = $repository;
-        $this->templatePrefixes = $templatePrefixes;
     }
 
     public function __invoke(Template $template): void

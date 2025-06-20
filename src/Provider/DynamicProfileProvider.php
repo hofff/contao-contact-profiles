@@ -10,27 +10,31 @@ use Contao\StringUtil;
 use Generator;
 use Hofff\Contao\ContactProfiles\Event\LoadContactProfilesEvent;
 use Netzmacht\Contao\Toolkit\Data\Model\Specification;
+use Override;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 use function count;
 
 final class DynamicProfileProvider extends AbstractProfileProvider
 {
-    private EventDispatcherInterface $eventDispatcher;
-
-    public function __construct(EventDispatcherInterface $eventDispatcher)
+    public function __construct(private EventDispatcherInterface $eventDispatcher)
     {
-        $this->eventDispatcher = $eventDispatcher;
     }
 
+    #[Override]
     public function name(): string
     {
         return 'dynamic';
     }
 
     /** {@inheritDoc} */
-    public function fetchProfiles(Model $model, PageModel $pageModel, ?Specification $specification, int $offset): array
-    {
+    #[Override]
+    public function fetchProfiles(
+        Model $model,
+        PageModel $pageModel,
+        Specification|null $specification,
+        int $offset,
+    ): array {
         $sources = StringUtil::deserialize($model->hofff_contact_sources, true);
         $event   = new LoadContactProfilesEvent($model, $pageModel, $sources);
         $this->eventDispatcher->dispatch($event, $event::NAME);
@@ -53,12 +57,14 @@ final class DynamicProfileProvider extends AbstractProfileProvider
     }
 
     /** {@inheritDoc} */
+    #[Override]
     public function countTotal(Model $model, array $profiles): int
     {
         return count($profiles);
     }
 
     /** {@inheritDoc} */
+    #[Override]
     protected function fetchInitials(Model $model, PageModel $pageModel): Generator
     {
         $sources = StringUtil::deserialize($model->hofff_contact_sources, true);

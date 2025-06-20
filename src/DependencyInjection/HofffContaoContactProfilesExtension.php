@@ -15,6 +15,7 @@ use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
 use Hofff\Contao\ContactProfiles\Model\Responsibility\ResponsibilityRepository;
 use Hofff\Contao\ContactProfiles\Model\SocialAccount\SocialAccountRepository;
 use Netzmacht\Contao\Toolkit\Data\Model\Repository;
+use Override;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -42,11 +43,12 @@ final class HofffContaoContactProfilesExtension extends Extension
     ];
 
     /** {@inheritDoc} */
+    #[Override]
     public function load(array $configs, ContainerBuilder $container): void
     {
         $loader = new XmlFileLoader(
             $container,
-            new FileLocator(__DIR__ . '/../Resources/config')
+            new FileLocator(__DIR__ . '/../Resources/config'),
         );
 
         $loader->load('services.xml');
@@ -130,17 +132,17 @@ final class HofffContaoContactProfilesExtension extends Extension
     private function configureMultilingual(
         array $multilingual,
         ContainerBuilder $container,
-        LoaderInterface $loader
+        LoaderInterface $loader,
     ): void {
         $container->setParameter('hofff_contao_contact_profiles.multilingual.enable', $multilingual['enable']);
         $container->setParameter('hofff_contao_contact_profiles.multilingual.fields', $multilingual['fields']);
         $container->setParameter(
             'hofff_contao_contact_profiles.multilingual.languages',
-            $multilingual['languages'] ?? null
+            $multilingual['languages'] ?? null,
         );
         $container->setParameter(
             'hofff_contao_contact_profiles.multilingual.fallback_language',
-            $multilingual['fallback_language'] ?? null
+            $multilingual['fallback_language'] ?? null,
         );
 
         if (! $multilingual['enable']) {
@@ -149,7 +151,7 @@ final class HofffContaoContactProfilesExtension extends Extension
             $bundles = $container->getParameter('kernel.bundles');
             if (! isset($bundles['Terminal42DcMultilingualBundle'])) {
                 throw new InvalidConfigurationException(
-                    'Enable multilingual support of contact profiles requires terminal42/dc_multilingual'
+                    'Enable multilingual support of contact profiles requires terminal42/dc_multilingual',
                 );
             }
 
@@ -163,7 +165,7 @@ final class HofffContaoContactProfilesExtension extends Extension
                 'netzmacht.contao_toolkit.repository',
                 [
                     'model' => $parameters->resolveValue($definition->getArgument(0)),
-                ]
+                ],
             );
         }
     }

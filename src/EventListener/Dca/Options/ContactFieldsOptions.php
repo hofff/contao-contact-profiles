@@ -16,11 +16,8 @@ use function array_filter;
  */
 final class ContactFieldsOptions
 {
-    private DcaManager $dcaManager;
-
-    public function __construct(DcaManager $dcaManager)
+    public function __construct(private DcaManager $dcaManager)
     {
-        $this->dcaManager = $dcaManager;
     }
 
     /**
@@ -34,7 +31,7 @@ final class ContactFieldsOptions
             (array) $this->dcaManager->getDefinition(Profile::getTable())->get(['fields']),
             static function (array $config): bool {
                 return (bool) ($config['eval']['profileField'] ?? false);
-            }
+            },
         );
 
         $options = [];

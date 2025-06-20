@@ -11,21 +11,13 @@ use Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator;
 use function explode;
 use function in_array;
 
-/**
- * @Hook("replaceInsertTags")
- */
+/** @Hook("replaceInsertTags") */
 final class InsertTagsListener
 {
-    private ProfileRepository $repository;
-
-    private ContactProfileUrlGenerator $urlGenerator;
-
     public function __construct(
-        ProfileRepository $repository,
-        ContactProfileUrlGenerator $urlGenerator
+        private ProfileRepository $repository,
+        private ContactProfileUrlGenerator $urlGenerator,
     ) {
-        $this->repository   = $repository;
-        $this->urlGenerator = $urlGenerator;
     }
 
     /**

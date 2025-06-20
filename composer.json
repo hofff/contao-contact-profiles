@@ -34,41 +34,39 @@
     "ext-pdo": "*",
     "ausi/slug-generator": "^1.1",
     "codefog/contao-haste": "^4.25 || ^5.0",
-    "contao/core-bundle": "^4.13",
+    "contao/core-bundle": "^4.13 || ^5.3",
     "doctrine/dbal": "^3.4",
     "hofff/contao-consent-bridge": "^1.3",
     "knplabs/knp-menu": "^2.1 || ^3.0",
     "menatwork/contao-multicolumnwizard-bundle": "^3.4",
-    "netzmacht/contao-toolkit": "^3.7",
+    "netzmacht/contao-toolkit": "^3.9 || ^4.0",
     "patchwork/utf8": "^1.3",
-    "symfony-cmf/routing": "^2.3",
-    "symfony/config": "^4.4 || ^5.1",
-    "symfony/dependency-injection": "^4.4 || ^5.0",
-    "symfony/event-dispatcher-contracts": "^1.1 || ^2.0",
-    "symfony/http-foundation": "^4.4 || ^5.0",
-    "symfony/http-kernel": "^4.4 || ^5.0",
-    "symfony/routing": "^4.4 || ^5.0",
-    "symfony/security-core": "^4.4 || ^5.0",
-    "symfony/translation-contracts": "^1.1 || ^2.0"
+    "symfony-cmf/routing": "^2.3 || ^3.0",
+    "symfony/config": "^5.4 || ^6.4 || ^7.0",
+    "symfony/dependency-injection": "^5.4 || ^6.4 || ^7.0",
+    "symfony/event-dispatcher-contracts": "^1.0 || ^2.0 || ^3.0",
+    "symfony/http-foundation": "^5.4 || ^6.4 || ^7.0",
+    "symfony/http-kernel": "^5.4 || ^6.4 || ^7.0",
+    "symfony/routing": "^5.4 || ^6.4 || ^7.0",
+    "symfony/security-core": "^5.4 || ^6.4 || ^7.0",
+    "symfony/translation-contracts": "^1.0 || ^2.0 || ^3.0"
   },
   "require-dev": {
-    "codefog/contao-news_categories": "^3.4",
-    "contao/calendar-bundle": "^4.9",
-    "contao/faq-bundle": "^4.9",
-    "contao/manager-plugin": "^2.0",
-    "contao/news-bundle": "^4.9",
-    "doctrine/coding-standard": "^9.0",
-    "hofff/contao-language-relations": "^3.0@dev",
+    "codefog/contao-news_categories": "^3.5 || ^4.0",
+    "contao/calendar-bundle": "^4.13 || ^5.3",
+    "contao/faq-bundle": "^4.13 || ^5.3",
+    "contao/manager-plugin": "^2.1",
+    "contao/news-bundle": "^4.13 || ^5.3",
     "hofff/contao-social-tags": "^2.0",
-    "phpcq/runner-bootstrap": "^1.0@dev",
+    "phpcq/runner-bootstrap": "@dev",
     "terminal42/dc_multilingual": "^4.2"
   },
   "conflict": {
-    "codefog/contao-news_categories": "<3.4 || >= 4.0",
-    "contao/calendar-bundle": "<4.9 || >=5.0",
-    "contao/faq-bundle": "<4.9 || >=5.0",
-    "contao/manager-plugin": "<2.0 || >=3.0",
-    "contao/news-bundle": "<4.9 || >=5.0",
+    "codefog/contao-news_categories": "<3.0 || >= 5.0",
+    "contao/calendar-bundle": "<4.13 || >=6.0",
+    "contao/faq-bundle": "<4.13 || >=6.0",
+    "contao/manager-plugin": "<2.1 || >= 3.0",
+    "contao/news-bundle": "<4.13 || >=6.0",
     "hofff/contao-language-relations": "<3.0 || >= 4.0",
     "hofff/contao-social-tags": "<2.0 || >=3.0"
   },
@@ -89,11 +87,12 @@
   "config": {
     "allow-plugins": {
       "contao-community-alliance/composer-plugin": true,
-      "contao-components/installer": false,
+      "contao-components/installer": true,
       "contao/manager-plugin": true,
       "dealerdirect/phpcodesniffer-composer-installer": true,
       "php-http/discovery": true
-    }
+    },
+    "sort-packages": true
   },
   "extra": {
     "branch-alias": {

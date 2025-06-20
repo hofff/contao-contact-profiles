@@ -12,17 +12,15 @@ use Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator;
 
 final class ContactProfileRenderer
 {
-    private const DEFAULT_TEMPLATE = 'hofff_contact_profile_default';
+    private const string DEFAULT_TEMPLATE = 'hofff_contact_profile_default';
 
-    private const DEFAULT_FIELD_TEMPLATE = 'hofff_contact_field';
-
-    private FieldRenderer $fieldRenderer;
+    private const string DEFAULT_FIELD_TEMPLATE = 'hofff_contact_field';
 
     /** @var string[] */
     private array $fields = [];
 
     /** @var list<string>|null */
-    private ?array $imageSize = null;
+    private array|null $imageSize = null;
 
     private string $template = self::DEFAULT_TEMPLATE;
 
@@ -31,22 +29,15 @@ final class ContactProfileRenderer
 
     private string $defaultFieldTemplate;
 
-    private string $moreLabel;
-
     /** @var array<string,ConsentId> */
     private array $consentIds = [];
 
-    private ContactProfileUrlGenerator $urlGenerator;
-
     public function __construct(
-        FieldRenderer $fieldRenderer,
-        string $moreLabel,
-        ContactProfileUrlGenerator $urlGenerator
+        private FieldRenderer $fieldRenderer,
+        private string $moreLabel,
+        private ContactProfileUrlGenerator $urlGenerator,
     ) {
-        $this->fieldRenderer        = $fieldRenderer;
-        $this->moreLabel            = $moreLabel;
         $this->defaultFieldTemplate = self::DEFAULT_FIELD_TEMPLATE;
-        $this->urlGenerator         = $urlGenerator;
     }
 
     /** @param string[] $fields */
@@ -83,7 +74,7 @@ final class ContactProfileRenderer
         return $this;
     }
 
-    public function fieldTemplate(string $field, ?string $default = null): ?string
+    public function fieldTemplate(string $field, string|null $default = null): string|null
     {
         if (isset($this->fieldTemplates[$field])) {
             return $this->fieldTemplates[$field];
@@ -108,7 +99,7 @@ final class ContactProfileRenderer
     }
 
     /** @return list<string>|null */
-    public function imageSize(): ?array
+    public function imageSize(): array|null
     {
         return $this->imageSize;
     }
@@ -118,7 +109,7 @@ final class ContactProfileRenderer
         return $this->moreLabel;
     }
 
-    public function consentId(string $type): ?ConsentId
+    public function consentId(string $type): ConsentId|null
     {
         return $this->consentIds[$type] ?? null;
     }
@@ -131,13 +122,13 @@ final class ContactProfileRenderer
                 'renderer' => $this,
                 'fields'   => $this->fields,
                 'profile'  => $profile,
-            ]
+            ],
         );
 
         return $template->parse();
     }
 
-    public function generateDetailUrl(Profile $profile): ?string
+    public function generateDetailUrl(Profile $profile): string|null
     {
         return $this->urlGenerator->generateDetailUrl($profile);
     }

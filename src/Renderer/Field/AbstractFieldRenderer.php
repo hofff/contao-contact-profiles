@@ -11,6 +11,7 @@ use Contao\FrontendTemplate;
 use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
 use Hofff\Contao\ContactProfiles\Renderer\FieldRenderer;
+use Override;
 
 use function is_object;
 use function is_scalar;
@@ -18,21 +19,19 @@ use function method_exists;
 
 abstract class AbstractFieldRenderer implements FieldRenderer
 {
-    protected ContaoFramework $framework;
+    protected string|null $template = null;
 
-    protected ?string $template = null;
-
-    public function __construct(ContaoFramework $framework)
+    public function __construct(protected ContaoFramework $framework)
     {
-        $this->framework = $framework;
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public function render(string $field, $value, ContactProfileRenderer $renderer, Profile $profile): ?string
+    #[Override]
+    public function render(string $field, $value, ContactProfileRenderer $renderer, Profile $profile): string|null
     {
         /** @var Adapter<Controller> $adpater */
         $adpater = $this->framework->getAdapter(Controller::class);
@@ -66,6 +65,7 @@ abstract class AbstractFieldRenderer implements FieldRenderer
     }
 
     /** @param mixed $value */
+    #[Override]
     public function hasValue(string $field, Profile $profile): bool
     {
         return (bool) $profile->$field;
@@ -76,6 +76,6 @@ abstract class AbstractFieldRenderer implements FieldRenderer
         FrontendTemplate $template,
         $value,
         Profile $profile,
-        ContactProfileRenderer $renderer
+        ContactProfileRenderer $renderer,
     ): void;
 }

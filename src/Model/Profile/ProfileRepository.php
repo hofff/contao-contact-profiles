@@ -20,21 +20,15 @@ use function str_replace;
 
 /**
  * @extends ContaoRepository<Profile>
+ * @method findMultipleByIds(array $ids)
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 final class ProfileRepository extends ContaoRepository
 {
-    private Connection $connection;
-
-    private TokenChecker $tokenChecker;
-
     /** @psalm-param class-string<Profile> $modelClass */
-    public function __construct(string $modelClass, Connection $connection, TokenChecker $tokenChecker)
+    public function __construct(string $modelClass, private Connection $connection, private TokenChecker $tokenChecker)
     {
         parent::__construct($modelClass);
-
-        $this->tokenChecker = $tokenChecker;
-        $this->connection   = $connection;
     }
 
     /** @param list<string|int> $categoryIds */
@@ -69,7 +63,7 @@ final class ProfileRepository extends ContaoRepository
      * @param list<string|int>    $profileIds
      * @param array<string,mixed> $options
      */
-    public function fetchPublishedByProfileIds(array $profileIds, array $options = []): ?Collection
+    public function fetchPublishedByProfileIds(array $profileIds, array $options = []): Collection|null
     {
         if ($profileIds === []) {
             return null;
@@ -89,8 +83,8 @@ final class ProfileRepository extends ContaoRepository
     public function fetchPublishedByProfileIdsAndSpecification(
         array $profileIds,
         Specification $specification,
-        array $options = []
-    ): ?Collection {
+        array $options = [],
+    ): Collection|null {
         if ($profileIds === []) {
             return null;
         }
@@ -107,7 +101,7 @@ final class ProfileRepository extends ContaoRepository
      * @param list<string|int>    $categoryIds
      * @param array<string,mixed> $options
      */
-    public function fetchPublishedByCategories(array $categoryIds, array $options = []): ?Collection
+    public function fetchPublishedByCategories(array $categoryIds, array $options = []): Collection|null
     {
         if ($categoryIds === []) {
             return null;
@@ -127,8 +121,8 @@ final class ProfileRepository extends ContaoRepository
     public function fetchPublishedByCategoriesAndSpecification(
         array $categoryIds,
         Specification $specification,
-        array $options = []
-    ): ?Collection {
+        array $options = [],
+    ): Collection|null {
         if ($categoryIds === []) {
             return null;
         }
@@ -141,10 +135,8 @@ final class ProfileRepository extends ContaoRepository
         return $this->findBy($columns, $values, $options);
     }
 
-    /**
-     * @param array<string,mixed> $options
-     */
-    public function fetchPublishedByIdOrAlias(string $identifier, array $options = []): ?Profile
+    /** @param array<string,mixed> $options */
+    public function fetchPublishedByIdOrAlias(string $identifier, array $options = []): Profile|null
     {
         if ($this->isMultilingual()) {
             $columns = ['( IFNULL(translation.alias, .alias)=? ) OR .id=? '];
@@ -189,11 +181,11 @@ final class ProfileRepository extends ContaoRepository
         return $result->fetchAllAssociative();
     }
 
-    public function findByNewsCategory(int $newsCategoryId): ?Collection
+    public function findByNewsCategory(int $newsCategoryId): Collection|null
     {
         $result = $this->connection->executeQuery(
             'SELECT contact_profile_id FROM tl_contact_profile_news_category WHERE news_category_id=:id',
-            ['id' => $newsCategoryId]
+            ['id' => $newsCategoryId],
         );
 
         return $this->findMultipleByIds($result->fetchFirstColumn());
@@ -237,7 +229,7 @@ final class ProfileRepository extends ContaoRepository
                     'LOWER(
                       SUBSTR(
                         IFNULL(translation.lastname, ' . $this->getTableName() . '.lastname), 1, 1)
-                    ) as letter'
+                    ) as letter',
                 );
         } else {
             $queryBuilder = $this->connection->createQueryBuilder();

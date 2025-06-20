@@ -15,6 +15,7 @@ use Contao\NewsBundle\ContaoNewsBundle;
 use Hofff\Contao\Consent\Bridge\HofffContaoConsentBridgeBundle;
 use Hofff\Contao\ContactProfiles\HofffContaoContactProfilesBundle;
 use Hofff\Contao\LanguageRelations\HofffContaoLanguageRelationsBundle;
+use Override;
 
 final class Plugin implements BundlePluginInterface
 {
@@ -23,6 +24,7 @@ final class Plugin implements BundlePluginInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[Override]
     public function getBundles(ParserInterface $parser): array
     {
         return [
@@ -35,7 +37,7 @@ final class Plugin implements BundlePluginInterface
                     HofffContaoConsentBridgeBundle::class,
                     HofffContaoLanguageRelationsBundle::class,
                     CodefogNewsCategoriesBundle::class,
-                ]
+                ],
             ),
         ];
     }

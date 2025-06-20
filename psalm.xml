@@ -1,11 +1,5 @@
 <?xml version="1.0"?>
-<psalm
-        errorLevel="3"
-        hideExternalErrors="true"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns="https://getpsalm.org/schema/config"
-        xsi:schemaLocation="https://getpsalm.org/schema/config ./.phpcq/plugins/psalm/tools/config.xsd"
->
+<psalm xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://getpsalm.org/schema/config" errorLevel="3" hideExternalErrors="true" xsi:schemaLocation="https://getpsalm.org/schema/config ./.phpcq/plugins/psalm/tools/config.xsd" findUnusedCode="false" findUnusedBaselineEntry="false">
     <projectFiles>
         <directory name="src"/>
         <ignoreFiles>
@@ -17,40 +11,38 @@
         <DeprecatedClass>
             <errorLevel type="suppress">
                 <referencedClass name="Contao\CoreBundle\Framework\ContaoFrameworkInterface"/>
+                <referencedClass name="Contao\Template"/>
+                <referencedClass name="Symfony\Component\Security\Core\Security"/>
             </errorLevel>
         </DeprecatedClass>
-        <DeprecatedMethod errorLevel="suppress">
+        <DeprecatedMethod>
             <errorLevel type="suppress">
-                <referencedMethod name="Symfony\Component\HttpFoundation\RequestStack::getMasterRequest"/>
+                <referencedMethod name="Contao\PageModel::getAbsoluteUrl"/>
+                <referencedMethod name="Contao\PageModel::getFrontendUrl"/>
+                <referencedMethod name="Contao\PageModel::getPreviewUrl"/>
+                <referencedMethod name="Contao\BackendUser::hasAccess"/>
             </errorLevel>
         </DeprecatedMethod>
-        <InternalMethod errorLevel="suppress">
-            <errorLevel type="suppress">
-                <referencedMethod name="Contao\CoreBundle\Framework\ContaoFramework::getAdapter"/>
-            </errorLevel>
-        </InternalMethod>
-        <TooManyArguments>
-            <errorLevel type="suppress">
-                <referencedFunction name="Symfony\Contracts\EventDispatcher\EventDispatcherInterface::dispatch"/>
-            </errorLevel>
-        </TooManyArguments>
         <UndefinedInterfaceMethod>
             <errorLevel type="suppress">
                 <referencedMethod name="UnitEnum::offsetGet"/>
             </errorLevel>
         </UndefinedInterfaceMethod>
-        <UndefinedDocblockClass>
-            <errorLevel type="suppress">
-                <referencedClass name="UnitEnum"/>
-                <referencedClass name="Doctrine\DBAL\ForwardCompatibility\Result"/>
-            </errorLevel>
-        </UndefinedDocblockClass>
         <UndefinedMagicPropertyFetch>
             <errorLevel type="suppress">
-                <referencedProperty name="Contao\Model::$hofff_contact_profiles"/>
-                <referencedProperty name="Contao\Model::$hofff_contact_profiles_order"/>
+                <referencedProperty name="Contao\DataContainer::$activeRecord"/>
             </errorLevel>
         </UndefinedMagicPropertyFetch>
+        <UndefinedMagicPropertyAssignment>
+            <errorLevel type="suppress">
+                <referencedProperty name="Contao\DataContainer::$activeRecord"/>
+            </errorLevel>
+        </UndefinedMagicPropertyAssignment>
+        <UndefinedClass>
+            <errorLevel type="suppress">
+                <referencedClass name="Hofff\Contao\LanguageRelations\HofffContaoLanguageRelationsBundle"/>
+            </errorLevel>
+        </UndefinedClass>
     </issueHandlers>
 
     <universalObjectCrates>

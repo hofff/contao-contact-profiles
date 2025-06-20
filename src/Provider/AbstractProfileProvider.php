@@ -9,6 +9,7 @@ use Contao\Model;
 use Contao\ModuleModel;
 use Contao\PageModel;
 use Generator;
+use Override;
 
 use function array_fill_keys;
 use function iconv;
@@ -16,6 +17,7 @@ use function range;
 
 abstract class AbstractProfileProvider implements ProfileProvider
 {
+    #[Override]
     public function supports(Model $model): bool
     {
         if (! $model instanceof ContentModel && ! $model instanceof ModuleModel) {
@@ -26,6 +28,7 @@ abstract class AbstractProfileProvider implements ProfileProvider
     }
 
     /** {@inheritDoc} */
+    #[Override]
     public function calculateInitials(Model $model, PageModel $pageModel): array
     {
         $letters = array_fill_keys(range('a', 'z'), 0);

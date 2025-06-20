@@ -10,6 +10,7 @@ use Contao\FrontendTemplate;
 use Contao\StringUtil;
 use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
+use Override;
 
 use function array_filter;
 use function array_map;
@@ -17,7 +18,7 @@ use function str_replace;
 
 final class VideosFieldRenderer extends AbstractFieldRenderer
 {
-    protected ?string $template = 'hofff_contact_field_videos';
+    protected string|null $template = 'hofff_contact_field_videos';
 
     public function __construct(ContaoFramework $framework)
     {
@@ -25,6 +26,7 @@ final class VideosFieldRenderer extends AbstractFieldRenderer
     }
 
     /** @param mixed $value */
+    #[Override]
     public function hasValue(string $field, Profile $profile): bool
     {
         if (! parent::hasValue($field, $profile)) {
@@ -36,18 +38,19 @@ final class VideosFieldRenderer extends AbstractFieldRenderer
             (array) $value,
             static function (array $config) {
                 return $config['videoSource'] !== '' && $config['video'] !== '';
-            }
+            },
         );
 
         return $profiles !== [];
     }
 
     /** @param mixed $value */
+    #[Override]
     protected function compile(
         FrontendTemplate $template,
         $value,
         Profile $profile,
-        ContactProfileRenderer $renderer
+        ContactProfileRenderer $renderer,
     ): void {
         $template->renderer = $renderer;
         $template->value    = array_filter(
@@ -72,12 +75,12 @@ final class VideosFieldRenderer extends AbstractFieldRenderer
 
                     return $video;
                 },
-                (array) $value
+                (array) $value,
             ),
             static function (array $video): bool {
                 /** @psalm-suppress RiskyTruthyFalsyComparison */
                 return ! empty($video['url']);
-            }
+            },
         );
 
         $template->renderVideo = static function (array $video): string {

@@ -17,6 +17,7 @@ use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRendererFactory;
 use Netzmacht\Contao\Toolkit\Response\ResponseTagger;
 use Netzmacht\Contao\Toolkit\Routing\RequestScopeMatcher;
 use Netzmacht\Contao\Toolkit\View\Template\TemplateRenderer;
+use Override;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -24,12 +25,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class ContactProfileDetailController extends AbstractHybridController
 {
-    private ProfileRepository $profiles;
-
-    private ContactProfileRendererFactory $rendererFactory;
-
-    private EventDispatcherInterface $eventDispatcher;
-
     /**
      * @param Adapter<Input> $inputAdapter
      *
@@ -42,10 +37,10 @@ final class ContactProfileDetailController extends AbstractHybridController
         RouterInterface $router,
         TranslatorInterface $translator,
         TokenChecker $tokenChecker,
-        ProfileRepository $profiles,
-        EventDispatcherInterface $eventDispatcher,
-        ContactProfileRendererFactory $rendererFactory,
-        Adapter $inputAdapter
+        private ProfileRepository $profiles,
+        private EventDispatcherInterface $eventDispatcher,
+        private ContactProfileRendererFactory $rendererFactory,
+        Adapter $inputAdapter,
     ) {
         parent::__construct(
             $templateRenderer,
@@ -54,15 +49,12 @@ final class ContactProfileDetailController extends AbstractHybridController
             $router,
             $translator,
             $tokenChecker,
-            $inputAdapter
+            $inputAdapter,
         );
-
-        $this->profiles        = $profiles;
-        $this->rendererFactory = $rendererFactory;
-        $this->eventDispatcher = $eventDispatcher;
     }
 
     /** {@inheritDoc} */
+    #[Override]
     protected function prepareTemplateData(array $data, Request $request, Model $model): array
     {
         $profile = $this->loadProfile($request);
@@ -83,14 +75,17 @@ final class ContactProfileDetailController extends AbstractHybridController
         return $data;
     }
 
-    private function loadProfile(Request $request): ?Profile
+    private function loadProfile(Request $request): Profile|null
     {
         $profile = $request->attributes->get(Profile::class);
         if ($profile instanceof Profile) {
             return $profile;
         }
 
-        /** @psalm-suppress PossiblyNullReference - Input adapter is always set */
+        /**
+         * @psalm-suppress PossiblyNullReference - Input adapter is always set
+         * @psalm-suppress PossiblyInvalidCast
+         */
         return $this->profiles->fetchPublishedByIdOrAlias((string) $this->inputAdapter->get('auto_item'));
     }
 }

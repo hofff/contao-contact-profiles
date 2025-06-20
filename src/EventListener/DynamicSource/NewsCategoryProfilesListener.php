@@ -7,16 +7,19 @@ namespace Hofff\Contao\ContactProfiles\EventListener\DynamicSource;
 use Codefog\NewsCategoriesBundle\Model\NewsCategoryModel;
 use Contao\Model;
 use Contao\Model\Collection;
+use Override;
 use Terminal42\DcMultilingualBundle\Model\Multilingual;
 
 final class NewsCategoryProfilesListener extends DynamicSourceListener
 {
+    #[Override]
     protected function source(): string
     {
         return 'news_categories';
     }
 
-    protected function fetchSource(string $alias): ?Model
+    #[Override]
+    protected function fetchSource(string $alias): Model|null
     {
         $repository = $this->repositoryManager->getRepository(NewsCategoryModel::class);
 
@@ -24,7 +27,8 @@ final class NewsCategoryProfilesListener extends DynamicSourceListener
         return $repository->findPublishedByIdOrAlias($alias);
     }
 
-    protected function fetchProfiles(Model $sourceModel): ?Collection
+    #[Override]
+    protected function fetchProfiles(Model $sourceModel): Collection|null
     {
         $sourceId = $sourceModel instanceof Multilingual ? $sourceModel->getLanguageId() : $sourceModel->id;
 
