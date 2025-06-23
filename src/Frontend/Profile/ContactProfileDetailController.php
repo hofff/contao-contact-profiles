@@ -25,8 +25,18 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[AsContentElement('hofff_contact_profile_detail', 'hofff_contact_profiles', method: 'renderAsContentElement')]
-#[AsFrontendModule('hofff_contact_profile_detail', 'hofff_contact_profiles', method: 'renderAsContentElement')]
+#[AsContentElement(
+    'hofff_contact_profile_detail',
+    'hofff_contact_profiles',
+    'ce_hofff_contact_profile_detail',
+    'renderAsContentElement'
+)]
+#[AsFrontendModule(
+    'hofff_contact_profile_detail',
+    'hofff_contact_profiles',
+    'mod_hofff_contact_profile_detail',
+    'renderAsFrontendModule'
+)]
 final class ContactProfileDetailController extends AbstractHybridController
 {
     /**

@@ -20,8 +20,18 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[AsContentElement('hofff_contact_profile_initials_filter', 'hofff_contact_profiles', method: 'renderAsContentElement')]
-#[AsFrontendModule('hofff_contact_profile_initials_filter', 'hofff_contact_profiles', method: 'renderAsContentElement')]
+#[AsContentElement(
+    'hofff_contact_profile_initials_filter',
+    'hofff_contact_profiles',
+    'ce_hofff_contact_profile_initials_filter',
+    'renderAsContentElement'
+)]
+#[AsFrontendModule(
+    'hofff_contact_profile_initials_filter',
+    'hofff_contact_profiles',
+    'mod_hofff_contact_profile_initials_filter',
+    'renderAsFrontendModule'
+)]
 final class ContactProfileInitialsFilterController extends AbstractHybridController
 {
     /** @param Adapter<Input> $inputAdapter */
