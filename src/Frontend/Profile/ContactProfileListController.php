@@ -34,13 +34,13 @@ use function min;
 use function substr;
 
 #[AsContentElement(
-    'hofff_contact_profiles_list',
+    'hofff_contact_profile_list',
     'hofff_contact_profiles',
     'ce_hofff_contact_profiles_list',
     'renderAsContentElement'
 )]
 #[AsFrontendModule(
-    'hofff_contact_profiles_list',
+    'hofff_contact_profile_list',
     'hofff_contact_profiles',
     'mod_hofff_contact_profiles_list',
     'renderAsFrontendModule'
