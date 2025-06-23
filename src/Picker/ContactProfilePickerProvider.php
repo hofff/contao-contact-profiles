@@ -50,7 +50,7 @@ final class ContactProfilePickerProvider extends AbstractInsertTagPickerProvider
     }
 
     #[Override]
-    public function getDcaTable(): string
+    public function getDcaTable(PickerConfig|null $config = null): string
     {
         return 'tl_contact_profile';
     }
