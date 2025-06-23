@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Hofff\Contao\ContactProfiles\Frontend\Profile;
 
 use Contao\Config;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsContentElement;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsFrontendModule;
 use Contao\CoreBundle\Exception\PageNotFoundException;
 use Contao\CoreBundle\Framework\Adapter;
 use Contao\CoreBundle\Security\Authentication\Token\TokenChecker;
@@ -31,6 +33,8 @@ use function is_numeric;
 use function min;
 use function substr;
 
+#[AsContentElement('hofff_contact_profiles_list', 'hofff_contact_profiles', method: 'renderAsContentElement')]
+#[AsFrontendModule('hofff_contact_profiles_list', 'hofff_contact_profiles', method: 'renderAsContentElement')]
 final class ContactProfileListController extends AbstractHybridController
 {
     /**

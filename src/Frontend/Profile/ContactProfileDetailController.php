@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\Frontend\Profile;
 
+use Contao\CoreBundle\DependencyInjection\Attribute\AsContentElement;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsFrontendModule;
 use Contao\CoreBundle\Exception\PageNotFoundException;
 use Contao\CoreBundle\Framework\Adapter;
 use Contao\CoreBundle\Security\Authentication\Token\TokenChecker;
@@ -23,6 +25,8 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+#[AsContentElement('hofff_contact_profile_detail', 'hofff_contact_profiles', method: 'renderAsContentElement')]
+#[AsFrontendModule('hofff_contact_profile_detail', 'hofff_contact_profiles', method: 'renderAsContentElement')]
 final class ContactProfileDetailController extends AbstractHybridController
 {
     /**

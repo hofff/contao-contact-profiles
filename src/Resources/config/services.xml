@@ -4,7 +4,7 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <defaults public="false" autoconfigure="false" autowire="false"/>
+        <defaults public="false" autoconfigure="true" autowire="false"/>
 
         <!-- Alias generator -->
         <service id="hofff_contao_contact_profiles.alias_generator" class="Ausi\SlugGenerator\SlugGenerator">
@@ -156,14 +156,6 @@
             <argument type="service" id="Hofff\Contao\ContactProfiles\Renderer\ContactProfileRendererFactory"/>
             <argument type="service" id="netzmacht.contao_toolkit.contao.config_adapter"/>
             <argument type="service" id="netzmacht.contao_toolkit.contao.input_adapter"/>
-            <tag name="contao.content_element"
-                 type="hofff_contact_profile_list"
-                 category="hofff_contact_profiles"
-                 method="renderAsContentElement"/>
-            <tag name="contao.frontend_module"
-                 type="hofff_contact_profile_list"
-                 category="hofff_contact_profiles"
-                 method="renderAsFrontendModule"/>
         </service>
 
         <service id="Hofff\Contao\ContactProfiles\Frontend\Profile\ContactProfileDetailController">
@@ -177,14 +169,6 @@
             <argument type="service" id="event_dispatcher"/>
             <argument type="service" id="Hofff\Contao\ContactProfiles\Renderer\ContactProfileRendererFactory"/>
             <argument type="service" id="netzmacht.contao_toolkit.contao.input_adapter"/>
-            <tag name="contao.content_element"
-                 type="hofff_contact_profile_detail"
-                 category="hofff_contact_profiles"
-                 method="renderAsContentElement"/>
-            <tag name="contao.frontend_module"
-                 type="hofff_contact_profile_detail"
-                 category="hofff_contact_profiles"
-                 method="renderAsFrontendModule"/>
         </service>
 
         <service id="Hofff\Contao\ContactProfiles\Frontend\Profile\ContactProfileInitialsFilterController">
@@ -196,14 +180,6 @@
             <argument type="service" id="contao.security.token_checker"/>
             <argument type="service" id="Hofff\Contao\ContactProfiles\Provider\ProfileProvider"/>
             <argument type="service" id="netzmacht.contao_toolkit.contao.input_adapter"/>
-            <tag name="contao.content_element"
-                 type="hofff_contact_profile_initials_filter"
-                 category="hofff_contact_profiles"
-                 method="renderAsContentElement"/>
-            <tag name="contao.frontend_module"
-                 type="hofff_contact_profile_initials_filter"
-                 category="hofff_contact_profiles"
-                 method="renderAsFrontendModule"/>
         </service>
 
         <!-- Pages -->

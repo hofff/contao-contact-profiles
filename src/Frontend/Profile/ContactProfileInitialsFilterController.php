@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\Frontend\Profile;
 
+use Contao\CoreBundle\DependencyInjection\Attribute\AsContentElement;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsFrontendModule;
 use Contao\CoreBundle\Framework\Adapter;
 use Contao\CoreBundle\Security\Authentication\Token\TokenChecker;
 use Contao\Input;
@@ -18,6 +20,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+#[AsContentElement('hofff_contact_profile_initials_filter', 'hofff_contact_profiles', method: 'renderAsContentElement')]
+#[AsFrontendModule('hofff_contact_profile_initials_filter', 'hofff_contact_profiles', method: 'renderAsContentElement')]
 final class ContactProfileInitialsFilterController extends AbstractHybridController
 {
     /** @param Adapter<Input> $inputAdapter */
