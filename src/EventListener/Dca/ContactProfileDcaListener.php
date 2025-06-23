@@ -23,7 +23,8 @@ use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
 use Netzmacht\Contao\Toolkit\Dca\DcaManager;
 use RuntimeException;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 use function func_get_arg;
@@ -40,15 +41,15 @@ final class ContactProfileDcaListener
     private string $pattern;
 
     public function __construct(
-        private SlugGeneratorInterface $slugGenerator,
-        private Connection $connection,
-        private ProfileRepository $profiles,
-        private TranslatorInterface $translator,
-        private DcaManager $dcaManager,
-        private SessionInterface $session,
+        private readonly SlugGeneratorInterface $slugGenerator,
+        private readonly Connection $connection,
+        private readonly ProfileRepository $profiles,
+        private readonly TranslatorInterface $translator,
+        private readonly DcaManager $dcaManager,
+        private readonly RequestStack $requestStack,
         string $aliasPattern,
-        private bool $multilingual,
-        private string|null $fallbackLanguage,
+        private readonly bool $multilingual,
+        private readonly string|null $fallbackLanguage,
     ) {
         $this->pattern = $aliasPattern;
     }
@@ -56,8 +57,14 @@ final class ContactProfileDcaListener
     /** @Callback(table="tl_contact_profile", target="config.onload") */
     public function onLoad(): void
     {
+        $request = $this->requestStack->getCurrentRequest();
+        $session = $request?->getSession();
+        if (! $session instanceof Session) {
+            return;
+        }
+
         /** @psalm-suppress UndefinedInterfaceMethod */
-        $sorting = $this->session->getBag('contao_backend')->get('sorting')['tl_contact_profile'] ?? null;
+        $sorting = $this->requestStack->getBag('contao_backend')->get('sorting')['tl_contact_profile'] ?? null;
 
         // Only set sorting as the first field if custom sorting is chosen.
         if ($sorting !== 'sorting') {
