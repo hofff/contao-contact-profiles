@@ -63,8 +63,7 @@ final class ContactProfileDcaListener
             return;
         }
 
-        /** @psalm-suppress UndefinedInterfaceMethod */
-        $sorting = $this->requestStack->getBag('contao_backend')->get('sorting')['tl_contact_profile'] ?? null;
+        $sorting = $session->getBag('contao_backend')->get('sorting')['tl_contact_profile'] ?? null;
 
         // Only set sorting as the first field if custom sorting is chosen.
         if ($sorting !== 'sorting') {
