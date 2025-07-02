@@ -3,13 +3,14 @@
 declare(strict_types=1);
 
 use Contao\Config;
+use Contao\DC_Table;
 use Doctrine\DBAL\Types\Types;
 
 $GLOBALS['TL_DCA']['tl_contact_profile'] = [
 
     // Config
     'config'   => [
-        'dataContainer'    => 'Table',
+        'dataContainer'    => DC_Table::class,
         'ptable'           => 'tl_contact_category',
         'enableVersioning' => true,
         'sql'              => [
