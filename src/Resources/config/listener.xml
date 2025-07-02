@@ -11,7 +11,7 @@
         </parameter>
     </parameters>
     <services>
-        <defaults public="false" autoconfigure="false" autowire="false" />
+        <defaults public="false" autoconfigure="true" autowire="false" />
 
         <!-- DCA Options -->
         <service id="Hofff\Contao\ContactProfiles\EventListener\Dca\Options\CategoryOptions">
