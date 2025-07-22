@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Hofff\Contao\ContactProfiles\EventListener;
 
 use Contao\CoreBundle\InsertTag\InsertTagParser;
+use Contao\CoreBundle\Routing\ResponseContext\HtmlHeadBag\HtmlHeadBag;
+use Contao\CoreBundle\Routing\ResponseContext\ResponseContextAccessor;
+use Contao\CoreBundle\String\HtmlDecoder;
 use Contao\StringUtil;
 use Hofff\Contao\ContactProfiles\Event\ProfileDetailPageEvent;
 use Hofff\Contao\ContactProfiles\SocialTags\SocialTagsGenerator;
@@ -18,6 +21,8 @@ final class DetailPageListener
     public function __construct(
         private readonly InsertTagParser $insertTagParser,
         private readonly SocialTagsGenerator $socialTagsGenerator,
+        private readonly ResponseContextAccessor $responseContextAccessor,
+        private readonly HtmlDecoder $htmlDecoder,
     ) {
     }
 
@@ -32,6 +37,14 @@ final class DetailPageListener
 
         $GLOBALS['objPage']->pageTitle   = trim($profile->firstname . ' ' . $profile->lastname);
         $GLOBALS['objPage']->description = $this->prepareMetaDescription((string) $profile->teaser);
+
+        $context = $this->responseContextAccessor->getResponseContext();
+        if ($context && $context->has(HtmlHeadBag::class)) {
+            $bag = $context->get(HtmlHeadBag::class);
+
+            $bag->setTitle($GLOBALS['objPage']->pageTitle);
+            $bag->setMetaDescription($this->htmlDecoder->inputEncodedToPlainText($GLOBALS['objPage']->description));
+        }
 
         $this->socialTagsGenerator->generate($profile);
     }

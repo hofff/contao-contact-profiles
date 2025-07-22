@@ -145,6 +145,8 @@
             <argument type="service" id="contao.insert_tag.parser"/>
             <argument type="service" id="Hofff\Contao\ContactProfiles\SocialTags\SocialTagsGenerator"/>
             <tag name="kernel.event_listener" event="hofff.contao_contact_profile.profile_detail_page"/>
+            <argument type="service" id="contao.routing.response_context_accessor"/>
+            <argument type="service" id="contao.string.html_decoder"/>
         </service>
 
         <service id="Hofff\Contao\ContactProfiles\EventListener\MultilingualListener">
