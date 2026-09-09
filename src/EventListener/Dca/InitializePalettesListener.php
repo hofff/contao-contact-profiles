@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Hofff\Contao\ContactProfiles\EventListener\Dca;
 
 use Contao\CoreBundle\DataContainer\PaletteManipulator;
-use Contao\CoreBundle\ServiceAnnotation\Callback;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
 use Contao\DataContainer;
 use Netzmacht\Contao\Toolkit\Dca\DcaManager;
 
@@ -17,11 +17,9 @@ final class InitializePalettesListener
     {
     }
 
-    /**
-     * @Callback(table="tl_calendar_events", target="config.onload")
-     * @Callback(table="tl_faq", target="config.onload")
-     * @Callback(table="tl_news", target="config.onload")
-     */
+    #[AsCallback('tl_calendar_events', 'config.onload')]
+    #[AsCallback('tl_faq', 'config.onload')]
+    #[AsCallback('tl_news', 'config.onload')]
     public function initializePalette(DataContainer $dataContainer): void
     {
         $definition = $this->dcaManager->getDefinition($dataContainer->table);

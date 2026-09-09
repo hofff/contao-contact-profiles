@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\EventListener;
 
-use Contao\CoreBundle\ServiceAnnotation\Hook;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
 use Doctrine\DBAL\Types\Types;
 use Netzmacht\Contao\Toolkit\Dca\DcaManager;
 use Terminal42\DcMultilingualBundle\Driver;
@@ -25,7 +25,7 @@ final class MultilingualListener
     ) {
     }
 
-    /** @Hook("loadDataContainer") */
+    #[AsHook('loadDataContainer')]
     public function onLoadDataContainer(string $table): void
     {
         switch ($table) {

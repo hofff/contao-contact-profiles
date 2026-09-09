@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\EventListener\Dca\Options;
 
-use Contao\CoreBundle\ServiceAnnotation\Callback;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
 use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Netzmacht\Contao\Toolkit\Dca\DcaManager;
 
 use function array_filter;
 
-/**
- * @Callback(table="tl_content", target="fields.hofff_contact_fields.options")
- * @Callback(table="tl_module", target="fields.hofff_contact_fields.options")
- */
+#[AsCallback('tl_content', 'fields.hofff_contact_fields.options')]
+#[AsCallback('tl_module', 'fields.hofff_contact_fields.options')]
 final class ContactFieldsOptions
 {
     public function __construct(private DcaManager $dcaManager)

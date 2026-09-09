@@ -9,7 +9,6 @@ use Contao\Backend;
 use Contao\BackendUser;
 use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
 use Contao\CoreBundle\Exception\AccessDeniedException;
-use Contao\CoreBundle\ServiceAnnotation\Callback;
 use Contao\Database\Result;
 use Contao\DataContainer;
 use Contao\Image;
@@ -55,7 +54,7 @@ final class ContactProfileDcaListener
         $this->pattern = $aliasPattern;
     }
 
-    /** @Callback(table="tl_contact_profile", target="config.onload") */
+    #[AsCallback('tl_contact_profile', 'config.onload')]
     public function onLoad(): void
     {
         $request = $this->requestStack->getCurrentRequest();
@@ -78,11 +77,8 @@ final class ContactProfileDcaListener
         $this->dcaManager->getDefinition('tl_contact_profile')->set(['list', 'sorting', 'fields'], ['sorting']);
     }
 
-    /**
-     * @param mixed $value
-     *
-     * @Callback(table="tl_contact_profile", target="fields.alias.save")
-     */
+    /** @param mixed $value */
+    #[AsCallback('tl_contact_profile', 'fields.alias.save')]
     public function generateAlias($value, DataContainer $dataContainer): string
     {
         // Generate alias if there is none

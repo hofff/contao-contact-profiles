@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\EventListener\Hook;
 
+use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
 use Contao\CoreBundle\Framework\ContaoFramework;
-use Contao\CoreBundle\ServiceAnnotation\Hook;
 use Contao\Database;
 use Contao\Date;
 use Contao\PageModel;
@@ -17,7 +17,7 @@ use Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator;
 
 use function assert;
 
-/** @Hook("getSearchablePages") */
+#[AsHook('getSearchablePages')]
 final class GetSearchablePagesListener
 {
     public function __construct(

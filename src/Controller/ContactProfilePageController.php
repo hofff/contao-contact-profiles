@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\Controller;
 
+use Contao\CoreBundle\DependencyInjection\Attribute\AsPage;
 use Contao\CoreBundle\Exception\PageNotFoundException;
-use Contao\CoreBundle\ServiceAnnotation\Page;
 use Contao\PageModel;
 use Contao\PageRegular;
 use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
@@ -13,7 +13,7 @@ use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-/** @Page(type="contact_profile", path="{alias}", requirements={"alias": ".+"}) */
+#[AsPage(type: 'contact_profile', path: '{alias}', requirements: ['alias' => '.+'])]
 final class ContactProfilePageController
 {
     public function __construct(private ProfileRepository $profiles)

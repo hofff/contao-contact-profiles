@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\EventListener\Hook;
 
-use Contao\CoreBundle\ServiceAnnotation\Hook;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
 use Contao\Module;
 use Contao\StringUtil;
 use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 use function in_array;
 
-/** @Hook("getAllEvents") */
+#[AsHook('getAllEvents')]
 final class GetAllEventsListener
 {
     public function __construct(private RequestStack $requestStack)

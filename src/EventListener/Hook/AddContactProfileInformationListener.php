@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\EventListener\Hook;
 
-use Contao\CoreBundle\ServiceAnnotation\Hook;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
 use Contao\StringUtil;
 use Contao\Template;
 use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
@@ -13,7 +13,7 @@ use Hofff\Contao\ContactProfiles\Util\QueryUtil;
 
 use function strpos;
 
-/** @Hook("parseTemplate") */
+#[AsHook('parseTemplate')]
 final class AddContactProfileInformationListener
 {
     /** @param string[] $templatePrefixes */

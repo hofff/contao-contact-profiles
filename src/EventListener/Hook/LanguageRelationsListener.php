@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\EventListener\Hook;
 
-use Contao\CoreBundle\ServiceAnnotation\Hook;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
 use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
 use Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator;
@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use function strip_tags;
 use function trim;
 
-/** @Hook("hofff_language_relations_language_switcher") */
+#[AsHook('hofff_language_relations_language_switcher')]
 final class LanguageRelationsListener
 {
     public function __construct(

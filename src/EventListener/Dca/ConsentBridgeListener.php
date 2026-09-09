@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Hofff\Contao\ContactProfiles\EventListener\Dca;
 
 use Contao\CoreBundle\DataContainer\PaletteManipulator;
-use Contao\CoreBundle\ServiceAnnotation\Callback;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
 use Contao\DataContainer;
 use Hofff\Contao\Consent\Bridge\ConsentToolManager;
 
@@ -17,10 +17,8 @@ final class ConsentBridgeListener
     {
     }
 
-    /**
-     * @Callback(table="tl_module", target="config.onload")
-     * @Callback(table="tl_content", target="config.onload")
-     */
+    #[AsCallback('tl_module', 'config.onload')]
+    #[AsCallback('tl_content', 'config.onload')]
     public function initializePalettes(DataContainer $dataContainer): void
     {
         if (count($this->consentToolManager->consentTools()) === 1) {
