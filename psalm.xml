@@ -41,6 +41,7 @@
         <UndefinedClass>
             <errorLevel type="suppress">
                 <referencedClass name="Hofff\Contao\LanguageRelations\HofffContaoLanguageRelationsBundle"/>
+                <referencedClass name="Symfony\Component\Security\Core\Security"/>
             </errorLevel>
         </UndefinedClass>
     </issueHandlers>

@@ -9,6 +9,7 @@ use Contao\PageModel;
 use Contao\StringUtil;
 use Generator;
 use Hofff\Contao\ContactProfiles\Event\LoadContactProfilesEvent;
+use Hofff\Contao\ContactProfiles\Util\ListUtil;
 use Netzmacht\Contao\Toolkit\Data\Model\Specification;
 use Override;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -36,6 +37,7 @@ final class DynamicProfileProvider extends AbstractProfileProvider
         int $offset,
     ): array {
         $sources = StringUtil::deserialize($model->hofff_contact_sources, true);
+        $sources = ListUtil::toStringList($sources);
         $event   = new LoadContactProfilesEvent($model, $pageModel, $sources);
         $this->eventDispatcher->dispatch($event, $event::NAME);
 
@@ -68,6 +70,7 @@ final class DynamicProfileProvider extends AbstractProfileProvider
     protected function fetchInitials(Model $model, PageModel $pageModel): Generator
     {
         $sources = StringUtil::deserialize($model->hofff_contact_sources, true);
+        $sources = ListUtil::toStringList($sources);
         $event   = new LoadContactProfilesEvent($model, $pageModel, $sources);
         $this->eventDispatcher->dispatch($event, $event::NAME);
 

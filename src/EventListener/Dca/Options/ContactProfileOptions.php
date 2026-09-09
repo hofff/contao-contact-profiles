@@ -7,10 +7,8 @@ namespace Hofff\Contao\ContactProfiles\EventListener\Dca\Options;
 use Contao\CoreBundle\ServiceAnnotation\Callback;
 use Contao\Model\Collection;
 use Hofff\Contao\ContactProfiles\Model\Category\Category;
-use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
 
-use function assert;
 use function sprintf;
 
 /**
@@ -41,7 +39,6 @@ final class ContactProfileOptions
         }
 
         foreach ($collection as $profile) {
-            assert($profile instanceof Profile);
             $category = $profile->getRelated('pid');
 
             /** @psalm-suppress DocblockTypeContradiction */

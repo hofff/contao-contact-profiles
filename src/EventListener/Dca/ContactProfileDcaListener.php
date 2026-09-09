@@ -24,6 +24,7 @@ use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
 use Netzmacht\Contao\Toolkit\Dca\DcaManager;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -63,7 +64,11 @@ final class ContactProfileDcaListener
             return;
         }
 
-        $sorting = $session->getBag('contao_backend')->get('sorting')['tl_contact_profile'] ?? null;
+        $sorting    = null;
+        $sessionBag = $session->getBag('contao_backend');
+        if ($sessionBag instanceof AttributeBagInterface) {
+            $sorting = $sessionBag->get('sorting')['tl_contact_profile'] ?? null;
+        }
 
         // Only set sorting as the first field if custom sorting is chosen.
         if ($sorting !== 'sorting') {
@@ -188,6 +193,7 @@ final class ContactProfileDcaListener
      * @return list<array<string,mixed>>
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @psalm-suppress MoreSpecificReturnType
      */
     #[AsCallback('tl_contact_profile', 'fields.videos.save')]
     public function saveVideos($values, DataContainer $dataContainer): array

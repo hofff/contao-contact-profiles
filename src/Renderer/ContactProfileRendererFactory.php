@@ -9,6 +9,7 @@ use Contao\StringUtil;
 use Hofff\Contao\Consent\Bridge\ConsentId\ConsentIdParser;
 use Hofff\Contao\Consent\Bridge\Exception\InvalidArgumentException;
 use Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator;
+use Hofff\Contao\ContactProfiles\Util\ListUtil;
 use Netzmacht\Contao\Toolkit\Routing\RequestScopeMatcher;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -34,6 +35,7 @@ final class ContactProfileRendererFactory
         }
 
         $size = StringUtil::deserialize($model->size, true);
+        $size = ListUtil::toStringList($size);
         if ($size) {
             $renderer->withImageSize($size);
         }

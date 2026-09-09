@@ -13,6 +13,7 @@ use Contao\StringUtil;
 use Hofff\Contao\ContactProfiles\Event\LoadContactProfilesEvent;
 use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
+use Hofff\Contao\ContactProfiles\Util\ListUtil;
 use Hofff\Contao\ContactProfiles\Util\QueryUtil;
 use Netzmacht\Contao\Toolkit\Data\Model\RepositoryManager;
 
@@ -73,7 +74,9 @@ abstract class DynamicSourceListener
     protected function fetchProfiles(Model $sourceModel): Collection|null
     {
         $profileIds = StringUtil::deserialize($sourceModel->hofff_contact_profiles, true);
-        $order      = StringUtil::deserialize($sourceModel->hofff_contact_profiles_order, true) ?: $profileIds;
+        $profileIds = ListUtil::toIntList($profileIds);
+        $order      = ListUtil::toIntList(StringUtil::deserialize($sourceModel->hofff_contact_profiles_order, true))
+            ?: $profileIds;
         $options    = [];
 
         if ($order) {

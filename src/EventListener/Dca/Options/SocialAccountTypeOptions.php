@@ -6,10 +6,7 @@ namespace Hofff\Contao\ContactProfiles\EventListener\Dca\Options;
 
 use Contao\CoreBundle\ServiceAnnotation\Callback;
 use Contao\Model\Collection;
-use Hofff\Contao\ContactProfiles\Model\SocialAccount\SocialAccount;
 use Hofff\Contao\ContactProfiles\Model\SocialAccount\SocialAccountRepository;
-
-use function assert;
 
 /** @Callback(table="tl_contact_profile", target="fields.accounts.eval.columnFields.type.options") */
 final class SocialAccountTypeOptions
@@ -28,8 +25,6 @@ final class SocialAccountTypeOptions
         }
 
         foreach ($collection as $account) {
-            assert($account instanceof SocialAccount);
-
             $options[$account->socialAccountId()] = $account->name;
         }
 

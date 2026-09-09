@@ -43,12 +43,14 @@ final class ContactProfilePickerProvider extends AbstractInsertTagPickerProvider
         return $context === 'link' && $this->security->isGranted('contao_user.modules', 'hofff_contact_profiles');
     }
 
+    /** {@inheritDoc} */
     #[Override]
     public function supportsValue(PickerConfig $config): bool
     {
         return $this->isMatchingInsertTag($config);
     }
 
+    /** {@inheritDoc} */
     #[Override]
     public function getDcaTable(PickerConfig|null $config = null): string
     {

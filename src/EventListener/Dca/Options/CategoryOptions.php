@@ -6,10 +6,7 @@ namespace Hofff\Contao\ContactProfiles\EventListener\Dca\Options;
 
 use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
 use Contao\Model\Collection;
-use Hofff\Contao\ContactProfiles\Model\Category\Category;
 use Hofff\Contao\ContactProfiles\Model\Category\CategoryRepository;
-
-use function assert;
 
 #[AsCallback('tl_content', 'fields.hofff_contact_categories.options')]
 #[AsCallback('tl_module', 'fields.hofff_contact_categories.options')]
@@ -30,7 +27,6 @@ final class CategoryOptions
         }
 
         foreach ($collection as $category) {
-            assert($category instanceof Category);
             $options[$category->categoryId()] = $category->title;
         }
 

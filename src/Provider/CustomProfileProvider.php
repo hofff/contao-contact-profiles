@@ -9,6 +9,7 @@ use Contao\PageModel;
 use Contao\StringUtil;
 use Generator;
 use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
+use Hofff\Contao\ContactProfiles\Util\ListUtil;
 use Hofff\Contao\ContactProfiles\Util\QueryUtil;
 use Netzmacht\Contao\Toolkit\Data\Model\Specification;
 use Override;
@@ -39,9 +40,11 @@ final class CustomProfileProvider extends AbstractProfileProvider
     ): array {
         $options    = $this->fetchProfilesOptions($model, $offset);
         $profileIds = StringUtil::deserialize($model->hofff_contact_profiles, true);
+        $profileIds = ListUtil::toIntList($profileIds);
 
         if ($options['order'] === null) {
-            $order = StringUtil::deserialize($model->hofff_contact_profiles_order, true) ?: $profileIds;
+            $order = ListUtil::toIntList(StringUtil::deserialize($model->hofff_contact_profiles_order, true))
+                ?: $profileIds;
 
             if ($order) {
                 $options['order'] = QueryUtil::orderByIds('id', $order);
@@ -67,6 +70,7 @@ final class CustomProfileProvider extends AbstractProfileProvider
     public function countTotal(Model $model, array $profiles): int
     {
         $profileIds = StringUtil::deserialize($model->hofff_contact_profiles, true);
+        $profileIds = ListUtil::toIntList($profileIds);
 
         return $this->profiles->countPublishedByProfileIds($profileIds);
     }

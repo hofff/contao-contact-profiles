@@ -21,7 +21,7 @@ final class DetailPageListener
     public function __construct(
         private readonly InsertTagParser $insertTagParser,
         private readonly SocialTagsGenerator $socialTagsGenerator,
-        private readonly ResponseContextAccessor $responseContextAccessor,
+        private readonly ResponseContextAccessor $contextAccessor,
         private readonly HtmlDecoder $htmlDecoder,
     ) {
     }
@@ -38,7 +38,7 @@ final class DetailPageListener
         $GLOBALS['objPage']->pageTitle   = trim($profile->firstname . ' ' . $profile->lastname);
         $GLOBALS['objPage']->description = $this->prepareMetaDescription((string) $profile->teaser);
 
-        $context = $this->responseContextAccessor->getResponseContext();
+        $context = $this->contextAccessor->getResponseContext();
         if ($context && $context->has(HtmlHeadBag::class)) {
             $bag = $context->get(HtmlHeadBag::class);
 

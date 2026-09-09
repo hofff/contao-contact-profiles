@@ -9,6 +9,7 @@ use Contao\PageModel;
 use Contao\StringUtil;
 use Generator;
 use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
+use Hofff\Contao\ContactProfiles\Util\ListUtil;
 use Netzmacht\Contao\Toolkit\Data\Model\Specification;
 use Override;
 
@@ -37,6 +38,7 @@ final class CategoriesProfileProvider extends AbstractProfileProvider
         int $offset,
     ): array {
         $categoryIds = StringUtil::deserialize($model->hofff_contact_categories, true);
+        $categoryIds = ListUtil::toIntList($categoryIds);
         $options     = $this->fetchProfilesOptions($model, $offset);
 
         if ($specification) {
