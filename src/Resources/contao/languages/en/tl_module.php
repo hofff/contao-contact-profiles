@@ -22,11 +22,15 @@ $GLOBALS['TL_LANG']['tl_module']['hofff_contact_sources'][1]            = 'Selec
 $GLOBALS['TL_LANG']['tl_module']['hofff_contact_categories'][0]         = 'Contact profile categories';
 $GLOBALS['TL_LANG']['tl_module']['hofff_contact_categories'][1]         = 'Select the categories to choose which categories should be listed.';
 $GLOBALS['TL_LANG']['tl_module']['hofff_contact_profiles_order_sql'][0] = 'Order SQL clause';
-$GLOBALS['TL_LANG']['tl_module']['hofff_contact_profiles_order_sql'][1] = 'SQL order clause. Use <em>p.*</em> as the table alias!';
+$GLOBALS['TL_LANG']['tl_module']['hofff_contact_profiles_order_sql'][1] = 'SQL order clause. Use <em>tl_contact_profile.*</em> as the table alias!';
 $GLOBALS['TL_LANG']['tl_module']['hofff_contact_consent_tag_youtube'][0] = 'Youtube consent tag';
 $GLOBALS['TL_LANG']['tl_module']['hofff_contact_consent_tag_youtube'][1] = 'Assign a consent ID for youtube videos.';
 $GLOBALS['TL_LANG']['tl_module']['hofff_contact_consent_tag_vimeo'][0]   = 'Vimeo consent tag';
 $GLOBALS['TL_LANG']['tl_module']['hofff_contact_consent_tag_vimeo'][1]   = 'Assign a consent ID for vimeo videos.';
+$GLOBALS['TL_LANG']['tl_module']['hofff_contact_filters'][0]             = 'Contact profile filters';
+$GLOBALS['TL_LANG']['tl_module']['hofff_contact_filters'][1]             = 'Please select the filters which will be recognized.';
+$GLOBALS['TL_LANG']['tl_module']['hofff_contact_related_events'][0]      = 'Contact profile related events only';
+$GLOBALS['TL_LANG']['tl_module']['hofff_contact_related_events'][1]      = 'Filter events by active contact profile.';
 
 $GLOBALS['TL_LANG']['tl_module']['hofff_contact_source_options']['custom'][0]     = 'Custom';
 $GLOBALS['TL_LANG']['tl_module']['hofff_contact_source_options']['custom'][1]     = 'Choose custom contact profiles.';
@@ -35,9 +39,14 @@ $GLOBALS['TL_LANG']['tl_module']['hofff_contact_source_options']['categories'][1
 $GLOBALS['TL_LANG']['tl_module']['hofff_contact_source_options']['dynamic'][0]    = 'Dynamic sources';
 $GLOBALS['TL_LANG']['tl_module']['hofff_contact_source_options']['dynamic'][1]    = 'Retrieve contact profiles from a dynamic source.';
 
-$GLOBALS['TL_LANG']['tl_module']['hofff_contact_sources_options']['news'][0]  = 'News';
-$GLOBALS['TL_LANG']['tl_module']['hofff_contact_sources_options']['news'][1]  = 'Contact profiles assigned to a news.';
-$GLOBALS['TL_LANG']['tl_module']['hofff_contact_sources_options']['event'][0] = 'Event';
-$GLOBALS['TL_LANG']['tl_module']['hofff_contact_sources_options']['event'][1] = 'Contact profiles assigned to an event.';
-$GLOBALS['TL_LANG']['tl_module']['hofff_contact_sources_options']['faq'][0]   = 'FAQ';
-$GLOBALS['TL_LANG']['tl_module']['hofff_contact_sources_options']['faq'][1]   = 'Contact profiles assigned to a faq.';
+$GLOBALS['TL_LANG']['tl_module']['hofff_contact_sources_options']['news'][0]            = 'News';
+$GLOBALS['TL_LANG']['tl_module']['hofff_contact_sources_options']['news'][1]            = 'Contact profiles assigned to a news.';
+$GLOBALS['TL_LANG']['tl_module']['hofff_contact_sources_options']['event'][0]           = 'Event';
+$GLOBALS['TL_LANG']['tl_module']['hofff_contact_sources_options']['event'][1]           = 'Contact profiles assigned to an event.';
+$GLOBALS['TL_LANG']['tl_module']['hofff_contact_sources_options']['faq'][0]             = 'FAQ';
+$GLOBALS['TL_LANG']['tl_module']['hofff_contact_sources_options']['faq'][1]             = 'Contact profiles assigned to a faq.';
+$GLOBALS['TL_LANG']['tl_module']['hofff_contact_sources_options']['news_categories'][0] = 'Nachrichten-Kategorie';
+$GLOBALS['TL_LANG']['tl_module']['hofff_contact_sources_options']['news_categories'][1] = 'Kontaktprofile einer Nachrichten-Kategorie zugeordnet';
+
+$GLOBALS['TL_LANG']['tl_module']['hofff_contact_filters_options']['initials'][0] = 'Initial letter filter';
+$GLOBALS['TL_LANG']['tl_module']['hofff_contact_filters_options']['initials'][1] = 'Filters profiles by the first letter of the lastname';

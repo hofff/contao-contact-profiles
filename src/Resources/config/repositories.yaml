@@ -1,0 +1,39 @@
+parameters:
+    hofff_contao_contact_profiles.model.category: 'Hofff\Contao\ContactProfiles\Model\Category\MonolingualCategory'
+    hofff_contao_contact_profiles.model.profile: 'Hofff\Contao\ContactProfiles\Model\Profile\MonolingualProfile'
+    hofff_contao_contact_profiles.model.responsibility: 'Hofff\Contao\ContactProfiles\Model\Responsibility\MonolingualResponsibility'
+    hofff_contao_contact_profiles.model.social_account: 'Hofff\Contao\ContactProfiles\Model\SocialAccount\MonolingualSocialAccount'
+
+services:
+    _defaults:
+        public: false
+        autoconfigure: false
+        autowire: false
+
+    Hofff\Contao\ContactProfiles\Model\Category\CategoryRepository:
+        arguments:
+            - '%hofff_contao_contact_profiles.model.category%'
+        tags:
+            - { name: 'netzmacht.contao_toolkit.repository', model: 'Hofff\Contao\ContactProfiles\Model\Category\Category' }
+
+    Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository:
+        public: true
+        arguments:
+            - '%hofff_contao_contact_profiles.model.profile%'
+            - '@database_connection'
+            - '@contao.security.token_checker'
+        tags:
+            - { name: 'netzmacht.contao_toolkit.repository', model: 'Hofff\Contao\ContactProfiles\Model\Profile\Profile' }
+
+    Hofff\Contao\ContactProfiles\Model\Responsibility\ResponsibilityRepository:
+        arguments:
+            - '%hofff_contao_contact_profiles.model.responsibility%'
+            - 'Hofff\Contao\ContactProfiles\Model\Responsibility\MonolingualResponsibility'
+        tags:
+            - { name: 'netzmacht.contao_toolkit.repository', model: 'Hofff\Contao\ContactProfiles\Model\Responsibility\Responsibility' }
+
+    Hofff\Contao\ContactProfiles\Model\SocialAccount\SocialAccountRepository:
+        arguments:
+            - '%hofff_contao_contact_profiles.model.social_account%'
+        tags:
+            - { name: 'netzmacht.contao_toolkit.repository', model: 'Hofff\Contao\ContactProfiles\Model\SocialAccount\SocialAccount' }

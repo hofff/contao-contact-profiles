@@ -1,0 +1,89 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Hofff\Contao\ContactProfiles\Provider;
+
+use Contao\Model;
+use Contao\PageModel;
+use Contao\StringUtil;
+use Generator;
+use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
+use Hofff\Contao\ContactProfiles\Util\ListUtil;
+use Hofff\Contao\ContactProfiles\Util\QueryUtil;
+use Netzmacht\Contao\Toolkit\Data\Model\Specification;
+use Override;
+
+final class CustomProfileProvider extends AbstractProfileProvider
+{
+    public function __construct(private ProfileRepository $profiles)
+    {
+    }
+
+    #[Override]
+    public function name(): string
+    {
+        return 'custom';
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @psalm-suppress MoreSpecificReturnType
+     */
+    #[Override]
+    public function fetchProfiles(
+        Model $model,
+        PageModel $pageModel,
+        Specification|null $specification,
+        int $offset,
+    ): array {
+        $options    = $this->fetchProfilesOptions($model, $offset);
+        $profileIds = StringUtil::deserialize($model->hofff_contact_profiles, true);
+        $profileIds = ListUtil::toIntList($profileIds);
+
+        if ($options['order'] === null) {
+            $order = ListUtil::toIntList(StringUtil::deserialize($model->hofff_contact_profiles_order, true))
+                ?: $profileIds;
+
+            if ($order) {
+                $options['order'] = QueryUtil::orderByIds('id', $order);
+            }
+        }
+
+        if ($specification) {
+            $profiles = $this->profiles->fetchPublishedByProfileIdsAndSpecification(
+                $profileIds,
+                $specification,
+                $options,
+            );
+        } else {
+            $profiles = $this->profiles->fetchPublishedByProfileIds($profileIds, $options);
+        }
+
+        /** @psalm-suppress LessSpecificReturnStatement */
+        return $profiles ? $profiles->getModels() : [];
+    }
+
+    /** {@inheritDoc} */
+    #[Override]
+    public function countTotal(Model $model, array $profiles): int
+    {
+        $profileIds = StringUtil::deserialize($model->hofff_contact_profiles, true);
+        $profileIds = ListUtil::toIntList($profileIds);
+
+        return $this->profiles->countPublishedByProfileIds($profileIds);
+    }
+
+    /** {@inheritDoc} */
+    #[Override]
+    protected function fetchInitials(Model $model, PageModel $pageModel): Generator
+    {
+        /** @psalm-var list<int|string> $profileIds */
+        $profileIds = StringUtil::deserialize($model->hofff_contact_profiles, true);
+
+        foreach ($this->profiles->fetchInitialsOfPublishedByProfileIds($profileIds) as $row) {
+            yield $row['letter'] => (int) $row['count'];
+        }
+    }
+}

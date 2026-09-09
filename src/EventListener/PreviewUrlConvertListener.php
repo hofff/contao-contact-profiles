@@ -5,33 +5,19 @@ declare(strict_types=1);
 namespace Hofff\Contao\ContactProfiles\EventListener;
 
 use Contao\CoreBundle\Event\PreviewUrlConvertEvent;
-use Contao\CoreBundle\Framework\Adapter;
 use Contao\CoreBundle\Framework\ContaoFramework;
-use Contao\PageModel;
-use Doctrine\DBAL\Connection;
-use Hofff\Contao\ContactProfiles\Model\ContactProfileRepository;
-use PDO;
+use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
+use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
+use Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator;
 use Symfony\Component\HttpFoundation\Request;
 
 final class PreviewUrlConvertListener
 {
-    /** @var ContaoFramework */
-    private $framework;
-
-    /** @var ContactProfileRepository */
-    private $contactProfiles;
-
-    /** @var Connection */
-    private $connection;
-
     public function __construct(
-        ContaoFramework $framework,
-        ContactProfileRepository $contactProfiles,
-        Connection $connection
+        private ContaoFramework $framework,
+        private ProfileRepository $contactProfiles,
+        private ContactProfileUrlGenerator $urlGenerator,
     ) {
-        $this->framework       = $framework;
-        $this->contactProfiles = $contactProfiles;
-        $this->connection      = $connection;
     }
 
     /**
@@ -43,55 +29,41 @@ final class PreviewUrlConvertListener
             return;
         }
 
-        $request        = $event->getRequest();
-        $contactProfile = $this->getContactProfile($request);
-        if ($contactProfile === null) {
+        $request = $event->getRequest();
+        $options = [];
+        if ($request->query->has('locale')) {
+            $options['language'] = $request->query->get('locale');
+        }
+
+        $contactProfile = $this->getContactProfile($request, $options);
+        if (! $contactProfile instanceof Profile) {
             return;
         }
 
-        $detailPage = $this->getDetailPage($contactProfile);
-        if ($detailPage === null) {
+        $url = $this->urlGenerator->generateDetailUrl(
+            $contactProfile,
+            ContactProfileUrlGenerator::PREVIEW_URL,
+            $options,
+        );
+
+        if ($url === null) {
             return;
         }
 
-        $event->setUrl($detailPage->getPreviewUrl('/' . $contactProfile['alias'] ?: $contactProfile['id']));
+        $event->setUrl($url);
     }
 
-    /** @return string[]|null */
-    private function getContactProfile(Request $request): ?array
+    /** @param array<string,mixed> $options */
+    private function getContactProfile(Request $request, array $options): Profile|null
     {
         if (! $request->query->has('hofff_contact_profile')) {
             return null;
         }
 
-        return $this->contactProfiles->fetchById($request->query->getInt('hofff_contact_profile'));
-    }
-
-    /**
-     * @param string[] $contactProfile
-     *
-     * @psalm-suppress InvalidReturnType
-     * @psalm-suppress InvalidReturnStatement
-     */
-    private function getDetailPage(array $contactProfile): ?PageModel
-    {
-        /** @var Adapter<PageModel> $adapter */
-        $adapter = $this->framework->getAdapter(PageModel::class);
-
-        if ($contactProfile['jumpTo'] > 0) {
-            return $adapter->findByPk($contactProfile['jumpTo']);
-        }
-
-        $statement = $this->connection->executeQuery(
-            'SELECT jumpTo from tl_contact_category WHERE id = :categoryId LIMIT 0,1',
-            ['categoryId' => $contactProfile['pid']]
+        return $this->contactProfiles->findOneBy(
+            ['.id=?'],
+            [$request->query->getInt('hofff_contact_profile')],
+            $options,
         );
-
-        $pageId = $statement->fetch(PDO::FETCH_COLUMN);
-        if ($pageId === false || $pageId < 1) {
-            return null;
-        }
-
-        return $adapter->findByPk($pageId);
     }
 }

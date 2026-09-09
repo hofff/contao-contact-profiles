@@ -4,57 +4,51 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\EventListener\Hook;
 
+use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\Database;
 use Contao\Date;
 use Contao\PageModel;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
-use Hofff\Contao\ContactProfiles\Model\ContactProfileRepository;
+use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
+use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
 use Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator;
 
-use function is_int;
-use function is_string;
+use function assert;
 
+#[AsHook('getSearchablePages')]
 final class GetSearchablePagesListener
 {
-    /** @var ContaoFramework */
-    private $framework;
-
-    /** @var Connection */
-    private $connection;
-
-    /** @var ContactProfileRepository */
-    private $contactProfiles;
-
-    /** @var ContactProfileUrlGenerator */
-    private $urlGenerator;
-
     public function __construct(
-        ContaoFramework $framework,
-        Connection $connection,
-        ContactProfileRepository $contactProfiles,
-        ContactProfileUrlGenerator $urlGenerator
+        private ContaoFramework $framework,
+        private Connection $connection,
+        private ProfileRepository $contactProfiles,
+        private ContactProfileUrlGenerator $urlGenerator,
     ) {
-        $this->framework       = $framework;
-        $this->connection      = $connection;
-        $this->contactProfiles = $contactProfiles;
-        $this->urlGenerator    = $urlGenerator;
     }
 
     /**
-     * @param string[]        $pages
-     * @param int|string|null $rootId
+     * @param string[]                $pages
+     * @param numeric-string|int|null $rootId
      *
      * @return string[]
      */
-    public function __invoke(array $pages, $rootId = null, bool $isSitemap = false): array
+    public function __invoke(array $pages, $rootId = null, bool $isSitemap = false, string|null $language = null): array
     {
-        $rootId      = $rootId ? (int) $rootId : null;
+        $rootId ??= (int) $rootId;
+        /** @psalm-suppress PossiblyInvalidArgument */
         $categoryIds = $this->fetchCategoriesWithDetailPage($rootId);
+        $collection  = $this->contactProfiles->fetchPublishedByCategories(
+            $categoryIds,
+            ['language' => $language],
+        ) ?: [];
 
-        foreach ($this->contactProfiles->fetchPublishedByCategories($categoryIds) as $contactProfile) {
+        foreach ($collection as $contactProfile) {
+            assert($contactProfile instanceof Profile);
+
             // Detail page of the category is overridden by the contact profile. Page is already processed by Contao.
-            if ($contactProfile['jumpTo'] > 0) {
+            if ($contactProfile->jumpTo > 0) {
                 continue;
             }
 
@@ -66,15 +60,20 @@ final class GetSearchablePagesListener
             $pages[] = $this->urlGenerator->generateUrlWithPage(
                 $contactProfile,
                 $detailPage,
-                ContactProfileUrlGenerator::ABSOLUTE_URL
+                ContactProfileUrlGenerator::ABSOLUTE_URL,
             );
         }
 
         return $pages;
     }
 
-    /** @return array<array-key,mixed> */
-    private function fetchCategoriesWithDetailPage(?int $rootId): array
+    /**
+     * @return list<int|string>
+     *
+     * @psalm-suppress MoreSpecificReturnType
+     * @psalm-suppress LessSpecificReturnStatement
+     */
+    private function fetchCategoriesWithDetailPage(int|null $rootId): array
     {
         $pageIds      = $this->getPageIds($rootId);
         $queryBuilder = $this->connection
@@ -86,19 +85,14 @@ final class GetSearchablePagesListener
         if ($pageIds !== []) {
             $queryBuilder
                 ->andWhere('jumpTo IN (:pageIds)')
-                ->setParameter('pageIds', $pageIds, Connection::PARAM_STR_ARRAY);
+                ->setParameter('pageIds', $pageIds, ArrayParameterType::STRING);
         }
 
-        $result = $queryBuilder->execute();
-        if (is_string($result) || is_int($result)) {
-            return [];
-        }
-
-        return $result->fetchFirstColumn();
+        return $queryBuilder->executeQuery()->fetchFirstColumn();
     }
 
     /** @return array<array-key,mixed> */
-    private function getPageIds(?int $rootId): array
+    private function getPageIds(int|null $rootId): array
     {
         if ($rootId === null || $rootId === 0) {
             return [];

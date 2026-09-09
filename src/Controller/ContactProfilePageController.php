@@ -1,0 +1,43 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Hofff\Contao\ContactProfiles\Controller;
+
+use Contao\CoreBundle\DependencyInjection\Attribute\AsPage;
+use Contao\CoreBundle\Exception\PageNotFoundException;
+use Contao\PageModel;
+use Contao\PageRegular;
+use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
+use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
+#[AsPage(type: 'contact_profile', path: '{alias}', requirements: ['alias' => '.+'])]
+final class ContactProfilePageController
+{
+    public function __construct(private ProfileRepository $profiles)
+    {
+    }
+
+    /** @SuppressWarnings(PHPMD.Superglobals) */
+    public function __invoke(string $alias, PageModel $pageModel, Request $request): Response
+    {
+        $request->attributes->set(Profile::class, $this->fetchProfile($alias, $pageModel));
+
+        // The legacy framework relies on the global $objPage variable
+        $GLOBALS['objPage'] = $pageModel;
+
+        return (new PageRegular())->getResponse($pageModel, true);
+    }
+
+    private function fetchProfile(string $alias, PageModel $pageModel): Profile
+    {
+        $profile = $this->profiles->fetchPublishedByIdOrAlias($alias, ['language' => $pageModel->language]);
+        if ($profile === null) {
+            throw new PageNotFoundException('Contact profile not found');
+        }
+
+        return $profile;
+    }
+}

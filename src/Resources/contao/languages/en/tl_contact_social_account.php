@@ -22,7 +22,9 @@ $GLOBALS['TL_LANG']['tl_contact_social_account']['social_accounts'][0]  = 'Socia
 $GLOBALS['TL_LANG']['tl_contact_social_account']['social_accounts'][1]  = 'Manage social accounts';
 
 // Fields
-$GLOBALS['TL_LANG']['tl_contact_social_account']['name'][0]  = 'Title';
-$GLOBALS['TL_LANG']['tl_contact_social_account']['name'][1]  = 'Title of the social account.';
-$GLOBALS['TL_LANG']['tl_contact_social_account']['class'][0] = 'CSS class';
-$GLOBALS['TL_LANG']['tl_contact_social_account']['class'][1] = 'Define a custom css class to style the social account link.';
+$GLOBALS['TL_LANG']['tl_contact_social_account']['name'][0]           = 'Title';
+$GLOBALS['TL_LANG']['tl_contact_social_account']['name'][1]           = 'Title of the social account.';
+$GLOBALS['TL_LANG']['tl_contact_social_account']['class'][0]          = 'CSS class';
+$GLOBALS['TL_LANG']['tl_contact_social_account']['class'][1]          = 'Define a custom css class to style the social account link.';
+$GLOBALS['TL_LANG']['tl_contact_social_account']['twitterCreator'][0] = 'Use for Twitter creator';
+$GLOBALS['TL_LANG']['tl_contact_social_account']['twitterCreator'][1] = 'Use this account for the twitter:creator tag for the Twitter cards meta tags.';

@@ -2,8 +2,8 @@
 
 <?php $this->block('value') ?>
 <ul>
-<?php foreach ($this->value as $responsibility): ?>
-  <li><?= $responsibility['name'] ?></li>
+<?php foreach ($this->value ?: [] as $responsibility): ?>
+  <li><?= $responsibility->name ?></li>
 <?php endforeach ?>
 </ul>
 <?php $this->endblock() ?>

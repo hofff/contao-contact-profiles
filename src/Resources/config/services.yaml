@@ -1,0 +1,205 @@
+services:
+    _defaults:
+        public: false
+        autoconfigure: true
+        autowire: false
+
+    # Alias generator
+    hofff_contao_contact_profiles.alias_generator:
+        class: Ausi\SlugGenerator\SlugGenerator
+        arguments:
+            - '%hofff_contao_contact_profiles.alias_options%'
+
+    # Migration
+    Hofff\Contao\ContactProfiles\Migration\ContactProfileElementMigration:
+        arguments:
+            - '@database_connection'
+            - '%hofff_contao_contact_profiles.sources%'
+        tags:
+            - 'contao.migration'
+
+    Hofff\Contao\ContactProfiles\Migration\ContactProfileModuleMigration:
+        arguments:
+            - '@database_connection'
+            - '%hofff_contao_contact_profiles.sources%'
+        tags:
+            - 'contao.migration'
+
+    # Url Generator
+    Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator:
+        public: true
+        arguments:
+            - '@contao.framework'
+            - '@router'
+            - '@Hofff\Contao\ContactProfiles\Model\Category\CategoryRepository'
+            - '%contao.preview_script%'
+
+    # Renderer
+    Hofff\Contao\ContactProfiles\Renderer\ContactProfileRendererFactory:
+        public: true
+        arguments:
+            - '@translator'
+            - '@Hofff\Contao\Consent\Bridge\ConsentId\ConsentIdParser'
+            - '@Hofff\Contao\ContactProfiles\Renderer\FieldRenderer'
+            - '@Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator'
+            - '@netzmacht.contao_toolkit.routing.scope_matcher'
+
+    # Field renderer
+    Hofff\Contao\ContactProfiles\Renderer\FieldRenderer:
+        class: Hofff\Contao\ContactProfiles\Renderer\Field\CompositeFieldRenderer
+        public: true
+        arguments:
+            - '@contao.framework'
+            - []
+
+    Hofff\Contao\ContactProfiles\Renderer\Field\ImageFieldRenderer:
+        arguments:
+            - '@contao.framework'
+            - '%kernel.project_dir%'
+            - '@contao.image.studio'
+        tags:
+            - { name: 'hofff_contao_contact_profiles.field_renderer', field: 'image' }
+
+    Hofff\Contao\ContactProfiles\Renderer\Field\EmailFieldRenderer:
+        arguments:
+            - '@contao.framework'
+            - '%kernel.project_dir%'
+        tags:
+            - { name: 'hofff_contao_contact_profiles.field_renderer', field: 'email' }
+
+    Hofff\Contao\ContactProfiles\Renderer\Field\SocialAccountsRenderer:
+        arguments:
+            - '@contao.framework'
+            - '@Hofff\Contao\ContactProfiles\Model\SocialAccount\SocialAccountRepository'
+        tags:
+            - { name: 'hofff_contao_contact_profiles.field_renderer', field: 'accounts' }
+
+    Hofff\Contao\ContactProfiles\Renderer\Field\ResponsibilitiesRenderer:
+        arguments:
+            - '@contao.framework'
+            - '@Hofff\Contao\ContactProfiles\Model\Responsibility\ResponsibilityRepository'
+        tags:
+            - { name: 'hofff_contao_contact_profiles.field_renderer', field: 'responsibilities' }
+
+    Hofff\Contao\ContactProfiles\Renderer\Field\JumpToFieldRenderer:
+        arguments:
+            - '@contao.framework'
+        tags:
+            - { name: 'hofff_contao_contact_profiles.field_renderer', field: 'jumpTo' }
+
+    Hofff\Contao\ContactProfiles\Renderer\Field\WebsiteFieldRenderer:
+        arguments:
+            - '@contao.framework'
+        tags:
+            - { name: 'hofff_contao_contact_profiles.field_renderer', field: 'website' }
+
+    Hofff\Contao\ContactProfiles\Renderer\Field\VideosFieldRenderer:
+        arguments:
+            - '@contao.framework'
+            - '@Hofff\Contao\Consent\Bridge\ConsentToolManager'
+        tags:
+            - { name: 'hofff_contao_contact_profiles.field_renderer', field: 'videos' }
+
+    Hofff\Contao\ContactProfiles\Renderer\Field\GalleryFieldRenderer:
+        arguments:
+            - '@contao.framework'
+            - '%kernel.project_dir%'
+            - '@contao.image.studio'
+        tags:
+            - { name: 'hofff_contao_contact_profiles.field_renderer', field: 'gallery' }
+
+    Hofff\Contao\ContactProfiles\Picker\ContactProfilePickerProvider:
+        arguments:
+            - '@knp_menu.factory'
+            - '@router'
+            - '@?translator'
+            - '@security.helper'
+            - '@Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository'
+        tags:
+            - 'contao.picker_provider'
+
+    # Social tags
+    Hofff\Contao\ContactProfiles\SocialTags\ContactProfileExtractor:
+        arguments:
+            - '@contao.framework'
+            - '@request_stack'
+            - '@contao.routing.response_context_accessor'
+            - '@contao.insert_tag.parser'
+            - '@Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator'
+            - '@Hofff\Contao\ContactProfiles\Model\SocialAccount\SocialAccountRepository'
+            - '%kernel.project_dir%'
+        tags:
+            - 'Hofff\Contao\SocialTags\Data\Extractor'
+
+    Hofff\Contao\ContactProfiles\SocialTags\SocialTagsGenerator:
+        public: true
+        arguments:
+            - '@request_stack'
+            - '@?Hofff\Contao\SocialTags\Data\SocialTagsFactory'
+
+    # Providers
+    Hofff\Contao\ContactProfiles\Provider\ProfileProvider:
+        class: Hofff\Contao\ContactProfiles\Provider\CompositeProfileProvider
+        arguments:
+            - !tagged_iterator hofff_contact_profiles.provider
+
+    Hofff\Contao\ContactProfiles\Provider\CustomProfileProvider:
+        arguments:
+            - '@Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository'
+        tags:
+            - 'hofff_contact_profiles.provider'
+
+    Hofff\Contao\ContactProfiles\Provider\CategoriesProfileProvider:
+        arguments:
+            - '@Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository'
+        tags:
+            - 'hofff_contact_profiles.provider'
+
+    Hofff\Contao\ContactProfiles\Provider\DynamicProfileProvider:
+        arguments:
+            - '@event_dispatcher'
+        tags:
+            - 'hofff_contact_profiles.provider'
+
+    # Fragments
+    Hofff\Contao\ContactProfiles\Frontend\Profile\ContactProfileListController:
+        arguments:
+            - '@netzmacht.contao_toolkit.template_renderer'
+            - '@netzmacht.contao_toolkit.routing.scope_matcher'
+            - '@netzmacht.contao_toolkit.response_tagger'
+            - '@router'
+            - '@translator'
+            - '@contao.security.token_checker'
+            - '@Hofff\Contao\ContactProfiles\Provider\ProfileProvider'
+            - '@Hofff\Contao\ContactProfiles\Renderer\ContactProfileRendererFactory'
+            - '@netzmacht.contao_toolkit.contao.config_adapter'
+            - '@netzmacht.contao_toolkit.contao.input_adapter'
+
+    Hofff\Contao\ContactProfiles\Frontend\Profile\ContactProfileDetailController:
+        arguments:
+            - '@netzmacht.contao_toolkit.template_renderer'
+            - '@netzmacht.contao_toolkit.routing.scope_matcher'
+            - '@netzmacht.contao_toolkit.response_tagger'
+            - '@router'
+            - '@translator'
+            - '@contao.security.token_checker'
+            - '@Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository'
+            - '@event_dispatcher'
+            - '@Hofff\Contao\ContactProfiles\Renderer\ContactProfileRendererFactory'
+            - '@netzmacht.contao_toolkit.contao.input_adapter'
+
+    Hofff\Contao\ContactProfiles\Frontend\Profile\ContactProfileInitialsFilterController:
+        arguments:
+            - '@netzmacht.contao_toolkit.template_renderer'
+            - '@netzmacht.contao_toolkit.routing.scope_matcher'
+            - '@netzmacht.contao_toolkit.response_tagger'
+            - '@router'
+            - '@translator'
+            - '@contao.security.token_checker'
+            - '@Hofff\Contao\ContactProfiles\Provider\ProfileProvider'
+            - '@netzmacht.contao_toolkit.contao.input_adapter'
+
+    # Pages
+    Hofff\Contao\ContactProfiles\Controller\ContactProfilePageController:
+        arguments:
+            - '@Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository'

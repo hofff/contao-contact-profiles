@@ -17,7 +17,7 @@ final class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->arrayNode('sources')
-                    ->info('Sources of the contact profiles')
+                    ->info('Dynamic sources of the contact profiles')
                     ->scalarPrototype()
                     ->end()
                 ->end()
@@ -30,8 +30,12 @@ final class Configuration implements ConfigurationInterface
                             ->defaultValue('{title}-{firstname}-{lastname}')
                         ->end()
                         ->scalarNode('validChars')
-                            ->info('Valid caracters')
+                            ->info('Valid characters')
                             ->defaultValue('a-z0-9')
+                        ->end()
+                        ->scalarNode('ignoreChars')
+                            ->info('Ignored characters')
+                            ->defaultValue('\p{Mn}\p{Lm}')
                         ->end()
                         ->scalarNode('locale')
                             ->info('The locale used to generate the alias used as fallback')
@@ -42,6 +46,46 @@ final class Configuration implements ConfigurationInterface
                             ->defaultValue('-')
                         ->end()
                     ->end()
+                ->end()
+                ->arrayNode('multilingual')
+                    ->info('Enable the multilingual feature. It requires that terminal42/dc_multilingual is installed')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->booleanNode('enable')
+                            ->info('Enable multilingual')
+                            ->defaultValue(false)
+                        ->end()
+                        ->scalarNode('fallback_language')
+                            ->info('Define a fallback language if a special one should be used')
+                        ->end()
+                        ->arrayNode('languages')
+                            ->info('Supported languages. If not defined all root page languages are used')
+                            ->scalarPrototype()
+                            ->end()
+                        ->end()
+                        ->arrayNode('fields')
+                            ->info('List of translated fields of the contact profile table')
+                            ->defaultValue(
+                                [
+                                    'alias',
+                                    'salutation',
+                                    'title',
+                                    'position',
+                                    'profession',
+                                    'caption',
+                                    'websiteTitle',
+                                    'teaser',
+                                    'description',
+                                    'statement',
+                                    'jumpTo',
+                                    'videos',
+                                ],
+                            )
+                            ->scalarPrototype()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
             ->end();
 
         return $builder;

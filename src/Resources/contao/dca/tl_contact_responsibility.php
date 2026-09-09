@@ -5,25 +5,29 @@ declare(strict_types=1);
 /**
  * Table tl_contact_responsibility
  */
+
+use Contao\DC_Table;
+use Doctrine\DBAL\Types\Types;
+
 $GLOBALS['TL_DCA']['tl_contact_responsibility'] = [
 
     // Config
     'config'   => [
-        'dataContainer'    => 'Table',
-        'sql'              => [
+        'dataContainer' => DC_Table::class,
+        'sql'           => [
             'keys' => ['id' => 'primary'],
         ],
     ],
 
     // List
     'list'     => [
-        'sorting'    => [
+        'sorting'           => [
             'mode'        => 1,
             'fields'      => ['name'],
             'flag'        => 1,
             'panelLayout' => 'search',
         ],
-        'label'      => [
+        'label'             => [
             'fields' => ['name'],
             'format' => '%s',
         ],
@@ -34,7 +38,7 @@ $GLOBALS['TL_DCA']['tl_contact_responsibility'] = [
                 'class' => 'header_back',
             ],
         ],
-        'operations' => [
+        'operations'        => [
             'edit'   => [
                 'label' => &$GLOBALS['TL_LANG']['tl_contact_responsibility']['edit'],
                 'href'  => 'act=edit',
@@ -44,7 +48,7 @@ $GLOBALS['TL_DCA']['tl_contact_responsibility'] = [
                 'label'      => &$GLOBALS['TL_LANG']['tl_contact_responsibility']['delete'],
                 'href'       => 'act=delete',
                 'icon'       => 'delete.gif',
-                'attributes' => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm']
+                'attributes' => 'onclick="if (!confirm(\'' . ($GLOBALS['TL_LANG']['MSC']['deleteConfirm'] ?? '')
                     . '\')) return false; Backend.getScrollOffset();"',
             ],
             'show'   => [
@@ -60,19 +64,33 @@ $GLOBALS['TL_DCA']['tl_contact_responsibility'] = [
 
     // Fields
     'fields'   => [
-        'id'     => [
+        'id'               => [
             'label'  => ['ID'],
             'search' => true,
-            'sql'    => 'int(10) unsigned NOT NULL auto_increment',
+            'sql' => [
+                'type'          => Types::INTEGER,
+                'unsigned'      => true,
+                'autoincrement' => true,
+            ],
         ],
-        'tstamp' => ['sql' => "int(10) unsigned NOT NULL default '0'"],
-        'name'  => [
+        'tstamp'           => [
+            'sql'       => [
+                'type'     => Types::INTEGER,
+                'unsigned' => true,
+                'default'  => 0,
+            ],
+        ],
+        'name'   => [
             'label'     => &$GLOBALS['TL_LANG']['tl_contact_responsibility']['name'],
             'exclude'   => true,
             'search'    => true,
             'inputType' => 'text',
             'eval'      => ['mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50'],
-            'sql'       => 'varchar(255) NOT NULL default \'\'',
+            'sql'       => [
+                'type'    => Types::STRING,
+                'length'  => 255,
+                'default' => '',
+            ],
         ],
     ],
 ];

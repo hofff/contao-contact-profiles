@@ -7,8 +7,10 @@ namespace Hofff\Contao\ContactProfiles\Renderer\Field;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\FilesModel;
 use Contao\FrontendTemplate;
-use Hofff\Contao\Consent\Bridge\ConsentToolManager;
+use Contao\StringUtil;
+use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
+use Override;
 
 use function array_filter;
 use function array_map;
@@ -16,44 +18,45 @@ use function str_replace;
 
 final class VideosFieldRenderer extends AbstractFieldRenderer
 {
-    /** @var string|null */
-    protected $template = 'hofff_contact_field_videos';
+    protected string|null $template = 'hofff_contact_field_videos';
 
-    /** @var ConsentToolManager */
-    private $consentToolManager;
-
-    public function __construct(ContaoFramework $framework, ConsentToolManager $consentToolManager)
+    public function __construct(ContaoFramework $framework)
     {
         parent::__construct($framework);
-
-        $this->consentToolManager = $consentToolManager;
     }
 
     /** @param mixed $value */
-    protected function hasValue($value): bool
+    #[Override]
+    public function hasValue(string $field, Profile $profile): bool
     {
-        if (! parent::hasValue($value)) {
+        if (! parent::hasValue($field, $profile)) {
             return false;
         }
 
+        $value    = StringUtil::deserialize($profile->$field);
         $profiles = array_filter(
             (array) $value,
             static function (array $config) {
                 return $config['videoSource'] !== '' && $config['video'] !== '';
-            }
+            },
         );
 
         return $profiles !== [];
     }
 
     /** @param mixed $value */
-    protected function compile(FrontendTemplate $template, $value, ContactProfileRenderer $renderer): void
-    {
+    #[Override]
+    protected function compile(
+        FrontendTemplate $template,
+        $value,
+        Profile $profile,
+        ContactProfileRenderer $renderer,
+    ): void {
         $template->renderer = $renderer;
         $template->value    = array_filter(
             array_map(
                 static function (array $video) {
-                    $video['aspect'] = str_replace(':', '', $video['aspect']);
+                    $video['aspect'] = str_replace(':', '', $video['aspect'] ?? '');
 
                     switch ($video['videoSource']) {
                         case 'youtube':
@@ -72,11 +75,12 @@ final class VideosFieldRenderer extends AbstractFieldRenderer
 
                     return $video;
                 },
-                (array) $value
+                (array) $value,
             ),
             static function (array $video): bool {
+                /** @psalm-suppress RiskyTruthyFalsyComparison */
                 return ! empty($video['url']);
-            }
+            },
         );
 
         $template->renderVideo = static function (array $video): string {

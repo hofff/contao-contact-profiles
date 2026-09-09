@@ -7,62 +7,69 @@ namespace Hofff\Contao\ContactProfiles\Routing;
 use Contao\CoreBundle\Framework\Adapter;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\PageModel;
-use Doctrine\DBAL\Connection;
+use Hofff\Contao\ContactProfiles\Model\Category\CategoryRepository;
+use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use InvalidArgumentException;
-use PDO;
+use Symfony\Cmf\Component\Routing\RouteObjectInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 use function array_key_exists;
 use function sprintf;
 
 final class ContactProfileUrlGenerator
 {
-    public const ABSOLUTE_PATH = 1;
+    public const int ABSOLUTE_PATH = 1;
 
-    public const ABSOLUTE_URL = 0;
+    public const int ABSOLUTE_URL = 0;
 
-    public const PREVIEW_URL = 2;
+    public const int PREVIEW_URL = 2;
 
-    /** @var ContaoFramework */
-    private $framework;
+    /** @var array<int|string, array<string,?PageModel>> */
+    private array $categoryDetailPages = [];
 
-    /** @var Connection */
-    private $connection;
-
-    /** @var array<int|string, ?PageModel> */
-    private $categoryDetailPages = [];
-
-    public function __construct(ContaoFramework $framework, Connection $connection)
-    {
-        $this->framework  = $framework;
-        $this->connection = $connection;
+    public function __construct(
+        private ContaoFramework $framework,
+        private RouterInterface $router,
+        private CategoryRepository $categories,
+        private string|null $previewScript,
+    ) {
     }
 
     /**
-     * @param array<string,mixed> $profile
+     * @param array<string,mixed> $options
      *
      * @psalm-suppress InvalidReturnType
      * @psalm-suppress InvalidReturnStatement
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public function getDetailPage(array $profile): ?PageModel
+    public function getDetailPage(Profile $profile, array $options = []): PageModel|null
     {
-        if ($profile['jumpTo']) {
-            return $this->framework->getAdapter(PageModel::class)->findByPk($profile['jumpTo']);
+        if ($profile->jumpTo) {
+            return $this->framework->getAdapter(PageModel::class)->findByPk($profile->jumpTo);
         }
 
-        if (! array_key_exists($profile['pid'], $this->categoryDetailPages)) {
-            $this->categoryDetailPages[$profile['pid']] = $this->fetchCategoryDetailPage((int) $profile['pid']);
+        $language = $options['language'] ?? $GLOBALS['TL_LANGUAGE'];
+
+        if (
+            ! array_key_exists($profile->pid, $this->categoryDetailPages)
+            || ! array_key_exists($language, $this->categoryDetailPages[$profile->pid])
+        ) {
+            $this->categoryDetailPages[$profile->pid][$language] = $this->fetchCategoryDetailPage($profile, $options);
         }
 
-        return $this->categoryDetailPages[$profile['pid']];
+        return $this->categoryDetailPages[$profile->pid][$language];
     }
 
-    /** @param array<string,mixed> $profile */
     public function generateUrlWithPage(
-        array $profile,
+        Profile $profile,
         PageModel $pageModel,
-        int $referenceType = self::ABSOLUTE_PATH
+        int $referenceType = self::ABSOLUTE_PATH,
     ): string {
-        $slug = '/' . ($profile['alias'] ?: $profile['id']);
+        $slug = '/' . ($profile->alias ?: $profile->profileId());
+
+        if ($pageModel->type === 'contact_profile') {
+            return $this->generateUrlForContactPage($profile, $pageModel, $referenceType);
+        }
 
         switch ($referenceType) {
             case self::ABSOLUTE_PATH:
@@ -76,15 +83,18 @@ final class ContactProfileUrlGenerator
 
             default:
                 throw new InvalidArgumentException(
-                    sprintf('Reference type "%s" is not supported', $referenceType)
+                    sprintf('Reference type "%s" is not supported', $referenceType),
                 );
         }
     }
 
-    /** @param array<string,mixed> $profile */
-    public function generateDetailUrl(array $profile, int $referenceType = self::ABSOLUTE_PATH): ?string
-    {
-        $page = $this->getDetailPage($profile);
+    /** @param array<string,mixed> $options */
+    public function generateDetailUrl(
+        Profile $profile,
+        int $referenceType = self::ABSOLUTE_PATH,
+        array $options = [],
+    ): string|null {
+        $page = $this->getDetailPage($profile, $options);
         if ($page === null) {
             return null;
         }
@@ -93,24 +103,73 @@ final class ContactProfileUrlGenerator
     }
 
     /**
+     * @param array<string,mixed> $options
+     *
      * @psalm-suppress InvalidReturnType
      * @psalm-suppress InvalidReturnStatement
      */
-    private function fetchCategoryDetailPage(int $categoryId): ?PageModel
+    private function fetchCategoryDetailPage(Profile $profile, array $options = []): PageModel|null
     {
-        $statement = $this->connection->executeQuery(
-            'SELECT jumpTo from tl_contact_category WHERE id = :categoryId LIMIT 0,1',
-            ['categoryId' => $categoryId]
-        );
-
-        $pageId = $statement->fetch(PDO::FETCH_COLUMN);
-        if ($pageId === false || $pageId < 1) {
+        $category = $this->categories->findOneBy(['.id=?'], [$profile->pid], $options);
+        if (! $category) {
             return null;
         }
 
         /** @var Adapter<PageModel> $adapter */
         $adapter = $this->framework->getAdapter(PageModel::class);
 
-        return $adapter->findByPk($pageId);
+        return $adapter->findByPk($category->jumpTo);
+    }
+
+    private function generateUrlForContactPage(Profile $profile, PageModel $pageModel, int $referenceType): string
+    {
+        switch ($referenceType) {
+            case self::ABSOLUTE_PATH:
+                return $this->router->generate(
+                    RouteObjectInterface::OBJECT_BASED_ROUTE_NAME,
+                    [
+                        RouteObjectInterface::CONTENT_OBJECT => $pageModel,
+                        'alias'                              => $profile->alias ?: $profile->profileId(),
+                    ],
+                    RouterInterface::ABSOLUTE_PATH,
+                );
+
+            case self::ABSOLUTE_URL:
+                return $this->router->generate(
+                    RouteObjectInterface::OBJECT_BASED_ROUTE_NAME,
+                    [
+                        RouteObjectInterface::CONTENT_OBJECT => $pageModel,
+                        'alias'                              => $profile->alias ?: $profile->profileId(),
+                    ],
+                    RouterInterface::ABSOLUTE_URL,
+                );
+
+            case self::PREVIEW_URL:
+                $baseUrl = '';
+                if ($this->previewScript !== null) {
+                    $baseUrl = $this->router->getContext()->getBaseUrl();
+                    $this->router->getContext()->setBaseUrl($this->previewScript);
+                }
+
+                $url = $this->router->generate(
+                    RouteObjectInterface::OBJECT_BASED_ROUTE_NAME,
+                    [
+                        RouteObjectInterface::CONTENT_OBJECT => $pageModel,
+                        'alias'                              => $profile->alias ?: $profile->profileId(),
+                    ],
+                    RouterInterface::ABSOLUTE_PATH,
+                );
+
+                if ($this->previewScript !== null) {
+                    $this->router->getContext()->setBaseUrl($baseUrl);
+                }
+
+                return $url;
+
+            default:
+                throw new InvalidArgumentException(
+                    sprintf('Reference type "%s" is not supported', $referenceType),
+                );
+        }
     }
 }

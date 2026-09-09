@@ -7,57 +7,57 @@ namespace Hofff\Contao\ContactProfiles\Picker;
 use Contao\CoreBundle\Picker\AbstractInsertTagPickerProvider;
 use Contao\CoreBundle\Picker\DcaPickerProviderInterface;
 use Contao\CoreBundle\Picker\PickerConfig;
-use Hofff\Contao\ContactProfiles\Model\ContactProfileRepository;
+use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
+use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
 use Knp\Menu\FactoryInterface;
+use Override;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 use function sprintf;
 
 final class ContactProfilePickerProvider extends AbstractInsertTagPickerProvider implements DcaPickerProviderInterface
 {
-    /** @var Security */
-    private $security;
-
-    /** @var ContactProfileRepository */
-    private $repository;
-
     public function __construct(
         FactoryInterface $menuFactory,
         RouterInterface $router,
-        ?TranslatorInterface $translator,
-        Security $security,
-        ContactProfileRepository $repository
+        TranslatorInterface $translator,
+        private readonly Security $security,
+        private readonly ProfileRepository $repository,
     ) {
         parent::__construct($menuFactory, $router, $translator);
-
-        $this->security   = $security;
-        $this->repository = $repository;
     }
 
+    #[Override]
     public function getName(): string
     {
         return 'contactProfilePicker';
     }
 
     /** @param mixed $context */
+    #[Override]
     public function supportsContext($context): bool
     {
         return $context === 'link' && $this->security->isGranted('contao_user.modules', 'hofff_contact_profiles');
     }
 
+    /** {@inheritDoc} */
+    #[Override]
     public function supportsValue(PickerConfig $config): bool
     {
         return $this->isMatchingInsertTag($config);
     }
 
-    public function getDcaTable(): string
+    /** {@inheritDoc} */
+    #[Override]
+    public function getDcaTable(PickerConfig|null $config = null): string
     {
         return 'tl_contact_profile';
     }
 
     /** @return array<string,mixed> */
+    #[Override]
     public function getDcaAttributes(PickerConfig $config): array
     {
         $attributes = ['fieldType' => 'radio'];
@@ -75,13 +75,15 @@ final class ContactProfilePickerProvider extends AbstractInsertTagPickerProvider
     }
 
     /** @param mixed $value */
+    #[Override]
     public function convertDcaValue(PickerConfig $config, $value): string
     {
         return sprintf($this->getInsertTag($config), $value);
     }
 
     /** {@inheritDoc} */
-    protected function getRouteParameters(?PickerConfig $config = null): array
+    #[Override]
+    protected function getRouteParameters(PickerConfig|null $config = null): array
     {
         $params = ['do' => 'hofff_contact_profiles'];
 
@@ -98,19 +100,18 @@ final class ContactProfilePickerProvider extends AbstractInsertTagPickerProvider
         return $params;
     }
 
+    #[Override]
     protected function getDefaultInsertTag(): string
     {
         return '{{contact_profile_url::%s}}';
     }
 
-    /**
-     * @param int|string $categoryId
-     */
-    private function getCategoryId($categoryId): ?int
+    /** @param int|string $categoryId */
+    private function getCategoryId($categoryId): int|null
     {
-        $profile = $this->repository->fetchById((int) $categoryId);
-        if ($profile) {
-            return (int) $profile['pid'];
+        $profile = $this->repository->find((int) $categoryId);
+        if ($profile instanceof Profile) {
+            return (int) $profile->pid;
         }
 
         return null;

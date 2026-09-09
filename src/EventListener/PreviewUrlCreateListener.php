@@ -6,29 +6,24 @@ namespace Hofff\Contao\ContactProfiles\EventListener;
 
 use Contao\CoreBundle\Event\PreviewUrlCreateEvent;
 use Contao\CoreBundle\Framework\ContaoFramework;
-use Hofff\Contao\ContactProfiles\Model\ContactProfileRepository;
+use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
+use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
+
+use function http_build_query;
 
 final class PreviewUrlCreateListener
 {
-    /** @var RequestStack */
-    private $requestStack;
-
-    /** @var ContaoFramework */
-    private $framework;
-
-    /** @var ContactProfileRepository */
-    private $contactProfiles;
+    private ProfileRepository $contactProfiles;
 
     public function __construct(
-        RequestStack $requestStack,
-        ContaoFramework $framework,
-        ContactProfileRepository $repository
+        private RequestStack $requestStack,
+        private ContaoFramework $framework,
+        ProfileRepository $repository,
     ) {
-        $this->requestStack    = $requestStack;
-        $this->framework       = $framework;
         $this->contactProfiles = $repository;
     }
 
@@ -53,24 +48,39 @@ final class PreviewUrlCreateListener
             return;
         }
 
-        $contactProfile = $this->contactProfiles->fetchById($this->getId($event, $request));
-        if ($contactProfile === null) {
+        $profileId = $this->getId($event, $request);
+        $session   = $request->getSession();
+        $bag       = $session->getBag('contao_backend');
+        $locale    = null;
+        if ($bag instanceof AttributeBagInterface) {
+            $locale = $bag->get('dc_multilingual:tl_contact_profile:' . $profileId);
+        }
+
+        $contactProfile = $this->contactProfiles->findOneBy(
+            ['.id=?'],
+            [$this->getId($event, $request)],
+            ['language' => $locale],
+        );
+
+        if (! $contactProfile instanceof Profile) {
             return;
         }
 
-        $event->setQuery('hofff_contact_profile=' . $contactProfile['id']);
+        $event->setQuery(http_build_query(
+            [
+                'hofff_contact_profile' => $contactProfile->profileId(),
+                'locale'                => $locale,
+            ],
+        ));
     }
 
-    /**
-     * @return int|string
-     */
-    private function getId(PreviewUrlCreateEvent $event, Request $request)
+    private function getId(PreviewUrlCreateEvent $event, Request $request): int
     {
         // Overwrite the ID if the contact profile settings are edited
         if ($request->query->get('table') === 'tl_contact_profile' && $request->query->get('act') === 'edit') {
             return $request->query->getInt('id');
         }
 
-        return $event->getId();
+        return (int) $event->getId();
     }
 }

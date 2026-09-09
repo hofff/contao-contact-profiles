@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\Renderer\Field;
 
-use Contao\Controller;
 use Contao\CoreBundle\Framework\ContaoFramework;
+use Contao\CoreBundle\Image\Studio\Studio;
 use Contao\File;
 use Contao\FilesModel;
 use Contao\FrontendTemplate;
 use Contao\Model\Collection;
 use Contao\StringUtil;
 use Exception;
+use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
-use stdClass;
+use Override;
 
 use function array_filter;
 use function array_flip;
@@ -28,37 +29,39 @@ use function uniqid;
 
 final class GalleryFieldRenderer extends AbstractFieldRenderer
 {
-    /** @var string|null */
-    protected $template = 'hofff_contact_field_gallery';
+    protected string|null $template = 'hofff_contact_field_gallery';
 
-    /** @var string */
-    private $projectDir;
-
-    public function __construct(ContaoFramework $framework, string $projectDir)
-    {
+    public function __construct(
+        ContaoFramework $framework,
+        private string $projectDir,
+        private readonly Studio $imageStudio,
+    ) {
         parent::__construct($framework);
-
-        $this->projectDir = $projectDir;
     }
 
     /** @param mixed $value */
-    protected function compile(FrontendTemplate $template, $value, ContactProfileRenderer $renderer): void
-    {
-        $images          = $this->fetchImagesOrderedByCustomOrder((array) $value, $template->profile);
+    #[Override]
+    protected function compile(
+        FrontendTemplate $template,
+        $value,
+        Profile $profile,
+        ContactProfileRenderer $renderer,
+    ): void {
+        /** @psalm-suppress ArgumentTypeCoercion */
+        $images          = $this->fetchImagesOrderedByCustomOrder((array) $value, $profile);
         $template->value = $this->compileImages($images, $renderer->imageSize());
     }
 
     /**
      * Apply custom sorting.
      *
-     * @param list<string>        $uuids
-     * @param array<string,mixed> $profile
+     * @param list<string> $uuids
      *
      * @return list<array<string,mixed>>
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function fetchImagesOrderedByCustomOrder(array $uuids, array $profile): array
+    protected function fetchImagesOrderedByCustomOrder(array $uuids, Profile $profile): array
     {
         $collection = FilesModel::findMultipleByUuids($uuids);
         if (! $collection instanceof Collection) {
@@ -66,7 +69,7 @@ final class GalleryFieldRenderer extends AbstractFieldRenderer
         }
 
         $images = $this->prepareFiles($collection);
-        $tmp    = StringUtil::deserialize($profile['galleryOrder']);
+        $tmp    = StringUtil::deserialize($profile->galleryOrder);
 
         if (empty($tmp) || ! is_array($tmp)) {
             return $images;
@@ -77,7 +80,7 @@ final class GalleryFieldRenderer extends AbstractFieldRenderer
             /** @param mixed $value */
             static function ($value): void {
             },
-            array_flip($tmp)
+            array_flip($tmp),
         );
 
         // Move the matching elements to their position in $order
@@ -156,9 +159,9 @@ final class GalleryFieldRenderer extends AbstractFieldRenderer
      * @param list<array<string,mixed>> $images
      * @param list<string>|null         $imageSize
      *
-     * @return list<stdClass>
+     * @return list<object>
      */
-    private function compileImages(array $images, ?array $imageSize): array
+    private function compileImages(array $images, array|null $imageSize): array
     {
         $compiled   = [];
         $lightBoxId = 'lightbox[lb' . uniqid() . ']';
@@ -170,13 +173,12 @@ final class GalleryFieldRenderer extends AbstractFieldRenderer
             // Add size and margin
             $image['size'] = $imageSize;
 
-            Controller::addImageToTemplate(
-                $cell,
-                $image,
-                null,
-                $lightBoxId,
-                $image['filesModel']
-            );
+            $this->imageStudio->createFigureBuilder()
+                ->fromFilesModel($image['filesModel'])
+                ->setSize($imageSize)
+                ->setLightboxGroupIdentifier($lightBoxId)
+                ->build()
+                ->applyLegacyTemplateData($cell);
 
             if ($cell->picture['class']) {
                 $cell->picture['class'] = trim($cell->picture['class']);

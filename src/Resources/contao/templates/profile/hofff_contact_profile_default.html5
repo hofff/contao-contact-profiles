@@ -4,7 +4,7 @@
 
     <?php $this->block('fields') ?>
     <?php foreach ($this->fields as $field): ?>
-        <?php if ($this->has($field)): ?>
+        <?php if ($this->renderer->hasFieldValue($field, $this->profile)): ?>
             <?= $this->renderer->parseField($field, $this->profile) ?>
         <?php endif ?>
     <?php endforeach ?>

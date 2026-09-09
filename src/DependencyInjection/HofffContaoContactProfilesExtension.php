@@ -4,33 +4,66 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\DependencyInjection;
 
-use Hofff\Contao\ContactProfiles\EventListener\EventsContactProfilesListener;
-use Hofff\Contao\ContactProfiles\EventListener\FAQContactProfilesListener;
-use Hofff\Contao\ContactProfiles\EventListener\NewsContactProfilesListener;
+use Hofff\Contao\ContactProfiles\EventListener\Dca\NewsCategoryDcaListener;
+use Hofff\Contao\ContactProfiles\EventListener\DynamicSource\EventsContactProfilesListener;
+use Hofff\Contao\ContactProfiles\EventListener\DynamicSource\FAQContactProfilesListener;
+use Hofff\Contao\ContactProfiles\EventListener\DynamicSource\NewsContactProfilesListener;
+use Hofff\Contao\ContactProfiles\EventListener\Hook\LanguageRelationsListener;
+use Hofff\Contao\ContactProfiles\EventListener\MultilingualListener;
+use Hofff\Contao\ContactProfiles\Model\Category\CategoryRepository;
+use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
+use Hofff\Contao\ContactProfiles\Model\Responsibility\ResponsibilityRepository;
+use Hofff\Contao\ContactProfiles\Model\SocialAccount\SocialAccountRepository;
+use Netzmacht\Contao\Toolkit\Data\Model\Repository;
+use Override;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
+/**
+ * @psalm-type TMultilingualConfig = array{
+ *     enable: bool,
+ *     languages?: list<string>|null,
+ *     fallback_language: ?string,
+ *     fields: list<string>|null,
+ * }
+ * @SuppressWarnings(PHPMD.LongVariable)
+ */
 final class HofffContaoContactProfilesExtension extends Extension
 {
+    /** @var list<class-string<Repository>> */
+    private array $multilingualRepositories = [
+        CategoryRepository::class,
+        ProfileRepository::class,
+        ResponsibilityRepository::class,
+        SocialAccountRepository::class,
+    ];
+
     /** {@inheritDoc} */
+    #[Override]
     public function load(array $configs, ContainerBuilder $container): void
     {
-        $loader = new XmlFileLoader(
+        $loader = new YamlFileLoader(
             $container,
-            new FileLocator(__DIR__ . '/../Resources/config')
+            new FileLocator(__DIR__ . '/../Resources/config'),
         );
 
-        $loader->load('services.xml');
-        $loader->load('listener.xml');
+        $loader->load('services.yaml');
+        $loader->load('repositories.yaml');
+        $loader->load('listener.yaml');
 
         $config  = $this->processConfiguration(new Configuration(), $configs);
         $sources = $config['sources'];
 
+        $this->configureMultilingual($config['multilingual'], $container, $loader);
         $this->checkCalendarBundle($container, $sources);
         $this->checkFaqBundle($container, $sources);
         $this->checkNewsBundle($container, $sources);
+        $this->checkNewsCategoriesBundle($container, $sources);
+        $this->checkLanguageRelationsBundle($container, $config['multilingual']['enable']);
 
         $container->setParameter('hofff_contao_contact_profiles.sources', $sources);
 
@@ -76,5 +109,74 @@ final class HofffContaoContactProfilesExtension extends Extension
         }
 
         $container->removeDefinition(NewsContactProfilesListener::class);
+    }
+
+    /** @param list<string> $sources */
+    private function checkNewsCategoriesBundle(ContainerBuilder $container, array &$sources): void
+    {
+        $bundles = $container->getParameter('kernel.bundles');
+        if (isset($bundles['CodefogNewsCategoriesBundle'])) {
+            $sources[] = 'news_categories';
+
+            return;
+        }
+
+        $container->removeDefinition(NewsContactProfilesListener::class);
+        $container->removeDefinition(NewsCategoryDcaListener::class);
+    }
+
+    /**
+     * @param array<string,mixed> $multilingual
+     * @psalm-param TMultilingualConfig $multilingual
+     */
+    private function configureMultilingual(
+        array $multilingual,
+        ContainerBuilder $container,
+        LoaderInterface $loader,
+    ): void {
+        $container->setParameter('hofff_contao_contact_profiles.multilingual.enable', $multilingual['enable']);
+        $container->setParameter('hofff_contao_contact_profiles.multilingual.fields', $multilingual['fields']);
+        $container->setParameter(
+            'hofff_contao_contact_profiles.multilingual.languages',
+            $multilingual['languages'] ?? null,
+        );
+        $container->setParameter(
+            'hofff_contao_contact_profiles.multilingual.fallback_language',
+            $multilingual['fallback_language'] ?? null,
+        );
+
+        if (! $multilingual['enable']) {
+            $container->removeDefinition(MultilingualListener::class);
+        } else {
+            $bundles = $container->getParameter('kernel.bundles');
+            if (! isset($bundles['Terminal42DcMultilingualBundle'])) {
+                throw new InvalidConfigurationException(
+                    'Enable multilingual support of contact profiles requires terminal42/dc_multilingual',
+                );
+            }
+
+            $loader->load('multilingual.yaml');
+        }
+
+        $parameters = $container->getParameterBag();
+        foreach ($this->multilingualRepositories as $repository) {
+            $definition = $container->getDefinition($repository);
+            $definition->addTag(
+                'netzmacht.contao_toolkit.repository',
+                [
+                    'model' => $parameters->resolveValue($definition->getArgument(0)),
+                ],
+            );
+        }
+    }
+
+    private function checkLanguageRelationsBundle(ContainerBuilder $container, bool $multilingual): void
+    {
+        $bundles = $container->getParameter('kernel.bundles');
+        if ($multilingual && isset($bundles['HofffContaoLanguageRelationsBundle'])) {
+            return;
+        }
+
+        $container->removeDefinition(LanguageRelationsListener::class);
     }
 }

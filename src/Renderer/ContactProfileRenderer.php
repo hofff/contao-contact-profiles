@@ -7,52 +7,37 @@ namespace Hofff\Contao\ContactProfiles\Renderer;
 use Contao\FrontendTemplate;
 use Contao\StringUtil;
 use Hofff\Contao\Consent\Bridge\ConsentId;
+use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator;
-
-use function array_map;
 
 final class ContactProfileRenderer
 {
-    private const DEFAULT_TEMPLATE = 'hofff_contact_profile_default';
+    private const string DEFAULT_TEMPLATE = 'hofff_contact_profile_default';
 
-    private const DEFAULT_FIELD_TEMPLATE = 'hofff_contact_field';
-
-    /** @var FieldRenderer */
-    private $fieldRenderer;
+    private const string DEFAULT_FIELD_TEMPLATE = 'hofff_contact_field';
 
     /** @var string[] */
-    private $fields = [];
+    private array $fields = [];
 
-    /** @var string[]|null */
-    private $imageSize;
+    /** @var list<string>|null */
+    private array|null $imageSize = null;
 
-    /** @var string */
-    private $template = self::DEFAULT_TEMPLATE;
+    private string $template = self::DEFAULT_TEMPLATE;
 
     /** @var string[] */
-    private $fieldTemplates = [];
+    private array $fieldTemplates = [];
 
-    /** @var string */
-    private $defaultFieldTemplate;
-
-    /** @var string */
-    private $moreLabel;
+    private string $defaultFieldTemplate;
 
     /** @var array<string,ConsentId> */
-    private $consentIds = [];
-
-    /** @var ContactProfileUrlGenerator */
-    private $urlGenerator;
+    private array $consentIds = [];
 
     public function __construct(
-        FieldRenderer $fieldRenderer,
-        string $moreLabel,
-        ContactProfileUrlGenerator $urlGenerator
+        private FieldRenderer $fieldRenderer,
+        private string $moreLabel,
+        private ContactProfileUrlGenerator $urlGenerator,
     ) {
-        $this->fieldRenderer        = $fieldRenderer;
-        $this->moreLabel            = $moreLabel;
         $this->defaultFieldTemplate = self::DEFAULT_FIELD_TEMPLATE;
-        $this->urlGenerator         = $urlGenerator;
     }
 
     /** @param string[] $fields */
@@ -89,16 +74,16 @@ final class ContactProfileRenderer
         return $this;
     }
 
-    public function fieldTemplate(string $field, ?string $default = null): ?string
+    public function fieldTemplate(string $field, string|null $default = null): string|null
     {
         if (isset($this->fieldTemplates[$field])) {
             return $this->fieldTemplates[$field];
         }
 
-        return $default ?: $this->defaultFieldTemplate;
+        return $default ?? $this->defaultFieldTemplate;
     }
 
-    /** @param string[] $imageSize */
+    /** @param list<string> $imageSize */
     public function withImageSize(array $imageSize): self
     {
         $this->imageSize = $imageSize;
@@ -113,8 +98,8 @@ final class ContactProfileRenderer
         return $this;
     }
 
-    /** @return string[]|null */
-    public function imageSize(): ?array
+    /** @return list<string>|null */
+    public function imageSize(): array|null
     {
         return $this->imageSize;
     }
@@ -124,40 +109,39 @@ final class ContactProfileRenderer
         return $this->moreLabel;
     }
 
-    public function consentId(string $type): ?ConsentId
+    public function consentId(string $type): ConsentId|null
     {
         return $this->consentIds[$type] ?? null;
     }
 
-    /** @param string[] $profile */
-    public function render(array $profile): string
+    public function render(Profile $profile): string
     {
         $template = new FrontendTemplate($this->template);
         $template->setData(
             [
                 'renderer' => $this,
                 'fields'   => $this->fields,
-                'profile'  => array_map([StringUtil::class, 'deserialize'], $profile),
-                'has'      => static function (string $field) use ($template): bool {
-                    return ! empty($template->profile[$field]);
-                },
-            ]
+                'profile'  => $profile,
+            ],
         );
 
         return $template->parse();
     }
 
-    /** @param string[] $profile */
-    public function generateDetailUrl(array $profile): ?string
+    public function generateDetailUrl(Profile $profile): string|null
     {
         return $this->urlGenerator->generateDetailUrl($profile);
     }
 
-    /** @param string[] $profile */
-    public function parseField(string $field, array $profile): string
+    public function hasFieldValue(string $field, Profile $profile): bool
     {
-        $raw = StringUtil::deserialize($profile[$field] ?? null);
+        return $this->fieldRenderer->hasValue($field, $profile);
+    }
 
-        return ($this->fieldRenderer)($field, $raw, $this, $profile) ?? '';
+    public function parseField(string $field, Profile $profile): string
+    {
+        $raw = StringUtil::deserialize($profile->$field);
+
+        return $this->fieldRenderer->render($field, $raw, $this, $profile) ?? '';
     }
 }

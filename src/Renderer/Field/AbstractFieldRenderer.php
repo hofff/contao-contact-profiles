@@ -8,45 +8,31 @@ use Contao\Controller;
 use Contao\CoreBundle\Framework\Adapter;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\FrontendTemplate;
+use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
 use Hofff\Contao\ContactProfiles\Renderer\FieldRenderer;
+use Override;
+
+use function is_object;
+use function is_scalar;
+use function method_exists;
 
 abstract class AbstractFieldRenderer implements FieldRenderer
 {
-    /** @deprecated use $template property */
-    protected const TEMPLATE = null;
+    protected string|null $template = null;
 
-    /** @var ContaoFramework */
-    protected $framework;
-
-    /** @var string|null */
-    protected $template = null;
-
-    // phpcs:disable SlevomatCodingStandard.Classes.DisallowLateStaticBindingForConstants.DisallowedLateStaticBindingForConstant
-    public function __construct(ContaoFramework $framework)
+    public function __construct(protected ContaoFramework $framework)
     {
-        $this->framework = $framework;
-
-        /** @psalm-suppress DeprecatedConstant */
-        if (static::TEMPLATE === null) {
-            return;
-        }
-
-        /** @psalm-suppress DeprecatedConstant */
-        $this->template = static::TEMPLATE;
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public function __invoke(string $field, $value, ContactProfileRenderer $renderer, array $profile): ?string
+    #[Override]
+    public function render(string $field, $value, ContactProfileRenderer $renderer, Profile $profile): string|null
     {
-        if (! $this->hasValue($value)) {
-            return null;
-        }
-
         /** @var Adapter<Controller> $adpater */
         $adpater = $this->framework->getAdapter(Controller::class);
         $adpater->loadDataContainer('tl_contact_profile');
@@ -61,18 +47,35 @@ abstract class AbstractFieldRenderer implements FieldRenderer
         $template->label           = $GLOBALS['TL_DCA']['tl_contact_profile']['fields'][$field]['label'][0] ?? $field;
         $template->value           = $value;
         $template->profile         = $profile;
+        $template->renderValue     = /** @psalm-return mixed|scalar */ static function () use ($value) {
+            if (is_scalar($value)) {
+                return $value;
+            }
 
-        $this->compile($template, $value, $renderer);
+            if (is_object($value) && method_exists($value, '__toString')) {
+                return $value->__toString();
+            }
+
+            return '';
+        };
+
+        $this->compile($template, $value, $profile, $renderer);
 
         return $template->parse();
     }
 
     /** @param mixed $value */
-    protected function hasValue($value): bool
+    #[Override]
+    public function hasValue(string $field, Profile $profile): bool
     {
-        return (bool) $value;
+        return (bool) $profile->$field;
     }
 
     /** @param mixed $value */
-    abstract protected function compile(FrontendTemplate $template, $value, ContactProfileRenderer $renderer): void;
+    abstract protected function compile(
+        FrontendTemplate $template,
+        $value,
+        Profile $profile,
+        ContactProfileRenderer $renderer,
+    ): void;
 }

@@ -4,26 +4,20 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\EventListener\Hook;
 
-use Hofff\Contao\ContactProfiles\Model\ContactProfileRepository;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
+use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
 use Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator;
 
 use function explode;
 use function in_array;
 
+#[AsHook('replaceInsertTags')]
 final class InsertTagsListener
 {
-    /** @var ContactProfileRepository */
-    private $repository;
-
-    /** @var ContactProfileUrlGenerator */
-    private $urlGenerator;
-
     public function __construct(
-        ContactProfileRepository $repository,
-        ContactProfileUrlGenerator $urlGenerator
+        private ProfileRepository $repository,
+        private ContactProfileUrlGenerator $urlGenerator,
     ) {
-        $this->repository   = $repository;
-        $this->urlGenerator = $urlGenerator;
     }
 
     /**
@@ -38,11 +32,11 @@ final class InsertTagsListener
     {
         $elements = explode('::', $tag, 2);
 
-        if ($elements[0] !== 'contact_profile_url') {
+        if ($elements[0] !== 'contact_profile_url' || ! isset($elements[1])) {
             return false;
         }
 
-        $profile = $this->repository->fetchById($elements[1]);
+        $profile = $this->repository->find((int) $elements[1]);
         if (! $profile) {
             return '';
         }
@@ -51,6 +45,7 @@ final class InsertTagsListener
             ? ContactProfileUrlGenerator::ABSOLUTE_URL
             : ContactProfileUrlGenerator::ABSOLUTE_PATH;
 
+        /** @psalm-suppress RiskyTruthyFalsyComparison */
         return $this->urlGenerator->generateDetailUrl($profile, $referenceType) ?: false;
     }
 }

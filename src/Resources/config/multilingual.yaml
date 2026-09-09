@@ -1,0 +1,5 @@
+parameters:
+    hofff_contao_contact_profiles.model.category: 'Hofff\Contao\ContactProfiles\Model\Category\MultilingualCategory'
+    hofff_contao_contact_profiles.model.profile: 'Hofff\Contao\ContactProfiles\Model\Profile\MultilingualProfile'
+    hofff_contao_contact_profiles.model.responsibility: 'Hofff\Contao\ContactProfiles\Model\Responsibility\MultilingualResponsibility'
+    hofff_contao_contact_profiles.model.social_account: 'Hofff\Contao\ContactProfiles\Model\SocialAccount\MultilingualSocialAccount'

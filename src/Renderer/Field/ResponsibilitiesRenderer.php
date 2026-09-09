@@ -6,27 +6,28 @@ namespace Hofff\Contao\ContactProfiles\Renderer\Field;
 
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\FrontendTemplate;
-use Hofff\Contao\ContactProfiles\Query\ResponsibilitiesQuery;
+use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
+use Hofff\Contao\ContactProfiles\Model\Responsibility\ResponsibilityRepository;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
+use Override;
 
 final class ResponsibilitiesRenderer extends AbstractFieldRenderer
 {
-    /** @var string|null */
-    protected $template = 'hofff_contact_field_responsibilities';
+    protected string|null $template = 'hofff_contact_field_responsibilities';
 
-    /** @var ResponsibilitiesQuery */
-    private $query;
-
-    public function __construct(ContaoFramework $framework, ResponsibilitiesQuery $query)
+    public function __construct(ContaoFramework $framework, private ResponsibilityRepository $responsibilities)
     {
         parent::__construct($framework);
-
-        $this->query = $query;
     }
 
     /** @param mixed $value */
-    protected function compile(FrontendTemplate $template, $value, ContactProfileRenderer $renderer): void
-    {
-        $template->value = ($this->query)((array) $value);
+    #[Override]
+    protected function compile(
+        FrontendTemplate $template,
+        $value,
+        Profile $profile,
+        ContactProfileRenderer $renderer,
+    ): void {
+        $template->value = $this->responsibilities->findMultipleByIds((array) $value);
     }
 }

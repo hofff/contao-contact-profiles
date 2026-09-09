@@ -1,0 +1,88 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Hofff\Contao\ContactProfiles\EventListener\DynamicSource;
+
+use Contao\Config;
+use Contao\CoreBundle\Framework\ContaoFramework;
+use Contao\Input;
+use Contao\Model;
+use Contao\Model\Collection;
+use Contao\StringUtil;
+use Hofff\Contao\ContactProfiles\Event\LoadContactProfilesEvent;
+use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
+use Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository;
+use Hofff\Contao\ContactProfiles\Util\ListUtil;
+use Hofff\Contao\ContactProfiles\Util\QueryUtil;
+use Netzmacht\Contao\Toolkit\Data\Model\RepositoryManager;
+
+use function assert;
+
+abstract class DynamicSourceListener
+{
+    public function __construct(
+        protected ContaoFramework $framework,
+        protected RepositoryManager $repositoryManager,
+        protected ProfileRepository $repository,
+    ) {
+    }
+
+    public function __invoke(LoadContactProfilesEvent $event): void
+    {
+        if (! $event->hasSource($this->source())) {
+            return;
+        }
+
+        $alias = $this->getAlias();
+        if ($alias === null) {
+            return;
+        }
+
+        $sourceModel = $this->fetchSource($alias);
+        if (! $sourceModel) {
+            return;
+        }
+
+        foreach ($this->fetchProfiles($sourceModel) ?: [] as $model) {
+            assert($model instanceof Profile);
+            $event->addProfile($model);
+        }
+    }
+
+    abstract protected function source(): string;
+
+    abstract protected function fetchSource(string $alias): Model|null;
+
+    /** @SuppressWarnings(PHPMD.Superglobals) */
+    protected function getAlias(): string|null
+    {
+        if (! isset($GLOBALS['objPage'])) {
+            return null;
+        }
+
+        $inputAdapter  = $this->framework->getAdapter(Input::class);
+        $configAdapter = $this->framework->getAdapter(Config::class);
+
+        if ($configAdapter->__call('get', ['useAutoItem'])) {
+            return $inputAdapter->__call('get', ['auto_item']);
+        }
+
+        return $inputAdapter->__call('get', ['items']);
+    }
+
+    protected function fetchProfiles(Model $sourceModel): Collection|null
+    {
+        $profileIds = StringUtil::deserialize($sourceModel->hofff_contact_profiles, true);
+        $profileIds = ListUtil::toIntList($profileIds);
+        $order      = ListUtil::toIntList(StringUtil::deserialize($sourceModel->hofff_contact_profiles_order, true))
+            ?: $profileIds;
+        $options    = [];
+
+        if ($order) {
+            $options['order'] = QueryUtil::orderByIds('id', $order);
+        }
+
+        return $this->repository->fetchPublishedByProfileIds($profileIds, $options);
+    }
+}

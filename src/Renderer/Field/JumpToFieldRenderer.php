@@ -6,16 +6,22 @@ namespace Hofff\Contao\ContactProfiles\Renderer\Field;
 
 use Contao\FrontendTemplate;
 use Contao\PageModel;
+use Hofff\Contao\ContactProfiles\Model\Profile\Profile;
 use Hofff\Contao\ContactProfiles\Renderer\ContactProfileRenderer;
+use Override;
 
 final class JumpToFieldRenderer extends AbstractFieldRenderer
 {
-    /** @var string|null */
-    protected $template = 'hofff_contact_field_jump_to';
+    protected string|null $template = 'hofff_contact_field_jump_to';
 
     /** @param mixed $value */
-    protected function compile(FrontendTemplate $template, $value, ContactProfileRenderer $renderer): void
-    {
+    #[Override]
+    protected function compile(
+        FrontendTemplate $template,
+        $value,
+        Profile $profile,
+        ContactProfileRenderer $renderer,
+    ): void {
         $template->label = $renderer->moreLabel();
 
         $value = $this->framework->getAdapter(PageModel::class)->findByPk($value);
