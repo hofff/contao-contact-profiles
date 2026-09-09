@@ -16,8 +16,8 @@ It's also works together with:
 
 ## Requirements
 
- - Contao `^4.9`
- - PHP `^7.4 || ^8.0`
+ - Contao `^5.3`
+ - PHP `^8.3`
 
 ## Features
 
