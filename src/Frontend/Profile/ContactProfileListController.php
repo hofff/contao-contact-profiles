@@ -37,13 +37,13 @@ use function substr;
     'hofff_contact_profile_list',
     'hofff_contact_profiles',
     'ce_hofff_contact_profile_list',
-    'renderAsContentElement'
+    'renderAsContentElement',
 )]
 #[AsFrontendModule(
     'hofff_contact_profile_list',
     'hofff_contact_profiles',
     'mod_hofff_contact_profile_list',
-    'renderAsFrontendModule'
+    'renderAsFrontendModule',
 )]
 final class ContactProfileListController extends AbstractHybridController
 {

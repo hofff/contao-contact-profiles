@@ -29,13 +29,13 @@ use Symfony\Contracts\Translation\TranslatorInterface;
     'hofff_contact_profile_detail',
     'hofff_contact_profiles',
     'ce_hofff_contact_profile_detail',
-    'renderAsContentElement'
+    'renderAsContentElement',
 )]
 #[AsFrontendModule(
     'hofff_contact_profile_detail',
     'hofff_contact_profiles',
     'mod_hofff_contact_profile_detail',
-    'renderAsFrontendModule'
+    'renderAsFrontendModule',
 )]
 final class ContactProfileDetailController extends AbstractHybridController
 {

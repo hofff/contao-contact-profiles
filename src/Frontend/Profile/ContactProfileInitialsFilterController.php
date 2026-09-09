@@ -24,13 +24,13 @@ use Symfony\Contracts\Translation\TranslatorInterface;
     'hofff_contact_profile_initials_filter',
     'hofff_contact_profiles',
     'ce_hofff_contact_profile_initials_filter',
-    'renderAsContentElement'
+    'renderAsContentElement',
 )]
 #[AsFrontendModule(
     'hofff_contact_profile_initials_filter',
     'hofff_contact_profiles',
     'mod_hofff_contact_profile_initials_filter',
-    'renderAsFrontendModule'
+    'renderAsFrontendModule',
 )]
 final class ContactProfileInitialsFilterController extends AbstractHybridController
 {
