@@ -10,9 +10,7 @@
     <issueHandlers>
         <DeprecatedClass>
             <errorLevel type="suppress">
-                <referencedClass name="Contao\CoreBundle\Framework\ContaoFrameworkInterface"/>
                 <referencedClass name="Contao\Template"/>
-                <referencedClass name="Symfony\Component\Security\Core\Security"/>
             </errorLevel>
         </DeprecatedClass>
         <DeprecatedMethod>

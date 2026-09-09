@@ -13,7 +13,6 @@ use Knp\Menu\FactoryInterface;
 use Override;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Security\Core\Security as LegacySecurity;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 use function sprintf;
@@ -24,7 +23,7 @@ final class ContactProfilePickerProvider extends AbstractInsertTagPickerProvider
         FactoryInterface $menuFactory,
         RouterInterface $router,
         TranslatorInterface $translator,
-        private readonly LegacySecurity|Security $security,
+        private readonly Security $security,
         private readonly ProfileRepository $repository,
     ) {
         parent::__construct($menuFactory, $router, $translator);
