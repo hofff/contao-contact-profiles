@@ -1,0 +1,162 @@
+parameters:
+    hofff.contao_contact_profiles.template_prefixes:
+        - 'faq_'
+        - 'event_'
+        - 'news_'
+
+services:
+    _defaults:
+        public: false
+        autoconfigure: true
+        autowire: false
+
+    # DCA Options
+    Hofff\Contao\ContactProfiles\EventListener\Dca\Options\CategoryOptions:
+        arguments:
+            - '@Hofff\Contao\ContactProfiles\Model\Category\CategoryRepository'
+
+    Hofff\Contao\ContactProfiles\EventListener\Dca\Options\ContactFieldsOptions:
+        arguments:
+            - '@netzmacht.contao_toolkit.dca.manager'
+
+    Hofff\Contao\ContactProfiles\EventListener\Dca\Options\ContactTemplateOptions:
+        arguments:
+            - '@contao.framework'
+
+    Hofff\Contao\ContactProfiles\EventListener\Dca\Options\SocialAccountTypeOptions:
+        arguments:
+            - '@Hofff\Contao\ContactProfiles\Model\SocialAccount\SocialAccountRepository'
+
+    Hofff\Contao\ContactProfiles\EventListener\Dca\Options\ContactProfileOptions:
+        arguments:
+            - '@Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository'
+
+    Hofff\Contao\ContactProfiles\EventListener\Dca\Options\SourceOptions:
+        arguments:
+            - !tagged_iterator hofff_contact_profiles.provider
+
+    Hofff\Contao\ContactProfiles\EventListener\Dca\Options\DynamicSourcesOptions:
+        arguments:
+            - '%hofff_contao_contact_profiles.sources%'
+
+    Hofff\Contao\ContactProfiles\EventListener\Dca\ContactProfileDcaListener:
+        arguments:
+            - '@hofff_contao_contact_profiles.alias_generator'
+            - '@database_connection'
+            - '@Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository'
+            - '@translator'
+            - '@netzmacht.contao_toolkit.dca.manager'
+            - '@request_stack'
+            - '%hofff_contao_contact_profiles.alias_pattern%'
+            - '%hofff_contao_contact_profiles.multilingual.enable%'
+            - '%hofff_contao_contact_profiles.multilingual.fallback_language%'
+
+    Hofff\Contao\ContactProfiles\EventListener\Dca\ConsentBridgeListener:
+        arguments:
+            - '@Hofff\Contao\Consent\Bridge\ConsentToolManager'
+
+    Hofff\Contao\ContactProfiles\EventListener\Dca\NewsCategoryDcaListener:
+        arguments:
+            - '@netzmacht.contao_toolkit.dca.manager'
+            - '@netzmacht.contao_toolkit.repository_manager'
+            - '%kernel.bundles%'
+
+    Hofff\Contao\ContactProfiles\EventListener\Dca\InitializePalettesListener:
+        arguments:
+            - '@netzmacht.contao_toolkit.dca.manager'
+
+    Hofff\Contao\ContactProfiles\EventListener\Hook\AddContactProfileInformationListener:
+        arguments:
+            - '@Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository'
+            - '%hofff.contao_contact_profiles.template_prefixes%'
+
+    Hofff\Contao\ContactProfiles\EventListener\Dca\PageDcaListener:
+        arguments:
+            - '@database_connection'
+
+    Hofff\Contao\ContactProfiles\EventListener\Hook\GetSearchablePagesListener:
+        arguments:
+            - '@contao.framework'
+            - '@database_connection'
+            - '@Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository'
+            - '@Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator'
+
+    Hofff\Contao\ContactProfiles\EventListener\Hook\InsertTagsListener:
+        public: true
+        arguments:
+            - '@Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository'
+            - '@Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator'
+
+    Hofff\Contao\ContactProfiles\EventListener\Hook\LanguageRelationsListener:
+        arguments:
+            - '@Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository'
+            - '@Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator'
+            - '@request_stack'
+
+    Hofff\Contao\ContactProfiles\EventListener\Hook\GetAllEventsListener:
+        arguments:
+            - '@request_stack'
+
+    Hofff\Contao\ContactProfiles\EventListener\DynamicSource\NewsContactProfilesListener:
+        arguments:
+            - '@contao.framework'
+            - '@netzmacht.contao_toolkit.repository_manager'
+            - '@Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository'
+        tags:
+            - { name: 'kernel.event_listener', event: 'hofff.contao_contact_profile.load_contact_profiles' }
+
+    Hofff\Contao\ContactProfiles\EventListener\DynamicSource\EventsContactProfilesListener:
+        arguments:
+            - '@contao.framework'
+            - '@netzmacht.contao_toolkit.repository_manager'
+            - '@Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository'
+        tags:
+            - { name: 'kernel.event_listener', event: 'hofff.contao_contact_profile.load_contact_profiles' }
+
+    Hofff\Contao\ContactProfiles\EventListener\DynamicSource\FAQContactProfilesListener:
+        arguments:
+            - '@contao.framework'
+            - '@netzmacht.contao_toolkit.repository_manager'
+            - '@Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository'
+        tags:
+            - { name: 'kernel.event_listener', event: 'hofff.contao_contact_profile.load_contact_profiles' }
+
+    Hofff\Contao\ContactProfiles\EventListener\DynamicSource\NewsCategoryProfilesListener:
+        arguments:
+            - '@contao.framework'
+            - '@netzmacht.contao_toolkit.repository_manager'
+            - '@Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository'
+        tags:
+            - { name: 'kernel.event_listener', event: 'hofff.contao_contact_profile.load_contact_profiles' }
+
+    Hofff\Contao\ContactProfiles\EventListener\PreviewUrlConvertListener:
+        arguments:
+            - '@contao.framework'
+            - '@Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository'
+            - '@Hofff\Contao\ContactProfiles\Routing\ContactProfileUrlGenerator'
+        tags:
+            - { name: 'kernel.event_listener', event: 'contao.preview_url_convert' }
+
+    Hofff\Contao\ContactProfiles\EventListener\PreviewUrlCreateListener:
+        arguments:
+            - '@request_stack'
+            - '@contao.framework'
+            - '@Hofff\Contao\ContactProfiles\Model\Profile\ProfileRepository'
+        tags:
+            - { name: 'kernel.event_listener', event: 'contao.preview_url_create' }
+
+    Hofff\Contao\ContactProfiles\EventListener\DetailPageListener:
+        arguments:
+            - '@contao.insert_tag.parser'
+            - '@Hofff\Contao\ContactProfiles\SocialTags\SocialTagsGenerator'
+            - '@contao.routing.response_context_accessor'
+            - '@contao.string.html_decoder'
+        tags:
+            - { name: 'kernel.event_listener', event: 'hofff.contao_contact_profile.profile_detail_page' }
+
+    Hofff\Contao\ContactProfiles\EventListener\MultilingualListener:
+        arguments:
+            - '@netzmacht.contao_toolkit.dca.manager'
+            - '%hofff_contao_contact_profiles.multilingual.languages%'
+            - '%hofff_contao_contact_profiles.multilingual.fallback_language%'
+            - '%hofff_contao_contact_profiles.multilingual.fields%'
