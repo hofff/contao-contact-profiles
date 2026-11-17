@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Hofff\Contao\ContactProfiles\Util;
 
-use function array_filter;
+use function array_map;
 use function array_values;
+use function intval;
+use function strval;
 
 final class ListUtil
 {
@@ -16,7 +18,7 @@ final class ListUtil
      */
     public static function toStringList(array $data): array
     {
-        return array_values(array_filter($data, 'strval'));
+        return array_values(array_map(strval(...), $data));
     }
 
     /**
@@ -26,6 +28,6 @@ final class ListUtil
      */
     public static function toIntList(array $data): array
     {
-        return array_values(array_filter($data, 'intval'));
+        return array_values(array_map(intval(...), $data));
     }
 }
