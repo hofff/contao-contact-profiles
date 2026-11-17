@@ -19,6 +19,10 @@ It's also works together with:
  - Contao `^5.3`
  - PHP `^8.3`
 
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for a list of notable changes.
+
 ## Features
 
  - Contact profile list module/content element (custom profiles, related profiles, by category)
