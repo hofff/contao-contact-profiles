@@ -7,9 +7,11 @@
 .gitignore export-ignore
 .phpcq.lock export-ignore
 .phpcq.yaml.dist export-ignore
+/tests export-ignore
 companion.json export-ignore
 composer.lock -diff
 phpcs.xml.dist export-ignore
+phpunit.xml.dist export-ignore
 psalm.xml export-ignore
 rector.php export-ignore
 

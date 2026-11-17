@@ -84,6 +84,11 @@
       "Hofff\\Contao\\ContactProfiles\\": "src/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "Hofff\\Contao\\ContactProfiles\\Tests\\": "tests/"
+    }
+  },
   "config": {
     "allow-plugins": {
       "contao-community-alliance/composer-plugin": true,

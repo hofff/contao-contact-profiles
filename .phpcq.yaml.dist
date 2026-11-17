@@ -26,6 +26,9 @@ phpcq:
     phpmd:
       version: ^1.0
       signed: false
+    phpunit:
+      version: ^1.0
+      signed: false
     psalm:
       version: ^1.0
       signed: false
@@ -58,6 +61,7 @@ tasks:
     - phpcpd
     - phploc
     - phpmd
+    - phpunit
     - psalm
     - phpcs
   default:
